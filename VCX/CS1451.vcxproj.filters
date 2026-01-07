@@ -13,10 +13,45 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\Utils">
+      <UniqueIdentifier>{1f5da526-1564-4bf8-b9d5-727961c1dfc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scenes">
+      <UniqueIdentifier>{81fe0e8a-3d84-4c50-aa0b-e2fb4d08eb22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Managers">
+      <UniqueIdentifier>{876dd9ac-d673-43b4-acfc-4ea31abc569c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Objects">
+      <UniqueIdentifier>{049abab2-6641-4d1a-ac3a-1c5b81ae0ed5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Managers">
+      <UniqueIdentifier>{3049df2d-be8d-44f7-9f16-40ecf228b3d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scenes">
+      <UniqueIdentifier>{589808e4-19a5-4255-8f01-af94b3a4e363}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Objects">
+      <UniqueIdentifier>{0c4ea0a4-9e8b-4983-893b-c3e2d853756d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Managers\SceneManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Source\Utils\AEOverload.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Managers\SceneManager.h">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Scenes\BaseScene.h">
+      <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
