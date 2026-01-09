@@ -16,7 +16,7 @@
     <ProjectGuid>{f643ca26-64e3-4198-bce9-9fe1ec5bed2f}</ProjectGuid>
     <RootNamespace>UIPortSoloProject</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>CS1451</ProjectName>
+    <ProjectName>Hah Fist</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -101,9 +101,9 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="..\Source\Managers\SceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Source\Managers\SceneManager.h" />
-    <ClInclude Include="..\Source\Scenes\BaseScene.h" />
-    <ClInclude Include="..\Source\Utils\AEOverload.h" />
+    <ClInclude Include="..\Source\Managers\SceneManager.hpp" />
+    <ClInclude Include="..\Source\Scenes\BaseScene.hpp" />
+    <ClInclude Include="..\Source\Utils\AEOverload.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,4 +1,4 @@
-#include "SceneManager.h"
+#include "SceneManager.hpp"
 
 SceneManager::SceneManager() : current_scene(0) {
 }

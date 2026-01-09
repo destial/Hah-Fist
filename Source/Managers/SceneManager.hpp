@@ -2,7 +2,7 @@
 #ifndef __SCENEMANAGER_H
 #define __SCENEMANAGER_H
 #include "AETypes.h"
-#include "../Scenes/BaseScene.h"
+#include "../Scenes/BaseScene.hpp"
 
 class SceneManager {
 protected:

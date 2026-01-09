@@ -2,7 +2,7 @@
 #include <vector>
 #include "AEEngine.h"
 #include "AEGraphics.h"
-#include "Managers/SceneManager.h"
+#include "Managers/SceneManager.hpp"
 
 // Program Entrypoint
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -20,7 +20,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, false, NULL);
 
 	// Changing the window title
-	AESysSetWindowTitle("UI Solo Project Port");
+	AESysSetWindowTitle("Hah Fist!");
 
 	// Reset the system modules
 	AESysReset();

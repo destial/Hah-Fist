@@ -44,13 +44,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Source\Utils\AEOverload.h">
+    <ClInclude Include="..\Source\Utils\AEOverload.hpp">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Managers\SceneManager.h">
+    <ClInclude Include="..\Source\Managers\SceneManager.hpp">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Scenes\BaseScene.h">
+    <ClInclude Include="..\Source\Scenes\BaseScene.hpp">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
