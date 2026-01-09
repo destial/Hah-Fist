@@ -10,8 +10,10 @@ protected:
 	std::vector<BaseEntity> scene_entities;
 
 public:
+	virtual void Init() = 0;
 	virtual void Update(const f32& dt) = 0;
 	virtual void Render() = 0;
+	virtual void End() = 0;
 };
 
 #endif

@@ -7,6 +7,7 @@
 class SceneManager {
 protected:
 	BaseScene* current_scene;
+	BaseScene* prev_scene;
 
 public:
 	SceneManager();

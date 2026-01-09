@@ -3,6 +3,7 @@
 #include "AEEngine.h"
 #include "AEGraphics.h"
 #include "Managers/SceneManager.hpp"
+#include "Managers/EventManager.hpp"
 
 // Program Entrypoint
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -31,6 +32,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	{
 		SceneManager sceneManager;
+		EventManager::GetInstance();
 		// Game Loop
 		while (gGameRunning) {
 			// Informing the system about the loop's start
@@ -59,7 +61,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
 				gGameRunning = 0;
 		}
+
 		// free the system
+		EventManager::Free();
 	}
 	AESysExit();
 }
