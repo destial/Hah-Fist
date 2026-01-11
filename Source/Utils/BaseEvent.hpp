@@ -3,11 +3,11 @@
 #include <string>
 
 class BaseEvent {
-private:
+protected:
 	BaseEvent() {}
 public:
 	virtual ~BaseEvent() {}
-	virtual std::string GetType() const = 0;
+	virtual const char* GetType() const = 0;
 };
 
 /*
@@ -19,7 +19,9 @@ class ExampleEvent : public BaseEvent {
 public:
 	ExampleEvent();
 	~ExampleEvent();
-	virtual std::string GetType() const {
+
+	static constexpr const char* type = "ExampleEvent";
+	virtual const char* GetType() const {
 		return "ExampleEvent";
 	}
 

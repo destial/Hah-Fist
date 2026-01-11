@@ -14,13 +14,13 @@ private:
 	EventManager();
 	~EventManager();
 	static EventManager* instance;
-	std::map<std::string, std::vector<Listener>> listeners;
+	std::map<const char*, std::vector<Listener>> listeners;
 public:
 	EventManager(const EventManager&) = delete; // ensure no other copies of this can exist
 	static EventManager* GetInstance();
 	static void Free();
 
-	void Subscribe(std::string type, Listener listener);
+	void Subscribe(const char* type, Listener listener);
 	void Post(const BaseEvent& event) const;
 };
 

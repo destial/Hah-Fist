@@ -20,7 +20,7 @@ void EventManager::Free() {
 	}
 }
 
-void EventManager::Subscribe(std::string type, Listener listener) {
+void EventManager::Subscribe(const char* type, Listener listener) {
 	listeners[type].push_back(listener);
 }
 

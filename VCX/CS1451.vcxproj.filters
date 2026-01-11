@@ -40,6 +40,9 @@
     <Filter Include="Header Files\Entities">
       <UniqueIdentifier>{29c06242-03d4-4f84-9a75-e94941239098}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Events">
+      <UniqueIdentifier>{5a2917b9-570d-475b-a546-83472b787eda}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\main.cpp">
@@ -72,7 +75,10 @@
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Utils\BaseEvent.hpp">
-      <Filter>Header Files\Utils</Filter>
+      <Filter>Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Events\InputEvent.hpp">
+      <Filter>Header Files\Events</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
