@@ -4,19 +4,21 @@
 
 InputHandler* InputHandler::instance = nullptr;
 
-InputHandler::InputHandler() {
-
-}
-
-InputHandler::~InputHandler() {
-
-}
+InputHandler::InputHandler() {}
+InputHandler::~InputHandler() {}
 
 InputHandler* InputHandler::GetInstance() {
 	if (instance == nullptr) {
 		instance = new InputHandler();
 	}
 	return instance;
+}
+
+void InputHandler::Free() {
+	if (instance) {
+		delete instance;
+		instance = nullptr;
+	}
 }
 
 void InputHandler::Update(const f32& dt) {
@@ -38,6 +40,9 @@ void InputHandler::Update(const f32& dt) {
 			keys_r.push_back(i);
 		}
 	}
+	if (!keys_t.empty() && !keys_p.empty() && !keys_c.empty() && !keys_r.empty())
+		return;
+
 	InputEvent event(keys_t, keys_p, keys_c, keys_r);
 	for (auto& fn : InputEvent::Listeners) {
 		fn(event);

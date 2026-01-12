@@ -10,6 +10,7 @@ private:
 	~InputHandler();
 public:
 	static InputHandler* GetInstance();
+	static void Free();
 	void Update(const f32& dt);
 };
 

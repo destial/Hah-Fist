@@ -7,12 +7,16 @@
 
 class BaseScene {
 protected:
-	std::vector<BaseEntity> scene_entities;
+	std::vector<BaseEntity*> scene_entities;
+	BaseScene();
 
 public:
+	virtual ~BaseScene();
 	virtual void Init() = 0;
+	virtual void PreUpdate(const f32& dt) = 0;
 	virtual void Update(const f32& dt) = 0;
-	virtual void Render() = 0;
+	virtual void PostUpdate(const f32& dt) = 0;
+	virtual void Render();
 	virtual void End() = 0;
 };
 

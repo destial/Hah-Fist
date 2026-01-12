@@ -14,23 +14,31 @@ private:
 	const std::vector<u8>& keys_released;
 public:
 	static std::vector<std::function<void(const InputEvent&)>> Listeners;
-	InputEvent(const std::vector<u8>& keys_t, const std::vector<u8>& keys_p, const std::vector<u8>& keys_c, const std::vector<u8>& keys_r)
-		: keys_triggered(keys_t), keys_prev(keys_p), keys_current(keys_c), keys_released(keys_r) {}
+	InputEvent(
+		const std::vector<u8>& keys_t,
+		const std::vector<u8>& keys_p,
+		const std::vector<u8>& keys_c,
+		const std::vector<u8>& keys_r)
+		: 
+		keys_triggered(keys_t),
+		keys_prev(keys_p),
+		keys_current(keys_c),
+		keys_released(keys_r) {}
 	~InputEvent() {}
 
-	const std::vector<u8> GetKeysTriggered() const {
+	const std::vector<u8>& GetKeysTriggered() const {
 		return keys_triggered;
 	}
 
-	const std::vector<u8> GetKeysHeld() const {
+	const std::vector<u8>& GetKeysHeld() const {
 		return keys_triggered;
 	}
 
-	const std::vector<u8> GetKeysReleased() const {
+	const std::vector<u8>& GetKeysReleased() const {
 		return keys_released;
 	}
 
-	const std::vector<u8> GetKeysPrevious() const {
+	const std::vector<u8>& GetKeysPrevious() const {
 		return keys_prev;
 	}
 };

@@ -5,6 +5,7 @@
 #include "Managers/SceneManager.hpp"
 #include "Managers/InputManager.hpp"
 #include "Events/InputEvent.hpp"
+#include "Scenes/MainMenuScene.hpp"
 
 bool bGameRunning = 1;
 
@@ -42,6 +43,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		InputEvent::Listeners.push_back(OnGameExit);
 
 		SceneManager sceneManager;
+		BaseScene* scenes[1] = { new MainMenuScene() };
+		sceneManager.SetNextScene(scenes[0]);
 		// Game Loop
 		while (bGameRunning) {
 			// Informing the system about the loop's start
@@ -53,8 +56,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 			// -=-=-=-=-=-=-=- Update Logic Start -=-=-=-=-=-=-=-
 
-			sceneManager.Update(dt);
+			sceneManager.PreUpdate(dt);
 			InputHandler::GetInstance()->Update(dt);
+			sceneManager.Update(dt);
+			sceneManager.PostUpdate(dt);
 
 			// -=-=-=-=-=-=-=- Rendering Logic Start -=-=-=-=-=-=-=-
 
@@ -73,6 +78,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 
 		// free the system
+		for (BaseScene* scene : scenes) {
+			delete scene;
+		}
+
+		InputHandler::Free();
 	}
 	AESysExit();
 }

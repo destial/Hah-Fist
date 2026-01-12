@@ -1,16 +1,21 @@
 #pragma once
 #ifndef __BASEENTITY_H
 #define __BASEENTITY_H
-#include "AETypes.h"
-#include "AEMath.h"
+#include "AEEngine.h"
 
 class BaseEntity {
-private:
+protected:
 	BaseEntity(AEVec2 position);
-	~BaseEntity();
+	AEGfxVertexList* mesh;
+	AEMtx33 transform;
 public:
+	virtual ~BaseEntity();
 	AEVec2 position;
 	AEVec2 velocity;
+	AEVec2 scale;
+	f32 rotation;
+
+	virtual void Render();
 };
 
 #endif

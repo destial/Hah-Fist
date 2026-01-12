@@ -49,12 +49,14 @@
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)Extern\AlphaEngine\lib</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\</OutDir>
     <IntDir>$(SolutionDir).tmp\$(Configuration)-$(Platform)\</IntDir>
+    <SourcePath>$(SolutionDir)Source\</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);$(SolutionDir)Extern\AlphaEngine\include</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(SolutionDir)Extern\AlphaEngine\lib</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)-$(Platform)\</OutDir>
     <IntDir>$(SolutionDir).tmp\$(Configuration)-$(Platform)\</IntDir>
+    <SourcePath>$(SolutionDir)Source\</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -98,18 +100,24 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Entities\BaseEntity.cpp" />
+    <ClCompile Include="..\Source\Entities\PlayerEntity.cpp" />
     <ClCompile Include="..\Source\Events\InputEvent.cpp" />
     <ClCompile Include="..\Source\main.cpp" />
     <ClCompile Include="..\Source\Managers\InputManager.cpp" />
     <ClCompile Include="..\Source\Managers\SceneManager.cpp" />
+    <ClCompile Include="..\Source\Scenes\BaseScene.cpp" />
+    <ClCompile Include="..\Source\Scenes\MainMenuScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Entities\BaseEntity.hpp" />
+    <ClInclude Include="..\Source\Entities\PlayerEntity.hpp" />
     <ClInclude Include="..\Source\Events\InputEvent.hpp" />
     <ClInclude Include="..\Source\Managers\InputManager.hpp" />
     <ClInclude Include="..\Source\Managers\SceneManager.hpp" />
     <ClInclude Include="..\Source\Scenes\BaseScene.hpp" />
+    <ClInclude Include="..\Source\Scenes\MainMenuScene.hpp" />
     <ClInclude Include="..\Source\Utils\AEOverload.hpp" />
+    <ClInclude Include="..\Source\Utils\MeshRenderer.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
