@@ -7,6 +7,7 @@ class BaseEntity {
 protected:
 	BaseEntity(AEVec2 position);
 	AEGfxVertexList* mesh;
+	AEGfxTexture* texture;
 	AEMtx33 transform;
 public:
 	virtual ~BaseEntity();

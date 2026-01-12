@@ -2,7 +2,8 @@
 #include "../Utils/MeshRenderer.hpp"
 
 Player::Player(AEVec2 pos) : BaseEntity(pos) {
-	mesh = MeshRenderer::CreateLeftBottomCornerRect(0xFFFFFFFF);
+	mesh = MeshRenderer::CreateCircle(50, 0xFFFFFFFF);
+	texture = AEGfxTextureLoad("Assets/PlanetTexture.png");
 }
 
 Player::~Player() {

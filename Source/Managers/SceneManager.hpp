@@ -13,9 +13,14 @@ public:
 	SceneManager();
 	~SceneManager();
 
+	// Called before InputHandler
 	void PreUpdate(const f32& dt);
+
+	// Called after InputHandler
 	void Update(const f32& dt);
 	void PostUpdate(const f32& dt);
+
+	// Called after every Update functions
 	void Render();
 
 	void SetNextScene(BaseScene* next);

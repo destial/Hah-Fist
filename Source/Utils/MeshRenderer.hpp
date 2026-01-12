@@ -18,8 +18,8 @@ namespace MeshRenderer {
 			// Add main triangle
 			AEGfxTriAdd(
 				0.f, 0.f, color, 0.5f, 0.5f,
-				x, y, color, (x + 1.f) * 0.5f, (y + 1.f) * 0.5f,
-				x2, y2, color, (x2 + 1.f) * 0.5f, (y2 + 1.f) * 0.5f
+				x, y, color, (x + 1.f) * 0.5f, 1.f - (y + 1.f) * 0.5f,
+				x2, y2, color, (x2 + 1.f) * 0.5f, 1.f - (y2 + 1.f) * 0.5f
 			);
 		}
 		return AEGfxMeshEnd();

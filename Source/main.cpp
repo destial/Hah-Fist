@@ -7,7 +7,9 @@
 #include "Events/InputEvent.hpp"
 #include "Scenes/MainMenuScene.hpp"
 
-bool bGameRunning = 1;
+namespace Game {
+	bool bGameRunning = 1;
+}
 
 // Program Entrypoint
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -33,20 +35,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AEGfxFontSystemStart();
 
 	{
-		auto OnGameExit = [](const InputEvent* ev) {
+		InputEvent::Listeners.push_back([](const InputEvent* ev) {
 			for (auto key : ev->GetKeysTriggered()) {
 				if (key == AEVK_ESCAPE) {
-					bGameRunning = false;
+					Game::bGameRunning = false;
 				}
 			}
-		};
-		InputEvent::Listeners.push_back(OnGameExit);
+		});
 
 		SceneManager sceneManager;
-		BaseScene* scenes[1] = { new MainMenuScene() };
+		BaseScene* scenes[] = { new MainMenuScene() };
 		sceneManager.SetNextScene(scenes[0]);
 		// Game Loop
-		while (bGameRunning) {
+		while (Game::bGameRunning) {
 			// Informing the system about the loop's start
 			AESysFrameStart();
 			AEFrameRateControllerStart();
@@ -74,7 +75,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			// Basic way to trigger exiting the application
 			// when ESCAPE is hit or when the window is closed
 			if (0 == AESysDoesWindowExist())
-				bGameRunning = false;
+				Game::bGameRunning = false;
 		}
 
 		// free the system
