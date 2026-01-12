@@ -3,7 +3,10 @@
 #include "AEEngine.h"
 #include "AEGraphics.h"
 #include "Managers/SceneManager.hpp"
-#include "Managers/EventManager.hpp"
+#include "Managers/InputManager.hpp"
+#include "Events/InputEvent.hpp"
+
+bool bGameRunning = 1;
 
 // Program Entrypoint
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -14,8 +17,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
-
-	int gGameRunning = 1;
 
 	// Using custom window procedure
 	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, false, NULL);
@@ -31,10 +32,18 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AEGfxFontSystemStart();
 
 	{
+		auto OnGameExit = [](const InputEvent& ev) {
+			for (auto key : ev.GetKeysTriggered()) {
+				if (key == AEVK_ESCAPE) {
+					bGameRunning = false;
+				}
+			}
+		};
+		InputEvent::Listeners.push_back(OnGameExit);
+
 		SceneManager sceneManager;
-		EventManager::GetInstance();
 		// Game Loop
-		while (gGameRunning) {
+		while (bGameRunning) {
 			// Informing the system about the loop's start
 			AESysFrameStart();
 			AEFrameRateControllerStart();
@@ -45,6 +54,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			// -=-=-=-=-=-=-=- Update Logic Start -=-=-=-=-=-=-=-
 
 			sceneManager.Update(dt);
+			InputHandler::GetInstance()->Update(dt);
 
 			// -=-=-=-=-=-=-=- Rendering Logic Start -=-=-=-=-=-=-=-
 
@@ -58,12 +68,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 			// Basic way to trigger exiting the application
 			// when ESCAPE is hit or when the window is closed
-			if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
-				gGameRunning = 0;
+			if (0 == AESysDoesWindowExist())
+				bGameRunning = false;
 		}
 
 		// free the system
-		EventManager::Free();
 	}
 	AESysExit();
 }

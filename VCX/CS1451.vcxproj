@@ -98,18 +98,18 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Entities\BaseEntity.cpp" />
+    <ClCompile Include="..\Source\Events\InputEvent.cpp" />
     <ClCompile Include="..\Source\main.cpp" />
-    <ClCompile Include="..\Source\Managers\EventManager.cpp" />
+    <ClCompile Include="..\Source\Managers\InputManager.cpp" />
     <ClCompile Include="..\Source\Managers\SceneManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Entities\BaseEntity.hpp" />
     <ClInclude Include="..\Source\Events\InputEvent.hpp" />
-    <ClInclude Include="..\Source\Managers\EventManager.hpp" />
+    <ClInclude Include="..\Source\Managers\InputManager.hpp" />
     <ClInclude Include="..\Source\Managers\SceneManager.hpp" />
     <ClInclude Include="..\Source\Scenes\BaseScene.hpp" />
     <ClInclude Include="..\Source\Utils\AEOverload.hpp" />
-    <ClInclude Include="..\Source\Utils\BaseEvent.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -43,6 +43,9 @@
     <Filter Include="Header Files\Events">
       <UniqueIdentifier>{5a2917b9-570d-475b-a546-83472b787eda}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Events">
+      <UniqueIdentifier>{20385e78-06b6-482c-bfa0-a51fa4f34da9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\main.cpp">
@@ -54,8 +57,11 @@
     <ClCompile Include="..\Source\Entities\BaseEntity.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Managers\EventManager.cpp">
+    <ClCompile Include="..\Source\Managers\InputManager.cpp">
       <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Events\InputEvent.cpp">
+      <Filter>Source Files\Events</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -71,14 +77,11 @@
     <ClInclude Include="..\Source\Entities\BaseEntity.hpp">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Managers\EventManager.hpp">
-      <Filter>Header Files\Managers</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Utils\BaseEvent.hpp">
-      <Filter>Header Files\Events</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\Events\InputEvent.hpp">
       <Filter>Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Managers\InputManager.hpp">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
