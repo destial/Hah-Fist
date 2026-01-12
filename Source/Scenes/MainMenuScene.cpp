@@ -17,28 +17,15 @@ void MainMenuScene::Init() {
 }
 
 void MainMenuScene::PreUpdate(const f32& dt) {
-	scene_entities[0]->velocity = { 0.f, 0.f };
-
-	if (AEInputCheckCurr(AEVK_W)) {
-		++scene_entities[0]->velocity.y;
-	}
-	if (AEInputCheckCurr(AEVK_S)) {
-		--scene_entities[0]->velocity.y;
-	}
-	if (AEInputCheckCurr(AEVK_A)) {
-		--scene_entities[0]->velocity.x;
-	}
-	if (AEInputCheckCurr(AEVK_D)) {
-		++scene_entities[0]->velocity.x;
-	}
+	BaseScene::PreUpdate(dt);
 }
 
 void MainMenuScene::Update(const f32& dt) {
-
+	BaseScene::Update(dt);
 }
 
 void MainMenuScene::PostUpdate(const f32& dt) {
-	scene_entities[0]->position += scene_entities[0]->velocity;
+	BaseScene::PostUpdate(dt);
 }
 
 void MainMenuScene::Render() {

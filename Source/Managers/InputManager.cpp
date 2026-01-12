@@ -1,11 +1,14 @@
 #include "InputManager.hpp"
 #include "AEEngine.h"
-#include "../Events/InputEvent.hpp"
 
 InputHandler* InputHandler::instance = nullptr;
 
-InputHandler::InputHandler() {}
-InputHandler::~InputHandler() {}
+InputHandler::InputHandler() : keys_t(0), keys_c(0), keys_r(0), keys_p(0) {
+	this->event = new InputEvent(keys_t, keys_p, keys_c, keys_r);
+}
+InputHandler::~InputHandler() {
+	delete event;
+}
 
 InputHandler* InputHandler::GetInstance() {
 	if (instance == nullptr) {
@@ -22,10 +25,10 @@ void InputHandler::Free() {
 }
 
 void InputHandler::Update(const f32& dt) {
-	std::vector<u8> keys_t;
-	std::vector<u8> keys_c;
-	std::vector<u8> keys_r;
-	std::vector<u8> keys_p;
+	keys_t.clear();
+	keys_p.clear();
+	keys_r.clear();
+	keys_c.clear();
 	for (u8 i = 0; i < 0xFF; ++i) {
 		if (AEInputCheckTriggered(i)) {
 			keys_t.push_back(i);
@@ -40,10 +43,10 @@ void InputHandler::Update(const f32& dt) {
 			keys_r.push_back(i);
 		}
 	}
+
 	if (!keys_t.empty() && !keys_p.empty() && !keys_c.empty() && !keys_r.empty())
 		return;
 
-	InputEvent event(keys_t, keys_p, keys_c, keys_r);
 	for (auto& fn : InputEvent::Listeners) {
 		fn(event);
 	}

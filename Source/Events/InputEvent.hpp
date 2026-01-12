@@ -13,7 +13,7 @@ private:
 	const std::vector<u8>& keys_current;
 	const std::vector<u8>& keys_released;
 public:
-	static std::vector<std::function<void(const InputEvent&)>> Listeners;
+	static std::vector<std::function<void(const InputEvent*)>> Listeners;
 	InputEvent(
 		const std::vector<u8>& keys_t,
 		const std::vector<u8>& keys_p,

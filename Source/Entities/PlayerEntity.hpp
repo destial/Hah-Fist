@@ -7,6 +7,10 @@ class Player : public BaseEntity {
 public:
 	Player(AEVec2 pos);
 	~Player();
+
+	virtual void PreUpdate(const f32& dt);
+	virtual void Update(const f32& dt);
+	virtual void PostUpdate(const f32& dt);
 };
 
 #endif

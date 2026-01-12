@@ -15,6 +15,9 @@ public:
 	AEVec2 scale;
 	f32 rotation;
 
+	virtual void PreUpdate(const f32& dt);
+	virtual void Update(const f32& dt);
+	virtual void PostUpdate(const f32& dt);
 	virtual void Render();
 };
 

@@ -33,8 +33,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AEGfxFontSystemStart();
 
 	{
-		auto OnGameExit = [](const InputEvent& ev) {
-			for (auto key : ev.GetKeysTriggered()) {
+		auto OnGameExit = [](const InputEvent* ev) {
+			for (auto key : ev->GetKeysTriggered()) {
 				if (key == AEVK_ESCAPE) {
 					bGameRunning = false;
 				}

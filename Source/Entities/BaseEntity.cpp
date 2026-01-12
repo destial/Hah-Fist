@@ -1,5 +1,6 @@
 #include "BaseEntity.hpp"
 #include "../Utils/MeshRenderer.hpp"
+#include "../Utils/AEOverload.hpp"
 
 BaseEntity::BaseEntity(AEVec2 position) {
 	this->position = position;
@@ -15,6 +16,13 @@ BaseEntity::~BaseEntity() {
 		AEGfxMeshFree(mesh);
 		mesh = nullptr;
 	}
+}
+
+void BaseEntity::PreUpdate(const f32& dt) {}
+void BaseEntity::Update(const f32& dt) {}
+
+void BaseEntity::PostUpdate(const f32& dt) {
+	this->position += (this->velocity);
 }
 
 void BaseEntity::Render() {
