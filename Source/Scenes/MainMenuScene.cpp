@@ -7,13 +7,12 @@ MainMenuScene::MainMenuScene() {
 }
 
 MainMenuScene::~MainMenuScene() {
-
 }
 
 void MainMenuScene::Init() {
-	static Player p({ 0.f, 0.f });
-	p.scale = { 50.f, 50.f };
-	scene_entities.push_back(&p);
+	Player* p = new Player({ 0.f, 0.f });
+	p->scale = { 50.f, 50.f };
+	scene_entities.push_back(p);
 }
 
 void MainMenuScene::PreUpdate(const f32& dt) {
@@ -33,5 +32,5 @@ void MainMenuScene::Render() {
 }
 
 void MainMenuScene::End() {
-
+	BaseScene::End();
 }

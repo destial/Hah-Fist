@@ -13,11 +13,11 @@ protected:
 public:
 	virtual ~BaseScene();
 	virtual void Init() = 0;
-	virtual void PreUpdate(const f32& dt) = 0;
-	virtual void Update(const f32& dt) = 0;
-	virtual void PostUpdate(const f32& dt) = 0;
+	virtual void PreUpdate(const f32& dt);
+	virtual void Update(const f32& dt);
+	virtual void PostUpdate(const f32& dt);
 	virtual void Render();
-	virtual void End() = 0;
+	virtual void End();
 };
 
 #endif

@@ -7,7 +7,6 @@ Player::Player(AEVec2 pos) : BaseEntity(pos) {
 }
 
 Player::~Player() {
-
 }
 
 void Player::PreUpdate(const f32& dt) {

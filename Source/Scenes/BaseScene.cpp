@@ -30,3 +30,10 @@ void BaseScene::Render() {
 		entity->Render();
 	}
 }
+
+void BaseScene::End() {
+	for (BaseEntity* const entity : scene_entities) {
+		delete entity;
+	}
+	scene_entities.clear();
+}

@@ -19,6 +19,7 @@ InputHandler* InputHandler::GetInstance() {
 
 void InputHandler::Free() {
 	if (instance) {
+		InputEvent::Listeners.clear();
 		delete instance;
 		instance = nullptr;
 	}

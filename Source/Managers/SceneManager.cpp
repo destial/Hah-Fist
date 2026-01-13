@@ -40,6 +40,6 @@ void SceneManager::SetNextScene(BaseScene* next) {
 	this->current_scene = next;
 }
 
-const BaseScene* SceneManager::GetCurrentScene() {
+BaseScene* SceneManager::GetCurrentScene() const {
 	return current_scene;
 }

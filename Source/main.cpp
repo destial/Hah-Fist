@@ -35,13 +35,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AEGfxFontSystemStart();
 
 	{
-		InputEvent::Listeners.push_back([](const InputEvent* ev) {
+		auto OnGameExit = ([](const InputEvent* ev) {
 			for (auto key : ev->GetKeysTriggered()) {
 				if (key == AEVK_ESCAPE) {
 					Game::bGameRunning = false;
 				}
 			}
 		});
+		InputEvent::Listeners += OnGameExit;
 
 		SceneManager sceneManager;
 		BaseScene* scenes[] = { new MainMenuScene() };
@@ -59,6 +60,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 			sceneManager.PreUpdate(dt);
 			InputHandler::GetInstance()->Update(dt);
+			if (AEInputCheckTriggered(AEVK_0)) {
+					InputEvent::Listeners -= OnGameExit;
+			}
 			sceneManager.Update(dt);
 			sceneManager.PostUpdate(dt);
 
@@ -77,6 +81,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			if (0 == AESysDoesWindowExist())
 				Game::bGameRunning = false;
 		}
+
+		sceneManager.GetCurrentScene()->End();
 
 		// free the system
 		for (BaseScene* scene : scenes) {

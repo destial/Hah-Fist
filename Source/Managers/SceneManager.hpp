@@ -24,7 +24,7 @@ public:
 	void Render();
 
 	void SetNextScene(BaseScene* next);
-	const BaseScene* GetCurrentScene();
+	BaseScene* GetCurrentScene() const;
 };
 
 #endif
