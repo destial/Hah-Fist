@@ -5,6 +5,7 @@
 
 class BaseEntity {
 protected:
+	BaseEntity();
 	BaseEntity(AEVec2 position);
 	AEGfxVertexList* mesh;
 	AEGfxTexture* texture;

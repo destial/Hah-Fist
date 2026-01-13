@@ -1,6 +1,7 @@
 #include "PlayerEntity.hpp"
 #include "../Utils/MeshRenderer.hpp"
 #include "../Events/InputEvent.hpp"
+#include <cstdio>
 
 Player::Player(AEVec2 pos) : BaseEntity(pos) {
 	sprite = new SpriteAnimation("Assets/67.png", 7, 5);
@@ -10,7 +11,16 @@ Player::Player(AEVec2 pos) : BaseEntity(pos) {
 	scale = { 5.f,5.f };
 }
 
+Player::Player() : BaseEntity() {
+	sprite = new SpriteAnimation("Assets/67.png", 7, 5);
+	animationTimer = 0.f;
+	animationFrame = 1.f / (7.f * 5.f);
+	currentRow = currentCol = 0;
+	scale = { 5.f,5.f };
+}
+
 Player::~Player() {
+	std::printf("Called Player deconstructor\n");
 	delete sprite;
 }
 

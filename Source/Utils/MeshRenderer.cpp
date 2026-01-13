@@ -1,7 +1,7 @@
 #include "MeshRenderer.hpp"
 
 namespace MeshRenderer {
-	static AEGfxVertexList* CreateCircle(int slices, u32 color) {
+	AEGfxVertexList* CreateCircle(int slices, u32 color) {
 		AEGfxMeshStart();
 		for (int i = 0; i < slices; ++i) {
 			f32 x = AESin(2.f * PI * i / slices);
@@ -20,7 +20,7 @@ namespace MeshRenderer {
 		return AEGfxMeshEnd();
 	}
 
-	static AEGfxVertexList* CreateCenterRect(u32 color) {
+	AEGfxVertexList* CreateCenterRect(u32 color) {
 		AEGfxMeshStart();
 		AEGfxTriAdd(
 			-0.5f, -0.5f, color, 0.0f, 1.0f,
@@ -34,7 +34,7 @@ namespace MeshRenderer {
 		return AEGfxMeshEnd();
 	}
 
-	static AEGfxVertexList* CreateLeftBottomCornerRect(u32 color) {
+	AEGfxVertexList* CreateLeftBottomCornerRect(u32 color) {
 		AEGfxMeshStart();
 		AEGfxTriAdd(
 			0.f, 0.f, color, 0.0f, 1.0f,

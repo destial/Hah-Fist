@@ -2,9 +2,18 @@
 #include "../Utils/MeshRenderer.hpp"
 #include "../Utils/AEOverload.hpp"
 #include "../Utils/Utils.hpp"
+#include <cstdio>
 
-BaseEntity::BaseEntity(AEVec2 position) {
-	this->position = position;
+BaseEntity::BaseEntity() : position({ 0.f, 0.f }) {
+	this->velocity = { 0.f, 0.f };
+	this->scale = { 1.f, 1.f };
+	this->rotation = 0.f;
+	this->transform = { 0 };
+	this->mesh = nullptr;
+	this->texture = nullptr;
+}
+
+BaseEntity::BaseEntity(AEVec2 position) : position(position) {
 	this->velocity = { 0.f, 0.f };
 	this->scale = { 1.f, 1.f };
 	this->rotation = 0.f;
@@ -14,6 +23,7 @@ BaseEntity::BaseEntity(AEVec2 position) {
 }
 
 BaseEntity::~BaseEntity() {
+	std::printf("Called BaseEntity deconstructor\n");
 	if (mesh) {
 		AEGfxMeshFree(mesh);
 		mesh = nullptr;
@@ -32,12 +42,11 @@ void BaseEntity::PostUpdate(const f32& dt) {
 
 	// TODO: Convert to world coordinates
 	AEMtx33 scale = { 1.f };
-	AEVec2 screenScale = World_To_Screen(this->scale.x, this->scale.y, 16.f, 9.f);
-	AEMtx33Scale(&scale, screenScale.x, screenScale.y);
+	AEMtx33Scale(&scale, this->scale.x * 100.f, this->scale.y * 100.f);
 	AEMtx33 rotate = { 0 };
 	AEMtx33Rot(&rotate, this->rotation);
 	AEMtx33 translate = { 0 };
-	AEVec2 screenPos = World_To_Screen(this->position.x, this->position.y, 16.f, 9.f);
+	AEVec2 screenPos = Game_To_Screen(this->position.x, this->position.y);
 	AEMtx33Trans(&translate, screenPos.x, screenPos.y);
 	this->transform = { 0 };
 	AEMtx33Concat(&this->transform, &rotate, &scale);

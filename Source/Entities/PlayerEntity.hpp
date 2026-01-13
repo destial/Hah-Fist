@@ -11,6 +11,7 @@ protected:
 	int currentRow, currentCol;
 	SpriteAnimation* sprite;
 public:
+	Player();
 	Player(AEVec2 pos);
 	~Player();
 
