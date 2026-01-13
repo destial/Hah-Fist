@@ -1,6 +1,7 @@
 #include "BaseEntity.hpp"
 #include "../Utils/MeshRenderer.hpp"
 #include "../Utils/AEOverload.hpp"
+#include "../Utils/Utils.hpp"
 
 BaseEntity::BaseEntity(AEVec2 position) {
 	this->position = position;
@@ -31,11 +32,13 @@ void BaseEntity::PostUpdate(const f32& dt) {
 
 	// TODO: Convert to world coordinates
 	AEMtx33 scale = { 1.f };
-	AEMtx33Scale(&scale, this->scale.x, this->scale.y);
+	AEVec2 screenScale = World_To_Screen(this->scale.x, this->scale.y, 16.f, 9.f);
+	AEMtx33Scale(&scale, screenScale.x, screenScale.y);
 	AEMtx33 rotate = { 0 };
 	AEMtx33Rot(&rotate, this->rotation);
 	AEMtx33 translate = { 0 };
-	AEMtx33Trans(&translate, this->position.x, this->position.y);
+	AEVec2 screenPos = World_To_Screen(this->position.x, this->position.y, 16.f, 9.f);
+	AEMtx33Trans(&translate, screenPos.x, screenPos.y);
 	this->transform = { 0 };
 	AEMtx33Concat(&this->transform, &rotate, &scale);
 	AEMtx33Concat(&this->transform, &translate, &transform);

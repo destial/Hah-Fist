@@ -28,6 +28,33 @@ const std::vector<u8>& InputEvent::GetKeysPrevious() const {
 	return keys_prev;
 }
 
+const bool InputEvent::IsKeyTriggered(u8 key) const {
+	for (auto& k : keys_triggered) {
+		if (k == key) {
+			return true;
+		}
+	}
+	return false;
+}
+
+const bool InputEvent::IsKeyHeld(u8 key) const {
+	for (auto& k : keys_current) {
+		if (k == key) {
+			return true;
+		}
+	}
+	return false;
+}
+
+const bool InputEvent::IsKeyReleased(u8 key) const {
+	for (auto& k : keys_released) {
+		if (k == key) {
+			return true;
+		}
+	}
+	return false;
+}
+
 bool operator== (InputEvent::InputListener& lhs, InputEvent::InputListener& rhs) {
 	return lhs.target<InputEvent::InputListener>() == rhs.target<InputEvent::InputListener>();
 }

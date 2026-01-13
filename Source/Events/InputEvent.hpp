@@ -23,14 +23,14 @@ public:
 	~InputEvent();
 
 	const std::vector<u8>& GetKeysTriggered() const;
-
 	const std::vector<u8>& GetKeysHeld() const;
-
 	const std::vector<u8>& GetKeysReleased() const;
-
 	const std::vector<u8>& GetKeysPrevious() const;
-};
 
+	const bool IsKeyTriggered(u8 key) const;
+	const bool IsKeyHeld(u8 key) const;
+	const bool IsKeyReleased(u8 key) const;
+};
 
 bool operator== (InputEvent::InputListener& lhs, InputEvent::InputListener& rhs);
 std::vector<InputEvent::InputListener>& operator+= (std::vector<InputEvent::InputListener>& lhs, InputEvent::InputListener& rhs);

@@ -12,7 +12,7 @@ public:
 	SpriteAnimation(const char* file, int rows, int columns);
 	~SpriteAnimation();
 
-	void Render(AEMtx33& const t, int const row, int const column);
+	void Render(AEMtx33& t, int row, int column);
 };
 
 #endif

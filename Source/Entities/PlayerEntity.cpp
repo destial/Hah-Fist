@@ -1,10 +1,11 @@
 #include "PlayerEntity.hpp"
 #include "../Utils/MeshRenderer.hpp"
+#include "../Events/InputEvent.hpp"
 
 Player::Player(AEVec2 pos) : BaseEntity(pos) {
 	sprite = new SpriteAnimation("Assets/blue_portal_sprite.png", 4, 6);
 	animationTimer = 0.f;
-	animationFrame = 5.f / (4.f * 6.f);
+	animationFrame = 1.f / (4.f * 6.f);
 	currentRow = currentCol = 0;
 }
 
@@ -19,18 +20,20 @@ void Player::PreUpdate(const f32& dt) {
 
 void Player::Update(const f32& dt) {
 	BaseEntity::Update(dt);
+
 	if (AEInputCheckCurr(AEVK_W)) {
-		++this->velocity.y;
+		velocity.y += dt * 5.f;
 	}
 	if (AEInputCheckCurr(AEVK_S)) {
-		--this->velocity.y;
+		velocity.y -= dt * 5.f;
 	}
 	if (AEInputCheckCurr(AEVK_A)) {
-		--this->velocity.x;
+		velocity.x -= dt * 5.f;
 	}
 	if (AEInputCheckCurr(AEVK_D)) {
-		++this->velocity.x;
+		velocity.x += dt * 5.f;
 	}
+	
 	if ((animationTimer += dt) > animationFrame) {
 		animationTimer = 0.f;
 		if (++currentCol >= 6) {

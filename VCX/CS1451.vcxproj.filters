@@ -46,6 +46,9 @@
     <Filter Include="Source Files\Events">
       <UniqueIdentifier>{20385e78-06b6-482c-bfa0-a51fa4f34da9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Utils">
+      <UniqueIdentifier>{28486349-bc23-4fe6-a9dc-f531b16d20da}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\main.cpp">
@@ -74,6 +77,15 @@
     </ClCompile>
     <ClCompile Include="..\Source\Items\SpriteAnimation.cpp">
       <Filter>Source Files\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Utils\Utils.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Utils\AEOverload.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Utils\MeshRenderer.cpp">
+      <Filter>Source Files\Utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +118,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Items\SpriteAnimation.hpp">
       <Filter>Header Files\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Utils\Utils.hpp">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

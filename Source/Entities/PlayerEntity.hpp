@@ -3,6 +3,7 @@
 #define __PLAYERENTITY_H
 #include "BaseEntity.hpp"
 #include "../Items/SpriteAnimation.hpp"
+#include "../Events/InputEvent.hpp"
 
 class Player : public BaseEntity {
 protected:

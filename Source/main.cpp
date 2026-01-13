@@ -54,14 +54,20 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			AEFrameRateControllerStart();
 
 			// Set the delta time
-			f32 const dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
+			f32 frame_time = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
 			// -=-=-=-=-=-=-=- Update Logic Start -=-=-=-=-=-=-=-
-
-			sceneManager.PreUpdate(dt);
-			InputHandler::GetInstance()->Update(dt);
-			sceneManager.Update(dt);
-			sceneManager.PostUpdate(dt);
+			float dt;
+			// run timestep for every lost frame if < 60fps
+			while (frame_time > 0.f) {
+				dt = min(frame_time, 1 / 60.f);
+				sceneManager.PreUpdate(dt);
+				InputHandler::GetInstance()->Update(dt);
+				sceneManager.Update(dt);
+				sceneManager.PostUpdate(dt);
+				frame_time -= dt;
+			}
+			InputHandler::GetInstance()->EndFrame();
 
 			// -=-=-=-=-=-=-=- Rendering Logic Start -=-=-=-=-=-=-=-
 

@@ -5,6 +5,7 @@ InputHandler* InputHandler::instance = nullptr;
 
 InputHandler::InputHandler() : keys_t(0), keys_c(0), keys_r(0), keys_p(0) {
 	this->event = new InputEvent(keys_t, keys_p, keys_c, keys_r);
+	this->EndFrame();
 }
 InputHandler::~InputHandler() {
 	delete event;
@@ -26,22 +27,43 @@ void InputHandler::Free() {
 }
 
 void InputHandler::Update(const f32& dt) {
-	keys_t.clear();
-	keys_p.clear();
-	keys_r.clear();
 	keys_c.clear();
 	for (u8 i = 0; i < 0xFF; ++i) {
-		if (AEInputCheckTriggered(i)) {
-			keys_t.push_back(i);
-		}
 		if (AEInputCheckCurr(i)) {
 			keys_c.push_back(i);
 		}
+		if (AEInputCheckTriggered(i)) {
+			bool already = false;
+			for (auto& k : keys_t) {
+				if (k == i) {
+					already = true;
+					break;
+				}
+			}
+			if (!already)
+				keys_t.push_back(i);
+		}
 		if (AEInputCheckPrev(i)) {
-			keys_p.push_back(i);
+			bool already = false;
+			for (auto& k : keys_p) {
+				if (k == i) {
+					already = true;
+					break;
+				}
+			}
+			if (!already)
+				keys_p.push_back(i);
 		}
 		if (AEInputCheckReleased(i)) {
-			keys_r.push_back(i);
+			bool already = false;
+			for (auto& k : keys_r) {
+				if (k == i) {
+					already = true;
+					break;
+				}
+			}
+			if (!already)
+				keys_r.push_back(i);
 		}
 	}
 
@@ -51,4 +73,10 @@ void InputHandler::Update(const f32& dt) {
 	for (auto& fn : InputEvent::Listeners) {
 		fn(event);
 	}
+}
+
+void InputHandler::EndFrame() {
+	keys_t.clear();
+	keys_p.clear();
+	keys_r.clear();
 }

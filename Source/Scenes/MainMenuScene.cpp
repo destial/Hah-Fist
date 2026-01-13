@@ -10,8 +10,7 @@ MainMenuScene::~MainMenuScene() {
 }
 
 void MainMenuScene::Init() {
-	Player* p = new Player({ 0.f, 0.f });
-	p->scale = { 50.f, 50.f };
+	BaseEntity* p = new Player({ 0.f, 0.f });
 	scene_entities.push_back(p);
 }
 
