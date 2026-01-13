@@ -36,10 +36,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	{
 		auto OnGameExit = ([](const InputEvent* ev) {
-			for (auto key : ev->GetKeysTriggered()) {
-				if (key == AEVK_ESCAPE) {
-					Game::bGameRunning = false;
-				}
+			if (ev->IsKeyTriggered(AEVK_ESCAPE)) {
+				Game::bGameRunning = false;
 			}
 		});
 		InputEvent::Listeners += OnGameExit;
