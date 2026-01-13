@@ -72,6 +72,9 @@
     <ClCompile Include="..\Source\Scenes\BaseScene.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Items\SpriteAnimation.cpp">
+      <Filter>Source Files\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -100,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Entities\PlayerEntity.hpp">
       <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Items\SpriteAnimation.hpp">
+      <Filter>Header Files\Items</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,9 +7,9 @@ BaseEntity::BaseEntity(AEVec2 position) {
 	this->velocity = { 0.f, 0.f };
 	this->scale = { 1.f, 1.f };
 	this->rotation = 0.f;
+	this->transform = { 0 };
 	this->mesh = nullptr;
 	this->texture = nullptr;
-	this->transform = { 0 };
 }
 
 BaseEntity::~BaseEntity() {
@@ -28,9 +28,7 @@ void BaseEntity::Update(const f32& dt) {}
 
 void BaseEntity::PostUpdate(const f32& dt) {
 	this->position += (this->velocity);
-}
 
-void BaseEntity::Render() {
 	// TODO: Convert to world coordinates
 	AEMtx33 scale = { 1.f };
 	AEMtx33Scale(&scale, this->scale.x, this->scale.y);
@@ -41,7 +39,9 @@ void BaseEntity::Render() {
 	this->transform = { 0 };
 	AEMtx33Concat(&this->transform, &rotate, &scale);
 	AEMtx33Concat(&this->transform, &translate, &transform);
+}
 
+void BaseEntity::Render() {
 	if (texture) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxTextureSet(texture, 0.f, 0.f);

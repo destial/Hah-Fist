@@ -54,15 +54,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			AEFrameRateControllerStart();
 
 			// Set the delta time
-			f32 const dt = 1.f / static_cast<f32>(AEFrameRateControllerGetFrameRate());
+			f32 const dt = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
 			// -=-=-=-=-=-=-=- Update Logic Start -=-=-=-=-=-=-=-
 
 			sceneManager.PreUpdate(dt);
 			InputHandler::GetInstance()->Update(dt);
-			if (AEInputCheckTriggered(AEVK_0)) {
-					InputEvent::Listeners -= OnGameExit;
-			}
 			sceneManager.Update(dt);
 			sceneManager.PostUpdate(dt);
 
