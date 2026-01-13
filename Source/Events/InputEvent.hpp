@@ -14,7 +14,8 @@ private:
 	const std::vector<u8>& keys_released;
 public:
 	typedef std::function<void(const InputEvent*)> InputListener;
-	static std::vector<InputListener> Listeners;
+	typedef std::vector<InputListener> InputListeners;
+	static InputListeners Listeners;
 	InputEvent(
 		const std::vector<u8>& keys_t,
 		const std::vector<u8>& keys_p,
@@ -33,9 +34,9 @@ public:
 };
 
 bool operator== (InputEvent::InputListener& lhs, InputEvent::InputListener& rhs);
-std::vector<InputEvent::InputListener>& operator+= (std::vector<InputEvent::InputListener>& lhs, InputEvent::InputListener& rhs);
-std::vector<InputEvent::InputListener>& operator+= (std::vector<InputEvent::InputListener>& lhs, InputEvent::InputListener rhs);
-std::vector<InputEvent::InputListener>& operator-= (std::vector<InputEvent::InputListener>& lhs, InputEvent::InputListener& rhs);
-std::vector<InputEvent::InputListener>& operator-= (std::vector<InputEvent::InputListener>& lhs, InputEvent::InputListener rhs);
+InputEvent::InputListeners& operator+= (InputEvent::InputListeners& lhs, InputEvent::InputListener& rhs);
+InputEvent::InputListeners& operator+= (InputEvent::InputListeners& lhs, InputEvent::InputListener rhs);
+InputEvent::InputListeners& operator-= (InputEvent::InputListeners& lhs, InputEvent::InputListener& rhs);
+InputEvent::InputListeners& operator-= (InputEvent::InputListeners& lhs, InputEvent::InputListener rhs);
 
 #endif

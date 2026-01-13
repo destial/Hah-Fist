@@ -3,10 +3,11 @@
 #include "../Events/InputEvent.hpp"
 
 Player::Player(AEVec2 pos) : BaseEntity(pos) {
-	sprite = new SpriteAnimation("Assets/blue_portal_sprite.png", 4, 6);
+	sprite = new SpriteAnimation("Assets/67.png", 7, 5);
 	animationTimer = 0.f;
-	animationFrame = 1.f / (4.f * 6.f);
+	animationFrame = 1.f / (7.f * 5.f);
 	currentRow = currentCol = 0;
+	scale = { 5.f,5.f };
 }
 
 Player::~Player() {
@@ -36,9 +37,9 @@ void Player::Update(const f32& dt) {
 	
 	if ((animationTimer += dt) > animationFrame) {
 		animationTimer = 0.f;
-		if (++currentCol >= 6) {
+		if (++currentCol >= 5) {
 			currentCol = 0;
-			if (++currentRow >= 4) {
+			if (++currentRow >= 7) {
 				currentRow = 0;
 			}
 		}

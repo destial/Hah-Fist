@@ -1,6 +1,6 @@
 #include "InputEvent.hpp"
 
-std::vector<std::function<void(const InputEvent*)>> InputEvent::Listeners;
+InputEvent::InputListeners InputEvent::Listeners;
 
 InputEvent::InputEvent(const std::vector<u8>& keys_t, const std::vector<u8>& keys_p, const std::vector<u8>& keys_c, const std::vector<u8>& keys_r)
 	:
@@ -59,18 +59,18 @@ bool operator== (InputEvent::InputListener& lhs, InputEvent::InputListener& rhs)
 	return lhs.target<InputEvent::InputListener>() == rhs.target<InputEvent::InputListener>();
 }
 
-std::vector<InputEvent::InputListener>& operator+= (std::vector<InputEvent::InputListener>& lhs, InputEvent::InputListener& rhs) {
+InputEvent::InputListeners& operator+= (InputEvent::InputListeners& lhs, InputEvent::InputListener& rhs) {
 	lhs.push_back(rhs);
 	return lhs;
 }
 
-std::vector<InputEvent::InputListener>& operator+= (std::vector<InputEvent::InputListener>& lhs, InputEvent::InputListener rhs) {
+InputEvent::InputListeners& operator+= (InputEvent::InputListeners& lhs, InputEvent::InputListener rhs) {
 	lhs.push_back(rhs);
 	return lhs;
 }
 
-std::vector<InputEvent::InputListener>& operator-= (std::vector<InputEvent::InputListener>& lhs, InputEvent::InputListener& rhs) {
-	for (std::vector<InputEvent::InputListener>::iterator it = lhs.begin(); it != lhs.end();) {
+InputEvent::InputListeners& operator-= (InputEvent::InputListeners& lhs, InputEvent::InputListener& rhs) {
+	for (InputEvent::InputListeners::iterator it = lhs.begin(); it != lhs.end();) {
 		if (*it == rhs) {
 			it = lhs.erase(it);
 		}
@@ -81,8 +81,8 @@ std::vector<InputEvent::InputListener>& operator-= (std::vector<InputEvent::Inpu
 	return lhs;
 }
 
-std::vector<InputEvent::InputListener>& operator-= (std::vector<InputEvent::InputListener>& lhs, InputEvent::InputListener rhs) {
-	for (std::vector<InputEvent::InputListener>::iterator it = lhs.begin(); it != lhs.end();) {
+InputEvent::InputListeners& operator-= (InputEvent::InputListeners& lhs, InputEvent::InputListener rhs) {
+	for (InputEvent::InputListeners::iterator it = lhs.begin(); it != lhs.end();) {
 		if (*it == rhs) {
 			it = lhs.erase(it);
 		}
