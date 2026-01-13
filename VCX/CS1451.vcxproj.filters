@@ -49,6 +49,12 @@
     <Filter Include="Source Files\Utils">
       <UniqueIdentifier>{28486349-bc23-4fe6-a9dc-f531b16d20da}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\UI">
+      <UniqueIdentifier>{8491fad9-7fb1-4480-8a8c-aea83158b949}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI">
+      <UniqueIdentifier>{ea18fb9d-d325-4315-adf6-de4d0a45e67c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\main.cpp">
