@@ -32,5 +32,5 @@ void BaseScene::Render() {
 }
 
 void BaseScene::End() {
-
+	scene_entities.clear();
 }

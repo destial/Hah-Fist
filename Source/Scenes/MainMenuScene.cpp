@@ -14,8 +14,9 @@ void MainMenuScene::Init() {
 	std::shared_ptr<BaseEntity> p = std::make_shared<Player>();
 	scene_entities.push_back(p);
 
-	std::shared_ptr<BaseEntity> s = std::make_shared<ButtonUI>(AEVec2{8.f, 4.5f});
+	std::shared_ptr<ButtonUI> s = std::make_shared<ButtonUI>(AEVec2{8.f, 4.5f});
 	s.get()->scale.x = 5.f;
+	s.get()->text = "test";
 	scene_entities.push_back(s);
 }
 

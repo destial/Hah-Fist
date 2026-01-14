@@ -7,17 +7,24 @@ BaseUI::BaseUI(AEVec2 pos) : BaseEntity(pos),
 	overlay_texture(nullptr),
 	overlay_color(0xFFDDDDDD),
 	mouse_hovered(false),
-	clicked_this_frame(false)
+	clicked_this_frame(false),
+	font(0),
+	text("")
 {
 	mesh = MeshRenderer::CreateLeftBottomCornerRect(0xFFFFFFFF);
+	font = AEGfxCreateFont("Assets/buggy-font.ttf", 12);
 }
 
 BaseUI::BaseUI() : BaseEntity(), 
 	overlay_texture(nullptr),
 	overlay_color(0xFFDDDDDD),
 	mouse_hovered(false),
-	clicked_this_frame(false) {
+	clicked_this_frame(false),
+	font(0),
+	text("")
+{
 	mesh = MeshRenderer::CreateLeftBottomCornerRect(0xFFFFFFFF);
+	font = AEGfxCreateFont("Assets/buggy-font.ttf", 12.f);
 }
 
 BaseUI::~BaseUI() {
@@ -25,6 +32,9 @@ BaseUI::~BaseUI() {
 	if (overlay_texture) {
 		AEGfxTextureUnload(overlay_texture);
 		overlay_texture = nullptr;
+	}
+	if (font) {
+		AEGfxDestroyFont(font);
 	}
 }
 
@@ -59,8 +69,14 @@ void BaseUI::Update(const f32& dt) {
 }
 
 void BaseUI::Render() {
-	BaseEntity::Render();
-
+	if (texture) {
+		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		AEGfxTextureSet(texture, 0.f, 0.f);
+	}
+	else {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	}
+	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f);
 	if (this->mouse_hovered) {
 		if (this->overlay_texture) {
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
@@ -75,11 +91,16 @@ void BaseUI::Render() {
 		float green = ((color >> 8) & 255) / 255.f;
 		float blue = (color & 255) / 255.f;
 		AEGfxSetColorToMultiply(red, green, blue, alpha);
-		AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		AEGfxSetTransparency(1.0f);
-		AEGfxSetTransform(this->transform.m);
-		AEGfxMeshDraw(mesh, MeshRenderer::RenderMode);
-		AEGfxTextureSet(nullptr, 0.f, 0.f);
 	}
+	AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+	AEGfxSetTransform(this->transform.m);
+	AEGfxMeshDraw(mesh, MeshRenderer::RenderMode);
+	AEGfxTextureSet(nullptr, 0.f, 0.f);
+	RenderText();
+}
+
+void BaseUI::RenderText() {
+	AEGfxPrint(font, "test", this->position.x, this->position.y, 1.f, 0.f, 0.f, 0.f, 1.f);
 }

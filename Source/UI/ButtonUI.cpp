@@ -18,7 +18,9 @@ void ButtonUI::OnMouseClick(AEVec2 mousePos, MouseButton button) {
 }
 
 void ButtonUI::OnMouseHover(AEVec2 pos) {
+	std::printf("hover!\n");
 }
 
 void ButtonUI::OnMouseStopHover() {
+	std::printf("stop hover!\n");
 }

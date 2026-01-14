@@ -96,6 +96,9 @@
     <ClCompile Include="..\Source\UI\BaseUI.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\UI\ButtonUI.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -132,6 +135,9 @@
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\UI\BaseUI.hpp">
+      <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\UI\ButtonUI.hpp">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
