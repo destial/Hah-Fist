@@ -4,7 +4,7 @@
 #include "AEEngine.h"
 
 class SpriteAnimation {
-private:
+protected:
 	int rows, columns;
 	AEGfxTexture* texture;
 	AEGfxVertexList* mesh;

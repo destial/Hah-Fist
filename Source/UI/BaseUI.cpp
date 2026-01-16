@@ -1,7 +1,8 @@
 #include "BaseUI.hpp"
 #include "../Utils/Utils.hpp"
 #include "../Utils/MeshRenderer.hpp"
-#include <cstdio>
+#include "../Utils/AEOverload.hpp"
+#include <iostream>
 
 BaseUI::BaseUI(AEVec2 pos) : BaseEntity(pos),
 	overlay_texture(nullptr),
@@ -12,7 +13,7 @@ BaseUI::BaseUI(AEVec2 pos) : BaseEntity(pos),
 	text("")
 {
 	mesh = MeshRenderer::CreateLeftBottomCornerRect(0xFFFFFFFF);
-	font = AEGfxCreateFont("Assets/buggy-font.ttf", 12);
+	font = AEGfxCreateFont("Assets/buggy-font.ttf", 72);
 }
 
 BaseUI::BaseUI() : BaseEntity(), 
@@ -24,7 +25,7 @@ BaseUI::BaseUI() : BaseEntity(),
 	text("")
 {
 	mesh = MeshRenderer::CreateLeftBottomCornerRect(0xFFFFFFFF);
-	font = AEGfxCreateFont("Assets/buggy-font.ttf", 12.f);
+	font = AEGfxCreateFont("Assets/buggy-font.ttf", 72);
 }
 
 BaseUI::~BaseUI() {
@@ -102,5 +103,9 @@ void BaseUI::Render() {
 }
 
 void BaseUI::RenderText() {
-	AEGfxPrint(font, "test", this->position.x, this->position.y, 1.f, 0.f, 0.f, 0.f, 1.f);
+	AEVec2 world = Game_To_Screen(this->position.x, this->position.y);
+	f32 w, h;
+	const char* str = text.c_str();
+	AEGfxGetPrintSize(font, str, this->scale.x * this->scale.y, &w, &h);
+	AEGfxPrint(font, str, world.x, world.y, h, 0.f, 0.f, 0.f, 1.f);
 }

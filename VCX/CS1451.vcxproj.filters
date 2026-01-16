@@ -99,6 +99,9 @@
     <ClCompile Include="..\Source\UI\ButtonUI.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Managers\SerializationManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -139,6 +142,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\UI\ButtonUI.hpp">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Managers\SerializationManager.hpp">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -106,6 +106,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="..\Source\main.cpp" />
     <ClCompile Include="..\Source\Managers\InputManager.cpp" />
     <ClCompile Include="..\Source\Managers\SceneManager.cpp" />
+    <ClCompile Include="..\Source\Managers\SerializationManager.cpp" />
     <ClCompile Include="..\Source\Scenes\BaseScene.cpp" />
     <ClCompile Include="..\Source\Scenes\MainMenuScene.cpp" />
     <ClCompile Include="..\Source\UI\BaseUI.cpp" />
@@ -121,6 +122,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="..\Source\Items\SpriteAnimation.hpp" />
     <ClInclude Include="..\Source\Managers\InputManager.hpp" />
     <ClInclude Include="..\Source\Managers\SceneManager.hpp" />
+    <ClInclude Include="..\Source\Managers\SerializationManager.hpp" />
     <ClInclude Include="..\Source\Scenes\BaseScene.hpp" />
     <ClInclude Include="..\Source\Scenes\MainMenuScene.hpp" />
     <ClInclude Include="..\Source\UI\BaseUI.hpp" />
