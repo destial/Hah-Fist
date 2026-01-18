@@ -19,9 +19,6 @@
     <Filter Include="Header Files\Scenes">
       <UniqueIdentifier>{81fe0e8a-3d84-4c50-aa0b-e2fb4d08eb22}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Managers">
-      <UniqueIdentifier>{876dd9ac-d673-43b4-acfc-4ea31abc569c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Managers">
       <UniqueIdentifier>{3049df2d-be8d-44f7-9f16-40ecf228b3d9}</UniqueIdentifier>
     </Filter>
@@ -54,6 +51,9 @@
     </Filter>
     <Filter Include="Header Files\UI">
       <UniqueIdentifier>{ea18fb9d-d325-4315-adf6-de4d0a45e67c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Managers">
+      <UniqueIdentifier>{876dd9ac-d673-43b4-acfc-4ea31abc569c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +102,12 @@
     <ClCompile Include="..\Source\Managers\SerializationManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Entities\GameObjectEntity.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Utils\PhysicsBody.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -145,6 +151,12 @@
     </ClInclude>
     <ClInclude Include="..\Source\Managers\SerializationManager.hpp">
       <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\GameObjectEntity.hpp">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Utils\PhysicsBody.hpp">
+      <Filter>Header Files\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

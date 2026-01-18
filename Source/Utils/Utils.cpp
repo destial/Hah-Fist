@@ -23,3 +23,11 @@ AEVec2 Screen_To_World(float x, float y) {
 		world_height - y * (world_height / 900.f)
 	};
 }
+
+float GetWorldWidth(void) {
+	return world_width;
+}
+
+float GetWorldHeight(void) {
+	return world_height;
+}

@@ -7,4 +7,6 @@ AEVec2 World_To_Screen(float x, float y);
 AEVec2 Screen_To_World(float x, float y);
 AEVec2 Game_To_Screen(float x, float y);
 
+float GetWorldWidth(void);
+float GetWorldHeight(void);
 #endif
