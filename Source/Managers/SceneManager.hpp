@@ -4,10 +4,20 @@
 #include "AETypes.h"
 #include "../Scenes/BaseScene.hpp"
 
+namespace Scenes {
+	typedef enum SceneState {
+		MAIN_MENU = 0,
+		GAME,
+		LAST,
+	} SceneState;
+}
+
 class SceneManager {
 protected:
-	BaseScene* next_scene;
-	BaseScene* current_scene;
+	BaseScene* all_scenes[Scenes::LAST];
+
+	Scenes::SceneState next_scene;
+	Scenes::SceneState current_scene;
 
 public:
 	SceneManager();
@@ -23,7 +33,7 @@ public:
 	// Called after every Update functions
 	void Render();
 
-	void SetNextScene(BaseScene* next);
+	void SetNextScene(Scenes::SceneState next);
 	BaseScene* GetCurrentScene() const;
 };
 

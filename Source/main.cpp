@@ -42,9 +42,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		});
 		InputEvent::Listeners += OnGameExit;
 
+		// dont need to call delete after, already handled in ~scene manager destructor
 		SceneManager sceneManager;
-		BaseScene* scenes[] = { new MainMenuScene() };
-		sceneManager.SetNextScene(scenes[0]);
+		sceneManager.SetNextScene(Scenes::MAIN_MENU);
 		// Game Loop
 		while (Game::bGameRunning) {
 			// Informing the system about the loop's start
@@ -84,11 +84,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 
 		sceneManager.GetCurrentScene()->End();
-
-		// free the system
-		for (BaseScene* scene : scenes) {
-			delete scene;
-		}
 
 		InputHandler::Free();
 	}
