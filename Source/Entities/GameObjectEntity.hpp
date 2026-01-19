@@ -10,10 +10,11 @@ protected:
 		AABB,
 		TOTAL
 	}type;
-	bool isActive;
+	f32 health;
+	f32 damage;
 public:
 	GameObjectEntity();
-	//~GameObjectEntity();
+	~GameObjectEntity();
 	
 
 	virtual void PreUpdate(const f32& dt);

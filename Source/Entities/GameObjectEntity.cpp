@@ -4,6 +4,10 @@ GameObjectEntity::GameObjectEntity() : BaseEntity()
 {
 }
 
+GameObjectEntity::~GameObjectEntity()
+{
+}
+
 void GameObjectEntity::PreUpdate(const f32& dt)
 {
 }
