@@ -12,9 +12,10 @@ protected:
 	}type;
 	f32 health;
 	f32 damage;
+	bool isActive;
 public:
 	GameObjectEntity();
-	~GameObjectEntity();
+	virtual ~GameObjectEntity();
 	
 
 	virtual void PreUpdate(const f32& dt);
