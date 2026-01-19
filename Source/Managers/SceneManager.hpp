@@ -6,6 +6,7 @@
 
 namespace Scenes {
 	typedef enum SceneState {
+		INIT = -1,
 		MAIN_MENU = 0,
 		GAME,
 		LAST,

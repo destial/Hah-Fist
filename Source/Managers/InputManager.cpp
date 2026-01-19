@@ -1,5 +1,6 @@
 #include "InputManager.hpp"
 #include "AEEngine.h"
+#include "AssetManager.hpp"
 
 InputHandler* InputHandler::instance = nullptr;
 

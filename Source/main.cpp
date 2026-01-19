@@ -4,6 +4,8 @@
 #include "AEGraphics.h"
 #include "Managers/SceneManager.hpp"
 #include "Managers/InputManager.hpp"
+
+#include "Managers/AssetManager.hpp"
 #include "Events/InputEvent.hpp"
 #include "Scenes/MainMenuScene.hpp"
 
@@ -86,6 +88,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		sceneManager.GetCurrentScene()->End();
 
 		InputHandler::Free();
+		AssetManager::Free();
 	}
 	AESysExit();
 }

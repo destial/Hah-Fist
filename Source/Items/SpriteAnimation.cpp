@@ -1,8 +1,10 @@
 #include "SpriteAnimation.hpp"
 #include "../Utils/MeshRenderer.hpp"
 
+#include "../Managers/AssetManager.hpp"
+
 SpriteAnimation::SpriteAnimation(const char* file, int rows, int columns) : rows(rows), columns(columns) {
-	texture = AEGfxTextureLoad(file);
+	texture = AssetManager::GetTexture(file);
 	AEGfxMeshStart();
 	AEGfxTriAdd(
 		0.f, 0.f, 0xFFFFFFFF, 0.f, 1.f / rows,
@@ -16,7 +18,6 @@ SpriteAnimation::SpriteAnimation(const char* file, int rows, int columns) : rows
 }
 
 SpriteAnimation::~SpriteAnimation() {
-	AEGfxTextureUnload(texture);
 	texture = nullptr;
 	AEGfxMeshFree(mesh);
 	mesh = nullptr;

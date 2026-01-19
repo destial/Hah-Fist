@@ -2,6 +2,7 @@
 #include "../Utils/Utils.hpp"
 #include "../Utils/MeshRenderer.hpp"
 #include "../Utils/AEOverload.hpp"
+#include "../Managers/AssetManager.hpp"
 #include <iostream>
 
 BaseUI::BaseUI(AEVec2 pos) : BaseEntity(pos),
@@ -13,7 +14,7 @@ BaseUI::BaseUI(AEVec2 pos) : BaseEntity(pos),
 	text("")
 {
 	mesh = MeshRenderer::CreateLeftBottomCornerRect(0xFFFFFFFF);
-	font = AEGfxCreateFont("Assets/buggy-font.ttf", 72);
+	font = AssetManager::GetFontId("Assets/buggy-font.ttf");
 }
 
 BaseUI::BaseUI() : BaseEntity(), 
@@ -25,18 +26,11 @@ BaseUI::BaseUI() : BaseEntity(),
 	text("")
 {
 	mesh = MeshRenderer::CreateLeftBottomCornerRect(0xFFFFFFFF);
-	font = AEGfxCreateFont("Assets/buggy-font.ttf", 72);
+	font = AssetManager::GetFontId("Assets/buggy-font.ttf");
 }
 
 BaseUI::~BaseUI() {
 	std::printf("Called BaseUI deconstructor\n");
-	if (overlay_texture) {
-		AEGfxTextureUnload(overlay_texture);
-		overlay_texture = nullptr;
-	}
-	if (font) {
-		AEGfxDestroyFont(font);
-	}
 }
 
 void BaseUI::Update(const f32& dt) {
@@ -106,6 +100,6 @@ void BaseUI::RenderText() {
 	AEVec2 world = Game_To_Screen(this->position.x, this->position.y);
 	f32 w, h;
 	const char* str = text.c_str();
-	AEGfxGetPrintSize(font, str, this->scale.x * this->scale.y, &w, &h);
+	AEGfxGetPrintSize(font, str, this->scale.y, &w, &h);
 	AEGfxPrint(font, str, world.x, world.y, h, 0.f, 0.f, 0.f, 1.f);
 }

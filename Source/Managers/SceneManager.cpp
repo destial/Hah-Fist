@@ -1,7 +1,7 @@
 #include "SceneManager.hpp"
 #include "../Scenes/MainMenuScene.hpp"
 
-SceneManager::SceneManager() : all_scenes(), next_scene(Scenes::GAME), current_scene(Scenes::GAME) {
+SceneManager::SceneManager() : all_scenes(), next_scene(Scenes::INIT), current_scene(Scenes::INIT) {
 	all_scenes[Scenes::MAIN_MENU] = new MainMenuScene();
 }
 
@@ -15,8 +15,10 @@ SceneManager::~SceneManager() {
 
 void SceneManager::PreUpdate(const f32& dt) {
 	if (current_scene != next_scene) {
-		if (all_scenes[current_scene])
-			all_scenes[current_scene]->End();
+		if (current_scene != Scenes::INIT) {
+			if (all_scenes[current_scene])
+				all_scenes[current_scene]->End();
+		}
 
 		if (all_scenes[next_scene])
 			all_scenes[next_scene]->Init();
