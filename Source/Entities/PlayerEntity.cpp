@@ -3,11 +3,15 @@
 #include "../Events/InputEvent.hpp"
 #include "../Utils/AEOverload.hpp"
 #include "../Utils/Utils.hpp"
+#include "../Managers/AssetManager.hpp"
 #include <iostream>
 #include <cstdio>
 
 Player::Player(AEVec2 pos) : BaseEntity(pos) {
-	sprite = new SpriteAnimation("Assets/67.png", 7, 5);
+	sprite = nullptr;
+	texture = AssetManager::GetTexture("Assets/PlanetTexture.png");
+	mesh = MeshRenderer::CreateLeftBottomCornerRect();
+	pBody = new PhysicsBody();
 	animationTimer = 0.f;
 	animationFrame = 1.f / (7.f * 5.f);
 	currentRow = currentCol = 0;
@@ -17,21 +21,8 @@ Player::Player(AEVec2 pos) : BaseEntity(pos) {
 	speed = 10.f;
 }
 
-Player::Player() : BaseEntity() {
-	sprite = new SpriteAnimation("Assets/67.png", 7, 5);
-	pBody = new PhysicsBody();
-	animationTimer = 0.f;
-	animationFrame = 1.f / (7.f * 5.f);
-	currentRow = currentCol = 0;
-	scale = { 5.f,5.f };
-	jumpHeight = 3.f;
-	jumpVelocity = sqrtf(jumpHeight * 2.f * -pBody->gravity.y);
-	speed = 10.f;
-}
-
 Player::~Player() {
 	std::printf("Called Player deconstructor\n");
-	delete sprite;
 	delete pBody;
 }
 
@@ -98,5 +89,6 @@ void Player::PostUpdate(const f32& dt) {
 }
 
 void Player::Render() {
-	sprite->Render(transform, currentRow, currentCol);
+	//sprite->Render(transform, currentRow, currentCol);
+	BaseEntity::Render();
 }

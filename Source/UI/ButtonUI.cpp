@@ -8,28 +8,20 @@ ButtonUI::ButtonUI(AEVec2 pos) : BaseUI(pos),
 	text = "Button";
 }
 
-ButtonUI::ButtonUI() : BaseUI(),
-	click_listeners(0),
-	hover_listeners(0),
-	unhover_listeners(0)
-{
-	text = "Button";
-}
-
 ButtonUI::~ButtonUI() {
 	std::printf("Called ButtonUI deconstructor\n");
 	click_listeners.clear();
 }
 
-void ButtonUI::AddClickListener(std::function<void()>& func) {
+void ButtonUI::AddClickListener(std::function<void()> func) {
 	click_listeners.push_back(func);
 }
 
-void ButtonUI::AddHoverListener(std::function<void()>& func) {
+void ButtonUI::AddHoverListener(std::function<void()> func) {
 	hover_listeners.push_back(func);
 }
 
-void ButtonUI::AddStopHoverListener(std::function<void()>& func) {
+void ButtonUI::AddStopHoverListener(std::function<void()> func) {
 	unhover_listeners.push_back(func);
 }
 

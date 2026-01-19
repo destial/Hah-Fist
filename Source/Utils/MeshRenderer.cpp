@@ -1,7 +1,7 @@
 #include "MeshRenderer.hpp"
 
 namespace MeshRenderer {
-	AEGfxVertexList* CreateCircle(int slices, u32 color) {
+	AEGfxVertexList* CreateCircle(u32 color, int slices) {
 		AEGfxMeshStart();
 		for (int i = 0; i < slices; ++i) {
 			f32 x = AESin(2.f * PI * i / slices);

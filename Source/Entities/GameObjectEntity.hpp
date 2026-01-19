@@ -13,8 +13,7 @@ protected:
 	bool isActive;
 public:
 	GameObjectEntity();
-	//~GameObjectEntity();
-	
+	virtual ~GameObjectEntity();
 
 	virtual void PreUpdate(const f32& dt);
 	virtual void Update(const f32& dt);

@@ -2,23 +2,23 @@
 #ifndef __ASSETMANAGER_H
 #define __ASSETMANAGER_H
 #include "AEEngine.h"
+#include "../Items/SpriteSheet.hpp"
 #include <map>
 #include <string>
 
 enum AssetType {
 	TEXTURE = 0,
+	SPRITE,
 	AUDIO,
 	FONT
 };
 
 struct Asset {
 	AssetType type;
-	union {
-		AEGfxTexture* texture;
-		s8 font;
-		AEAudio audio;
-		void* val;
-	};
+	AEGfxTexture* texture;
+	SpriteSheet* spritesheet;
+	s8 font;
+	AEAudio audio;
 };
 
 class AssetManager {
@@ -32,6 +32,7 @@ public:
 	static void Free();
 
 	static AEGfxTexture* GetTexture(std::string file_name);
+	static SpriteSheet* GetSpriteSheet(std::string file_name, int rows, int cols);
 	static s8 GetFontId(std::string file_name);
 	static AEAudio& GetAudio(std::string file_name);
 };

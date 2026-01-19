@@ -8,22 +8,12 @@
 BaseUI::BaseUI(AEVec2 pos) : BaseEntity(pos),
 	overlay_texture(nullptr),
 	overlay_color(0xFFDDDDDD),
+	base_color(0xFFFFFFFF),
 	mouse_hovered(false),
 	clicked_this_frame(false),
 	font(0),
-	text("")
-{
-	mesh = MeshRenderer::CreateLeftBottomCornerRect(0xFFFFFFFF);
-	font = AssetManager::GetFontId("Assets/buggy-font.ttf");
-}
-
-BaseUI::BaseUI() : BaseEntity(), 
-	overlay_texture(nullptr),
-	overlay_color(0xFFDDDDDD),
-	mouse_hovered(false),
-	clicked_this_frame(false),
-	font(0),
-	text("")
+	text(""),
+	text_size(1.f)
 {
 	mesh = MeshRenderer::CreateLeftBottomCornerRect(0xFFFFFFFF);
 	font = AssetManager::GetFontId("Assets/buggy-font.ttf");
@@ -34,6 +24,7 @@ BaseUI::~BaseUI() {
 }
 
 void BaseUI::Update(const f32& dt) {
+	BaseEntity::Update(dt);
 	s32 mouse_x, mouse_y;
 	AEInputGetCursorPosition(&mouse_x, &mouse_y);
 	AEVec2 mouse{ static_cast<f32>(mouse_x), static_cast<f32>(mouse_y) };
@@ -71,7 +62,8 @@ void BaseUI::Render() {
 	else {
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	}
-	AEGfxSetColorToMultiply(1.f, 1.f, 1.f, 1.f);
+	Color c = ConvertFromColor(base_color);
+	AEGfxSetColorToMultiply(c.r / 255.f, c.g / 255.f, c.b / 255.f, c.a / 255.f);
 	if (this->mouse_hovered) {
 		if (this->overlay_texture) {
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
@@ -80,12 +72,8 @@ void BaseUI::Render() {
 		else {
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		}
-		u32 color = overlay_color;
-		float alpha = ((color >> 24) & 255) / 255.f;
-		float red = ((color >> 16) & 255) / 255.f;
-		float green = ((color >> 8) & 255) / 255.f;
-		float blue = (color & 255) / 255.f;
-		AEGfxSetColorToMultiply(red, green, blue, alpha);
+		c = ConvertFromColor(overlay_color);
+		AEGfxSetColorToMultiply(c.r / 255.f, c.g / 255.f, c.b / 255.f, c.a / 255.f);
 	}
 	AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
@@ -100,6 +88,6 @@ void BaseUI::RenderText() {
 	AEVec2 world = Game_To_Screen(this->position.x, this->position.y);
 	f32 w, h;
 	const char* str = text.c_str();
-	AEGfxGetPrintSize(font, str, this->scale.y, &w, &h);
+	AEGfxGetPrintSize(font, str, text_size, &w, &h);
 	AEGfxPrint(font, str, world.x, world.y, h, 0.f, 0.f, 0.f, 1.f);
 }

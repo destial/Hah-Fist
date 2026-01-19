@@ -4,15 +4,6 @@
 #include "../Utils/Utils.hpp"
 #include <cstdio>
 
-BaseEntity::BaseEntity() : position({ 0.f, 0.f }) {
-	this->velocity = { 0.f, 0.f };
-	this->scale = { 1.f, 1.f };
-	this->rotation = 0.f;
-	this->transform = { 0 };
-	this->mesh = nullptr;
-	this->texture = nullptr;
-}
-
 BaseEntity::BaseEntity(AEVec2 position) : position(position) {
 	this->velocity = { 0.f, 0.f };
 	this->scale = { 1.f, 1.f };
@@ -28,13 +19,11 @@ BaseEntity::~BaseEntity() {
 		AEGfxMeshFree(mesh);
 		mesh = nullptr;
 	}
-	if (texture) {
-		AEGfxTextureUnload(texture);
-		texture = nullptr;
-	}
+	texture = nullptr;
 }
 
 void BaseEntity::PreUpdate(const f32& dt) {}
+
 void BaseEntity::Update(const f32& dt) {}
 
 void BaseEntity::PostUpdate(const f32& dt) {
@@ -49,7 +38,8 @@ void BaseEntity::PostUpdate(const f32& dt) {
 	
 	// TODO: Convert to world coordinates
 	AEMtx33 scale = { 1.f };
-	AEMtx33Scale(&scale, this->scale.x * 100.f, this->scale.y * 100.f);
+	AEVec2 scaleWorld = Scale_To_Screen(this->scale.x, this->scale.y);
+	AEMtx33Scale(&scale, scaleWorld.x, scaleWorld.y);
 	AEMtx33 rotate = { 0 };
 	AEMtx33Rot(&rotate, this->rotation);
 	AEMtx33 translate = { 0 };

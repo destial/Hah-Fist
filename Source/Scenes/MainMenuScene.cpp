@@ -2,7 +2,9 @@
 #include "../Entities/PlayerEntity.hpp"
 #include "../Events/InputEvent.hpp"
 #include "../Utils/AEOverload.hpp"
+#include "../Utils/Utils.hpp"
 #include "../UI/ButtonUI.hpp"
+#include <cstdio>
 
 MainMenuScene::MainMenuScene() {
 }
@@ -11,13 +13,30 @@ MainMenuScene::~MainMenuScene() {
 }
 
 void MainMenuScene::Init() {
-	std::shared_ptr<BaseEntity> p = std::make_shared<Player>();
+	std::shared_ptr<BaseEntity> p = std::make_shared<Player>(AEVec2{0.f, 0.f});
 	scene_entities.push_back(p);
 
-	std::shared_ptr<ButtonUI> s = std::make_shared<ButtonUI>(AEVec2{8.f, 4.5f});
-	s.get()->scale.x = 5.f;
-	s.get()->text = "test";
-	scene_entities.push_back(s);
+	for (int y = 0; y < GetWorldHeight(); y += 5) {
+		for (int x = 0; x < GetWorldWidth(); x += 5) {
+			std::shared_ptr<ButtonUI> s = std::make_shared<ButtonUI>(AEVec2{ static_cast<f32>(x), static_cast<f32>(y) });
+			int red = static_cast<int>(AERandFloat() * 255);
+			int green = static_cast<int>(AERandFloat() * 255);
+			int blue = static_cast<int>(AERandFloat() * 255);
+			s.get()->base_color = ConvertToColor(red, green, blue);
+
+			char b[10];
+			sprintf_s(b, "%d,%d", x, y);
+			s.get()->text = "a";
+			s.get()->text_size = 50.f;
+
+			s.get()->AddClickListener([this, x, y]() {
+				std::printf("button pressed! %d, %d\n", x, y);
+			});
+
+			scene_entities.push_back(s);
+		}
+	}
+	
 }
 
 void MainMenuScene::PreUpdate(const f32& dt) {

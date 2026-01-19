@@ -103,7 +103,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="..\Source\Entities\GameObjectEntity.cpp" />
     <ClCompile Include="..\Source\Entities\PlayerEntity.cpp" />
     <ClCompile Include="..\Source\Events\InputEvent.cpp" />
-    <ClCompile Include="..\Source\Items\SpriteAnimation.cpp" />
+    <ClCompile Include="..\Source\Items\SpriteSheet.cpp" />
     <ClCompile Include="..\Source\main.cpp" />
     <ClCompile Include="..\Source\Managers\AssetManager.cpp" />
     <ClCompile Include="..\Source\Managers\InputManager.cpp" />
@@ -123,7 +123,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="..\Source\Entities\GameObjectEntity.hpp" />
     <ClInclude Include="..\Source\Entities\PlayerEntity.hpp" />
     <ClInclude Include="..\Source\Events\InputEvent.hpp" />
-    <ClInclude Include="..\Source\Items\SpriteAnimation.hpp" />
+    <ClInclude Include="..\Source\Items\SpriteSheet.hpp" />
     <ClInclude Include="..\Source\Managers\AssetManager.hpp" />
     <ClInclude Include="..\Source\Managers\InputManager.hpp" />
     <ClInclude Include="..\Source\Managers\SceneManager.hpp" />
