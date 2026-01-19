@@ -4,7 +4,7 @@ BaseScene::BaseScene() : scene_entities(0) {
 }
 
 BaseScene::~BaseScene() {
-
+	scene_entities.clear();
 }
 
 void BaseScene::PreUpdate(const f32& dt) {

@@ -3,14 +3,14 @@
 #define __SPRITEANIMATION_H
 #include "AEEngine.h"
 
-class SpriteAnimation {
+class SpriteSheet {
 protected:
 	int rows, columns;
 	AEGfxTexture* texture;
 	AEGfxVertexList* mesh;
 public:
-	SpriteAnimation(const char* file, int rows, int columns);
-	~SpriteAnimation();
+	SpriteSheet(const char* file, int rows, int columns);
+	~SpriteSheet();
 
 	void Render(AEMtx33& t, int row, int column);
 };

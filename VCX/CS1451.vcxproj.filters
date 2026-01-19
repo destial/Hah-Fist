@@ -81,7 +81,7 @@
     <ClCompile Include="..\Source\Scenes\BaseScene.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Items\SpriteAnimation.cpp">
+    <ClCompile Include="..\Source\Items\SpriteSheet.cpp">
       <Filter>Source Files\Items</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Utils\Utils.cpp">
@@ -107,6 +107,9 @@
     </ClCompile>
     <ClCompile Include="..\Source\Utils\PhysicsBody.cpp">
       <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Managers\AssetManager.cpp">
+      <Filter>Source Files\Managers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -137,7 +140,7 @@
     <ClInclude Include="..\Source\Entities\PlayerEntity.hpp">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Items\SpriteAnimation.hpp">
+    <ClInclude Include="..\Source\Items\SpriteSheet.hpp">
       <Filter>Header Files\Items</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Utils\Utils.hpp">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Utils\PhysicsBody.hpp">
       <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Managers\AssetManager.hpp">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

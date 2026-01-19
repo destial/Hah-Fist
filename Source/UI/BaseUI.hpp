@@ -17,10 +17,11 @@ protected:
 	s8 font;
 public:
 	std::string text;
+	f32 text_size;
+	u32 base_color;
 	u32 overlay_color;
 	AEGfxTexture* overlay_texture;
 
-	BaseUI();
 	BaseUI(AEVec2 pos);
 	virtual ~BaseUI();
 	virtual void Update(const f32& dt);

@@ -2,7 +2,7 @@
 #ifndef __PLAYERENTITY_H
 #define __PLAYERENTITY_H
 #include "BaseEntity.hpp"
-#include "../Items/SpriteAnimation.hpp"
+#include "../Items/SpriteSheet.hpp"
 #include "../Events/InputEvent.hpp"
 #include "../Utils/PhysicsBody.hpp"
 
@@ -13,11 +13,10 @@ protected:
 	f32 jumpVelocity;
 	f32 speed;
 	int currentRow, currentCol;
-	SpriteAnimation* sprite;
+	SpriteSheet* sprite;
 public:
-	Player();
 	Player(AEVec2 pos);
-	~Player();
+	virtual ~Player();
 	PhysicsBody* pBody;
 	virtual void PreUpdate(const f32& dt);
 	virtual void Update(const f32& dt);

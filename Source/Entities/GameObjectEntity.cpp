@@ -1,6 +1,10 @@
 #include "GameObjectEntity.hpp"
 
-GameObjectEntity::GameObjectEntity() : BaseEntity()
+GameObjectEntity::GameObjectEntity() : isActive(true), type(CIRCLE), BaseEntity({0.f})
+{
+}
+
+GameObjectEntity::~GameObjectEntity() 
 {
 }
 
