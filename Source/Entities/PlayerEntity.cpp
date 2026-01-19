@@ -16,9 +16,9 @@ Player::Player(AEVec2 pos) : BaseEntity(pos) {
 	animationFrame = 1.f / (7.f * 5.f);
 	currentRow = currentCol = 0;
 	scale = { 5.f,5.f };
-	jumpHeight = 1.5f;
+	jumpHeight = 2.f;
 	jumpVelocity = sqrtf(jumpHeight * 2.f * -pBody->gravity.y);
-	speed = 10.f;
+	speed = 20.f;
 }
 
 Player::~Player() {
