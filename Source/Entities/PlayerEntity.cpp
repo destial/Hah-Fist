@@ -14,6 +14,7 @@ Player::Player(AEVec2 pos) : BaseEntity(pos) {
 	scale = { 5.f,5.f };
 	jumpHeight = 1.5f;
 	jumpVelocity = sqrtf(jumpHeight * 2.f * -pBody->gravity.y);
+	speed = 10.f;
 }
 
 Player::Player() : BaseEntity() {
@@ -23,10 +24,9 @@ Player::Player() : BaseEntity() {
 	animationFrame = 1.f / (7.f * 5.f);
 	currentRow = currentCol = 0;
 	scale = { 5.f,5.f };
-	jumpHeight = 50.f;
-	//jumpVel = Mathf.Sqrt(maxHeightJump * 2f * -Physics.gravity.y); 
-	// Calculates the jump force required to reach the maxHeightJump, mgh = 0.5mv^2 (Kinetic energy required to reach max potential energy)
+	jumpHeight = 3.f;
 	jumpVelocity = sqrtf(jumpHeight * 2.f * -pBody->gravity.y);
+	speed = 10.f;
 }
 
 Player::~Player() {
@@ -37,7 +37,7 @@ Player::~Player() {
 
 void Player::PreUpdate(const f32& dt) {
 	BaseEntity::PreUpdate(dt);
-	//this->velocity = { 0.f, 0.f };
+	this->velocity = { 0.f, velocity.y };
 }
 
 void Player::Update(const f32& dt) {
@@ -45,15 +45,15 @@ void Player::Update(const f32& dt) {
 	
 	// Out of bounds checking
 	AEVec2 dir{};
-	if (AEInputCheckCurr(AEVK_W)) {
-		dir += { 0.f, 1.f };
-		
-		//velocity.y += dt * 5.f;
-	}
-	if (AEInputCheckCurr(AEVK_S)) {
-		dir += { 0.f , -1.f };
-		//velocity.y -= dt * 5.f;
-	}
+	//if (AEInputCheckCurr(AEVK_W)) {
+	//	dir += { 0.f, 1.f };
+	//	
+	//	//velocity.y += dt * 5.f;
+	//}
+	//if (AEInputCheckCurr(AEVK_S)) {
+	//	dir += { 0.f , -1.f };
+	//	//velocity.y -= dt * 5.f;
+	//}
 	if (AEInputCheckCurr(AEVK_A)) {
 		dir += { -1.f , 0.f };
 		//velocity.x -= dt * 5.f;
@@ -65,14 +65,11 @@ void Player::Update(const f32& dt) {
 	if (dir.x || dir.y) {
 		AEVec2Normalize(&dir, &dir);
 	}
-	velocity = dir * 10.f;
-	pBody->ApplyGravity(this->velocity, dt);
+	velocity.x = dir.x * speed;
+	
 	if (AEInputCheckTriggered(AEVK_SPACE)) {
 		velocity.y = jumpVelocity;
-		std::cout << "Jump: " << velocity << std::endl;
-		//pBody->state = PhysicsBody::IN_AIR;
 	}
-	std::cout << "velocity: " << velocity << std::endl;
 	/*if (position.x > ) {
 		position.x = GetWorldWidth() - scale.x;
 	}
@@ -92,10 +89,12 @@ void Player::Update(const f32& dt) {
 			}
 		}
 	}
+	pBody->ApplyGravity(this->velocity, dt);
 }
 
 void Player::PostUpdate(const f32& dt) {
 	BaseEntity::PostUpdate(dt);
+	
 }
 
 void Player::Render() {

@@ -39,8 +39,14 @@ void BaseEntity::Update(const f32& dt) {}
 
 void BaseEntity::PostUpdate(const f32& dt) {
 	this->position += (this->velocity) * dt;
-	position.x = AEClamp(position.x, 0.f, GetWorldWidth() - scale.x);
-	position.y = AEClamp(position.y, 0.f, GetWorldHeight() - scale.y);
+	this->position.y = AEClamp(this->position.y, 0.f, GetWorldHeight() - this->scale.y);
+	if (this->position.x <= 0.f) {
+		velocity.x = 0.f;
+	}
+	else if (this->position.y <= 0.f) {
+		velocity.y = 0.f;
+	}
+	
 	// TODO: Convert to world coordinates
 	AEMtx33 scale = { 1.f };
 	AEMtx33Scale(&scale, this->scale.x * 100.f, this->scale.y * 100.f);

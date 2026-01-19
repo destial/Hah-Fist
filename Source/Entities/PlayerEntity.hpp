@@ -11,6 +11,7 @@ protected:
 	f32 animationTimer, animationFrame;
 	f32 jumpHeight;
 	f32 jumpVelocity;
+	f32 speed;
 	int currentRow, currentCol;
 	SpriteAnimation* sprite;
 public:
