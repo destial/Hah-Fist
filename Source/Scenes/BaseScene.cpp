@@ -27,7 +27,7 @@ void BaseScene::PostUpdate(const f32& dt) {
 	}
 }
 
-static bool compare(std::shared_ptr<BaseEntity> a, std::shared_ptr<BaseEntity> b) {
+static bool compare(BaseEntity* a, BaseEntity* b) {
 	return b->layer > a->layer;
 }
 
@@ -40,5 +40,8 @@ void BaseScene::Render() {
 }
 
 void BaseScene::End() {
+	for (auto& entity : scene_entities) {
+		delete entity;
+	}
 	scene_entities.clear();
 }

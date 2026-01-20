@@ -12,6 +12,9 @@ namespace Utils {
 	AEVec2 Screen_To_World(float x, float y);
 	AEVec2 Game_To_Screen(float x, float y);
 	AEVec2 Scale_To_Screen(float x, float y);
+	AEVec2 Game_To_TextScreen(float x, float y);
+
+	const AEVec2 Get_Mouse_World();
 
 	u32 ConvertToColor(int red, int green, int blue, int alpha = 255);
 	Color ConvertFromColor(u32 color);

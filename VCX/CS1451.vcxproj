@@ -113,6 +113,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="..\Source\Scenes\MainMenuScene.cpp" />
     <ClCompile Include="..\Source\UI\BaseUI.cpp" />
     <ClCompile Include="..\Source\UI\ButtonUI.cpp" />
+    <ClCompile Include="..\Source\UI\CircleButtonUI.cpp" />
     <ClCompile Include="..\Source\Utils\AEOverload.cpp" />
     <ClCompile Include="..\Source\Utils\MeshRenderer.cpp" />
     <ClCompile Include="..\Source\Utils\PhysicsBody.cpp" />
@@ -132,6 +133,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="..\Source\Scenes\MainMenuScene.hpp" />
     <ClInclude Include="..\Source\UI\BaseUI.hpp" />
     <ClInclude Include="..\Source\UI\ButtonUI.hpp" />
+    <ClInclude Include="..\Source\UI\CircleButtonUI.hpp" />
     <ClInclude Include="..\Source\Utils\AEOverload.hpp" />
     <ClInclude Include="..\Source\Utils\MeshRenderer.hpp" />
     <ClInclude Include="..\Source\Utils\PhysicsBody.hpp" />

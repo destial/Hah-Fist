@@ -3,6 +3,7 @@
 #include "AEEngine.h"
 #include "AEGraphics.h"
 #include "Utils/Utils.hpp"
+#include "Utils/MeshRenderer.hpp"
 #include "Managers/SceneManager.hpp"
 #include "Managers/InputManager.hpp"
 
@@ -92,6 +93,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 		sceneManager.GetCurrentScene()->End();
 
+		MeshRenderer::Free();
 		InputHandler::Free();
 		AssetManager::Free();
 	}

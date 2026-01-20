@@ -6,11 +6,11 @@
 namespace MeshRenderer {
 	static AEGfxMeshDrawMode RenderMode = AE_GFX_MDM_TRIANGLES;
 
-	AEGfxVertexList* CreateCircle(u32 color = 0xFFFFFFFF, int slices = 50);
+	AEGfxVertexList* GetCircle(int slices = 50);
 
-	AEGfxVertexList* CreateCenterRect(u32 color = 0xFFFFFFFF);
+	AEGfxVertexList* GetLeftBottomCornerRect();
 
-	AEGfxVertexList* CreateLeftBottomCornerRect(u32 color = 0xFFFFFFFF);
+	void Free();
 }
 
 #endif

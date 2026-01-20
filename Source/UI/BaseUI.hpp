@@ -28,6 +28,8 @@ public:
 	virtual void Update(const f32& dt);
 	virtual void Render();
 	virtual void RenderText();
+
+	void AddUpdateListener(std::function<void()> func);
 };
 
 #endif

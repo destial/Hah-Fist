@@ -8,7 +8,7 @@
 
 class BaseScene {
 protected:
-	std::vector<std::shared_ptr<BaseEntity>> scene_entities;
+	std::vector<BaseEntity*> scene_entities;
 	BaseScene();
 
 public:
