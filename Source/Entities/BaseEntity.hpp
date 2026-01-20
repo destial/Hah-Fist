@@ -9,12 +9,14 @@ protected:
 	AEGfxVertexList* mesh;
 	AEGfxTexture* texture;
 	AEMtx33 transform;
+	
 public:
 	virtual ~BaseEntity();
 	AEVec2 position;
 	AEVec2 velocity;
 	AEVec2 scale;
 	f32 rotation;
+	int layer;
 
 	virtual void PreUpdate(const f32& dt);
 	virtual void Update(const f32& dt);

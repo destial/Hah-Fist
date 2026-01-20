@@ -4,13 +4,15 @@
 #include "../Utils/Utils.hpp"
 #include <cstdio>
 
-BaseEntity::BaseEntity(AEVec2 position) : position(position) {
-	this->velocity = { 0.f, 0.f };
-	this->scale = { 1.f, 1.f };
-	this->rotation = 0.f;
-	this->transform = { 0 };
-	this->mesh = nullptr;
-	this->texture = nullptr;
+BaseEntity::BaseEntity(AEVec2 position) :
+	position(position),
+	velocity({ 0 }),
+	scale({ 1.f, 1.f }),
+	rotation(0),
+	transform({ 0 }),
+	layer(0),
+	mesh(nullptr), texture(nullptr)
+{
 }
 
 BaseEntity::~BaseEntity() {
@@ -27,23 +29,22 @@ void BaseEntity::PreUpdate(const f32& dt) {}
 void BaseEntity::Update(const f32& dt) {}
 
 void BaseEntity::PostUpdate(const f32& dt) {
-	this->position += (this->velocity) * dt;
-	this->position.y = AEClamp(this->position.y, 0.f, GetWorldHeight() - this->scale.y);
+	this->position += this->velocity * dt;
+	this->position.y = AEClamp(this->position.y, 0.f, Utils::GetWorldHeight() - this->scale.y);
 	if (this->position.x <= 0.f) {
-		velocity.x = 0.f;
+		velocity.x = 0;
 	}
 	else if (this->position.y <= 0.f) {
-		velocity.y = 0.f;
+		velocity.y = 0;
 	}
 	
-	// TODO: Convert to world coordinates
 	AEMtx33 scale = { 1.f };
-	AEVec2 scaleWorld = Scale_To_Screen(this->scale.x, this->scale.y);
+	AEVec2 scaleWorld = Utils::Scale_To_Screen(this->scale.x, this->scale.y);
 	AEMtx33Scale(&scale, scaleWorld.x, scaleWorld.y);
 	AEMtx33 rotate = { 0 };
 	AEMtx33Rot(&rotate, this->rotation);
 	AEMtx33 translate = { 0 };
-	AEVec2 screenPos = Game_To_Screen(this->position.x, this->position.y);
+	AEVec2 screenPos = Utils::Game_To_Screen(this->position.x, this->position.y);
 	AEMtx33Trans(&translate, screenPos.x, screenPos.y);
 	this->transform = { 0 };
 	AEMtx33Concat(&this->transform, &rotate, &scale);

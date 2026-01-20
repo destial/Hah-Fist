@@ -18,7 +18,8 @@ Player::Player(AEVec2 pos) : BaseEntity(pos) {
 	scale = { 5.f,5.f };
 	jumpHeight = 2.f;
 	jumpVelocity = sqrtf(jumpHeight * 2.f * -pBody->gravity.y);
-	speed = 20.f;
+	speed = 10.f;
+	layer = 2;
 }
 
 Player::~Player() {
@@ -58,7 +59,7 @@ void Player::Update(const f32& dt) {
 	}
 	velocity.x = dir.x * speed;
 	
-	if (AEInputCheckTriggered(AEVK_SPACE)) {
+	if (AEInputCheckCurr(AEVK_SPACE) && velocity.y == 0) {
 		velocity.y = jumpVelocity;
 	}
 	/*if (position.x > ) {
