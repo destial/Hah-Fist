@@ -13,6 +13,11 @@ AEVec2 operator* (const AEVec2& lhs, f32 magnitude) {
 	return { lhs.x * magnitude, lhs.y * magnitude };
 }
 
+AEVec2 operator*(const float& scalar, const AEVec2& rhs)
+{
+	return rhs * scalar;
+}
+
 AEVec2 operator/ (const AEVec2& lhs, f32 magnitude) {
 	return { lhs.x / magnitude, lhs.y / magnitude };
 }

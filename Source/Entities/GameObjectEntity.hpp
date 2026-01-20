@@ -7,7 +7,6 @@ class GameObjectEntity : public BaseEntity {
 protected:
 	f32 health;
 	f32 damage;
-	bool isActive;
 public:
 	enum SHAPE {
 		CIRCLE,
@@ -21,5 +20,6 @@ public:
 	virtual void Update(const f32& dt);
 	virtual void PostUpdate(const f32& dt);
 	virtual void Render();
+	bool isActive;
 };
 #endif

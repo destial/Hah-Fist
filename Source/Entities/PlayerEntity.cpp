@@ -28,13 +28,12 @@ Player::~Player() {
 }
 
 void Player::PreUpdate(const f32& dt) {
-	BaseEntity::PreUpdate(dt);
-	this->velocity = { 0.f, velocity.y };
+	GameObjectEntity::PreUpdate(dt);
+	
 }
 
 void Player::Update(const f32& dt) {
-	BaseEntity::Update(dt);
-	
+	GameObjectEntity::Update(dt);
 	// Out of bounds checking
 	AEVec2 dir{};
 	if (AEInputCheckCurr(AEVK_A)) {
@@ -68,7 +67,7 @@ void Player::Update(const f32& dt) {
 }
 
 void Player::PostUpdate(const f32& dt) {
-	BaseEntity::PostUpdate(dt);
+	GameObjectEntity::PostUpdate(dt);
 }
 
 void Player::Render() {

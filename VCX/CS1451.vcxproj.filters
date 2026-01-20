@@ -114,6 +114,9 @@
     <ClCompile Include="..\Source\UI\CircleButtonUI.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Entities\EnemyEntity.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -169,6 +172,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\UI\CircleButtonUI.hpp">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\EnemyEntity.hpp">
+      <Filter>Header Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

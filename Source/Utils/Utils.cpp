@@ -1,6 +1,5 @@
 #include "Utils.hpp"
 #include "AEMath.h"
-
 namespace Utils {
 	static float world_width = 48.f;
 	static float world_height = 27.f;
@@ -75,8 +74,10 @@ namespace Utils {
 		return deltaTime;
 	}
 
-	bool CircleCircleCollision(AEVec2& center_pos_1, const f32& radius_1, AEVec2& center_pos_2, const f32& radius_2) {
-		f32 sqrDisplacement = AEVec2SquareDistance(&center_pos_1, &center_pos_2);
+	bool CircleCircleCollision(const AEVec2& center_pos_1, const f32& radius_1, const AEVec2& center_pos_2, const f32& radius_2) {
+		AEVec2 center_1 = { center_pos_1.x + radius_1, center_pos_1.y + radius_2 };
+		AEVec2 center_2 = { center_pos_2.x + radius_1, center_pos_2.y + radius_2 };
+		f32 sqrDisplacement = AEVec2SquareDistance(&center_1, &center_2);
 		f32 combinedRadii = radius_1 + radius_2;
 		return sqrDisplacement <= combinedRadii * combinedRadii;
 	}

@@ -1,6 +1,6 @@
 #include "MainMenuScene.hpp"
 #include "../Entities/PlayerEntity.hpp"
-#include "../Entities/GameObjectEntity.hpp"
+#include "../Entities/EnemyEntity.hpp"
 #include "../Events/InputEvent.hpp"
 #include "../Utils/AEOverload.hpp"
 #include "../Utils/Utils.hpp"
@@ -31,8 +31,11 @@ void MainMenuScene::Init() {
 	scene_entities.push_back(s);
 
 	GameObjectEntity* p = new Player(AEVec2{ 0.f, 0.f });
+	GameObjectEntity* e = new EnemyEntity(AEVec2{ 9.f, 4.5f });
 	scene_entities.push_back(p);
+	scene_entities.push_back(e);
 	gameObjects.push_back(p);
+	gameObjects.push_back(e);
 }
 
 void MainMenuScene::PreUpdate(const f32& dt) {
@@ -41,6 +44,21 @@ void MainMenuScene::PreUpdate(const f32& dt) {
 
 void MainMenuScene::Update(const f32& dt) {
 	BaseScene::Update(dt);
+	// Collision detection 
+	for (std::vector<GameObjectEntity*>::iterator it = gameObjects.begin(); it != gameObjects.end(); ++it) {
+		GameObjectEntity* go = static_cast<GameObjectEntity*>(*it);
+		if (go->isActive) {
+			if (go->type == GameObjectEntity::AABB) {
+				for (std::vector<GameObjectEntity*>::iterator it2 = gameObjects.begin(); it2 != gameObjects.end(); ++it2) {
+					GameObjectEntity* go2 = static_cast<GameObjectEntity*>(*it2);
+					if (go2 == go) continue;
+					if (Utils::AABB(go->position, go->scale.x, go->scale.y, go2->position, go2->scale.x, go2->scale.y)) {
+						// Collision response WIP
+					}
+				}
+			}
+		}
+	}
 }
 
 void MainMenuScene::PostUpdate(const f32& dt) {

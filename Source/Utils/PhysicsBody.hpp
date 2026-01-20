@@ -13,8 +13,7 @@ public:
 	f32 mass;
 	f32 gravityScale;
 
-	PhysicsBody();
-	PhysicsBody(AEVec2 gravity, AEVec2 force, f32 mass, f32 gravityScale);
+	PhysicsBody(f32 mass = 1.f, f32 gravityScale = 1.f, AEVec2 gravity = AEVec2{0.0f, -98.f});
 	~PhysicsBody();
 
 	void ApplyGravity(AEVec2& velocity,const f32& dt);

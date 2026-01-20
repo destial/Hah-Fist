@@ -14,7 +14,7 @@ public:
 	virtual void Render();
 	virtual void End();
 
-	std::vector<std::shared_ptr<GameObjectEntity>> gameObjects;
+	std::vector<GameObjectEntity*> gameObjects;
 };
 
 #endif
