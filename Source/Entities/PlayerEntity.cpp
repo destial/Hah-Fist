@@ -19,6 +19,7 @@ Player::Player(AEVec2 pos) : BaseEntity(pos) {
 	jumpHeight = 1.5f;
 	jumpVelocity = sqrtf(jumpHeight * 2.f * -pBody->gravity.y);
 	speed = 10.f;
+	layer = 2;
 }
 
 Player::~Player() {

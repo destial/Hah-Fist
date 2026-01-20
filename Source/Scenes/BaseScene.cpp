@@ -1,4 +1,6 @@
 #include "BaseScene.hpp"
+#include <algorithm>
+#include <memory>
 
 BaseScene::BaseScene() : scene_entities(0) {
 }
@@ -25,7 +27,13 @@ void BaseScene::PostUpdate(const f32& dt) {
 	}
 }
 
+static bool compare(std::shared_ptr<BaseEntity> a, std::shared_ptr<BaseEntity> b) {
+	return b->layer > a->layer;
+}
+
 void BaseScene::Render() {
+	std::stable_sort(scene_entities.begin(), scene_entities.end(), compare);
+
 	for (auto& entity : scene_entities) {
 		entity->Render();
 	}

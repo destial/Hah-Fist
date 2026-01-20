@@ -1,9 +1,13 @@
 #include "ButtonUI.hpp"
+#include "../Utils/Utils.hpp"
+#include "../Utils/MeshRenderer.hpp"
 
 ButtonUI::ButtonUI(AEVec2 pos) : BaseUI(pos),
 	click_listeners(0),
 	hover_listeners(0),
-	unhover_listeners(0)
+	unhover_listeners(0),
+	clicked_this_frame(false),
+	mouse_hovered(false)
 {
 	text = "Button";
 }
@@ -11,6 +15,67 @@ ButtonUI::ButtonUI(AEVec2 pos) : BaseUI(pos),
 ButtonUI::~ButtonUI() {
 	std::printf("Called ButtonUI deconstructor\n");
 	click_listeners.clear();
+}
+
+void ButtonUI::Update(const f32& dt) {
+	BaseUI::Update(dt);
+	s32 mouse_x, mouse_y;
+	AEInputGetCursorPosition(&mouse_x, &mouse_y);
+	AEVec2 mouse{ static_cast<f32>(mouse_x), static_cast<f32>(mouse_y) };
+	AEVec2 mouse_world = Utils::Screen_To_World(mouse.x, mouse.y);
+
+	if (mouse_world.x >= this->position.x && mouse_world.x <= this->position.x + this->scale.x &&
+		mouse_world.y >= this->position.y && mouse_world.y <= this->position.y + this->scale.y) {
+		OnMouseHover(mouse);
+		this->mouse_hovered = true;
+
+		if (AEInputCheckTriggered(AEVK_LBUTTON) || AEInputCheckTriggered(AEVK_RBUTTON) || AEInputCheckTriggered(AEVK_MBUTTON)) {
+			this->clicked_this_frame = true;
+			OnMouseClick(mouse,
+				AEInputCheckTriggered(AEVK_LBUTTON) ? MouseButton::LEFT :
+				AEInputCheckTriggered(AEVK_RBUTTON) ? MouseButton::RIGHT :
+				MouseButton::MIDDLE
+			);
+		}
+		else {
+			this->clicked_this_frame = false;
+		}
+	}
+	else if (this->mouse_hovered) {
+		OnMouseStopHover();
+		this->mouse_hovered = false;
+		this->clicked_this_frame = false;
+	}
+}
+
+void ButtonUI::Render() {
+	if (texture) {
+		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+		AEGfxTextureSet(texture, 0.f, 0.f);
+	}
+	else {
+		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+	}
+	Color c = Utils::ConvertFromColor(base_color);
+	AEGfxSetColorToMultiply(c.r / 255.f, c.g / 255.f, c.b / 255.f, c.a / 255.f);
+	if (this->mouse_hovered) {
+		if (this->overlay_texture) {
+			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
+			AEGfxTextureSet(overlay_texture, 0.f, 0.f);
+		}
+		else {
+			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+		}
+		c = Utils::ConvertFromColor(overlay_color);
+		AEGfxSetColorToMultiply(c.r / 255.f, c.g / 255.f, c.b / 255.f, c.a / 255.f);
+	}
+	AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+	AEGfxSetTransparency(1.0f);
+	AEGfxSetTransform(this->transform.m);
+	AEGfxMeshDraw(mesh, MeshRenderer::RenderMode);
+	AEGfxTextureSet(nullptr, 0.f, 0.f);
+	RenderText();
 }
 
 void ButtonUI::AddClickListener(std::function<void()> func) {

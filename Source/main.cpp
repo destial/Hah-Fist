@@ -32,18 +32,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	// Reset the system modules
 	AESysReset();
-	AEFrameRateControllerInit(120);
+	AEGfxSetVSync(1);
+	AEFrameRateControllerInit(-1);
 
 	// Initialize fonts
 	AEGfxFontSystemStart();
 
 	{
+#if _DEBUG
 		auto OnGameExit = ([](const InputEvent* ev) {
 			if (ev->IsKeyTriggered(AEVK_ESCAPE)) {
 				Game::bGameRunning = false;
 			}
 		});
 		InputEvent::Listeners += OnGameExit;
+#endif
 
 		// dont need to call delete after, already handled in ~scene manager destructor
 		SceneManager sceneManager;

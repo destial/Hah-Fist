@@ -2,8 +2,7 @@
 
 AssetManager* AssetManager::instance = nullptr;
 
-AssetManager::AssetManager() {
-}
+AssetManager::AssetManager() {}
 
 AssetManager::~AssetManager() {
 	for (auto& entry : asset_map) {
@@ -60,7 +59,7 @@ s8 AssetManager::GetFontId(std::string file_name) {
 		return instance->asset_map[file_name]->font;
 	}
 	instance->asset_map[file_name] = new Asset();
-	instance->asset_map[file_name]->font = AEGfxCreateFont(file_name.c_str(), 72);
+	instance->asset_map[file_name]->font = AEGfxCreateFont(file_name.c_str(), 50);
 	instance->asset_map[file_name]->type = FONT;
 	return instance->asset_map[file_name]->font;
 }
