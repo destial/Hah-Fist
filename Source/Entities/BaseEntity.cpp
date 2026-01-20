@@ -31,10 +31,10 @@ void BaseEntity::Update(const f32& dt) {}
 void BaseEntity::PostUpdate(const f32& dt) {
 	this->position += this->velocity * dt;
 	this->position.y = AEClamp(this->position.y, 0.f, Utils::GetWorldHeight() - this->scale.y);
-	if (this->position.x <= 0.f) {
+	/*if (this->position.x <= 0.f) {
 		velocity.x = 0;
-	}
-	else if (this->position.y <= 0.f) {
+	}*/
+	if (this->position.y <= 0.f) {
 		velocity.y = 0;
 	}
 	

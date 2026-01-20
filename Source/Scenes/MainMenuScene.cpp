@@ -1,5 +1,6 @@
 #include "MainMenuScene.hpp"
 #include "../Entities/PlayerEntity.hpp"
+#include "../Entities/GameObjectEntity.hpp"
 #include "../Events/InputEvent.hpp"
 #include "../Utils/AEOverload.hpp"
 #include "../Utils/Utils.hpp"
@@ -33,7 +34,7 @@ void MainMenuScene::Init() {
 		}
 	}
 
-	std::shared_ptr<BaseEntity> p = std::make_shared<Player>(AEVec2{ 0.f, 0.f });
+	std::shared_ptr<GameObjectEntity> p = std::make_shared<Player>(AEVec2{ 0.f, 0.f });
 	scene_entities.push_back(p);
 }
 

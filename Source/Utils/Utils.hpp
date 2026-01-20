@@ -19,6 +19,9 @@ namespace Utils {
 	const float GetWorldWidth(void);
 	const float GetWorldHeight(void);
 	const float GetDeltaTime(void);
+
+	bool CircleCircleCollision(AEVec2& center_pos_1, const f32& radius_1, AEVec2& center_pos_2, const f32& radius_2);
+	bool AABB(const AEVec2& bottom_left_1, const f32& width_1, const f32& height_1, const AEVec2& bottom_left_2, const f32& width_2, const f32& height_2);
 	void SetDeltaTime(float dt);
 
 }

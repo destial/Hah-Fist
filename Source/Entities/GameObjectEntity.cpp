@@ -4,6 +4,10 @@ GameObjectEntity::GameObjectEntity() : isActive(true), type(CIRCLE), BaseEntity(
 {
 }
 
+GameObjectEntity::GameObjectEntity(AEVec2 pos, SHAPE type) : isActive(true), type(type),BaseEntity(pos)
+{
+}
+
 GameObjectEntity::~GameObjectEntity() 
 {
 }
@@ -22,4 +26,6 @@ void GameObjectEntity::PostUpdate(const f32& dt)
 
 void GameObjectEntity::Render()
 {
+	if(isActive)
+		BaseEntity::Render();
 }

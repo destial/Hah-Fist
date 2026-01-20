@@ -60,7 +60,21 @@ namespace Utils {
 		return deltaTime;
 	}
 
+	bool CircleCircleCollision(AEVec2& center_pos_1, const f32& radius_1, AEVec2& center_pos_2, const f32& radius_2) {
+		f32 sqrDisplacement = AEVec2SquareDistance(&center_pos_1, &center_pos_2);
+		f32 combinedRadii = radius_1 + radius_2;
+		return sqrDisplacement <= combinedRadii * combinedRadii;
+	}
+
+	bool AABB(const AEVec2& bottom_left_1, const f32& width_1, const f32& height_1, const AEVec2& bottom_left_2, const f32& width_2, const f32& height_2) {
+		return !(bottom_left_1.x + width_1 < bottom_left_2.x || bottom_left_1.x > bottom_left_2.x + width_2 ||
+			bottom_left_1.y + height_1 < bottom_left_2.y || bottom_left_1.y > bottom_left_2.y + height_2);
+	}
+
 	void SetDeltaTime(float dt) {
 		deltaTime = dt;
 	}
+
+	
+
 }
