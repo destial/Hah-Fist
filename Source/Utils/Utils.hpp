@@ -16,8 +16,10 @@ namespace Utils {
 	u32 ConvertToColor(int red, int green, int blue, int alpha = 255);
 	Color ConvertFromColor(u32 color);
 
-	float GetWorldWidth(void);
-	float GetWorldHeight(void);
+	const float GetWorldWidth(void);
+	const float GetWorldHeight(void);
+	const float GetDeltaTime(void);
+	void SetDeltaTime(float dt);
 
 }
 #endif

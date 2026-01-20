@@ -2,6 +2,7 @@
 #include <vector>
 #include "AEEngine.h"
 #include "AEGraphics.h"
+#include "Utils/Utils.hpp"
 #include "Managers/SceneManager.hpp"
 #include "Managers/InputManager.hpp"
 
@@ -61,6 +62,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			// run timestep for every lost frame if < 60fps
 			while (frame_time > 0.f) {
 				dt = min(frame_time, 1 / 60.f);
+				Utils::SetDeltaTime(dt);
 				sceneManager.PreUpdate(dt);
 				InputHandler::GetInstance()->Update(dt);
 				sceneManager.Update(dt);

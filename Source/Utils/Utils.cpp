@@ -4,6 +4,8 @@ namespace Utils {
 	static float world_width = 48.f;
 	static float world_height = 27.f;
 
+	static float deltaTime;
+
 	AEVec2 World_To_Screen(float x, float y) {
 		return {
 			x * (1600.f / world_width),
@@ -46,11 +48,19 @@ namespace Utils {
 		return c;
 	}
 
-	float GetWorldWidth(void) {
+	const float GetWorldWidth(void) {
 		return world_width;
 	}
 
-	float GetWorldHeight(void) {
+	const float GetWorldHeight(void) {
 		return world_height;
+	}
+
+	const float GetDeltaTime(void) {
+		return deltaTime;
+	}
+
+	void SetDeltaTime(float dt) {
+		deltaTime = dt;
 	}
 }
