@@ -14,16 +14,20 @@ BaseUI::BaseUI(AEVec2 pos) : BaseEntity(pos),
 	text_size(1.f)
 {
 	layer = 5;
-	mesh = MeshRenderer::CreateLeftBottomCornerRect(0xFFFFFFFF);
+	mesh = MeshRenderer::GetLeftBottomCornerRect();
 	font = AssetManager::GetFontId("Assets/buggy-font.ttf");
 }
 
 BaseUI::~BaseUI() {
 	std::printf("Called BaseUI deconstructor\n");
+	update_listeners.clear();
 }
 
 void BaseUI::Update(const f32& dt) {
 	BaseEntity::Update(dt);
+	for (auto& func : update_listeners) {
+		func();
+	}
 }
 
 void BaseUI::Render() {
@@ -46,9 +50,13 @@ void BaseUI::Render() {
 }
 
 void BaseUI::RenderText() {
-	AEVec2 world = Utils::Game_To_Screen(this->position.x, this->position.y);
+	AEVec2 screen = Utils::Game_To_TextScreen(this->position.x, this->position.y);
 	f32 w, h;
 	const char* str = text.c_str();
 	AEGfxGetPrintSize(font, str, text_size, &w, &h);
-	AEGfxPrint(font, str, world.x, world.y, h, 0.f, 0.f, 0.f, 1.f);
+	AEGfxPrint(font, str, screen.x, screen.y, h, 0.f, 0.f, 0.f, 1.f);
+}
+
+void BaseUI::AddUpdateListener(std::function<void()> func) {
+	update_listeners.push_back(func);
 }

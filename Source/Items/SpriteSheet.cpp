@@ -18,7 +18,9 @@ SpriteSheet::SpriteSheet(const char* file, int rows, int columns) : rows(rows), 
 }
 
 SpriteSheet::~SpriteSheet() {
-	AEGfxTextureUnload(texture);
+	if (texture) {
+		AEGfxTextureUnload(texture);
+	}
 	texture = nullptr;
 	AEGfxMeshFree(mesh);
 	mesh = nullptr;
@@ -26,7 +28,9 @@ SpriteSheet::~SpriteSheet() {
 
 void SpriteSheet::Render(AEMtx33& t, int row, int column) {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	AEGfxTextureSet(texture, static_cast<f32>(column) / columns, static_cast<f32>(row) / rows);
+	if (texture) {
+		AEGfxTextureSet(texture, static_cast<f32>(column) / columns, static_cast<f32>(row) / rows);
+	}
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);

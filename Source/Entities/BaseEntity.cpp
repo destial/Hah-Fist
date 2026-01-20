@@ -17,10 +17,7 @@ BaseEntity::BaseEntity(AEVec2 position) :
 
 BaseEntity::~BaseEntity() {
 	std::printf("Called BaseEntity deconstructor\n");
-	if (mesh) {
-		AEGfxMeshFree(mesh);
-		mesh = nullptr;
-	}
+	mesh = nullptr;
 	texture = nullptr;
 }
 

@@ -1,4 +1,5 @@
 #include "Utils.hpp"
+#include "AEMath.h"
 
 namespace Utils {
 	static float world_width = 48.f;
@@ -27,11 +28,25 @@ namespace Utils {
 		};
 	}
 
+	AEVec2 Game_To_TextScreen(float x, float y) {
+		return {
+			((x / world_width) * 2.f) - 1.f,
+			((y / world_height) * 2.f) - 1.f
+		};
+	}
+
 	AEVec2 Scale_To_Screen(float x, float y) {
 		return {
 			x * (1600.f / world_width),
 			y * (900.f / world_height)
 		};
+	}
+
+	const AEVec2 Get_Mouse_World() {
+		s32 mouse_x, mouse_y;
+		AEInputGetCursorPosition(&mouse_x, &mouse_y);
+		AEVec2 mouse{ static_cast<f32>(mouse_x), static_cast<f32>(mouse_y) };
+		return Utils::Screen_To_World(mouse.x, mouse.y);
 	}
 
 	u32 ConvertToColor(int red, int green, int blue, int alpha) {

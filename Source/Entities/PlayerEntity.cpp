@@ -10,7 +10,7 @@
 Player::Player(AEVec2 pos) : BaseEntity(pos) {
 	sprite = nullptr;
 	texture = AssetManager::GetTexture("Assets/PlanetTexture.png");
-	mesh = MeshRenderer::CreateLeftBottomCornerRect();
+	mesh = MeshRenderer::GetLeftBottomCornerRect();
 	pBody = new PhysicsBody();
 	animationTimer = 0.f;
 	animationFrame = 1.f / (7.f * 5.f);

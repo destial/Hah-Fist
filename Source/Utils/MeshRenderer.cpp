@@ -1,7 +1,16 @@
 #include "MeshRenderer.hpp"
+#include <map>
 
 namespace MeshRenderer {
-	AEGfxVertexList* CreateCircle(u32 color, int slices) {
+
+	static AEGfxVertexList* centerRectMesh = nullptr;
+	static AEGfxVertexList* cornerRectMesh = nullptr;
+	static std::map<int, AEGfxVertexList*> circleMeshes;
+
+	AEGfxVertexList* GetCircle(int slices) {
+		if (circleMeshes[slices]) {
+			return circleMeshes[slices];
+		}
 		AEGfxMeshStart();
 		for (int i = 0; i < slices; ++i) {
 			f32 x = AESin(2.f * PI * i / slices);
@@ -12,39 +21,43 @@ namespace MeshRenderer {
 
 			// Add main triangle
 			AEGfxTriAdd(
-				0.f, 0.f, color, 0.5f, 0.5f,
-				x, y, color, (x + 1.f) * 0.5f, 1.f - (y + 1.f) * 0.5f,
-				x2, y2, color, (x2 + 1.f) * 0.5f, 1.f - (y2 + 1.f) * 0.5f
+				0.5f, 0.5f, 0xFFFFFFFF, 0.5f, 0.5f,
+				x + 1.f, y + 1.f, 0xFFFFFFFF, (x + 1.f) * 0.5f, 1.f - (y + 1.f) * 0.5f,
+				x2 + 1.f, y2 + 1.f, 0xFFFFFFFF, (x2 + 1.f) * 0.5f, 1.f - (y2 + 1.f) * 0.5f
 			);
 		}
-		return AEGfxMeshEnd();
+		return circleMeshes[slices] = AEGfxMeshEnd();
 	}
 
-	AEGfxVertexList* CreateCenterRect(u32 color) {
+	AEGfxVertexList* GetLeftBottomCornerRect() {
+		if (cornerRectMesh) {
+			return cornerRectMesh;
+		}
 		AEGfxMeshStart();
 		AEGfxTriAdd(
-			-0.5f, -0.5f, color, 0.0f, 1.0f,
-			0.5f, -0.5f, color, 1.0f, 1.0f,
-			-0.5f, 0.5f, color, 0.0f, 0.0f);
+			0.f, 0.f, 0xFFFFFFFF, 0.0f, 1.0f,
+			1.f, 0.f, 0xFFFFFFFF, 1.0f, 1.0f,
+			0.f, 1.f, 0xFFFFFFFF, 0.0f, 0.0f);
 
 		AEGfxTriAdd(
-			0.5f, -0.5f, color, 1.0f, 1.0f,
-			0.5f, 0.5f, color, 1.0f, 0.0f,
-			-0.5f, 0.5f, color, 0.0f, 0.0f);
-		return AEGfxMeshEnd();
+			1.f, 0.f, 0xFFFFFFFF, 1.0f, 1.0f,
+			1.f, 1.f, 0xFFFFFFFF, 1.0f, 0.0f,
+			0.f, 1.f, 0xFFFFFFFF, 0.0f, 0.0f);
+		return cornerRectMesh = AEGfxMeshEnd();
 	}
 
-	AEGfxVertexList* CreateLeftBottomCornerRect(u32 color) {
-		AEGfxMeshStart();
-		AEGfxTriAdd(
-			0.f, 0.f, color, 0.0f, 1.0f,
-			1.f, 0.f, color, 1.0f, 1.0f,
-			0.f, 1.f, color, 0.0f, 0.0f);
-
-		AEGfxTriAdd(
-			1.f, 0.f, color, 1.0f, 1.0f,
-			1.f, 1.f, color, 1.0f, 0.0f,
-			0.f, 1.f, color, 0.0f, 0.0f);
-		return AEGfxMeshEnd();
+	void Free() {
+		if (cornerRectMesh) {
+			AEGfxMeshFree(cornerRectMesh);
+			cornerRectMesh = nullptr;
+		}
+		if (centerRectMesh) {
+			AEGfxMeshFree(centerRectMesh);
+			centerRectMesh = nullptr;
+		}
+		for (auto& entry : circleMeshes) {
+			AEGfxMeshFree(entry.second);
+		}
+		circleMeshes.clear();
 	}
 }
