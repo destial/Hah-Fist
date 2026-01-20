@@ -1,5 +1,6 @@
 #include "MainMenuScene.hpp"
 #include "../Entities/PlayerEntity.hpp"
+#include "../Entities/WeaponEntity.hpp"
 #include "../Events/InputEvent.hpp"
 #include "../Utils/AEOverload.hpp"
 #include "../Utils/Utils.hpp"
@@ -31,6 +32,9 @@ void MainMenuScene::Init() {
 
 	BaseEntity* p = new Player(AEVec2{ 0.f, 0.f });
 	scene_entities.push_back(p);
+
+	BaseEntity* w = new Weapon(AEVec2{ 0.f, 0.f }, p);
+	scene_entities.push_back(w);
 }
 
 void MainMenuScene::PreUpdate(const f32& dt) {
