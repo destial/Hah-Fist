@@ -28,7 +28,7 @@ void BaseUI::Update(const f32& dt) {
 	s32 mouse_x, mouse_y;
 	AEInputGetCursorPosition(&mouse_x, &mouse_y);
 	AEVec2 mouse{ static_cast<f32>(mouse_x), static_cast<f32>(mouse_y) };
-	AEVec2 mouse_world = Screen_To_World(mouse.x, mouse.y);
+	AEVec2 mouse_world = Utils::Screen_To_World(mouse.x, mouse.y);
 
 	if (mouse_world.x >= this->position.x && mouse_world.x <= this->position.x + this->scale.x &&
 		mouse_world.y >= this->position.y && mouse_world.y <= this->position.y + this->scale.y) {
@@ -62,7 +62,7 @@ void BaseUI::Render() {
 	else {
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	}
-	Color c = ConvertFromColor(base_color);
+	Color c = Utils::ConvertFromColor(base_color);
 	AEGfxSetColorToMultiply(c.r / 255.f, c.g / 255.f, c.b / 255.f, c.a / 255.f);
 	if (this->mouse_hovered) {
 		if (this->overlay_texture) {
@@ -72,7 +72,7 @@ void BaseUI::Render() {
 		else {
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		}
-		c = ConvertFromColor(overlay_color);
+		c = Utils::ConvertFromColor(overlay_color);
 		AEGfxSetColorToMultiply(c.r / 255.f, c.g / 255.f, c.b / 255.f, c.a / 255.f);
 	}
 	AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
@@ -85,7 +85,7 @@ void BaseUI::Render() {
 }
 
 void BaseUI::RenderText() {
-	AEVec2 world = Game_To_Screen(this->position.x, this->position.y);
+	AEVec2 world = Utils::Game_To_Screen(this->position.x, this->position.y);
 	f32 w, h;
 	const char* str = text.c_str();
 	AEGfxGetPrintSize(font, str, text_size, &w, &h);

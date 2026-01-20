@@ -58,7 +58,7 @@ void Player::Update(const f32& dt) {
 	}
 	velocity.x = dir.x * speed;
 	
-	if (AEInputCheckTriggered(AEVK_SPACE)) {
+	if (AEInputCheckCurr(AEVK_SPACE) && velocity.y == 0) {
 		velocity.y = jumpVelocity;
 	}
 	/*if (position.x > ) {
