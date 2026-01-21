@@ -1,12 +1,12 @@
 #pragma once
 #ifndef __PLAYERENTITY_H
 #define __PLAYERENTITY_H
-#include "BaseEntity.hpp"
+#include "GameObjectEntity.hpp"
 #include "../Items/SpriteSheet.hpp"
 #include "../Events/InputEvent.hpp"
 #include "../Utils/PhysicsBody.hpp"
 
-class Player : public BaseEntity {
+class Player : public GameObjectEntity {
 protected:
 	f32 animationTimer, animationFrame;
 	f32 jumpHeight;

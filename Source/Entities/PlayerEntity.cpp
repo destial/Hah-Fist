@@ -7,7 +7,7 @@
 #include <iostream>
 #include <cstdio>
 
-Player::Player(AEVec2 pos) : BaseEntity(pos) {
+Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 	sprite = nullptr;
 	texture = AssetManager::GetTexture("Assets/PlanetTexture.png");
 	mesh = MeshRenderer::GetLeftBottomCornerRect();
@@ -16,7 +16,7 @@ Player::Player(AEVec2 pos) : BaseEntity(pos) {
 	animationFrame = 1.f / (7.f * 5.f);
 	currentRow = currentCol = 0;
 	scale = { 5.f,5.f };
-	jumpHeight = 1.5f;
+	jumpHeight = 2.f;
 	jumpVelocity = sqrtf(jumpHeight * 2.f * -pBody->gravity.y);
 	speed = 10.f;
 	layer = 2;
@@ -28,31 +28,19 @@ Player::~Player() {
 }
 
 void Player::PreUpdate(const f32& dt) {
-	BaseEntity::PreUpdate(dt);
-	this->velocity = { 0.f, velocity.y };
+	GameObjectEntity::PreUpdate(dt);
+	
 }
 
 void Player::Update(const f32& dt) {
-	BaseEntity::Update(dt);
-	
+	GameObjectEntity::Update(dt);
 	// Out of bounds checking
 	AEVec2 dir{};
-	//if (AEInputCheckCurr(AEVK_W)) {
-	//	dir += { 0.f, 1.f };
-	//	
-	//	//velocity.y += dt * 5.f;
-	//}
-	//if (AEInputCheckCurr(AEVK_S)) {
-	//	dir += { 0.f , -1.f };
-	//	//velocity.y -= dt * 5.f;
-	//}
 	if (AEInputCheckCurr(AEVK_A)) {
 		dir += { -1.f , 0.f };
-		//velocity.x -= dt * 5.f;
 	}
 	if (AEInputCheckCurr(AEVK_D)) {
 		dir += { 1.f , 0.f };
-		//velocity.x += dt * 5.f;
 	}
 	if (dir.x || dir.y) {
 		AEVec2Normalize(&dir, &dir);
@@ -62,12 +50,6 @@ void Player::Update(const f32& dt) {
 	if (AEInputCheckCurr(AEVK_SPACE) && velocity.y == 0) {
 		velocity.y += jumpVelocity;
 	}
-	/*if (position.x > ) {
-		position.x = GetWorldWidth() - scale.x;
-	}
-	else if (position.x < 0) {
-		position.x = 0;
-	}*/
 	
 
 
@@ -85,10 +67,10 @@ void Player::Update(const f32& dt) {
 }
 
 void Player::PostUpdate(const f32& dt) {
-	BaseEntity::PostUpdate(dt);
+	GameObjectEntity::PostUpdate(dt);
 }
 
 void Player::Render() {
 	//sprite->Render(transform, currentRow, currentCol);
-	BaseEntity::Render();
+	GameObjectEntity::Render();
 }
