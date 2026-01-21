@@ -45,10 +45,10 @@ void Player::Update(const f32& dt) {
 	if (dir.x || dir.y) {
 		AEVec2Normalize(&dir, &dir);
 	}
-	velocity.x = dir.x * speed;
+	velocity.x += dir.x * speed;
 	
 	if (AEInputCheckCurr(AEVK_SPACE) && velocity.y == 0) {
-		velocity.y = jumpVelocity;
+		velocity.y += jumpVelocity;
 	}
 	
 

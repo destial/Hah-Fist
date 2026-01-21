@@ -117,6 +117,9 @@
     <ClCompile Include="..\Source\Entities\EnemyEntity.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Entities\WeaponEntity.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -174,6 +177,9 @@
       <Filter>Header Files\UI</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Entities\EnemyEntity.hpp">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\WeaponEntity.hpp">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>

@@ -103,6 +103,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="..\Source\Entities\EnemyEntity.cpp" />
     <ClCompile Include="..\Source\Entities\GameObjectEntity.cpp" />
     <ClCompile Include="..\Source\Entities\PlayerEntity.cpp" />
+    <ClCompile Include="..\Source\Entities\WeaponEntity.cpp" />
     <ClCompile Include="..\Source\Events\InputEvent.cpp" />
     <ClCompile Include="..\Source\Items\SpriteSheet.cpp" />
     <ClCompile Include="..\Source\main.cpp" />
@@ -125,6 +126,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="..\Source\Entities\EnemyEntity.hpp" />
     <ClInclude Include="..\Source\Entities\GameObjectEntity.hpp" />
     <ClInclude Include="..\Source\Entities\PlayerEntity.hpp" />
+    <ClInclude Include="..\Source\Entities\WeaponEntity.hpp" />
     <ClInclude Include="..\Source\Events\InputEvent.hpp" />
     <ClInclude Include="..\Source\Items\SpriteSheet.hpp" />
     <ClInclude Include="..\Source\Managers\AssetManager.hpp" />
