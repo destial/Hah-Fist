@@ -16,7 +16,7 @@ protected:
 	f32 channel_timer = 0.0f;
 	AEVec2 weapon_direction;
 public:
-	Weapon(AEVec2 pos, BaseEntity* Player);
+	Weapon(AEVec2 pos = { 0.f, 0.f }, BaseEntity* Player = nullptr);
 	~Weapon();
 	virtual void PreUpdate(const f32& dt);
 	virtual void Update(const f32& dt);

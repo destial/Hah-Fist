@@ -57,7 +57,7 @@ void MainMenuScene::Init() {
 	scene_entities.push_back(sk);
 	scene_entities.push_back(dk);
 
-	GameObjectEntity* p = new Player(AEVec2{ 0.f, 0.f });
+	GameObjectEntity* p = new Player();
 	GameObjectEntity* e = new EnemyEntity(AEVec2{ 9.f, 4.5f });
 	e->AddPreUpdateListener(this, [e]() {
 		e->color = { 255, 255, 255, 255 };

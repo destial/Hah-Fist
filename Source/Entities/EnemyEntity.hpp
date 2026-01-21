@@ -6,7 +6,6 @@
 
 class EnemyEntity : public GameObjectEntity {
 public:
-	EnemyEntity();
 	EnemyEntity(AEVec2 pos);
 	virtual ~EnemyEntity();
 	virtual void PreUpdate(const f32& dt);

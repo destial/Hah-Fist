@@ -13,7 +13,7 @@ protected:
 	bool mouse_hovered;
 	bool clicked_this_frame;
 public:
-	ButtonUI(AEVec2 pos);
+	ButtonUI(AEVec2 pos = { 0.f, 0.f });
 	virtual ~ButtonUI();
 
 	void AddClickListener(std::function<void(MouseButton)> func);

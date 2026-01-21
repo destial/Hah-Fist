@@ -1,8 +1,5 @@
 #include "EnemyEntity.hpp"
 #include "../Utils/MeshRenderer.hpp"
-EnemyEntity::EnemyEntity()
-{
-}
 
 EnemyEntity::EnemyEntity(AEVec2 pos) : GameObjectEntity(pos)
 {

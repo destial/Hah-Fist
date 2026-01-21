@@ -14,7 +14,7 @@ protected:
 	bool clicked_this_frame;
 public:
 	f32 radius;
-	CircleButtonUI(AEVec2 pos);
+	CircleButtonUI(AEVec2 pos = { 0.f, 0.f });
 	virtual ~CircleButtonUI();
 
 	void AddClickListener(std::function<void(MouseButton)> func);

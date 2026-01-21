@@ -14,7 +14,7 @@ public:
 		TOTAL
 	}type;
 	GameObjectEntity();
-	GameObjectEntity(AEVec2 pos, SHAPE type = AABB);
+	GameObjectEntity(AEVec2 pos = { 0.f, 0.f }, SHAPE type = AABB);
 	virtual ~GameObjectEntity();
 	virtual void PreUpdate(const f32& dt);
 	virtual void Update(const f32& dt);

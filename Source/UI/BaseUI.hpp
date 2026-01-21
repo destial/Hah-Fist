@@ -24,7 +24,7 @@ public:
 	Color overlay_color;
 	AEGfxTexture* overlay_texture;
 
-	BaseUI(AEVec2 pos);
+	BaseUI(AEVec2 pos = { 0.f, 0.f });
 	virtual ~BaseUI();
 	virtual void Render();
 	virtual void RenderText();
