@@ -78,15 +78,12 @@ void MainMenuScene::PreUpdate(const f32& dt) {
 void MainMenuScene::Update(const f32& dt) {
 	BaseScene::Update(dt);
 	// Collision detection 
-	for (std::vector<GameObjectEntity*>::iterator it = gameObjects.begin(); it != gameObjects.end(); ++it) {
-		GameObjectEntity* go = static_cast<GameObjectEntity*>(*it);
+	for (auto& go : gameObjects){
 		if (go->isActive) {
 			if (go->type == GameObjectEntity::AABB) {
-				for (std::vector<GameObjectEntity*>::iterator it2 = gameObjects.begin(); it2 != gameObjects.end(); ++it2) {
-					GameObjectEntity* go2 = static_cast<GameObjectEntity*>(*it2);
+				for (auto& go2 : gameObjects){
 					if (go2 == go) continue;
-					if (Utils::AABB(go->position, go->scale.x, go->scale.y, go2->position, go2->scale.x, go2->scale.y)) {
-						// Collision response WIP
+					if (Utils::AABB(go,go2)) {
 						go->color = { 255, 0, 0, 0 };
 					}
 				}

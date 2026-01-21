@@ -2,7 +2,7 @@
 #ifndef __UTIL_H
 #define __UTIL_H
 #include "AEEngine.h"
-
+class GameObjectEntity;
 struct Color {
 	union {
 		unsigned char a;
@@ -39,8 +39,12 @@ namespace Utils {
 	const float GetWorldHeight(void);
 	const float GetDeltaTime(void);
 
-	bool CircleCircleCollision(AEVec2& center_pos_1, const f32& radius_1, AEVec2& center_pos_2, const f32& radius_2);
-	bool AABB(const AEVec2& bottom_left_1, const f32& width_1, const f32& height_1, const AEVec2& bottom_left_2, const f32& width_2, const f32& height_2);
+	bool CircleCircleCollision(GameObjectEntity*& go, GameObjectEntity*& go2);
+	//bool CircleCircleCollision(AEVec2& center_pos_1, const f32& radius_1, AEVec2& center_pos_2, const f32& radius_2);
+	//bool AABB(const AEVec2& bottom_left_1, const f32& width_1, const f32& height_1, const AEVec2& bottom_left_2, const f32& width_2, const f32& height_2);
+	
+	bool AABB(const GameObjectEntity* const & go,  const GameObjectEntity* const& go2);
+	
 	void SetDeltaTime(float dt);
 
 }

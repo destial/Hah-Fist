@@ -1,5 +1,6 @@
 #include "Utils.hpp"
 #include "AEMath.h"
+#include "../Entities/GameObjectEntity.hpp"
 namespace Utils {
 	static float world_width = 48.f;
 	static float world_height = 27.f;
@@ -79,17 +80,30 @@ namespace Utils {
 		return deltaTime;
 	}
 
-	bool CircleCircleCollision(const AEVec2& center_pos_1, const f32& radius_1, const AEVec2& center_pos_2, const f32& radius_2) {
+	bool CircleCircleCollision(GameObjectEntity* & go,  GameObjectEntity*& go2)
+	{
+		f32 sqrDist = AEVec2SquareDistance(&go->position, &go2->position);
+		f32 combinedRadii = go->scale.x + go2->scale.x;
+		return sqrDist <= combinedRadii * combinedRadii;
+	}
+
+	/*bool CircleCircleCollision(const AEVec2& center_pos_1, const f32& radius_1, const AEVec2& center_pos_2, const f32& radius_2) {
 		AEVec2 center_1 = { center_pos_1.x + radius_1, center_pos_1.y + radius_2 };
 		AEVec2 center_2 = { center_pos_2.x + radius_1, center_pos_2.y + radius_2 };
 		f32 sqrDisplacement = AEVec2SquareDistance(&center_1, &center_2);
 		f32 combinedRadii = radius_1 + radius_2;
 		return sqrDisplacement <= combinedRadii * combinedRadii;
-	}
+	}*/
 
-	bool AABB(const AEVec2& bottom_left_1, const f32& width_1, const f32& height_1, const AEVec2& bottom_left_2, const f32& width_2, const f32& height_2) {
+	/*bool AABB(const AEVec2& bottom_left_1, const f32& width_1, const f32& height_1, const AEVec2& bottom_left_2, const f32& width_2, const f32& height_2) {
 		return !(bottom_left_1.x + width_1 < bottom_left_2.x || bottom_left_1.x > bottom_left_2.x + width_2 ||
 			bottom_left_1.y + height_1 < bottom_left_2.y || bottom_left_1.y > bottom_left_2.y + height_2);
+	}*/
+
+	bool AABB(const GameObjectEntity* const& go, const GameObjectEntity* const& go2)
+	{
+		return !(go->position.x + go->scale.x * 0.5f < go2->position.x - go2->scale.x * 0.5f || go->position.x - go->scale.x * 0.5f > go2->position.x + go2->scale.x * 0.5f ||
+			go->position.y + go->scale.y * 0.5f < go2->position.y - go2->scale.y * 0.5f || go->position.y - go->scale.y * 0.5f > go2->position.y + go2->scale.y * 0.5f);
 	}
 
 	void SetDeltaTime(float dt) {
