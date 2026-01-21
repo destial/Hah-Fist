@@ -5,6 +5,7 @@
 #include <map>
 #include <functional>
 #include "AEEngine.h"
+#include "../Utils/Utils.hpp"
 
 class BaseEntity {
 protected:
@@ -19,6 +20,7 @@ public:
 	AEVec2 velocity;
 	AEVec2 scale;
 	f32 rotation;
+	Color color;
 	int layer;
 
 	std::map<void*, std::vector<std::function<void()>>> preupdate_listeners;

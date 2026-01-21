@@ -33,7 +33,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	// Reset the system modules
 	AESysReset();
-	AEGfxSetVSync(1);
 	AEFrameRateControllerInit(-1);
 
 	// Initialize fonts

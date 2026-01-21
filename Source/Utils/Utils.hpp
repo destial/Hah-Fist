@@ -4,7 +4,7 @@
 #include "AEEngine.h"
 
 struct Color {
-	int a, r, g, b;
+	unsigned char a, r, g, b;
 };
 
 namespace Utils {
@@ -16,8 +16,9 @@ namespace Utils {
 
 	const AEVec2 Get_Mouse_World();
 
-	u32 ConvertToColor(int red, int green, int blue, int alpha = 255);
-	Color ConvertFromColor(u32 color);
+	u32 PackColor(int red, int green, int blue, int alpha = 255);
+	u32 PackColor(Color& color);
+	Color UnpackColor(u32 color);
 
 	const float GetWorldWidth(void);
 	const float GetWorldHeight(void);

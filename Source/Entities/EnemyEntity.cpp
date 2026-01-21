@@ -6,7 +6,7 @@ EnemyEntity::EnemyEntity()
 
 EnemyEntity::EnemyEntity(AEVec2 pos) : GameObjectEntity(pos)
 {
-	mesh = MeshRenderer::GetLeftBottomCornerRect();
+	mesh = MeshRenderer::GetCenterRectMesh();
 	scale = { 5.f,5.f };
 	layer = 2;
 	pBody = new PhysicsBody(2.f);

@@ -48,17 +48,22 @@ namespace Utils {
 		return Utils::Screen_To_World(mouse.x, mouse.y);
 	}
 
-	u32 ConvertToColor(int red, int green, int blue, int alpha) {
+	u32 PackColor(int red, int green, int blue, int alpha) {
 		u32 color = (alpha << 24) + (red << 16) + (green << 8) + (blue);
 		return color;
 	}
 
-	Color ConvertFromColor(u32 color) {
+	u32 PackColor(Color& color) {
+		u32 packed = (color.a << 24) + (color.r << 16) + (color.g << 8) + (color.b);
+		return packed;
+	}
+
+	Color UnpackColor(u32 color) {
 		Color c{ 0, 0, 0, 0 };
-		c.a = ((color >> 24) & 255);
-		c.r = ((color >> 16) & 255);
-		c.g = ((color >> 8) & 255);
-		c.b = (color & 255);
+		c.a = static_cast<unsigned char>((color >> 24) & 255);
+		c.r = static_cast<unsigned char>((color >> 16) & 255);
+		c.g = static_cast<unsigned char>((color >> 8) & 255);
+		c.b = static_cast<unsigned char>(color & 255);
 		return c;
 	}
 

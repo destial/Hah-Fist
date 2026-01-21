@@ -6,7 +6,7 @@ namespace MeshRenderer {
 	static AEGfxVertexList* cornerRectMesh = nullptr;
 	static std::map<int, AEGfxVertexList*> circleMeshes;
 
-	AEGfxVertexList* GetCircle(int slices) {
+	AEGfxVertexList* GetCircleMesh(int slices) {
 		if (circleMeshes[slices]) {
 			return circleMeshes[slices];
 		}
@@ -20,28 +20,28 @@ namespace MeshRenderer {
 
 			// Add main triangle
 			AEGfxTriAdd(
-				0.5f, 0.5f, 0xFFFFFFFF, 0.5f, 0.5f,
-				x + 1.f, y + 1.f, 0xFFFFFFFF, (x + 1.f) * 0.5f, 1.f - (y + 1.f) * 0.5f,
-				x2 + 1.f, y2 + 1.f, 0xFFFFFFFF, (x2 + 1.f) * 0.5f, 1.f - (y2 + 1.f) * 0.5f
+				0.f, 0.f, 0xFFFFFFFF, 0.5f, 0.5f,
+				x, y, 0xFFFFFFFF, (x + 1.f) * 0.5f, 1.f - (y + 1.f) * 0.5f,
+				x2, y2, 0xFFFFFFFF, (x2 + 1.f) * 0.5f, 1.f - (y2 + 1.f) * 0.5f
 			);
 		}
 		return circleMeshes[slices] = AEGfxMeshEnd();
 	}
 
-	AEGfxVertexList* GetLeftBottomCornerRect() {
+	AEGfxVertexList* GetCenterRectMesh() {
 		if (cornerRectMesh) {
 			return cornerRectMesh;
 		}
 		AEGfxMeshStart();
 		AEGfxTriAdd(
-			0.f, 0.f, 0xFFFFFFFF, 0.0f, 1.0f,
-			1.f, 0.f, 0xFFFFFFFF, 1.0f, 1.0f,
-			0.f, 1.f, 0xFFFFFFFF, 0.0f, 0.0f);
+			-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+			0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+			-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
 
 		AEGfxTriAdd(
-			1.f, 0.f, 0xFFFFFFFF, 1.0f, 1.0f,
-			1.f, 1.f, 0xFFFFFFFF, 1.0f, 0.0f,
-			0.f, 1.f, 0xFFFFFFFF, 0.0f, 0.0f);
+			0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+			0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+			-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
 		return cornerRectMesh = AEGfxMeshEnd();
 	}
 

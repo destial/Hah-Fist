@@ -9,9 +9,9 @@
 namespace MeshRenderer {
 	static AEGfxMeshDrawMode RenderMode = AE_GFX_MDM_TRIANGLES;
 
-	AEGfxVertexList* GetCircle(int slices = 50);
+	AEGfxVertexList* GetCircleMesh(int slices = 50);
 
-	AEGfxVertexList* GetLeftBottomCornerRect();
+	AEGfxVertexList* GetCenterRectMesh();
 
 	void Free();
 }

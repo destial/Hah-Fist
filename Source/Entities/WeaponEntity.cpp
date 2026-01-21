@@ -10,7 +10,7 @@ Weapon::Weapon(AEVec2 pos, BaseEntity* player) : BaseEntity(pos) {
 	player_entity = player;
 
 	texture = AssetManager::GetTexture("Assets/PlanetTexture.png");
-	mesh = MeshRenderer::GetLeftBottomCornerRect();
+	mesh = MeshRenderer::GetCenterRectMesh();
 	layer = 2;
 }
 
@@ -20,7 +20,7 @@ Weapon::~Weapon() {
 
 void Weapon::PreUpdate(const f32& dt) {
 	BaseEntity::PreUpdate(dt);
-	this->position = player_entity->position + player_entity->scale * 0.5;
+	this->position = player_entity->position + (player_entity->scale * 0.25f);
 }
 
 void Weapon::Update(const f32& dt) {

@@ -10,7 +10,7 @@
 Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 	sprite = nullptr;
 	texture = AssetManager::GetTexture("Assets/PlanetTexture.png");
-	mesh = MeshRenderer::GetLeftBottomCornerRect();
+	mesh = MeshRenderer::GetCenterRectMesh();
 	pBody = new PhysicsBody();
 	animationTimer = 0.f;
 	animationFrame = 1.f / (7.f * 5.f);
@@ -29,7 +29,7 @@ Player::~Player() {
 
 void Player::PreUpdate(const f32& dt) {
 	GameObjectEntity::PreUpdate(dt);
-	
+	color = { 255, 255, 255, 255 };
 }
 
 void Player::Update(const f32& dt) {

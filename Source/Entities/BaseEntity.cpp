@@ -11,7 +11,7 @@ BaseEntity::BaseEntity(AEVec2 position) :
 	rotation(0),
 	transform({ 0 }),
 	layer(0),
-	mesh(nullptr), texture(nullptr)
+	mesh(nullptr), texture(nullptr), color({255, 255, 255, 255})
 {
 }
 
@@ -50,15 +50,6 @@ void BaseEntity::Update(const f32& dt) {
 }
 
 void BaseEntity::PostUpdate(const f32& dt) {
-	this->position += this->velocity * dt;
-	this->position.y = AEClamp(this->position.y, 0.f, Utils::GetWorldHeight() - this->scale.y);
-	/*if (this->position.x <= 0.f) {
-		velocity.x = 0;
-	}*/
-	if (this->position.y <= 0.f) {
-		velocity.y = 0;
-	}
-
 	for (auto& entry : postupdate_listeners) {
 		for (auto& func : entry.second) {
 			func();
@@ -89,7 +80,7 @@ void BaseEntity::Render() {
 
 	// Set the the color to multiply to white, so that the sprite can 
 	// display the full range of colors (default is black).
-	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetColorToMultiply(color.r / 255.f, color.b / 255.f, color.g / 255.f, color.a / 255.f);
 
 	// Set the color to add to nothing, so that we don't alter the sprite's color
 	AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);

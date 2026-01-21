@@ -1,6 +1,6 @@
 #pragma once
-#ifndef __BUTTONUI_H
-#define __BUTTONUI_H
+#ifndef __CIRCLEBUTTONUI_H
+#define __CIRCLEBUTTONUI_H
 #include "BaseUI.hpp"
 #include <functional>
 #include <vector>

@@ -12,7 +12,7 @@ CircleButtonUI::CircleButtonUI(AEVec2 pos) : BaseUI(pos),
 	radius(1.f)
 {
 	text = "CircleButtonUI";
-	mesh = MeshRenderer::GetCircle();
+	mesh = MeshRenderer::GetCircleMesh();
 }
 
 CircleButtonUI::~CircleButtonUI() {
@@ -27,8 +27,7 @@ void CircleButtonUI::Update(const f32& dt) {
 	AEVec2 mouse{ static_cast<f32>(mouse_x), static_cast<f32>(mouse_y) };
 	AEVec2 mouse_world = Utils::Screen_To_World(mouse.x, mouse.y);
 
-	AEVec2 center = this->position + AEVec2({ radius, radius });
-	if (AEVec2Distance(&mouse_world, &center) <= this->radius) {
+	if (AEVec2Distance(&mouse_world, &this->position) <= this->radius) {
 		OnMouseHover(mouse);
 		this->mouse_hovered = true;
 
@@ -52,7 +51,7 @@ void CircleButtonUI::Update(const f32& dt) {
 }
 
 void CircleButtonUI::PostUpdate(const f32& dt) {
-	this->scale = { this->radius, this->radius };
+	this->scale = { this->radius * 2.f, this->radius * 2.f };
 	BaseEntity::PostUpdate(dt);
 }
 
@@ -64,8 +63,7 @@ void CircleButtonUI::Render() {
 	else {
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	}
-	Color c = Utils::ConvertFromColor(base_color);
-	AEGfxSetColorToMultiply(c.r / 255.f, c.g / 255.f, c.b / 255.f, c.a / 255.f);
+	AEGfxSetColorToMultiply(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
 	if (this->mouse_hovered) {
 		if (this->overlay_texture) {
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
@@ -74,8 +72,7 @@ void CircleButtonUI::Render() {
 		else {
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		}
-		c = Utils::ConvertFromColor(overlay_color);
-		AEGfxSetColorToMultiply(c.r / 255.f, c.g / 255.f, c.b / 255.f, c.a / 255.f);
+		AEGfxSetColorToMultiply(overlay_color.r / 255.f, overlay_color.g / 255.f, overlay_color.b / 255.f, overlay_color.a / 255.f);
 	}
 	AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);

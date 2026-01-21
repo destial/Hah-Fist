@@ -7,14 +7,13 @@
 
 BaseUI::BaseUI(AEVec2 pos) : BaseEntity(pos),
 	overlay_texture(nullptr),
-	overlay_color(0xFFDDDDDD),
-	base_color(0xFFFFFFFF),
+	overlay_color({255, 128, 128, 128}),
 	font(0),
 	text("BaseUI"),
 	text_size(1.f)
 {
 	layer = 5;
-	mesh = MeshRenderer::GetLeftBottomCornerRect();
+	mesh = MeshRenderer::GetCenterRectMesh();
 	font = AssetManager::GetFontId("Assets/buggy-font.ttf");
 }
 
@@ -30,8 +29,7 @@ void BaseUI::Render() {
 	else {
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	}
-	Color c = Utils::ConvertFromColor(base_color);
-	AEGfxSetColorToMultiply(c.r / 255.f, c.g / 255.f, c.b / 255.f, c.a / 255.f);
+	AEGfxSetColorToMultiply(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
 	AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetTransparency(1.0f);
@@ -42,7 +40,7 @@ void BaseUI::Render() {
 }
 
 void BaseUI::RenderText() {
-	AEVec2 screen = Utils::Game_To_TextScreen(this->position.x, this->position.y);
+	AEVec2 screen = Utils::Game_To_TextScreen(this->position.x - this->scale.x * 0.5f, this->position.y - this->scale.y * 0.5f);
 	f32 w, h;
 	const char* str = text.c_str();
 	AEGfxGetPrintSize(font, str, text_size, &w, &h);

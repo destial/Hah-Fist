@@ -3,6 +3,7 @@
 #define __BASEUI_H
 #include <string>
 #include "../Entities/BaseEntity.hpp"
+#include "../Utils/Utils.hpp"
 
 typedef enum MouseButton {
 	LEFT = 0,
@@ -16,8 +17,7 @@ protected:
 public:
 	std::string text;
 	f32 text_size;
-	u32 base_color;
-	u32 overlay_color;
+	Color overlay_color;
 	AEGfxTexture* overlay_texture;
 
 	BaseUI(AEVec2 pos);
