@@ -5,16 +5,20 @@
 #include "../Entities/BaseEntity.hpp"
 #include "../Utils/Utils.hpp"
 
-typedef enum MouseButton {
-	LEFT = 0,
-	RIGHT,
-	MIDDLE
-} MouseButton;
-
 class BaseUI : public BaseEntity {
-protected:
-	s8 font;
 public:
+	enum MouseButton {
+		LEFT = 0,
+		RIGHT,
+		MIDDLE
+	};
+
+	enum TEXT_ALIGNMENT {
+		CENTER,
+		LEFT_CORNER,
+		RIGHT_CORNER
+	} text_alignment;
+	s8 font;
 	std::string text;
 	f32 text_size;
 	Color overlay_color;

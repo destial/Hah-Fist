@@ -1,8 +1,9 @@
 #pragma once
-#include "GameObjectEntity.hpp"
-#include "../Utils/PhysicsBody.hpp"
 #ifndef __ENEMYENTITY_H
 #define __ENEMYENTITY_H
+#include "GameObjectEntity.hpp"
+#include "../Utils/PhysicsBody.hpp"
+
 class EnemyEntity : public GameObjectEntity {
 public:
 	EnemyEntity();

@@ -10,7 +10,8 @@ BaseUI::BaseUI(AEVec2 pos) : BaseEntity(pos),
 	overlay_color({255, 128, 128, 128}),
 	font(0),
 	text("BaseUI"),
-	text_size(1.f)
+	text_size(1.f),
+	text_alignment(CENTER)
 {
 	layer = 5;
 	mesh = MeshRenderer::GetCenterRectMesh();
@@ -44,5 +45,13 @@ void BaseUI::RenderText() {
 	const char* str = text.c_str();
 	AEGfxGetPrintSize(font, str, text_size, &w, &h);
 	AEVec2 screen = Utils::Game_To_TextScreen(this->position.x, this->position.y);
-	AEGfxPrint(font, str, screen.x - ((w / 2.f) / text_size * 0.5f), screen.y - ((h / 2.f) / text_size * 0.5f), h, 0.f, 0.f, 0.f, 1.f);
+	if (text_alignment == TEXT_ALIGNMENT::CENTER) {
+		AEGfxPrint(font, str, screen.x - ((w / 2.f) / text_size * 0.5f), screen.y - ((h / 2.f) / text_size * 0.5f), h, 0.f, 0.f, 0.f, 1.f);
+	}
+	else if (text_alignment == TEXT_ALIGNMENT::LEFT_CORNER) {
+		AEGfxPrint(font, str, screen.x, screen.y - ((h / 2.f) / text_size * 0.5f), h, 0.f, 0.f, 0.f, 1.f);
+	}
+	else if (text_alignment == TEXT_ALIGNMENT::RIGHT_CORNER) {
+		AEGfxPrint(font, str, screen.x - ((w / 2.f) / text_size), screen.y - ((h / 2.f) / text_size * 0.5f), h, 0.f, 0.f, 0.f, 1.f);
+	}
 }

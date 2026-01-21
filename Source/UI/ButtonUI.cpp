@@ -51,21 +51,27 @@ void ButtonUI::Update(const f32& dt) {
 void ButtonUI::Render() {
 	if (texture) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		AEGfxTextureSet(texture, 0.f, 0.f);
+		if (this->mouse_hovered && this->overlay_texture) {
+			AEGfxTextureSet(overlay_texture, 0.f, 0.f);
+		}
+		else {
+			AEGfxTextureSet(texture, 0.f, 0.f);
+		}
 	}
 	else {
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-	}
-	AEGfxSetColorToMultiply(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
-	if (this->mouse_hovered) {
-		if (this->overlay_texture) {
+		if (this->mouse_hovered && this->overlay_texture) {
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 			AEGfxTextureSet(overlay_texture, 0.f, 0.f);
 		}
 		else {
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 		}
+	}
+	if (this->mouse_hovered) {
 		AEGfxSetColorToMultiply(overlay_color.r / 255.f, overlay_color.g / 255.f, overlay_color.b / 255.f, overlay_color.a / 255.f);
+	}
+	else {
+		AEGfxSetColorToMultiply(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
 	}
 	AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);

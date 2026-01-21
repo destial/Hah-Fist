@@ -17,7 +17,8 @@ static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, char ch) {
 	b->color = { 255, 255, 255, 255 };
 	b->overlay_color = b->color;
 	b->text = ch;
-	b->text_size = 4.f;
+	b->text_size = 7.5f;
+	b->font = AssetManager::GetFontId("Assets/Jersey25-Regular.ttf");
 	return b;
 }
 
@@ -29,7 +30,7 @@ MainMenuScene::~MainMenuScene() {
 
 void MainMenuScene::Init() {
 	ButtonUI* s = new ButtonUI(AEVec2{ 3.f, Utils::GetWorldHeight() - .6f });
-	s->color = { 0, 255, 255, 255 };
+	s->color = { 128, 255, 255, 255 };
 	s->overlay_color = s->color;
 	s->scale.x = 5.5f;
 	s->text_size = 5.f;
@@ -41,6 +42,18 @@ void MainMenuScene::Init() {
 			sprintf_s(b, "FPS:%.0f", 1.f / Utils::GetDeltaTime());
 			s->text = std::string(b);
 			fps_counter = 0.f;
+		}
+	});
+
+	InputEvent::Listeners.push_back([s](const InputEvent* ev) {
+		if (ev->IsKeyTriggered(AEVK_C)) {
+			s->text_alignment = BaseUI::TEXT_ALIGNMENT::CENTER;
+		}
+		else if (ev->IsKeyTriggered(AEVK_L)) {
+			s->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
+		}
+		else if (ev->IsKeyTriggered(AEVK_R)) {
+			s->text_alignment = BaseUI::TEXT_ALIGNMENT::RIGHT_CORNER;
 		}
 	});
 	scene_entities.push_back(s);
