@@ -1,4 +1,5 @@
 #include "MainMenuScene.hpp"
+#include "../Managers/AssetManager.hpp"
 #include "../Entities/PlayerEntity.hpp"
 #include "../Entities/EnemyEntity.hpp"
 #include "../Entities/WeaponEntity.hpp"
@@ -8,6 +9,17 @@
 #include "../UI/ButtonUI.hpp"
 #include "../UI/CircleButtonUI.hpp"
 #include <cstdio>
+#include <string>
+
+static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, char ch) {
+	ButtonUI* b = new ButtonUI(pos);
+	b->texture = AssetManager::GetTexture("Assets/Icons/small_button_grey.png");
+	b->color = { 255, 255, 255, 255 };
+	b->overlay_color = b->color;
+	b->text = ch;
+	b->text_size = 4.f;
+	return b;
+}
 
 MainMenuScene::MainMenuScene() : BaseScene() {
 }
@@ -33,8 +45,8 @@ void MainMenuScene::Init() {
 	});
 	scene_entities.push_back(s);
 
-	CircleButtonUI* q = new CircleButtonUI(AEVec2{ Utils::GetWorldWidth() - 1.f, Utils::GetWorldHeight() - 1.f });
-	scene_entities.push_back(q);
+	ButtonUI* display = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 1.f, Utils::GetWorldHeight() - 1.f }, 'W');
+	scene_entities.push_back(display);
 
 	GameObjectEntity* p = new Player(AEVec2{ 0.f, 0.f });
 	GameObjectEntity* e = new EnemyEntity(AEVec2{ 9.f, 4.5f });

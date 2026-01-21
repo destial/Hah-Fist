@@ -33,10 +33,8 @@ public:
 	const bool IsKeyReleased(u8 key) const;
 };
 
-bool operator== (InputEvent::InputListener& lhs, InputEvent::InputListener& rhs);
-InputEvent::InputListeners& operator+= (InputEvent::InputListeners& lhs, InputEvent::InputListener& rhs);
+bool operator== (InputEvent::InputListener& lhs, const InputEvent::InputListener& rhs);
 InputEvent::InputListeners& operator+= (InputEvent::InputListeners& lhs, InputEvent::InputListener rhs);
-InputEvent::InputListeners& operator-= (InputEvent::InputListeners& lhs, InputEvent::InputListener& rhs);
 InputEvent::InputListeners& operator-= (InputEvent::InputListeners& lhs, InputEvent::InputListener rhs);
 
 #endif

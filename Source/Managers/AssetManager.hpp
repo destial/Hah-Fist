@@ -20,6 +20,7 @@ struct Asset {
 	s8 font;
 	AEAudio audio;
 };
+
 /*
 * @brief Singleton class that handles creation and deletion of all assets (textures, fonts, audios, spritesheets)
 */

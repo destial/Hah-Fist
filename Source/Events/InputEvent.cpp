@@ -55,29 +55,12 @@ const bool InputEvent::IsKeyReleased(u8 key) const {
 	return false;
 }
 
-bool operator== (InputEvent::InputListener& lhs, InputEvent::InputListener& rhs) {
+bool operator== (InputEvent::InputListener& lhs, const InputEvent::InputListener& rhs) {
 	return lhs.target<InputEvent::InputListener>() == rhs.target<InputEvent::InputListener>();
-}
-
-InputEvent::InputListeners& operator+= (InputEvent::InputListeners& lhs, InputEvent::InputListener& rhs) {
-	lhs.push_back(rhs);
-	return lhs;
 }
 
 InputEvent::InputListeners& operator+= (InputEvent::InputListeners& lhs, InputEvent::InputListener rhs) {
 	lhs.push_back(rhs);
-	return lhs;
-}
-
-InputEvent::InputListeners& operator-= (InputEvent::InputListeners& lhs, InputEvent::InputListener& rhs) {
-	for (InputEvent::InputListeners::iterator it = lhs.begin(); it != lhs.end();) {
-		if (*it == rhs) {
-			it = lhs.erase(it);
-		}
-		else {
-			++it;
-		}
-	}
 	return lhs;
 }
 

@@ -4,7 +4,22 @@
 #include "AEEngine.h"
 
 struct Color {
-	unsigned char a, r, g, b;
+	union {
+		unsigned char a;
+		unsigned char alpha;
+	};
+	union {
+		unsigned char r;
+		unsigned char red;
+	};
+	union {
+		unsigned char g;
+		unsigned char green;
+	};
+	union {
+		unsigned char b;
+		unsigned char blue;
+	};
 };
 
 namespace Utils {

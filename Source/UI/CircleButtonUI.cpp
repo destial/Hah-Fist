@@ -51,7 +51,7 @@ void CircleButtonUI::Update(const f32& dt) {
 }
 
 void CircleButtonUI::PostUpdate(const f32& dt) {
-	this->scale = { this->radius * 2.f, this->radius * 2.f };
+	this->scale = { this->radius, this->radius };
 	BaseEntity::PostUpdate(dt);
 }
 
