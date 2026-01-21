@@ -20,14 +20,6 @@ BaseUI::BaseUI(AEVec2 pos) : BaseEntity(pos),
 
 BaseUI::~BaseUI() {
 	std::printf("Called BaseUI deconstructor\n");
-	update_listeners.clear();
-}
-
-void BaseUI::Update(const f32& dt) {
-	BaseEntity::Update(dt);
-	for (auto& func : update_listeners) {
-		func();
-	}
 }
 
 void BaseUI::Render() {
@@ -55,8 +47,4 @@ void BaseUI::RenderText() {
 	const char* str = text.c_str();
 	AEGfxGetPrintSize(font, str, text_size, &w, &h);
 	AEGfxPrint(font, str, screen.x, screen.y, h, 0.f, 0.f, 0.f, 1.f);
-}
-
-void BaseUI::AddUpdateListener(std::function<void()> func) {
-	update_listeners.push_back(func);
 }

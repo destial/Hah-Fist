@@ -20,7 +20,7 @@ void MainMenuScene::Init() {
 	s->scale.x = 10.f;
 	s->text_size = 5.f;
 	static int fps_counter = 0;
-	s->AddUpdateListener([s]() {
+	s->AddUpdateListener(this, [s]() {
 		if (++fps_counter > 10) {
 			char b[50];
 			sprintf_s(b, "FPS:%.0f", 1.f / Utils::GetDeltaTime());

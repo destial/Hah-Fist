@@ -1,5 +1,4 @@
 #include "AEOverload.hpp"
-#include <iostream>
 
 AEVec2 operator+ (const AEVec2& lhs, const AEVec2& rhs) {
 	return { lhs.x + rhs.x, lhs.y + rhs.y };
@@ -11,6 +10,10 @@ AEVec2 operator- (const AEVec2& lhs, const AEVec2& rhs) {
 
 AEVec2 operator* (const AEVec2& lhs, f32 magnitude) {
 	return { lhs.x * magnitude, lhs.y * magnitude };
+}
+
+f32 operator* (const AEVec2& lhs, const AEVec2& rhs) {
+	return (lhs.x * rhs.x) + (lhs.y * rhs.y);
 }
 
 AEVec2 operator/ (const AEVec2& lhs, f32 magnitude) {
@@ -44,4 +47,9 @@ AEVec2& operator/= (AEVec2& lhs, f32 magnitude) {
 std::ostream& operator<< (std::ostream& os, const AEVec2& rhs) {
 	os << '{' << rhs.x << ", " << rhs.y << '}';
 	return os;
+}
+
+std::istream& operator>>(std::istream& is, AEVec2& rhs) {
+	is >> rhs.x >> rhs.y;
+	return is;
 }

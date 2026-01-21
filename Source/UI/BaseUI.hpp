@@ -2,8 +2,6 @@
 #ifndef __BASEUI_H
 #define __BASEUI_H
 #include <string>
-#include <vector>
-#include <functional>
 #include "../Entities/BaseEntity.hpp"
 
 typedef enum MouseButton {
@@ -15,7 +13,6 @@ typedef enum MouseButton {
 class BaseUI : public BaseEntity {
 protected:
 	s8 font;
-	std::vector<std::function<void()>> update_listeners;
 public:
 	std::string text;
 	f32 text_size;
@@ -25,11 +22,8 @@ public:
 
 	BaseUI(AEVec2 pos);
 	virtual ~BaseUI();
-	virtual void Update(const f32& dt);
 	virtual void Render();
 	virtual void RenderText();
-
-	void AddUpdateListener(std::function<void()> func);
 };
 
 #endif

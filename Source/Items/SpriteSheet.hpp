@@ -3,6 +3,9 @@
 #define __SPRITEANIMATION_H
 #include "AEEngine.h"
 
+/*
+* @brief Represents a texture formatted as a spritesheet
+*/
 class SpriteSheet {
 protected:
 	int rows, columns;

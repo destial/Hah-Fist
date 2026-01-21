@@ -19,11 +19,35 @@ BaseEntity::~BaseEntity() {
 	std::printf("Called BaseEntity deconstructor\n");
 	mesh = nullptr;
 	texture = nullptr;
+	for (auto& entry : update_listeners) {
+		entry.second.clear();
+	}
+	update_listeners.clear();
+	for (auto& entry : preupdate_listeners) {
+		entry.second.clear();
+	}
+	preupdate_listeners.clear();
+	for (auto& entry : postupdate_listeners) {
+		entry.second.clear();
+	}
+	postupdate_listeners.clear();
 }
 
-void BaseEntity::PreUpdate(const f32& dt) {}
+void BaseEntity::PreUpdate(const f32& dt) {
+	for (auto& entry : preupdate_listeners) {
+		for (auto& func : entry.second) {
+			func();
+		}
+	}
+}
 
-void BaseEntity::Update(const f32& dt) {}
+void BaseEntity::Update(const f32& dt) {
+	for (auto& entry : update_listeners) {
+		for (auto& func : entry.second) {
+			func();
+		}
+	}
+}
 
 void BaseEntity::PostUpdate(const f32& dt) {
 	this->position += this->velocity * dt;
@@ -33,6 +57,12 @@ void BaseEntity::PostUpdate(const f32& dt) {
 	}
 	else if (this->position.y <= 0.f) {
 		velocity.y = 0;
+	}
+
+	for (auto& entry : postupdate_listeners) {
+		for (auto& func : entry.second) {
+			func();
+		}
 	}
 	
 	AEMtx33 scale = { 1.f };
@@ -72,4 +102,52 @@ void BaseEntity::Render() {
 	AEGfxSetTransform(this->transform.m);
 	AEGfxMeshDraw(mesh, MeshRenderer::RenderMode);
 	AEGfxTextureSet(nullptr, 0.f, 0.f);
+}
+
+void BaseEntity::AddUpdateListener(void* owner, std::function<void()> func) {
+	if (!update_listeners.count(owner)) {
+		update_listeners[owner] = std::vector<std::function<void()>>(0);
+	}
+	update_listeners[owner].push_back(func);
+}
+
+void BaseEntity::AddPreUpdateListener(void* owner, std::function<void()> func) {
+	if (!preupdate_listeners.count(owner)) {
+		preupdate_listeners[owner] = std::vector<std::function<void()>>(0);
+	}
+	preupdate_listeners[owner].push_back(func);
+}
+
+void BaseEntity::AddPostUpdateListener(void* owner, std::function<void()> func) {
+	if (!postupdate_listeners.count(owner)) {
+		postupdate_listeners[owner] = std::vector<std::function<void()>>(0);
+	}
+	postupdate_listeners[owner].push_back(func);
+}
+
+bool BaseEntity::RemoveUpdateListener(void* owner) {
+	if (update_listeners.count(owner)) {
+		update_listeners[owner].clear();
+		update_listeners.erase(owner);
+		return true;
+	}
+	return false;
+}
+
+bool BaseEntity::RemovePreUpdateListener(void* owner) {
+	if (preupdate_listeners.count(owner)) {
+		preupdate_listeners[owner].clear();
+		preupdate_listeners.erase(owner);
+		return true;
+	}
+	return false;
+}
+
+bool BaseEntity::RemovePostUpdateListener(void* owner) {
+	if (postupdate_listeners.count(owner)) {
+		postupdate_listeners[owner].clear();
+		postupdate_listeners.erase(owner);
+		return true;
+	}
+	return false;
 }
