@@ -44,14 +44,17 @@ void BaseUI::RenderText() {
 	f32 w, h;
 	const char* str = text.c_str();
 	AEGfxGetPrintSize(font, str, text_size, &w, &h);
-	AEVec2 screen = Utils::Game_To_TextScreen(this->position.x, this->position.y);
+	
 	if (text_alignment == TEXT_ALIGNMENT::CENTER) {
+		AEVec2 screen = Utils::Game_To_TextScreen(this->position.x, this->position.y);
 		AEGfxPrint(font, str, screen.x - ((w / 2.f) / text_size * 0.5f), screen.y - ((h / 2.f) / text_size * 0.5f), h, 0.f, 0.f, 0.f, 1.f);
 	}
 	else if (text_alignment == TEXT_ALIGNMENT::LEFT_CORNER) {
+		AEVec2 screen = Utils::Game_To_TextScreen(this->position.x - (this->scale.x * 0.5f), this->position.y);
 		AEGfxPrint(font, str, screen.x, screen.y - ((h / 2.f) / text_size * 0.5f), h, 0.f, 0.f, 0.f, 1.f);
 	}
 	else if (text_alignment == TEXT_ALIGNMENT::RIGHT_CORNER) {
+		AEVec2 screen = Utils::Game_To_TextScreen(this->position.x + (this->scale.x * 0.5f), this->position.y);
 		AEGfxPrint(font, str, screen.x - ((w / 2.f) / text_size), screen.y - ((h / 2.f) / text_size * 0.5f), h, 0.f, 0.f, 0.f, 1.f);
 	}
 }

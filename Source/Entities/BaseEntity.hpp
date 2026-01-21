@@ -9,7 +9,7 @@
 
 class BaseEntity {
 protected:
-	BaseEntity(AEVec2 position);
+	BaseEntity(AEVec2 position = { 0.f, 0.f });
 	AEMtx33 transform;
 	
 public:

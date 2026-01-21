@@ -7,7 +7,7 @@
 
 class CircleButtonUI : public BaseUI {
 protected:
-	std::vector<std::function<void()>> click_listeners;
+	std::vector<std::function<void(MouseButton)>> click_listeners;
 	std::vector<std::function<void()>> hover_listeners;
 	std::vector<std::function<void()>> unhover_listeners;
 	bool mouse_hovered;
@@ -17,7 +17,7 @@ public:
 	CircleButtonUI(AEVec2 pos);
 	virtual ~CircleButtonUI();
 
-	void AddClickListener(std::function<void()> func);
+	void AddClickListener(std::function<void(MouseButton)> func);
 	void AddHoverListener(std::function<void()> func);
 	void AddStopHoverListener(std::function<void()> func);
 

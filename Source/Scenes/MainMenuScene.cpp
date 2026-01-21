@@ -30,14 +30,15 @@ MainMenuScene::~MainMenuScene() {
 
 void MainMenuScene::Init() {
 	ButtonUI* s = new ButtonUI(AEVec2{ 3.f, Utils::GetWorldHeight() - .6f });
-	s->color = { 128, 255, 255, 255 };
+	s->color = { 0, 0, 0, 0 };
 	s->overlay_color = s->color;
 	s->scale.x = 5.5f;
 	s->text_size = 5.f;
 	s->text = "FPS:";
+	s->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
 	static float fps_counter = 0.f;
 	s->AddUpdateListener(this, [s]() {
-		if ((fps_counter += Utils::GetDeltaTime()) > 0.2f) {
+		if ((fps_counter += Utils::GetDeltaTime()) > 0.1f) {
 			char b[50];
 			sprintf_s(b, "FPS:%.0f", 1.f / Utils::GetDeltaTime());
 			s->text = std::string(b);
@@ -45,21 +46,16 @@ void MainMenuScene::Init() {
 		}
 	});
 
-	InputEvent::Listeners.push_back([s](const InputEvent* ev) {
-		if (ev->IsKeyTriggered(AEVK_C)) {
-			s->text_alignment = BaseUI::TEXT_ALIGNMENT::CENTER;
-		}
-		else if (ev->IsKeyTriggered(AEVK_L)) {
-			s->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
-		}
-		else if (ev->IsKeyTriggered(AEVK_R)) {
-			s->text_alignment = BaseUI::TEXT_ALIGNMENT::RIGHT_CORNER;
-		}
-	});
 	scene_entities.push_back(s);
 
-	ButtonUI* display = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 1.f, Utils::GetWorldHeight() - 1.f }, 'W');
-	scene_entities.push_back(display);
+	ButtonUI* wk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 1.f }, 'W');
+	ButtonUI* ak = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 3.f, Utils::GetWorldHeight() - 2.f }, 'A');
+	ButtonUI* sk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 2.f }, 'S');
+	ButtonUI* dk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 1.f, Utils::GetWorldHeight() - 2.f }, 'D');
+	scene_entities.push_back(wk);
+	scene_entities.push_back(ak);
+	scene_entities.push_back(sk);
+	scene_entities.push_back(dk);
 
 	GameObjectEntity* p = new Player(AEVec2{ 0.f, 0.f });
 	GameObjectEntity* e = new EnemyEntity(AEVec2{ 9.f, 4.5f });

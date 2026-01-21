@@ -8,9 +8,9 @@
 class BaseUI : public BaseEntity {
 public:
 	enum MouseButton {
-		LEFT = 0,
-		RIGHT,
-		MIDDLE
+		LEFT = AEVK_LBUTTON,
+		RIGHT = AEVK_RBUTTON,
+		MIDDLE = AEVK_MBUTTON
 	};
 
 	enum TEXT_ALIGNMENT {

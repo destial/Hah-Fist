@@ -82,7 +82,7 @@ void ButtonUI::Render() {
 	RenderText();
 }
 
-void ButtonUI::AddClickListener(std::function<void()> func) {
+void ButtonUI::AddClickListener(std::function<void(MouseButton)> func) {
 	click_listeners.push_back(func);
 }
 
@@ -96,7 +96,7 @@ void ButtonUI::AddStopHoverListener(std::function<void()> func) {
 
 void ButtonUI::OnMouseClick(AEVec2 mousePos, MouseButton button) {
 	for (auto& func : click_listeners) {
-		func();
+		func(button);
 	}
 }
 

@@ -83,7 +83,7 @@ void CircleButtonUI::Render() {
 	RenderText();
 }
 
-void CircleButtonUI::AddClickListener(std::function<void()> func) {
+void CircleButtonUI::AddClickListener(std::function<void(MouseButton)> func) {
 	click_listeners.push_back(func);
 }
 
@@ -97,7 +97,7 @@ void CircleButtonUI::AddStopHoverListener(std::function<void()> func) {
 
 void CircleButtonUI::OnMouseClick(AEVec2 mousePos, MouseButton button) {
 	for (auto& func : click_listeners) {
-		func();
+		func(button);
 	}
 }
 
