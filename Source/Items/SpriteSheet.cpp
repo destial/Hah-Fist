@@ -7,13 +7,13 @@ SpriteSheet::SpriteSheet(const char* file, int rows, int columns) : rows(rows), 
 	texture = AEGfxTextureLoad(file);
 	AEGfxMeshStart();
 	AEGfxTriAdd(
-		0.f, 0.f, 0xFFFFFFFF, 0.f, 1.f / rows,
-		1.f, 0.f, 0xFFFFFFFF, 1.f / columns, 1.f / rows,
-		0.f, 1.f, 0xFFFFFFFF, 0.f, 0.f);
+		-0.5f, -0.5f, 0xFFFFFFFF, 0.f, 1.f / rows,
+		0.5f, -0.5f, 0xFFFFFFFF, 1.f / columns, 1.f / rows,
+		-0.5f, 0.5f, 0xFFFFFFFF, 0.f, 0.f);
 	AEGfxTriAdd(
-		1.f, 0.f, 0xFFFFFFFF, 1.0f / columns, 1.f / rows, 
-		1.f, 1.f, 0xFFFFFFFF, 1.0f / columns, 0.f,
-		0.f, 1.f, 0xFFFFFFFF, 0.f, 0.f);
+		0.5f, -0.5f, 0xFFFFFFFF, 1.0f / columns, 1.f / rows,
+		0.5f, 0.5f, 0xFFFFFFFF, 1.0f / columns, 0.f,
+		-0.5f, 0.5f, 0xFFFFFFFF, 0.f, 0.f);
 	mesh = AEGfxMeshEnd();
 }
 

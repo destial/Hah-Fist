@@ -5,6 +5,12 @@
 #include <iostream>
 
 /*
+* @brief Addition rotation Vector utility function
+* @return The rotated vector
+*/
+void AEVec2Rotate(AEVec2* result, AEVec2* pVec, float radians);
+
+/*
 * @brief Addition operator between two vectors
 * @return A new vector
 */

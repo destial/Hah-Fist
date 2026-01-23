@@ -52,13 +52,14 @@ void MainMenuScene::Init() {
 	ButtonUI* ak = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 3.f, Utils::GetWorldHeight() - 2.f }, 'A');
 	ButtonUI* sk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 2.f }, 'S');
 	ButtonUI* dk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 1.f, Utils::GetWorldHeight() - 2.f }, 'D');
+
 	scene_entities.push_back(wk);
 	scene_entities.push_back(ak);
 	scene_entities.push_back(sk);
 	scene_entities.push_back(dk);
 
-	GameObjectEntity* p = new Player();
-	GameObjectEntity* e = new EnemyEntity(AEVec2{ 9.f, 4.5f });
+	GameObjectEntity* p = new Player({ 1.f, 1.f });
+	GameObjectEntity* e = new EnemyEntity({ 9.f, 4.5f });
 	e->AddPreUpdateListener(this, [e]() {
 		e->color = { 255, 255, 255, 255 };
 	});

@@ -8,12 +8,11 @@
 #include <cstdio>
 
 Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
-	sprite = nullptr;
-	texture = AssetManager::GetTexture("Assets/PlanetTexture.png");
+	sprite = AssetManager::GetSpriteSheet("Assets/test_sprite.png", 3, 3);
 	mesh = MeshRenderer::GetCenterRectMesh();
 	pBody = new PhysicsBody();
 	animationTimer = 0.f;
-	animationFrame = 1.f / (7.f * 5.f);
+	animationFrame = 1.f / (3.f * 3.f);
 	currentRow = currentCol = 0;
 	scale = { 5.f,5.f };
 	jumpHeight = 2.f;
@@ -50,27 +49,27 @@ void Player::Update(const f32& dt) {
 	if (AEInputCheckCurr(AEVK_SPACE) && velocity.y == 0) {
 		velocity.y += jumpVelocity;
 	}
-	
-
-
-
-	if ((animationTimer += dt) > animationFrame) {
-		animationTimer = 0.f;
-		if (++currentCol >= 5) {
-			currentCol = 0;
-			if (++currentRow >= 7) {
-				currentRow = 0;
-			}
-		}
-	}
 	pBody->ApplyGravity(this->velocity, dt);
 }
 
 void Player::PostUpdate(const f32& dt) {
 	GameObjectEntity::PostUpdate(dt);
+	currentRow = 0;
+	if (velocity.x > 0) {
+		currentRow = 1;
+	}
+	if (velocity.x < 0) {
+		currentRow = 2;
+	}
+	if ((animationTimer += dt) > animationFrame) {
+		animationTimer = 0.f;
+		if (++currentCol >= 3) {
+			currentCol = 0;
+		}
+	}
 }
 
 void Player::Render() {
-	//sprite->Render(transform, currentRow, currentCol);
-	GameObjectEntity::Render();
+	sprite->Render(transform, currentRow, currentCol);
+	//GameObjectEntity::Render();
 }

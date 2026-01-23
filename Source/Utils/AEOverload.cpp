@@ -1,5 +1,10 @@
 #include "AEOverload.hpp"
 
+void AEVec2Rotate(AEVec2* pResult, AEVec2* pVec, float radians) {
+	pResult->x = (pVec->x * AECos(radians)) - (pVec->y * AESin(radians));
+	pResult->y = (pVec->x * AESin(radians)) + (pVec->y * AECos(radians));
+}
+
 AEVec2 operator+ (const AEVec2& lhs, const AEVec2& rhs) {
 	return { lhs.x + rhs.x, lhs.y + rhs.y };
 }
