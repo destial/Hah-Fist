@@ -76,4 +76,16 @@ std::ostream& operator<< (std::ostream& os, const AEVec2& rhs);
 */
 std::istream& operator>> (std::istream& is, AEVec2& rhs);
 
+/*
+* @brief Multiplication operator between two matrices
+* @return A new matrix
+*/
+AEMtx33 operator* (const AEMtx33& lhs, const AEMtx33& rhs);
+
+/*
+* @brief Multiplication operator between two matrices
+* @return A reference to the lhs matrix
+*/
+AEMtx33& operator*= (AEMtx33& lhs, const AEMtx33& rhs);
+
 #endif

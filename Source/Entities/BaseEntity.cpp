@@ -56,17 +56,21 @@ void BaseEntity::PostUpdate(const f32& dt) {
 		}
 	}
 	
-	AEMtx33 scale = { 1.f };
 	AEVec2 scaleWorld = Utils::Scale_To_Screen(this->scale.x, this->scale.y);
+	AEMtx33 scale = { 1.f };
+	AEMtx33Identity(&scale);
 	AEMtx33Scale(&scale, scaleWorld.x, scaleWorld.y);
+
 	AEMtx33 rotate = { 0 };
+	AEMtx33Identity(&rotate);
 	AEMtx33Rot(&rotate, this->rotation);
-	AEMtx33 translate = { 0 };
+
 	AEVec2 screenPos = Utils::Game_To_Screen(this->position.x, this->position.y);
+	AEMtx33 translate = { 0 };
+	AEMtx33Identity(&translate);
 	AEMtx33Trans(&translate, screenPos.x, screenPos.y);
-	this->transform = { 0 };
-	AEMtx33Concat(&this->transform, &rotate, &scale);
-	AEMtx33Concat(&this->transform, &translate, &transform);
+
+	this->transform = translate * rotate * scale;
 }
 
 void BaseEntity::Render() {

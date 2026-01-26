@@ -58,3 +58,14 @@ std::istream& operator>>(std::istream& is, AEVec2& rhs) {
 	is >> rhs.x >> rhs.y;
 	return is;
 }
+
+AEMtx33 operator* (const AEMtx33& lhs, const AEMtx33& rhs) {
+	AEMtx33 result;
+	AEMtx33Concat(&result, &lhs, &rhs);
+	return result;
+}
+
+AEMtx33& operator*= (AEMtx33& lhs, const AEMtx33& rhs) {
+	AEMtx33Concat(&lhs, &lhs, &rhs);
+	return lhs;
+}
