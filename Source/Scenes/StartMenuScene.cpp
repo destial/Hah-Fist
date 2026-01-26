@@ -18,6 +18,7 @@ static ButtonUI* CreateButtonDisplay(AEVec2 pos, const char* ch) {
 	b->scale = { 10.f, 7.f };
 	b->color = { 255, 255, 255, 255 };
 	b->overlay_color = { 255, 128, 128, 128 };
+	b->overlay_text_color = { 255, 255, 255, 255 };
 	b->text = ch;
 	b->text_size = 7.5f;
 	b->text_alignment = BaseUI::TEXT_ALIGNMENT::CENTER;

@@ -7,8 +7,6 @@ CircleButtonUI::CircleButtonUI(AEVec2 pos) : BaseUI(pos),
 	click_listeners(0),
 	hover_listeners(0),
 	unhover_listeners(0),
-	clicked_this_frame(false),
-	mouse_hovered(false),
 	radius(1.f)
 {
 	text = "CircleButtonUI";
@@ -18,6 +16,8 @@ CircleButtonUI::CircleButtonUI(AEVec2 pos) : BaseUI(pos),
 CircleButtonUI::~CircleButtonUI() {
 	std::printf("Called CircleButtonUI deconstructor\n");
 	click_listeners.clear();
+	unhover_listeners.clear();
+	hover_listeners.clear();
 }
 
 void CircleButtonUI::Update(const f32& dt) {

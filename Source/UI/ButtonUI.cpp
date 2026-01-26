@@ -5,16 +5,16 @@
 ButtonUI::ButtonUI(AEVec2 pos) : BaseUI(pos),
 	click_listeners(0),
 	hover_listeners(0),
-	unhover_listeners(0),
-	clicked_this_frame(false),
-	mouse_hovered(false)
+	unhover_listeners(0)
 {
-	text = "Button";
+	text = "ButtonUI";
 }
 
 ButtonUI::~ButtonUI() {
 	std::printf("Called ButtonUI deconstructor\n");
 	click_listeners.clear();
+	unhover_listeners.clear();
+	hover_listeners.clear();
 }
 
 void ButtonUI::Update(const f32& dt) {

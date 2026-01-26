@@ -10,8 +10,7 @@ protected:
 	std::vector<std::function<void(MouseButton)>> click_listeners;
 	std::vector<std::function<void()>> hover_listeners;
 	std::vector<std::function<void()>> unhover_listeners;
-	bool mouse_hovered;
-	bool clicked_this_frame;
+
 public:
 	ButtonUI(AEVec2 pos = { 0.f, 0.f });
 	virtual ~ButtonUI();

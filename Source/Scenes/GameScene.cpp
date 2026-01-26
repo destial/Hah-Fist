@@ -15,6 +15,7 @@ static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, char ch) {
 	ButtonUI* b = new ButtonUI(pos);
 	b->image = AssetManager::GetTexture("Assets/Icons/small_button_grey.png");
 	b->color = { 255, 255, 255, 255 };
+	b->overlay_text_color = { 255, 255, 255, 255 };
 	b->overlay_color = b->color;
 	b->text = ch;
 	b->text_size = 7.5f;
