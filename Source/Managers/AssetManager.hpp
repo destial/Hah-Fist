@@ -36,7 +36,7 @@ public:
 	static void Free();
 
 	static Image* GetTexture(std::string file_name);
-	static SpriteSheet* GetSpriteSheet(std::string file_name, int rows, int cols);
+	static SpriteSheet* GetSpriteSheet(std::string file_name, int rows = 1, int cols = 1);
 	static s8 GetFontId(std::string file_name);
 	static AEAudio& GetAudio(std::string file_name);
 };

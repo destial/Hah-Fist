@@ -24,12 +24,12 @@ SpriteSheet::~SpriteSheet() {
 	mesh = nullptr;
 }
 
-void SpriteSheet::Render(AEMtx33& t, int row, int column) {
+void SpriteSheet::Render(AEMtx33& t, Color color, int row, int column) {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	if (image->image) {
 		AEGfxTextureSet(image->image, static_cast<f32>(column) / columns, static_cast<f32>(row) / rows);
 	}
-	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
+	AEGfxSetColorToMultiply(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
 	AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 	AEGfxSetTransparency(1.0f);

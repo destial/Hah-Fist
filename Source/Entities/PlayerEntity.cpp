@@ -70,6 +70,6 @@ void Player::PostUpdate(const f32& dt) {
 }
 
 void Player::Render() {
-	sprite->Render(transform, currentRow, currentCol);
+	sprite->Render(transform, color, currentRow, currentCol);
 	//GameObjectEntity::Render();
 }

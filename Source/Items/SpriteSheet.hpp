@@ -3,6 +3,7 @@
 #define __SPRITEANIMATION_H
 #include "AEEngine.h"
 #include "Image.hpp"
+#include "../Utils/Utils.hpp"
 
 /*
 * @brief Represents a image formatted as a spritesheet
@@ -16,7 +17,7 @@ public:
 	SpriteSheet(const char* file, int rows, int columns);
 	~SpriteSheet();
 
-	void Render(AEMtx33& t, int row, int column);
+	void Render(AEMtx33& t, Color color, int row, int column);
 };
 
 #endif
