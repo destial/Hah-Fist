@@ -47,5 +47,6 @@ namespace Utils {
 	
 	void SetDeltaTime(float dt);
 
+	void SnapVectorToAxis(AEVec2* result, AEVec2* vec2);
 }
 #endif

@@ -15,7 +15,7 @@ protected:
 	int currentRow, currentCol;
 	SpriteSheet* sprite;
 public:
-	Player(AEVec2 pos = { 0.f, 0.f });
+	Player(AEVec2 pos = { 0.f, 0.f }, f32 go_mass = 10.0f);
 	virtual ~Player();
 	PhysicsBody* pBody;
 	virtual void PreUpdate(const f32& dt);

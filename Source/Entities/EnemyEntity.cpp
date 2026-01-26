@@ -1,7 +1,7 @@
 #include "EnemyEntity.hpp"
 #include "../Utils/MeshRenderer.hpp"
 
-EnemyEntity::EnemyEntity(AEVec2 pos) : GameObjectEntity(pos)
+EnemyEntity::EnemyEntity(AEVec2 pos, f32 go_mass) : GameObjectEntity(pos)
 {
 	mesh = MeshRenderer::GetCenterRectMesh();
 	scale = { 5.f,5.f };

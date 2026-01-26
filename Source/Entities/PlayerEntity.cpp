@@ -7,7 +7,7 @@
 #include <iostream>
 #include <cstdio>
 
-Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
+Player::Player(AEVec2 pos, f32 go_mass) : GameObjectEntity(pos, go_mass) {
 	sprite = AssetManager::GetSpriteSheet("Assets/test_sprite.png", 3, 3);
 	mesh = MeshRenderer::GetCenterRectMesh();
 	pBody = new PhysicsBody();
@@ -15,7 +15,7 @@ Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 	animationFrame = 1.f / (3.f * 3.f);
 	currentRow = currentCol = 0;
 	scale = { 5.f * (static_cast<f32>(sprite->image->width) / sprite->image->height), 5.f };
-	jumpHeight = 2.f;
+	jumpHeight = 6.5f;
 	jumpVelocity = sqrtf(jumpHeight * 2.f * -pBody->gravity.y);
 	speed = 10.f;
 	layer = 2;
@@ -34,19 +34,26 @@ void Player::PreUpdate(const f32& dt) {
 void Player::Update(const f32& dt) {
 	GameObjectEntity::Update(dt);
 	// Out of bounds checking
+	
+
 	AEVec2 dir{};
 	if (AEInputCheckCurr(AEVK_A)) {
-		dir += { -1.f , 0.f };
+		dir += { -1.f, 0.f };
 	}
 	if (AEInputCheckCurr(AEVK_D)) {
-		dir += { 1.f , 0.f };
+		dir += { 1.f, 0.f };
 	}
 	if (dir.x || dir.y) {
 		AEVec2Normalize(&dir, &dir);
 	}
-	velocity.x += dir.x * speed;
-	
-	if (AEInputCheckCurr(AEVK_SPACE) && velocity.y == 0) {
+	if (dir.x)
+	{
+		f32 spd = velocity.y == 0 ? speed : speed * 0.75f;
+		velocity.x = dir.x * spd;
+	}
+
+
+	if (AEInputCheckCurr(AEVK_SPACE) && abs(velocity.y) == 0) {
 		velocity.y += jumpVelocity;
 	}
 	pBody->ApplyGravity(this->velocity, dt);
