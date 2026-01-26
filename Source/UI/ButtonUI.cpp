@@ -24,8 +24,8 @@ void ButtonUI::Update(const f32& dt) {
 	AEVec2 mouse{ static_cast<f32>(mouse_x), static_cast<f32>(mouse_y) };
 	AEVec2 mouse_world = Utils::Screen_To_World(mouse.x, mouse.y);
 
-	if (mouse_world.x >= this->position.x && mouse_world.x <= this->position.x + this->scale.x &&
-		mouse_world.y >= this->position.y && mouse_world.y <= this->position.y + this->scale.y) {
+	if (mouse_world.x >= this->position.x - (this->scale.x * 0.5f) && mouse_world.x <= this->position.x + (this->scale.x * 0.5f) &&
+		mouse_world.y >= this->position.y - (this->scale.y * 0.5f) && mouse_world.y <= this->position.y + (this->scale.y * 0.5f)) {
 		OnMouseHover(mouse);
 		this->mouse_hovered = true;
 

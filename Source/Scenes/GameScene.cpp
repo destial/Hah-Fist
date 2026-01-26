@@ -1,4 +1,4 @@
-#include "MainMenuScene.hpp"
+#include "GameScene.hpp"
 #include "../Managers/AssetManager.hpp"
 #include "../Entities/PlayerEntity.hpp"
 #include "../Entities/EnemyEntity.hpp"
@@ -22,13 +22,13 @@ static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, char ch) {
 	return b;
 }
 
-MainMenuScene::MainMenuScene() : BaseScene() {
+GameScene::GameScene() : BaseScene() {
 }
 
-MainMenuScene::~MainMenuScene() {
+GameScene::~GameScene() {
 }
 
-void MainMenuScene::Init() {
+void GameScene::Init() {
 	ButtonUI* s = new ButtonUI(AEVec2{ 3.f, Utils::GetWorldHeight() - .6f });
 	s->color = { 0, 0, 0, 0 };
 	s->overlay_color = s->color;
@@ -72,11 +72,11 @@ void MainMenuScene::Init() {
 	scene_entities.push_back(w);
 }
 
-void MainMenuScene::PreUpdate(const f32& dt) {
+void GameScene::PreUpdate(const f32& dt) {
 	BaseScene::PreUpdate(dt);
 }
 
-void MainMenuScene::Update(const f32& dt) {
+void GameScene::Update(const f32& dt) {
 	BaseScene::Update(dt);
 	// Collision detection 
 	for (auto& go : gameObjects){
@@ -93,14 +93,14 @@ void MainMenuScene::Update(const f32& dt) {
 	}
 }
 
-void MainMenuScene::PostUpdate(const f32& dt) {
+void GameScene::PostUpdate(const f32& dt) {
 	BaseScene::PostUpdate(dt);
 }
 
-void MainMenuScene::Render() {
+void GameScene::Render() {
 	BaseScene::Render();
 }
 
-void MainMenuScene::End() {
+void GameScene::End() {
 	BaseScene::End();
 }

@@ -1,8 +1,13 @@
 #include "SceneManager.hpp"
-#include "../Scenes/MainMenuScene.hpp"
+#include "../Scenes/GameScene.hpp"
+#include "../Scenes/StartMenuScene.hpp"
+
+SceneManager* SceneManager::instance = nullptr;
 
 SceneManager::SceneManager() : all_scenes(), next_scene(Scenes::INIT), current_scene(Scenes::INIT) {
-	all_scenes[Scenes::MAIN_MENU] = new MainMenuScene();
+	instance = this;
+	all_scenes[Scenes::MAIN_MENU] = new StartMenuScene();
+	all_scenes[Scenes::GAME] = new GameScene();
 }
 
 SceneManager::~SceneManager() {
@@ -51,4 +56,8 @@ void SceneManager::SetNextScene(Scenes::SceneState next) {
 
 BaseScene* SceneManager::GetCurrentScene() const {
 	return all_scenes[current_scene];
+}
+
+SceneManager* SceneManager::GetInstance() {
+	return instance;
 }

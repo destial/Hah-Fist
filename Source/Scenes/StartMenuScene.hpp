@@ -1,0 +1,21 @@
+#pragma once
+#ifndef __STARTMENUSCENE_H
+#define __STARTMENUSCENE_H
+#include "BaseScene.hpp"
+#include "../Entities/GameObjectEntity.hpp"
+
+class StartMenuScene : public BaseScene {
+public:
+	StartMenuScene();
+	~StartMenuScene();
+	virtual void Init();
+	virtual void PreUpdate(const f32& dt);
+	virtual void Update(const f32& dt);
+	virtual void PostUpdate(const f32& dt);
+	virtual void Render();
+	virtual void End();
+
+	std::vector<GameObjectEntity*> gameObjects;
+};
+
+#endif

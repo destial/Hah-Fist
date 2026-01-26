@@ -1,6 +1,6 @@
 #include "BaseScene.hpp"
 #include <algorithm>
-#include <memory>
+#include <iostream>
 
 BaseScene::BaseScene() : scene_entities(0) {
 }
@@ -44,4 +44,5 @@ void BaseScene::End() {
 		delete entity;
 	}
 	scene_entities.clear();
+	std::cout << "Scene ended\n";
 }

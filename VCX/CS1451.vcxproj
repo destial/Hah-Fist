@@ -113,7 +113,8 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="..\Source\Managers\SceneManager.cpp" />
     <ClCompile Include="..\Source\Managers\SerializationManager.cpp" />
     <ClCompile Include="..\Source\Scenes\BaseScene.cpp" />
-    <ClCompile Include="..\Source\Scenes\MainMenuScene.cpp" />
+    <ClCompile Include="..\Source\Scenes\GameScene.cpp" />
+    <ClCompile Include="..\Source\Scenes\StartMenuScene.cpp" />
     <ClCompile Include="..\Source\UI\BaseUI.cpp" />
     <ClCompile Include="..\Source\UI\ButtonUI.cpp" />
     <ClCompile Include="..\Source\UI\CircleButtonUI.cpp" />
@@ -136,7 +137,8 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="..\Source\Managers\SceneManager.hpp" />
     <ClInclude Include="..\Source\Managers\SerializationManager.hpp" />
     <ClInclude Include="..\Source\Scenes\BaseScene.hpp" />
-    <ClInclude Include="..\Source\Scenes\MainMenuScene.hpp" />
+    <ClInclude Include="..\Source\Scenes\GameScene.hpp" />
+    <ClInclude Include="..\Source\Scenes\StartMenuScene.hpp" />
     <ClInclude Include="..\Source\UI\BaseUI.hpp" />
     <ClInclude Include="..\Source\UI\ButtonUI.hpp" />
     <ClInclude Include="..\Source\UI\CircleButtonUI.hpp" />

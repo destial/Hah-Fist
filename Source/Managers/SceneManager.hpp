@@ -14,6 +14,8 @@ namespace Scenes {
 }
 
 class SceneManager {
+private:
+	static SceneManager* instance;
 protected:
 	BaseScene* all_scenes[Scenes::LAST];
 
@@ -36,6 +38,8 @@ public:
 
 	void SetNextScene(Scenes::SceneState next);
 	BaseScene* GetCurrentScene() const;
+
+	static SceneManager* GetInstance();
 };
 
 #endif

@@ -9,7 +9,7 @@
 
 #include "Managers/AssetManager.hpp"
 #include "Events/InputEvent.hpp"
-#include "Scenes/MainMenuScene.hpp"
+#include "Scenes/GameScene.hpp"
 
 namespace Game {
 	bool bGameRunning = 1;

@@ -72,7 +72,7 @@
     <ClCompile Include="..\Source\Events\InputEvent.cpp">
       <Filter>Source Files\Events</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Scenes\MainMenuScene.cpp">
+    <ClCompile Include="..\Source\Scenes\GameScene.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Entities\PlayerEntity.cpp">
@@ -123,6 +123,9 @@
     <ClCompile Include="..\Source\Items\Image.cpp">
       <Filter>Source Files\Items</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Scenes\StartMenuScene.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -146,7 +149,7 @@
     <ClInclude Include="..\Source\Utils\MeshRenderer.hpp">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Scenes\MainMenuScene.hpp">
+    <ClInclude Include="..\Source\Scenes\GameScene.hpp">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Entities\PlayerEntity.hpp">
@@ -187,6 +190,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Items\Image.hpp">
       <Filter>Header Files\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Scenes\StartMenuScene.hpp">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
