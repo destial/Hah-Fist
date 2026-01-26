@@ -1,5 +1,5 @@
 #include "AEOverload.hpp"
-#include <math.h>
+#include <cmath>
 
 void AEVec2Rotate(AEVec2* pResult, AEVec2* pVec, float radians) {
 	pResult->x = (pVec->x * AECos(radians)) - (pVec->y * AESin(radians));
@@ -8,17 +8,13 @@ void AEVec2Rotate(AEVec2* pResult, AEVec2* pVec, float radians) {
 
 f32 AEVec2Angle(AEVec2* vec1, AEVec2* vec2) {
 	f32 dot = AEVec2DotProduct(vec1, vec2);
-	f32 angle = acosf(dot / (AEVec2Length(vec1) * AEVec2Length(vec2)));
-	if (dot >= 1.f) {
-		angle += 180.f;
-	}
-	return angle;
+	return AEACos(dot / (AEVec2Length(vec1) * AEVec2Length(vec2)));
 }
 
 f32 AEVec2AngleCCW(AEVec2* vec1, AEVec2* vec2) {
 	f32 u = (vec1->x * vec2->y) - (vec1->y * vec2->x);
 	f32 v = (vec1->x * vec2->x) + (vec1->y * vec2->y);
-	return atan2f(u, v);
+	return std::atan2f(u, v);
 }
 
 AEVec2 operator+ (const AEVec2& lhs, const AEVec2& rhs) {
@@ -66,7 +62,7 @@ AEVec2& operator/= (AEVec2& lhs, f32 magnitude) {
 }
 
 std::ostream& operator<< (std::ostream& os, const AEVec2& rhs) {
-	os << '{' << rhs.x << ", " << rhs.y << '}';
+	os << "AEVec2={" << rhs.x << ", " << rhs.y << '}';
 	return os;
 }
 

@@ -5,13 +5,21 @@
 #include <iostream>
 
 /*
-* @brief Addition rotation Vector utility function
+* @brief Additional rotation Vector utility function
 * @return The rotated vector
 */
 void AEVec2Rotate(AEVec2* result, AEVec2* pVec, float radians);
 
+/*
+* @brief Additional angle Vector utility function
+* @return The minimum angle between two vectors
+*/
 f32 AEVec2Angle(AEVec2* vec1, AEVec2* vec2);
 
+/*
+* @brief Additional angle Vector utility function
+* @return The counter-clockwise angle between two vectors
+*/
 f32 AEVec2AngleCCW(AEVec2* vec1, AEVec2* vec2);
 
 /*

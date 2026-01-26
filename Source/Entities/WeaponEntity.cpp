@@ -6,10 +6,10 @@
 #include "../Managers/AssetManager.hpp"
 
 
-Weapon::Weapon(AEVec2 pos, BaseEntity* player) : BaseEntity(pos) {
+Weapon::Weapon(AEVec2 pos, BaseEntity* player) : BaseEntity(pos), dash_timer(0.f), channel_timer(0.f), channelling(false), weapon_direction({ 0.f, 0.f }) {
 	player_entity = player;
 
-	image = AssetManager::GetTexture("Assets/PlanetTexture.png");
+	image = AssetManager::GetTexture("Assets/test_fist.png");
 	mesh = MeshRenderer::GetCenterRectMesh();
 	layer = 2;
 }
@@ -20,10 +20,7 @@ Weapon::~Weapon() {
 
 void Weapon::PreUpdate(const f32& dt) {
 	BaseEntity::PreUpdate(dt);
-	s32 x, y;
-	AEInputGetCursorPosition(&x, &y);
-
-	AEVec2 attack_direction = Utils::Screen_To_World(x, y) - player_entity->position;
+	AEVec2 attack_direction = Utils::Get_Mouse_World() - player_entity->position;
 	AEVec2Normalize(&attack_direction, &attack_direction);
 	AEVec2 right = { 1.f, 0 };
 	rotation = AEVec2AngleCCW(&right, &attack_direction);
@@ -61,10 +58,8 @@ void Weapon::Render() {
 
 void Weapon::Attack() {
 	float attack_strength = channel_timer / max_channel_time;
-	s32 x, y;
-	AEInputGetCursorPosition(&x, &y);
 
-	AEVec2 attack_direction = Utils::Screen_To_World(x, y) - player_entity->position;
+	AEVec2 attack_direction = Utils::Get_Mouse_World() - player_entity->position;
 	AEVec2Normalize(&attack_direction, &attack_direction);
 
 	dash_timer = max_dash_time;
