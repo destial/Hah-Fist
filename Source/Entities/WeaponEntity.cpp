@@ -20,7 +20,14 @@ Weapon::~Weapon() {
 
 void Weapon::PreUpdate(const f32& dt) {
 	BaseEntity::PreUpdate(dt);
-	this->position = player_entity->position + (player_entity->scale * 0.25f);
+	s32 x, y;
+	AEInputGetCursorPosition(&x, &y);
+
+	AEVec2 attack_direction = Utils::Screen_To_World(x, y) - player_entity->position;
+	AEVec2Normalize(&attack_direction, &attack_direction);
+	AEVec2 right = { 1.f, 0 };
+	rotation = AEVec2AngleCCW(&right, &attack_direction);
+	this->position = player_entity->position + attack_direction;
 }
 
 void Weapon::Update(const f32& dt) {

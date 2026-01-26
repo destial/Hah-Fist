@@ -1,8 +1,24 @@
 #include "AEOverload.hpp"
+#include <math.h>
 
 void AEVec2Rotate(AEVec2* pResult, AEVec2* pVec, float radians) {
 	pResult->x = (pVec->x * AECos(radians)) - (pVec->y * AESin(radians));
 	pResult->y = (pVec->x * AESin(radians)) + (pVec->y * AECos(radians));
+}
+
+f32 AEVec2Angle(AEVec2* vec1, AEVec2* vec2) {
+	f32 dot = AEVec2DotProduct(vec1, vec2);
+	f32 angle = acosf(dot / (AEVec2Length(vec1) * AEVec2Length(vec2)));
+	if (dot >= 1.f) {
+		angle += 180.f;
+	}
+	return angle;
+}
+
+f32 AEVec2AngleCCW(AEVec2* vec1, AEVec2* vec2) {
+	f32 u = (vec1->x * vec2->y) - (vec1->y * vec2->x);
+	f32 v = (vec1->x * vec2->x) + (vec1->y * vec2->y);
+	return atan2f(u, v);
 }
 
 AEVec2 operator+ (const AEVec2& lhs, const AEVec2& rhs) {

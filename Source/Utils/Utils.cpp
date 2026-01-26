@@ -7,24 +7,27 @@ namespace Utils {
 
 	static float deltaTime;
 
+	unsigned int screen_width = 1600;
+	unsigned int screen_height = 900;
+
 	AEVec2 World_To_Screen(float x, float y) {
 		return {
-			x * (1600.f / world_width),
-			900.f - y * (900.f / world_height)
+			x * (screen_width / world_width),
+			screen_height - y * (screen_height / world_height)
 		};
 	}
 
 	AEVec2 Screen_To_World(float x, float y) {
 		return {
-			x * (world_width / 1600.f),
-			world_height - y * (world_height / 900.f)
+			x * (world_width / screen_width),
+			world_height - y * (world_height / screen_height)
 		};
 	}
 
 	AEVec2 Game_To_Screen(float x, float y) {
 		return {
-			x * (1600.f / world_width) - 800.f,
-			y * (900.f / world_height) - 450.f
+			x * (screen_width / world_width) - (static_cast<f32>(screen_width) * 0.5f),
+			y * (screen_height / world_height) - (static_cast<f32>(screen_height) * 0.5f)
 		};
 	}
 
@@ -37,8 +40,8 @@ namespace Utils {
 
 	AEVec2 Scale_To_Screen(float x, float y) {
 		return {
-			x * (1600.f / world_width),
-			y * (900.f / world_height)
+			x * (screen_width / world_width),
+			y * (screen_height / world_height)
 		};
 	}
 
@@ -80,8 +83,7 @@ namespace Utils {
 		return deltaTime;
 	}
 
-	bool CircleCircleCollision(GameObjectEntity* & go,  GameObjectEntity*& go2)
-	{
+	bool CircleCircleCollision(GameObjectEntity* & go,  GameObjectEntity*& go2) {
 		f32 sqrDist = AEVec2SquareDistance(&go->position, &go2->position);
 		f32 combinedRadii = go->scale.x + go2->scale.x;
 		return sqrDist <= combinedRadii * combinedRadii;
@@ -100,8 +102,7 @@ namespace Utils {
 			bottom_left_1.y + height_1 < bottom_left_2.y || bottom_left_1.y > bottom_left_2.y + height_2);
 	}*/
 
-	bool AABB(const GameObjectEntity* const& go, const GameObjectEntity* const& go2)
-	{
+	bool AABB(const GameObjectEntity* const& go, const GameObjectEntity* const& go2) {
 		return !(go->position.x + go->scale.x * 0.5f < go2->position.x - go2->scale.x * 0.5f || go->position.x - go->scale.x * 0.5f > go2->position.x + go2->scale.x * 0.5f ||
 			go->position.y + go->scale.y * 0.5f < go2->position.y - go2->scale.y * 0.5f || go->position.y - go->scale.y * 0.5f > go2->position.y + go2->scale.y * 0.5f);
 	}
@@ -109,7 +110,4 @@ namespace Utils {
 	void SetDeltaTime(float dt) {
 		deltaTime = dt;
 	}
-
-	
-
 }

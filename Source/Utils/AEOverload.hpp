@@ -10,6 +10,10 @@
 */
 void AEVec2Rotate(AEVec2* result, AEVec2* pVec, float radians);
 
+f32 AEVec2Angle(AEVec2* vec1, AEVec2* vec2);
+
+f32 AEVec2AngleCCW(AEVec2* vec1, AEVec2* vec2);
+
 /*
 * @brief Addition operator between two vectors
 * @return A new vector
