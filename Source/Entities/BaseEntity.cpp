@@ -11,14 +11,14 @@ BaseEntity::BaseEntity(AEVec2 position) :
 	rotation(0),
 	transform({ 0 }),
 	layer(0),
-	mesh(nullptr), texture(nullptr), color({255, 255, 255, 255})
+	mesh(nullptr), image(nullptr), color({255, 255, 255, 255})
 {
 }
 
 BaseEntity::~BaseEntity() {
 	std::printf("Called BaseEntity deconstructor\n");
 	mesh = nullptr;
-	texture = nullptr;
+	image = nullptr;
 	for (auto& entry : update_listeners) {
 		entry.second.clear();
 	}
@@ -74,9 +74,9 @@ void BaseEntity::PostUpdate(const f32& dt) {
 }
 
 void BaseEntity::Render() {
-	if (texture) {
+	if (image && image->image) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		AEGfxTextureSet(texture, 0.f, 0.f);
+		AEGfxTextureSet(image->image, 0.f, 0.f);
 	}
 	else {
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);

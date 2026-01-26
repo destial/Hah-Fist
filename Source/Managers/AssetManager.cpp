@@ -6,8 +6,8 @@ AssetManager::AssetManager() {}
 
 AssetManager::~AssetManager() {
 	for (auto& entry : asset_map) {
-		if (entry.second->type == TEXTURE && entry.second->texture) {
-			AEGfxTextureUnload(entry.second->texture);
+		if (entry.second->type == TEXTURE && entry.second->image) {
+			delete entry.second->image;
 		}
 		else if (entry.second->type == FONT && entry.second->font) {
 			AEGfxDestroyFont(entry.second->font);
@@ -31,15 +31,15 @@ void AssetManager::Free() {
 	}
 }
 
-AEGfxTexture* AssetManager::GetTexture(std::string file_name) {
+Image* AssetManager::GetTexture(std::string file_name) {
 	GetInstance();
 	if (instance->asset_map.count(file_name)) {
-		return instance->asset_map[file_name]->texture;
+		return instance->asset_map[file_name]->image;
 	}
 	instance->asset_map[file_name] = new Asset();
-	instance->asset_map[file_name]->texture = AEGfxTextureLoad(file_name.c_str());
+	instance->asset_map[file_name]->image = new Image(file_name.c_str());
 	instance->asset_map[file_name]->type = TEXTURE;
-	return instance->asset_map[file_name]->texture;
+	return instance->asset_map[file_name]->image;
 }
 
 SpriteSheet* AssetManager::GetSpriteSheet(std::string file_name, int rows, int cols) {

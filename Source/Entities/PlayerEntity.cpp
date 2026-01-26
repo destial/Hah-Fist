@@ -14,7 +14,7 @@ Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 	animationTimer = 0.f;
 	animationFrame = 1.f / (3.f * 3.f);
 	currentRow = currentCol = 0;
-	scale = { 5.f,5.f };
+	scale = { 5.f * (static_cast<f32>(sprite->image->width) / sprite->image->height), 5.f };
 	jumpHeight = 2.f;
 	jumpVelocity = sqrtf(jumpHeight * 2.f * -pBody->gravity.y);
 	speed = 10.f;

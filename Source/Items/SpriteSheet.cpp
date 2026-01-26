@@ -4,7 +4,7 @@
 #include "../Managers/AssetManager.hpp"
 
 SpriteSheet::SpriteSheet(const char* file, int rows, int columns) : rows(rows), columns(columns) {
-	texture = AEGfxTextureLoad(file);
+	image = new Image(file);
 	AEGfxMeshStart();
 	AEGfxTriAdd(
 		-0.5f, -0.5f, 0xFFFFFFFF, 0.f, 1.f / rows,
@@ -18,18 +18,16 @@ SpriteSheet::SpriteSheet(const char* file, int rows, int columns) : rows(rows), 
 }
 
 SpriteSheet::~SpriteSheet() {
-	if (texture) {
-		AEGfxTextureUnload(texture);
-	}
-	texture = nullptr;
+	delete image;
+	image = nullptr;
 	AEGfxMeshFree(mesh);
 	mesh = nullptr;
 }
 
 void SpriteSheet::Render(AEMtx33& t, int row, int column) {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	if (texture) {
-		AEGfxTextureSet(texture, static_cast<f32>(column) / columns, static_cast<f32>(row) / rows);
+	if (image->image) {
+		AEGfxTextureSet(image->image, static_cast<f32>(column) / columns, static_cast<f32>(row) / rows);
 	}
 	AEGfxSetColorToMultiply(1.0f, 1.0f, 1.0f, 1.0f);
 	AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);

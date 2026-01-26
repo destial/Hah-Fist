@@ -120,6 +120,9 @@
     <ClCompile Include="..\Source\Entities\WeaponEntity.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Items\Image.cpp">
+      <Filter>Source Files\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -181,6 +184,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Entities\WeaponEntity.hpp">
       <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Items\Image.hpp">
+      <Filter>Header Files\Items</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -6,6 +6,7 @@
 #include <functional>
 #include "AEEngine.h"
 #include "../Utils/Utils.hpp"
+#include "../Items/Image.hpp"
 
 class BaseEntity {
 protected:
@@ -15,7 +16,7 @@ protected:
 public:
 	virtual ~BaseEntity();
 	AEGfxVertexList* mesh;
-	AEGfxTexture* texture;
+	Image* image;
 	AEVec2 position;
 	AEVec2 velocity;
 	AEVec2 scale;

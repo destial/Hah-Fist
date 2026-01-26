@@ -4,6 +4,7 @@
 #include <string>
 #include "../Entities/BaseEntity.hpp"
 #include "../Utils/Utils.hpp"
+#include "../Items/Image.hpp"
 
 class BaseUI : public BaseEntity {
 public:
@@ -22,7 +23,7 @@ public:
 	std::string text;
 	f32 text_size;
 	Color overlay_color;
-	AEGfxTexture* overlay_texture;
+	Image* overlay_texture;
 
 	BaseUI(AEVec2 pos = { 0.f, 0.f });
 	virtual ~BaseUI();

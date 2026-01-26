@@ -49,19 +49,19 @@ void ButtonUI::Update(const f32& dt) {
 }
 
 void ButtonUI::Render() {
-	if (texture) {
+	if (image && image->image) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		if (this->mouse_hovered && this->overlay_texture) {
-			AEGfxTextureSet(overlay_texture, 0.f, 0.f);
+		if (this->mouse_hovered && this->overlay_texture && this->overlay_texture->image) {
+			AEGfxTextureSet(overlay_texture->image, 0.f, 0.f);
 		}
 		else {
-			AEGfxTextureSet(texture, 0.f, 0.f);
+			AEGfxTextureSet(image->image, 0.f, 0.f);
 		}
 	}
 	else {
-		if (this->mouse_hovered && this->overlay_texture) {
+		if (this->mouse_hovered && this->overlay_texture && this->overlay_texture->image) {
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-			AEGfxTextureSet(overlay_texture, 0.f, 0.f);
+			AEGfxTextureSet(overlay_texture->image, 0.f, 0.f);
 		}
 		else {
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);

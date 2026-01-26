@@ -23,9 +23,9 @@ BaseUI::~BaseUI() {
 }
 
 void BaseUI::Render() {
-	if (texture) {
+	if (image && image->image) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		AEGfxTextureSet(texture, 0.f, 0.f);
+		AEGfxTextureSet(image->image, 0.f, 0.f);
 	}
 	else {
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);

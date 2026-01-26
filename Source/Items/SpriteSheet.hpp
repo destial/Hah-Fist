@@ -2,16 +2,17 @@
 #ifndef __SPRITEANIMATION_H
 #define __SPRITEANIMATION_H
 #include "AEEngine.h"
+#include "Image.hpp"
 
 /*
-* @brief Represents a texture formatted as a spritesheet
+* @brief Represents a image formatted as a spritesheet
 */
 class SpriteSheet {
 protected:
 	int rows, columns;
-	AEGfxTexture* texture;
 	AEGfxVertexList* mesh;
 public:
+	Image* image;
 	SpriteSheet(const char* file, int rows, int columns);
 	~SpriteSheet();
 
