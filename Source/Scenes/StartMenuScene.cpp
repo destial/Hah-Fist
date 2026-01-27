@@ -49,14 +49,22 @@ void StartMenuScene::Init() {
 		}
 	});
 
-	ButtonUI* wk = CreateButtonDisplay(AEVec2{ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f }, "Start  ");
-	wk->AddClickListener([](BaseUI::MouseButton b) {
+	ButtonUI* start = CreateButtonDisplay(AEVec2{ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f + 5.f }, "Start  ");
+	start->AddClickListener([](BaseUI::MouseButton b) {
 		if (b & BaseUI::MouseButton::LEFT) {
 			SceneManager::GetInstance()->SetNextScene(Scenes::GAME);
 		}
 	});
 
-	scene_entities.push_back(wk);
+	ButtonUI* quit = CreateButtonDisplay(AEVec2{ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f - 5.f }, "Quit  ");
+	quit->AddClickListener([](BaseUI::MouseButton b) {
+		if (b & BaseUI::MouseButton::LEFT) {
+			Game::SetGameRunning(false);
+		}
+	});
+
+	scene_entities.push_back(start);
+	scene_entities.push_back(quit);
 	scene_entities.push_back(s);
 }
 

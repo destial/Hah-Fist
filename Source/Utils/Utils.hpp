@@ -2,6 +2,11 @@
 #ifndef __UTIL_H
 #define __UTIL_H
 #include "AEEngine.h"
+
+namespace Game {
+	void SetGameRunning(bool b);
+}
+
 class GameObjectEntity;
 struct Color {
 	union {
@@ -44,6 +49,7 @@ namespace Utils {
 	//bool AABB(const AEVec2& bottom_left_1, const f32& width_1, const f32& height_1, const AEVec2& bottom_left_2, const f32& width_2, const f32& height_2);
 	
 	bool AABB(const GameObjectEntity* const & go,  const GameObjectEntity* const& go2);
+	bool OBB(const GameObjectEntity* const& go, const GameObjectEntity* const& go2);
 	
 	void SetDeltaTime(float dt);
 

@@ -2,8 +2,8 @@
 #include <cmath>
 
 void AEVec2Rotate(AEVec2* pResult, AEVec2* pVec, float radians) {
-	pResult->x = (pVec->x * AECos(radians)) - (pVec->y * AESin(radians));
-	pResult->y = (pVec->x * AESin(radians)) + (pVec->y * AECos(radians));
+	pResult->x = (pVec->x * AECos(-radians)) - (pVec->y * AESin(-radians));
+	pResult->y = (pVec->x * AESin(-radians)) + (pVec->y * AECos(-radians));
 }
 
 f32 AEVec2Angle(AEVec2* vec1, AEVec2* vec2) {

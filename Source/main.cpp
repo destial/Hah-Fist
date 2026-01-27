@@ -12,7 +12,10 @@
 #include "Scenes/GameScene.hpp"
 
 namespace Game {
-	bool bGameRunning = 1;
+	bool bGameRunning;
+	void SetGameRunning(bool b) {
+		bGameRunning = b;
+	}
 }
 
 // Program Entrypoint
@@ -38,19 +41,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Initialize fonts
 	AEGfxFontSystemStart();
 
+	Game::bGameRunning = true;
 	{
-#if _DEBUG
-		const auto OnGameExit = ([](const InputEvent* ev) {
-			if (ev->IsKeyTriggered(AEVK_ESCAPE)) {
-				Game::bGameRunning = false;
-			}
-		});
-		InputEvent::Listeners += OnGameExit;
-#endif
-
-		// dont need to call delete after, already handled in ~scene manager destructor
 		SceneManager sceneManager;
+		// dont need to call delete after, already handled in ~scene manager destructor
 		sceneManager.SetNextScene(Scenes::MAIN_MENU);
+		
 		// Game Loop
 		while (Game::bGameRunning) {
 			// Informing the system about the loop's start

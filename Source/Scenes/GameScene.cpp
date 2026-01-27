@@ -1,4 +1,5 @@
 #include "GameScene.hpp"
+#include "../Managers/SceneManager.hpp"
 #include "../Managers/AssetManager.hpp"
 #include "../Entities/PlayerEntity.hpp"
 #include "../Entities/EnemyEntity.hpp"
@@ -29,7 +30,15 @@ GameScene::GameScene() : BaseScene() {
 GameScene::~GameScene() {
 }
 
+static void OnGameExit(const InputEvent* ev) {
+	if (ev->IsKeyTriggered(AEVK_ESCAPE)) {
+		SceneManager::GetInstance()->SetNextScene(Scenes::MAIN_MENU);
+	}
+}
+
 void GameScene::Init() {
+	InputEvent::Listeners += OnGameExit;
+
 	ButtonUI* s = new ButtonUI(AEVec2{ 3.f, Utils::GetWorldHeight() - .6f });
 	s->color = { 0, 0, 0, 0 };
 	s->overlay_color = s->color;
@@ -176,4 +185,6 @@ void GameScene::Render() {
 
 void GameScene::End() {
 	BaseScene::End();
+	InputEvent::Listeners -= OnGameExit;
+	gameObjects.clear();
 }

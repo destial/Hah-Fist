@@ -1,6 +1,7 @@
 #include "ButtonUI.hpp"
 #include "../Utils/Utils.hpp"
 #include "../Utils/MeshRenderer.hpp"
+#include "../Utils/AEOverload.hpp"
 
 ButtonUI::ButtonUI(AEVec2 pos) : BaseUI(pos),
 	click_listeners(0),
@@ -23,9 +24,11 @@ void ButtonUI::Update(const f32& dt) {
 	AEInputGetCursorPosition(&mouse_x, &mouse_y);
 	AEVec2 mouse{ static_cast<f32>(mouse_x), static_cast<f32>(mouse_y) };
 	AEVec2 mouse_world = Utils::Screen_To_World(mouse.x, mouse.y);
+	AEVec2 local_golf_pos = mouse_world - this->position;
+	AEVec2Rotate(&local_golf_pos, &local_golf_pos, rotation);
 
-	if (mouse_world.x >= this->position.x - (this->scale.x * 0.5f) && mouse_world.x <= this->position.x + (this->scale.x * 0.5f) &&
-		mouse_world.y >= this->position.y - (this->scale.y * 0.5f) && mouse_world.y <= this->position.y + (this->scale.y * 0.5f)) {
+	if (local_golf_pos.x <= this->scale.x * 0.5f && local_golf_pos.x >= -this->scale.x * 0.5f &&
+		local_golf_pos.y <= this->scale.y * 0.5f && local_golf_pos.y >= -this->scale.y * 0.5f) {
 		OnMouseHover(mouse);
 		this->mouse_hovered = true;
 

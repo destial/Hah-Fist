@@ -38,6 +38,7 @@ public:
 
 	void SetNextScene(Scenes::SceneState next);
 	BaseScene* GetCurrentScene() const;
+	Scenes::SceneState GetCurrentState() const;
 
 	static SceneManager* GetInstance();
 };

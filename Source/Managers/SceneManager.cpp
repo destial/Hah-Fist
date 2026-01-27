@@ -25,6 +25,9 @@ void SceneManager::PreUpdate(const f32& dt) {
 				all_scenes[current_scene]->End();
 		}
 
+		if (next_scene == Scenes::INIT) {
+			return;
+		}
 		if (all_scenes[next_scene])
 			all_scenes[next_scene]->Init();
 	}
@@ -56,6 +59,10 @@ void SceneManager::SetNextScene(Scenes::SceneState next) {
 
 BaseScene* SceneManager::GetCurrentScene() const {
 	return all_scenes[current_scene];
+}
+
+Scenes::SceneState SceneManager::GetCurrentState() const {
+	return current_scene;
 }
 
 SceneManager* SceneManager::GetInstance() {

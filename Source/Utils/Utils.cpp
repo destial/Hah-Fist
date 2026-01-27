@@ -1,6 +1,15 @@
 #include "Utils.hpp"
 #include "AEMath.h"
 #include "../Entities/GameObjectEntity.hpp"
+#include "AEOverload.hpp"
+#include <cmath>
+
+struct OBBStruct {
+	AEVec2 center;
+	AEVec2 axes[2]; // Local X and Y unit vectors (normalized)
+	float halfWidths[2]; // Half-extents along the axes
+};
+
 namespace Utils {
 	static float world_width = 48.f;
 	static float world_height = 27.f;
@@ -105,6 +114,52 @@ namespace Utils {
 	bool AABB(const GameObjectEntity* const& go, const GameObjectEntity* const& go2) {
 		return !(go->position.x + go->scale.x * 0.5f < go2->position.x - go2->scale.x * 0.5f || go->position.x - go->scale.x * 0.5f > go2->position.x + go2->scale.x * 0.5f ||
 			go->position.y + go->scale.y * 0.5f < go2->position.y - go2->scale.y * 0.5f || go->position.y - go->scale.y * 0.5f > go2->position.y + go2->scale.y * 0.5f);
+	}
+
+	static bool isGap(AEVec2& L, OBBStruct& a, OBBStruct& b) {
+		// Vector between centers
+		AEVec2 T = a.center - b.center;
+
+		// Project the distance between centers onto the axis L
+		float distance = std::abs(AEVec2DotProduct(&T, &L));
+
+		// Project the "radius" of box A onto axis L
+		float radiusA = std::abs(AEVec2DotProduct(&a.axes[0], &L) * a.halfWidths[0]) +
+			std::abs(AEVec2DotProduct(&a.axes[1], &L) * a.halfWidths[1]);
+
+		// Project the "radius" of box B onto axis L
+		float radiusB = std::abs(AEVec2DotProduct(&b.axes[0], &L) * b.halfWidths[0]) +
+			std::abs(AEVec2DotProduct(&b.axes[1], &L) * b.halfWidths[1]);
+
+		// If distance is greater than the sum of the radii, there is a gap
+		return distance > (radiusA + radiusB);
+	}
+
+	bool OBB(const GameObjectEntity* const& go, const GameObjectEntity* const& go2) {
+		// TODO: Oriented bounding box collision (still trying to understand SAT)
+#if 1
+		return AABB(go, go2);
+#endif
+		AEVec2 top_a = { go->scale.x, 0.f };
+		AEVec2 left_a = { 0.f, go->scale.y };
+		AEVec2Rotate(&top_a, &top_a, go->rotation);
+		AEVec2Rotate(&left_a, &left_a, go->rotation);
+
+		AEVec2 top_b = { go2->scale.x, 0.f };
+		AEVec2 left_b = { 0.f, go2->scale.y };
+		AEVec2Rotate(&top_b, &top_b, go2->rotation);
+		AEVec2Rotate(&left_b, &left_b, go2->rotation);
+
+		OBBStruct a{ go->position, {top_a, left_a}, {go->scale.x * 0.5f, go->scale.y * 0.5f} };
+		OBBStruct b{ go2->position, {top_b, left_b}, {go2->scale.x * 0.5f, go2->scale.y * 0.5f} };
+
+		if (isGap(a.axes[0], a, b)) return false;
+		if (isGap(a.axes[1], a, b)) return false;
+		if (isGap(b.axes[0], a, b)) return false;
+		if (isGap(b.axes[1], a, b)) return false;
+
+		// No gap found on any axis = collision
+		return true;
 	}
 
 	void SetDeltaTime(float dt) {
