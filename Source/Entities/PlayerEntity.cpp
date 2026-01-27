@@ -7,10 +7,9 @@
 #include <iostream>
 #include <cstdio>
 
-Player::Player(AEVec2 pos, f32 go_mass) : GameObjectEntity(pos, go_mass) {
+Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 	sprite = AssetManager::GetSpriteSheet("Assets/test_sprite.png", 3, 3);
 	mesh = MeshRenderer::GetCenterRectMesh();
-	pBody = new PhysicsBody();
 	animationTimer = 0.f;
 	animationFrame = 1.f / (3.f * 3.f);
 	currentRow = currentCol = 0;
@@ -23,7 +22,6 @@ Player::Player(AEVec2 pos, f32 go_mass) : GameObjectEntity(pos, go_mass) {
 
 Player::~Player() {
 	std::printf("Called Player deconstructor\n");
-	delete pBody;
 }
 
 void Player::PreUpdate(const f32& dt) {
@@ -56,7 +54,6 @@ void Player::Update(const f32& dt) {
 	if (AEInputCheckCurr(AEVK_SPACE) && abs(velocity.y) == 0) {
 		velocity.y += jumpVelocity;
 	}
-	pBody->ApplyGravity(this->velocity, dt);
 }
 
 void Player::PostUpdate(const f32& dt) {

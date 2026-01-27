@@ -1,16 +1,19 @@
 #include "GameObjectEntity.hpp"
 #include "../Utils/AEOverload.hpp"
 
-GameObjectEntity::GameObjectEntity() : health(1.f),damage(1.f), isActive(true), type(CIRCLE), BaseEntity({0.f}), mass(1.0f)
+GameObjectEntity::GameObjectEntity() : health(1.f),damage(1.f), isActive(true), type(CIRCLE), BaseEntity({0.f})
 {
+	pBody = new PhysicsBody{};
 }
 
-GameObjectEntity::GameObjectEntity(AEVec2 pos, f32 go_mass, SHAPE type) : health(1.f), damage(1.f),isActive(true), type(type), BaseEntity(pos), mass(go_mass)
+GameObjectEntity::GameObjectEntity(AEVec2 pos, f32 mass, SHAPE type) : health(1.f), damage(1.f),isActive(true), type(type), BaseEntity(pos)
 {
+	pBody = new PhysicsBody{ mass };
 }
 
 GameObjectEntity::~GameObjectEntity() 
 {
+	delete pBody;
 }
 
 void GameObjectEntity::PreUpdate(const f32& dt)
@@ -26,6 +29,9 @@ void GameObjectEntity::Update(const f32& dt)
 
 void GameObjectEntity::PostUpdate(const f32& dt) 
 {
+	pBody->UpdateStates(this->velocity, this->position, this->scale);
+	pBody->ApplyGravity(this->velocity, dt);
+
 	this->position += this->velocity * dt;
 	this->position.y = AEClamp(this->position.y, this->scale.y * 0.5f, Utils::GetWorldHeight() - (this->scale.y * 0.5f));
 	/*if (this->position.x <= 0.f) {

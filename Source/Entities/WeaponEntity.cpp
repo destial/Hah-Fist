@@ -8,7 +8,7 @@
 
 Weapon::Weapon(AEVec2 pos, GameObjectEntity* player) : BaseEntity(pos), dash_timer(0.f), channel_timer(0.f), channelling(false), weapon_direction({ 0.f, 0.f }) {
 	player_entity = player;
-	player_original_mass = player_entity->mass;
+	player_original_mass = player_entity->pBody->mass;
 
 	image = AssetManager::GetTexture("Assets/test_fist.png");
 	mesh = MeshRenderer::GetCenterRectMesh();
@@ -46,9 +46,9 @@ void Weapon::Update(const f32& dt) {
 	{
 		dash_timer -= dt;
 	}
-	else if (player_entity->mass != player_original_mass)
+	else if (player_entity->pBody->mass != player_original_mass)
 	{
-		player_entity->mass = player_original_mass;
+		player_entity->pBody->mass = player_original_mass;
 	}
 }
 
@@ -68,5 +68,5 @@ void Weapon::Attack() {
 
 	dash_timer = max_dash_time;
 	player_entity->velocity = attack_direction * 60 * attack_strength;
-	player_entity->mass = 10.0f * attack_strength;
+	player_entity->pBody->mass = 10.0f * attack_strength;
 }

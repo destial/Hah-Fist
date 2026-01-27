@@ -59,8 +59,11 @@ void GameScene::Init() {
 	scene_entities.push_back(sk);
 	scene_entities.push_back(dk);
 
-	GameObjectEntity* p = new Player({ 1.f, 1.f }, 1.0f);
-	GameObjectEntity* e = new EnemyEntity({ 9.f, 4.5f }, 50.0f);
+	GameObjectEntity* p = new Player({ 1.f, 1.f });
+	std::printf("Player mass :%f\n", p->pBody->mass);
+	GameObjectEntity* e = new EnemyEntity({ 9.f, 4.5f });
+	e->pBody->mass = 40.0f;
+	std::printf("Enemy mass :%f\n", e->pBody->mass);
 	e->AddPreUpdateListener(this, [e]() {
 		e->color = { 255, 255, 255, 255 };
 	});
@@ -94,33 +97,52 @@ void GameScene::Update(const f32& dt) {
 		}
 	}
 
+	//Reset collision state to false;
+	for (auto& go : gameObjects) { go->pBody->is_colliding = false; }
+
 	for (int i{}; i < gameObjects.size(); i++) {
 		// Starts loop only from the next object
 		for (int j{i + 1}; j < gameObjects.size(); j++) {
 			GameObjectEntity* go = gameObjects[i];
 			GameObjectEntity* go2 = gameObjects[j];
+			//Checks if either go is inactive, if so, skip this check
+			if (!go->isActive || !go2->isActive)
+				continue;
 			if (Utils::AABB(go, go2)) {
 				//go->color = { 255, 0, 0, 0 };
 				AEVec2 go1to2 = go2->position - go->position;
+				go->pBody->is_colliding = true;
+				go2->pBody->is_colliding = true;
 				if (AEVec2DotProduct(&go->velocity, &go1to2) > 1)
 				{
 					//Velocity Trading
 
 					AEVec2 tmp{ go->velocity };
 					AEVec2 tmp2{ go2->velocity };
-					f32 mass_total = go->mass + go2->mass;
-					go->velocity = tmp2 * abs(go->mass - go2->mass) / mass_total;
-					go2->velocity = tmp * abs(go2->mass - go->mass) / mass_total;
+					f32 mass_total = go->pBody->mass + go2->pBody->mass;
+					go->velocity.x = (go->velocity.x * (go->pBody->mass - go2->pBody->mass) + tmp2.x * 2 * go2->pBody->mass) / mass_total;
+					go2->velocity.x = (go2->velocity.x * (go2->pBody->mass - go->pBody->mass) + tmp.x * 2 * go->pBody->mass) / mass_total;
+					
+					if (go->position.y > go2->position.y)
+					{
+						go->velocity.y = 0.0f;
+						go2->velocity.y = (go2->velocity.y * (go2->pBody->mass - go->pBody->mass) + tmp.y * 2 * go->pBody->mass) / mass_total;
+					}
+					else
+					{
+						go2->velocity.y = 0.0f;
+						go->velocity.y = (go->velocity.y * (go->pBody->mass - go2->pBody->mass) + tmp2.y * 2 * go2->pBody->mass) / mass_total;
+					}
 
 
 
 
-					AEVec2 go1_push = go->position - go2->position;
+					/*AEVec2 go1_push = go->position - go2->position;
 					AEVec2 go2_push = go2->position - go->position;
 					Utils::SnapVectorToAxis(&go1_push, &go1_push);
 					Utils::SnapVectorToAxis(&go2_push, &go2_push);
 					go->velocity += go1_push;
-					go2->velocity += go2_push;
+					go2->velocity += go2_push;*/
 					/*if (go1_push.y > go1_push.x || go2_push.y > go2_push.x)
 					{
 						if (go->position.y > go2->position.y)

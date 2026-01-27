@@ -3,19 +3,21 @@
 #ifndef __GAMEOBJECTENTITY_H
 #define __GAMEOBJECTENTITY_H
 #include "BaseEntity.hpp"
+#include "../Utils/PhysicsBody.hpp"
+
 class GameObjectEntity : public BaseEntity {
 protected:
 	f32 health;
 	f32 damage;
 public:
-	f32 mass;
+	PhysicsBody* pBody;
 	enum SHAPE {
 		CIRCLE,
 		AABB,
 		TOTAL
 	}type;
 	GameObjectEntity();
-	GameObjectEntity(AEVec2 pos = { 0.f, 0.f }, f32 go_mass = 1.0f, SHAPE type = AABB);
+	GameObjectEntity(AEVec2 pos = { 0.f, 0.f }, f32 mass = 1.0f, SHAPE type = AABB);
 	virtual ~GameObjectEntity();
 	virtual void PreUpdate(const f32& dt);
 	virtual void Update(const f32& dt);
