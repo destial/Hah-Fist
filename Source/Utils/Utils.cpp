@@ -2,6 +2,9 @@
 #include "AEMath.h"
 #include "../Entities/GameObjectEntity.hpp"
 #include "AEOverload.hpp"
+#include <functional>
+#include <algorithm>
+#include <vector>
 #include <cmath>
 
 struct OBBStruct {
@@ -116,50 +119,62 @@ namespace Utils {
 			go->position.y + go->scale.y * 0.5f < go2->position.y - go2->scale.y * 0.5f || go->position.y - go->scale.y * 0.5f > go2->position.y + go2->scale.y * 0.5f);
 	}
 
-	static bool isGap(AEVec2& L, OBBStruct& a, OBBStruct& b) {
-		// Vector between centers
-		AEVec2 T = a.center - b.center;
+	static std::vector<AEVec2> getCorners(const GameObjectEntity* go) {
+		std::vector<AEVec2> corners(4);
+		float cosA = AECos(go->rotation);
+		float sinA = AESin(go->rotation);
 
-		// Project the distance between centers onto the axis L
-		float distance = std::abs(AEVec2DotProduct(&T, &L));
+		// Local axes vectors
+		AEVec2 dirX = { cosA, sinA };
+		AEVec2 dirY = { -sinA, cosA };
 
-		// Project the "radius" of box A onto axis L
-		float radiusA = std::abs(AEVec2DotProduct(&a.axes[0], &L) * a.halfWidths[0]) +
-			std::abs(AEVec2DotProduct(&a.axes[1], &L) * a.halfWidths[1]);
+		// Combine center with scaled axes
+		corners[0] = { go->position.x + dirX.x * (go->scale.x * 0.5f) + dirY.x * (go->scale.y * 0.5f), go->position.y + dirX.y * (go->scale.x * 0.5f) + dirY.y * (go->scale.y * 0.5f) };
+		corners[1] = { go->position.x - dirX.x * (go->scale.x * 0.5f) + dirY.x * (go->scale.y * 0.5f), go->position.y - dirX.y * (go->scale.x * 0.5f) + dirY.y * (go->scale.y * 0.5f) };
+		corners[2] = { go->position.x - dirX.x * (go->scale.x * 0.5f) - dirY.x * (go->scale.y * 0.5f), go->position.y - dirX.y * (go->scale.x * 0.5f) - dirY.y * (go->scale.y * 0.5f) };
+		corners[3] = { go->position.x + dirX.x * (go->scale.x * 0.5f) - dirY.x * (go->scale.y * 0.5f), go->position.y + dirX.y * (go->scale.x * 0.5f) - dirY.y * (go->scale.y * 0.5f) };
 
-		// Project the "radius" of box B onto axis L
-		float radiusB = std::abs(AEVec2DotProduct(&b.axes[0], &L) * b.halfWidths[0]) +
-			std::abs(AEVec2DotProduct(&b.axes[1], &L) * b.halfWidths[1]);
-
-		// If distance is greater than the sum of the radii, there is a gap
-		return distance > (radiusA + radiusB);
+		return corners;
 	}
 
 	bool OBB(const GameObjectEntity* const& go, const GameObjectEntity* const& go2) {
-		// TODO: Oriented bounding box collision (still trying to understand SAT)
-#if 1
-		return AABB(go, go2);
-#endif
-		AEVec2 top_a = { go->scale.x, 0.f };
-		AEVec2 left_a = { 0.f, go->scale.y };
-		AEVec2Rotate(&top_a, &top_a, go->rotation);
-		AEVec2Rotate(&left_a, &left_a, go->rotation);
+		auto cornersA = getCorners(go);
+		auto cornersB = getCorners(go2);
 
-		AEVec2 top_b = { go2->scale.x, 0.f };
-		AEVec2 left_b = { 0.f, go2->scale.y };
-		AEVec2Rotate(&top_b, &top_b, go2->rotation);
-		AEVec2Rotate(&left_b, &left_b, go2->rotation);
+		// Axes to check: the normals of the sides of both rectangles
+		// For a rectangle, we only need 2 axes per box (perpendicular sides)
+		std::vector<AEVec2> axes = {
+			{ AECos(go->rotation), AESin(go->rotation) },  // Box A Local X
+			{ AESin(go->rotation), AECos(go->rotation) }, // Box A Local Y
+			{ AECos(go2->rotation), AESin(go2->rotation) },  // Box B Local X
+			{ AESin(go2->rotation), AECos(go2->rotation) }  // Box B Local Y
+		};
 
-		OBBStruct a{ go->position, {top_a, left_a}, {go->scale.x * 0.5f, go->scale.y * 0.5f} };
-		OBBStruct b{ go2->position, {top_b, left_b}, {go2->scale.x * 0.5f, go2->scale.y * 0.5f} };
+		for (auto& axis : axes) {
+			float minA = AEVec2DotProduct(&cornersA[0], &axis);
+			float maxA = minA;
+			for (size_t i = 1; i < 4; ++i) {
+				float p = AEVec2DotProduct(&cornersA[i], &axis);
+				if (p < minA) minA = p;
+				if (p > maxA) maxA = p;
+			}
 
-		if (isGap(a.axes[0], a, b)) return false;
-		if (isGap(a.axes[1], a, b)) return false;
-		if (isGap(b.axes[0], a, b)) return false;
-		if (isGap(b.axes[1], a, b)) return false;
+			// Project corners of B
+			float minB = AEVec2DotProduct(&cornersB[0], &axis);
+			float maxB = minB;
+			for (size_t i = 1; i < 4; ++i) {
+				float p = AEVec2DotProduct(&cornersB[i], &axis);
+				if (p < minB) minB = p;
+				if (p > maxB) maxB = p;
+			}
 
-		// No gap found on any axis = collision
-		return true;
+			// SAT Gap Check: If the "shadows" on this axis don't overlap, there's no collision
+			if (maxA < minB || maxB < minA) {
+				return false;
+			}
+		}
+
+		return true; // Overlap on all axes means a collision
 	}
 
 	void SetDeltaTime(float dt) {

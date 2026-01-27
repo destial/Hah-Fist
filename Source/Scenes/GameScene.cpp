@@ -9,6 +9,7 @@
 #include "../Utils/Utils.hpp"
 #include "../UI/ButtonUI.hpp"
 #include "../UI/CircleButtonUI.hpp"
+#include "AEMath.h"
 #include <cstdio>
 #include <string>
 
@@ -76,10 +77,30 @@ void GameScene::Init() {
 	e->AddPreUpdateListener(this, [e]() {
 		e->color = { 255, 255, 255, 255 };
 	});
+	e->AddUpdateListener(this, [e]() {
+		if (e->pBody->is_colliding) {
+			e->color = { 255, 0, 0, 0 };
+		}
+	});
+
+	GameObjectEntity* m = new EnemyEntity({ 0.f, 0.f });
+	m->AddPreUpdateListener(this, [m]() {
+		m->color = { 255, 255, 255, 255 };
+		m->position = Utils::Get_Mouse_World();
+	});
+	m->AddUpdateListener(this, [m]() {
+		if (m->pBody->is_colliding) {
+			m->color = { 255, 0, 0, 0 };
+		}
+	});
+	m->rotation = AEDegToRad(45.f);
+
+	scene_entities.push_back(m);
 	scene_entities.push_back(p);
 	scene_entities.push_back(e);
 	gameObjects.push_back(p);
 	gameObjects.push_back(e);
+	gameObjects.push_back(m);
 
 	BaseEntity* w = new Weapon(AEVec2{ 0.f, 0.f }, p);
 	scene_entities.push_back(w);
@@ -91,24 +112,10 @@ void GameScene::PreUpdate(const f32& dt) {
 
 void GameScene::Update(const f32& dt) {
 	BaseScene::Update(dt);
-	// Collision detection 
-	for (auto& go : gameObjects){
-		if (go->isActive) {
-			if (go->type == GameObjectEntity::AABB) {
-				for (auto& go2 : gameObjects){
-					if (go2 == go) continue;
-					if (Utils::AABB(go,go2)) {
-						//go->color = { 255, 0, 0, 0 };
-
-					}
-				}
-			}
-		}
-	}
-
 	//Reset collision state to false;
 	for (auto& go : gameObjects) { go->pBody->is_colliding = false; }
 
+	// Collision detection 
 	for (int i{}; i < gameObjects.size(); i++) {
 		// Starts loop only from the next object
 		for (int j{i + 1}; j < gameObjects.size(); j++) {
