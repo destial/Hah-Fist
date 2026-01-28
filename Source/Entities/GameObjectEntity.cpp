@@ -44,7 +44,7 @@ void GameObjectEntity::PostUpdate(const f32& dt)
 	
 	if (velocity.y == 0)
 	{
-		velocity.x -= velocity.x * 20.0 * dt; // later change 5.0 to friction perhaps
+		velocity.x -= velocity.x * 20.0f * dt; // later change 5.0 to friction perhaps
 		if (abs(velocity.x) < 0.3)
 		{
 			velocity.x = 0.0;

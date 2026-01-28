@@ -6,6 +6,7 @@ PhysicsBody::PhysicsBody(f32 mass, f32 gravityScale, AEVec2 gravity)
 	this->gravityScale = gravityScale;
 	this->gravity = gravity;
 	state = STATE::IN_AIR;
+	vertical_state = VERTICAL_STATE::VS_FALLING;
 	force = AEVec2{};
 }
 

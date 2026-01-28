@@ -14,6 +14,7 @@ public:
 		VS_FALLING,
 		VS_ON_GROUND,
 	}vertical_state;
+
 	AEVec2 gravity;
 	AEVec2 force;
 	f32 mass;

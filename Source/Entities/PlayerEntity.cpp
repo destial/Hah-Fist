@@ -15,7 +15,7 @@ Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 	currentRow = currentCol = 0;
 	scale = { 5.f * (static_cast<f32>(sprite->image->width) / sprite->image->height), 5.f };
 	jumpHeight = 6.5f;
-	jumpVelocity = sqrtf(jumpHeight * 2.f * -pBody->gravity.y);
+	jumpVelocity = sqrtf(jumpHeight * 2.f * abs(pBody->gravity.y));
 	speed = 10.f;
 	layer = 2;
 }
@@ -32,8 +32,6 @@ void Player::PreUpdate(const f32& dt) {
 void Player::Update(const f32& dt) {
 	GameObjectEntity::Update(dt);
 	// Out of bounds checking
-	
-
 	AEVec2 dir{};
 	if (AEInputCheckCurr(AEVK_A)) {
 		dir += { -1.f, 0.f };
