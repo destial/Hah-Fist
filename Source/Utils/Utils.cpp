@@ -119,7 +119,7 @@ namespace Utils {
 			go->position.y + go->scale.y * 0.5f < go2->position.y - go2->scale.y * 0.5f || go->position.y - go->scale.y * 0.5f > go2->position.y + go2->scale.y * 0.5f);
 	}
 
-	static std::vector<AEVec2> getCorners(const GameObjectEntity* go) {
+	std::vector<AEVec2> GetCorners(const GameObjectEntity* go) {
 		std::vector<AEVec2> corners(4);
 		float cosA = AECos(-go->rotation);
 		float sinA = AESin(-go->rotation);
@@ -129,17 +129,24 @@ namespace Utils {
 		AEVec2 dirY = { -sinA, cosA };
 
 		// Combine center with scaled axes
-		corners[0] = { go->position.x + dirX.x * (go->scale.x) + dirY.x * (go->scale.y), go->position.y + dirX.y * (go->scale.x) + dirY.y * (go->scale.y) };
-		corners[1] = { go->position.x - dirX.x * (go->scale.x) + dirY.x * (go->scale.y), go->position.y - dirX.y * (go->scale.x) + dirY.y * (go->scale.y) };
-		corners[2] = { go->position.x - dirX.x * (go->scale.x) - dirY.x * (go->scale.y), go->position.y - dirX.y * (go->scale.x) - dirY.y * (go->scale.y) };
-		corners[3] = { go->position.x + dirX.x * (go->scale.x) - dirY.x * (go->scale.y), go->position.y + dirX.y * (go->scale.x) - dirY.y * (go->scale.y) };
+		// top right
+		corners[0] = { go->position.x + dirX.x * (go->scale.x * 0.5f) + dirY.x * (go->scale.y * 0.5f), go->position.y + dirX.y * (go->scale.x * 0.5f) + dirY.y * (go->scale.y * 0.5f) };
+
+		// bottom right
+		corners[1] = { go->position.x - dirX.x * (go->scale.x * 0.5f) + dirY.x * (go->scale.y * 0.5f), go->position.y - dirX.y * (go->scale.x * 0.5f) + dirY.y * (go->scale.y * 0.5f) };
+
+		// bottom left
+		corners[2] = { go->position.x - dirX.x * (go->scale.x * 0.5f) - dirY.x * (go->scale.y * 0.5f), go->position.y - dirX.y * (go->scale.x * 0.5f) - dirY.y * (go->scale.y * 0.5f) };
+
+		// top left
+		corners[3] = { go->position.x + dirX.x * (go->scale.x * 0.5f) - dirY.x * (go->scale.y * 0.5f), go->position.y + dirX.y * (go->scale.x * 0.5f) - dirY.y * (go->scale.y * 0.5f) };
 
 		return corners;
 	}
 
 	bool OBB(const GameObjectEntity* const& go, const GameObjectEntity* const& go2) {
-		auto cornersA = getCorners(go);
-		auto cornersB = getCorners(go2);
+		auto cornersA = GetCorners(go);
+		auto cornersB = GetCorners(go2);
 
 		// Axes to check: the normals of the sides of both rectangles
 		// For a rectangle, we only need 2 axes per box (perpendicular sides)

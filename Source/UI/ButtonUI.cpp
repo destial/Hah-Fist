@@ -24,11 +24,11 @@ void ButtonUI::Update(const f32& dt) {
 	AEInputGetCursorPosition(&mouse_x, &mouse_y);
 	AEVec2 mouse{ static_cast<f32>(mouse_x), static_cast<f32>(mouse_y) };
 	AEVec2 mouse_world = Utils::Screen_To_World(mouse.x, mouse.y);
-	AEVec2 local_golf_pos = mouse_world - this->position;
-	AEVec2Rotate(&local_golf_pos, &local_golf_pos, rotation);
+	AEVec2 local_pos = mouse_world - this->position;
+	AEVec2Rotate(&local_pos, &local_pos, rotation);
 
-	if (local_golf_pos.x <= this->scale.x * 0.5f && local_golf_pos.x >= -this->scale.x * 0.5f &&
-		local_golf_pos.y <= this->scale.y * 0.5f && local_golf_pos.y >= -this->scale.y * 0.5f) {
+	if (local_pos.x <= this->scale.x * 0.5f && local_pos.x >= -this->scale.x * 0.5f &&
+		local_pos.y <= this->scale.y * 0.5f && local_pos.y >= -this->scale.y * 0.5f) {
 		OnMouseHover(mouse);
 		this->mouse_hovered = true;
 

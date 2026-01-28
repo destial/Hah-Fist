@@ -9,6 +9,7 @@
 #include "../Utils/Utils.hpp"
 #include "../UI/ButtonUI.hpp"
 #include "../UI/CircleButtonUI.hpp"
+#include "../UI/Debug.hpp"
 #include "AEMath.h"
 #include <cstdio>
 #include <string>
