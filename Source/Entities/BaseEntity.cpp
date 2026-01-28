@@ -74,6 +74,9 @@ void BaseEntity::PostUpdate(const f32& dt) {
 }
 
 void BaseEntity::Render() {
+	if (!mesh)
+		return;
+
 	if (image && image->image) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxTextureSet(image->image, 0.f, 0.f);

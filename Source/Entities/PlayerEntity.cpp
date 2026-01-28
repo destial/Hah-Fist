@@ -9,7 +9,7 @@
 
 Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 	sprite = AssetManager::GetSpriteSheet("Assets/test_sprite.png", 3, 3);
-	mesh = MeshRenderer::GetCenterRectMesh();
+	mesh = nullptr;
 	animationTimer = 0.f;
 	animationFrame = 1.f / (3.f * 3.f);
 	currentRow = currentCol = 0;
@@ -73,5 +73,5 @@ void Player::PostUpdate(const f32& dt) {
 
 void Player::Render() {
 	sprite->Render(transform, color, currentRow, currentCol);
-	//GameObjectEntity::Render();
+	GameObjectEntity::Render();
 }

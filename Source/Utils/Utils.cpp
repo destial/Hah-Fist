@@ -121,8 +121,8 @@ namespace Utils {
 
 	std::vector<AEVec2> GetCorners(const GameObjectEntity* go) {
 		std::vector<AEVec2> corners(4);
-		float cosA = AECos(-go->rotation);
-		float sinA = AESin(-go->rotation);
+		float cosA = AECos(go->rotation);
+		float sinA = AESin(go->rotation);
 
 		// Local axes vectors
 		AEVec2 dirX = { cosA, sinA };

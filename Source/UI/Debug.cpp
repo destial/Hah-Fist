@@ -9,7 +9,7 @@ namespace DebugUtils {
 
 	void RenderPoint(AEVec2 world_pos, Color color) {
 		if (point == nullptr) {
-			point = MeshRenderer::GetCircleMesh(30);
+			point = MeshRenderer::GetCircleMesh(4);
 		}
 		AEMtx33 scale = { 1.f };
 		AEMtx33Identity(&scale);
