@@ -9,6 +9,7 @@
 #include "../Utils/Utils.hpp"
 #include "../UI/ButtonUI.hpp"
 #include "../UI/CircleButtonUI.hpp"
+#include "../UI/Debug.hpp"
 #include "AEMath.h"
 #include <cstdio>
 #include <string>
@@ -87,6 +88,10 @@ void GameScene::Init() {
 	m->AddPreUpdateListener(this, [m]() {
 		m->color = { 255, 255, 255, 255 };
 		m->position = Utils::Get_Mouse_World();
+		m->rotation += Utils::GetDeltaTime();
+		if (m->rotation >= 360.f) {
+			m->rotation -= 360.f;
+		}
 	});
 	m->AddUpdateListener(this, [m]() {
 		if (m->pBody->is_colliding) {
@@ -94,7 +99,6 @@ void GameScene::Init() {
 		}
 	});
 	m->go_type = GameObjectEntity::KINEMATIC::STATIC;
-	m->rotation = AEDegToRad(45.f);
 
 	scene_entities.push_back(m);
 	scene_entities.push_back(p);
@@ -125,7 +129,7 @@ void GameScene::Update(const f32& dt) {
 			//Checks if either go is inactive, if so, skip this check
 			if (!go->isActive || !go2->isActive)
 				continue;
-			if (Utils::AABB(go, go2)) {
+			if (Utils::OBB(go, go2)) {
 				//go->color = { 255, 0, 0, 0 };
 				AEVec2 go1to2 = go2->position - go->position;
 				go->pBody->is_colliding = true;

@@ -1,5 +1,7 @@
 #include "GameObjectEntity.hpp"
 #include "../Utils/AEOverload.hpp"
+#include "../UI/Debug.hpp"
+#include <vector>
 
 GameObjectEntity::GameObjectEntity() : health(1.f),damage(1.f), isActive(true), type(CIRCLE), go_type(DYNAMIC), BaseEntity({0.f})
 {
@@ -55,6 +57,15 @@ void GameObjectEntity::PostUpdate(const f32& dt)
 
 void GameObjectEntity::Render()
 {
-	if(isActive)
+	if (isActive) {
 		BaseEntity::Render();
+		auto corners = Utils::GetCorners(this);
+		for (auto& corner : corners) {
+			DebugUtils::RenderPoint(corner);
+		}
+		DebugUtils::RenderLine(corners[0], corners[1], { 255, 255, 0, 0 });
+		DebugUtils::RenderLine(corners[1], corners[2], { 255, 0, 255, 0 });
+		DebugUtils::RenderLine(corners[2], corners[3], { 255, 0, 0, 255 });
+		DebugUtils::RenderLine(corners[3], corners[0], { 255, 255, 255, 0 });
+	}
 }
