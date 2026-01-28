@@ -93,6 +93,7 @@ void GameScene::Init() {
 			m->color = { 255, 0, 0, 0 };
 		}
 	});
+	m->go_type = GameObjectEntity::KINEMATIC::STATIC;
 	m->rotation = AEDegToRad(45.f);
 
 	scene_entities.push_back(m);

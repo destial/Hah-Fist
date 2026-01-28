@@ -121,18 +121,18 @@ namespace Utils {
 
 	static std::vector<AEVec2> getCorners(const GameObjectEntity* go) {
 		std::vector<AEVec2> corners(4);
-		float cosA = AECos(go->rotation);
-		float sinA = AESin(go->rotation);
+		float cosA = AECos(-go->rotation);
+		float sinA = AESin(-go->rotation);
 
 		// Local axes vectors
 		AEVec2 dirX = { cosA, sinA };
 		AEVec2 dirY = { -sinA, cosA };
 
 		// Combine center with scaled axes
-		corners[0] = { go->position.x + dirX.x * (go->scale.x * 0.5f) + dirY.x * (go->scale.y * 0.5f), go->position.y + dirX.y * (go->scale.x * 0.5f) + dirY.y * (go->scale.y * 0.5f) };
-		corners[1] = { go->position.x - dirX.x * (go->scale.x * 0.5f) + dirY.x * (go->scale.y * 0.5f), go->position.y - dirX.y * (go->scale.x * 0.5f) + dirY.y * (go->scale.y * 0.5f) };
-		corners[2] = { go->position.x - dirX.x * (go->scale.x * 0.5f) - dirY.x * (go->scale.y * 0.5f), go->position.y - dirX.y * (go->scale.x * 0.5f) - dirY.y * (go->scale.y * 0.5f) };
-		corners[3] = { go->position.x + dirX.x * (go->scale.x * 0.5f) - dirY.x * (go->scale.y * 0.5f), go->position.y + dirX.y * (go->scale.x * 0.5f) - dirY.y * (go->scale.y * 0.5f) };
+		corners[0] = { go->position.x + dirX.x * (go->scale.x) + dirY.x * (go->scale.y), go->position.y + dirX.y * (go->scale.x) + dirY.y * (go->scale.y) };
+		corners[1] = { go->position.x - dirX.x * (go->scale.x) + dirY.x * (go->scale.y), go->position.y - dirX.y * (go->scale.x) + dirY.y * (go->scale.y) };
+		corners[2] = { go->position.x - dirX.x * (go->scale.x) - dirY.x * (go->scale.y), go->position.y - dirX.y * (go->scale.x) - dirY.y * (go->scale.y) };
+		corners[3] = { go->position.x + dirX.x * (go->scale.x) - dirY.x * (go->scale.y), go->position.y + dirX.y * (go->scale.x) - dirY.y * (go->scale.y) };
 
 		return corners;
 	}
@@ -144,10 +144,10 @@ namespace Utils {
 		// Axes to check: the normals of the sides of both rectangles
 		// For a rectangle, we only need 2 axes per box (perpendicular sides)
 		std::vector<AEVec2> axes = {
-			{ AECos(go->rotation), AESin(go->rotation) },  // Box A Local X
-			{ AESin(go->rotation), AECos(go->rotation) }, // Box A Local Y
-			{ AECos(go2->rotation), AESin(go2->rotation) },  // Box B Local X
-			{ AESin(go2->rotation), AECos(go2->rotation) }  // Box B Local Y
+			{ AECos(-go->rotation), -AESin(-go->rotation) },  // Box A Local X
+			{ AESin(-go->rotation), AECos(-go->rotation) }, // Box A Local Y
+			{ AECos(-go2->rotation), -AESin(-go2->rotation) },  // Box B Local X
+			{ AESin(-go2->rotation), AECos(-go2->rotation) }  // Box B Local Y
 		};
 
 		for (auto& axis : axes) {

@@ -126,6 +126,9 @@
     <ClCompile Include="..\Source\Scenes\StartMenuScene.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\UI\Debug.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -193,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Scenes\StartMenuScene.hpp">
       <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\UI\Debug.hpp">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

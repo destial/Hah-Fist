@@ -20,7 +20,6 @@ void EnemyEntity::PreUpdate(const f32& dt)
 void EnemyEntity::Update(const f32& dt)
 {
 	GameObjectEntity::Update(dt);
-	pBody->ApplyGravity(velocity, dt);
 }
 
 void EnemyEntity::PostUpdate(const f32& dt)
