@@ -84,10 +84,9 @@ void GameScene::Init() {
 		}
 	});
 
-	GameObjectEntity* m = new EnemyEntity({ 0.f, 0.f });
+	GameObjectEntity* m = new EnemyEntity({ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f });
 	m->AddPreUpdateListener(this, [m]() {
 		m->color = { 255, 255, 255, 255 };
-		m->position = Utils::Get_Mouse_World();
 		m->rotation += Utils::GetDeltaTime();
 		if (m->rotation >= 360.f) {
 			m->rotation -= 360.f;

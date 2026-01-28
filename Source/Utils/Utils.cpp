@@ -95,7 +95,7 @@ namespace Utils {
 		return deltaTime;
 	}
 
-	bool CircleCircleCollision(GameObjectEntity* & go,  GameObjectEntity*& go2) {
+	bool CircleCircleCollision(BaseEntity* & go, BaseEntity*& go2) {
 		f32 sqrDist = AEVec2SquareDistance(&go->position, &go2->position);
 		f32 combinedRadii = go->scale.x + go2->scale.x;
 		return sqrDist <= combinedRadii * combinedRadii;
@@ -114,12 +114,12 @@ namespace Utils {
 			bottom_left_1.y + height_1 < bottom_left_2.y || bottom_left_1.y > bottom_left_2.y + height_2);
 	}*/
 
-	bool AABB(const GameObjectEntity* const& go, const GameObjectEntity* const& go2) {
+	bool AABB(const BaseEntity* const& go, const BaseEntity* const& go2) {
 		return !(go->position.x + go->scale.x * 0.5f < go2->position.x - go2->scale.x * 0.5f || go->position.x - go->scale.x * 0.5f > go2->position.x + go2->scale.x * 0.5f ||
 			go->position.y + go->scale.y * 0.5f < go2->position.y - go2->scale.y * 0.5f || go->position.y - go->scale.y * 0.5f > go2->position.y + go2->scale.y * 0.5f);
 	}
 
-	std::vector<AEVec2> GetCorners(const GameObjectEntity* go) {
+	std::vector<AEVec2> GetCorners(const BaseEntity* go) {
 		std::vector<AEVec2> corners(4);
 		float cosA = AECos(go->rotation);
 		float sinA = AESin(go->rotation);
@@ -144,7 +144,7 @@ namespace Utils {
 		return corners;
 	}
 
-	bool OBB(const GameObjectEntity* const& go, const GameObjectEntity* const& go2) {
+	bool OBB(const BaseEntity* const& go, const BaseEntity* const& go2) {
 		auto cornersA = GetCorners(go);
 		auto cornersB = GetCorners(go2);
 

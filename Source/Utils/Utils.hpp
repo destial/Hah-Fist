@@ -8,7 +8,7 @@ namespace Game {
 	void SetGameRunning(bool b);
 }
 
-class GameObjectEntity;
+class BaseEntity;
 
 struct Color {
 	union {
@@ -46,12 +46,12 @@ namespace Utils {
 	const float GetWorldHeight(void);
 	const float GetDeltaTime(void);
 
-	bool CircleCircleCollision(GameObjectEntity*& go, GameObjectEntity*& go2);
+	bool CircleCircleCollision(BaseEntity*& go, BaseEntity*& go2);
 	//bool CircleCircleCollision(AEVec2& center_pos_1, const f32& radius_1, AEVec2& center_pos_2, const f32& radius_2);
 	//bool AABB(const AEVec2& bottom_left_1, const f32& width_1, const f32& height_1, const AEVec2& bottom_left_2, const f32& width_2, const f32& height_2);
-	std::vector<AEVec2> GetCorners(const GameObjectEntity* go);
-	bool AABB(const GameObjectEntity* const & go,  const GameObjectEntity* const& go2);
-	bool OBB(const GameObjectEntity* const& go, const GameObjectEntity* const& go2);
+	std::vector<AEVec2> GetCorners(const BaseEntity* go);
+	bool AABB(const BaseEntity* const & go,  const BaseEntity* const& go2);
+	bool OBB(const BaseEntity* const& go, const BaseEntity* const& go2);
 	
 	void SetDeltaTime(float dt);
 
