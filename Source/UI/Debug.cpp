@@ -2,10 +2,32 @@
 #include "../Utils/MeshRenderer.hpp"
 #include "../Utils/Utils.hpp"
 #include "../Utils/AEOverload.hpp"
+#include <vector>
 
 namespace DebugUtils {
+	struct DebugRender {
+		AEGfxVertexList* mesh;
+		AEMtx33 transform;
+		Color color;
+	};
+
 	static AEGfxVertexList* point = nullptr;
 	static AEGfxVertexList* line = nullptr;
+	std::vector<DebugRender> renders{ 0 };
+	
+	void _RenderAll() {
+		for (DebugRender& r : renders) {
+			AEGfxTextureSet(nullptr, 0.f, 0.f);
+			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+			AEGfxSetColorToMultiply(r.color.r / 255.f, r.color.b / 255.f, r.color.g / 255.f, r.color.a / 255.f);
+			AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+			AEGfxSetTransparency(1.0f);
+			AEGfxSetTransform(r.transform.m);
+			AEGfxMeshDraw(r.mesh, MeshRenderer::RenderMode);
+		}
+		renders.clear();
+	}
 
 	void RenderPoint(AEVec2 world_pos, Color color) {
 		if (point == nullptr) {
@@ -20,26 +42,17 @@ namespace DebugUtils {
 		AEMtx33Trans(&translate, screenPos.x, screenPos.y);
 		AEMtx33 transform = translate * scale;
 
-		AEGfxTextureSet(nullptr, 0.f, 0.f);
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetColorToMultiply(color.r / 255.f, color.b / 255.f, color.g / 255.f, color.a / 255.f);
-		AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		AEGfxSetTransparency(1.0f);
-		AEGfxSetTransform(transform.m);
-		AEGfxMeshDraw(point, MeshRenderer::RenderMode);
+		renders.push_back({point, transform, color});
 	}
 
 	void RenderLine(AEVec2 point_a, AEVec2 point_b, Color color) {
 		if (line == nullptr) {
 			line = MeshRenderer::GetCenterRectMesh();
 		}
-
 		AEVec2 midpoint = (point_a + point_b) * 0.5f;
 		AEVec2 dir = point_b - point_a;
 		AEVec2 up = { 0.f, 1.f };
 		f32 rotation = AEVec2AngleCCW(&up, &dir);
-
 		AEMtx33 scale = { 1.f };
 		AEVec2 s_scale = Utils::Scale_To_Screen(1.f, AEVec2Length(&dir));
 		AEMtx33Identity(&scale);
@@ -53,13 +66,6 @@ namespace DebugUtils {
 		AEMtx33Trans(&translate, screenPos.x, screenPos.y);
 		AEMtx33 transform = translate * rotate * scale;
 
-		AEGfxTextureSet(nullptr, 0.f, 0.f);
-		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-		AEGfxSetColorToMultiply(color.r / 255.f, color.b / 255.f, color.g / 255.f, color.a / 255.f);
-		AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
-		AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-		AEGfxSetTransparency(1.0f);
-		AEGfxSetTransform(transform.m);
-		AEGfxMeshDraw(line, MeshRenderer::RenderMode);
+		renders.push_back({ line, transform, color });
 	}
 }

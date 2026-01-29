@@ -2,6 +2,10 @@
 #include "../Scenes/GameScene.hpp"
 #include "../Scenes/StartMenuScene.hpp"
 
+namespace DebugUtils {
+	void _RenderAll();
+}
+
 SceneManager* SceneManager::instance = nullptr;
 
 SceneManager::SceneManager() : all_scenes(), next_scene(Scenes::INIT), current_scene(Scenes::INIT) {
@@ -51,6 +55,8 @@ void SceneManager::PostUpdate(const f32& dt) {
 void SceneManager::Render() {
 	if (all_scenes[current_scene])
 		all_scenes[current_scene]->Render();
+
+	DebugUtils::_RenderAll();
 }
 
 void SceneManager::SetNextScene(Scenes::SceneState next) {
