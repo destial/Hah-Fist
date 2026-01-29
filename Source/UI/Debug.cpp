@@ -13,18 +13,29 @@ namespace DebugUtils {
 
 	static AEGfxVertexList* point = nullptr;
 	static AEGfxVertexList* line = nullptr;
+	bool enabled = false;
 	std::vector<DebugRender> renders{ 0 };
+
+	bool IsRendering() {
+		return enabled;
+	}
+
+	void ToggleRender(bool state) {
+		enabled = state;
+	}
 	
 	void _RenderAll() {
-		for (DebugRender& r : renders) {
-			AEGfxTextureSet(nullptr, 0.f, 0.f);
-			AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-			AEGfxSetColorToMultiply(r.color.r / 255.f, r.color.b / 255.f, r.color.g / 255.f, r.color.a / 255.f);
-			AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
-			AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-			AEGfxSetTransparency(1.0f);
-			AEGfxSetTransform(r.transform.m);
-			AEGfxMeshDraw(r.mesh, MeshRenderer::RenderMode);
+		if (enabled) {
+			for (DebugRender& r : renders) {
+				AEGfxTextureSet(nullptr, 0.f, 0.f);
+				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
+				AEGfxSetColorToMultiply(r.color.r / 255.f, r.color.b / 255.f, r.color.g / 255.f, r.color.a / 255.f);
+				AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
+				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
+				AEGfxSetTransparency(1.0f);
+				AEGfxSetTransform(r.transform.m);
+				AEGfxMeshDraw(r.mesh, MeshRenderer::RenderMode);
+			}
 		}
 		renders.clear();
 	}

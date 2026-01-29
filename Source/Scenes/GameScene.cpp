@@ -165,6 +165,9 @@ void GameScene::Update(const f32& dt) {
 		y -= dt * 100;
 		AEGfxSetCamPosition(x, y);
 	}
+	if (AEInputCheckTriggered(AEVK_G)) {
+		DebugUtils::ToggleRender(!DebugUtils::IsRendering());
+	}
 
 	//Reset collision state to false;
 	for (auto& go : gameObjects) { go->pBody->is_colliding = false; }

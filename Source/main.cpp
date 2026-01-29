@@ -10,6 +10,7 @@
 #include "Managers/AssetManager.hpp"
 #include "Events/InputEvent.hpp"
 #include "Scenes/GameScene.hpp"
+#include "UI/Debug.hpp"
 
 namespace Game {
 	bool bGameRunning;
@@ -40,6 +41,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	// Initialize fonts
 	AEGfxFontSystemStart();
+
+	DebugUtils::ToggleRender(false);
+#ifdef _DEBUG
+	DebugUtils::ToggleRender(true);
+#endif
 
 	Game::bGameRunning = true;
 	{
