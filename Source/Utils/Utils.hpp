@@ -30,11 +30,12 @@ struct Color {
 };
 
 namespace Utils {
-	AEVec2 World_To_Screen(float x, float y);
-	AEVec2 Screen_To_World(float x, float y);
-	AEVec2 Game_To_Screen(float x, float y);
-	AEVec2 Scale_To_Screen(float x, float y);
-	AEVec2 Game_To_TextScreen(float x, float y);
+	AEVec2 World_To_Screen(f32 x, f32 y);
+	AEVec2 Screen_To_World(f32 x, f32 y);
+	AEVec2 Game_To_Screen(f32 x, f32 y);
+	AEVec2 Scale_To_Screen(f32 x, f32 y);
+	AEVec2 Screen_To_Scale(f32 x, f32 y);
+	AEVec2 Game_To_TextScreen(f32 x, f32 y);
 
 	const AEVec2 Get_Mouse_World();
 
@@ -42,9 +43,9 @@ namespace Utils {
 	u32 PackColor(Color& color);
 	Color UnpackColor(u32 color);
 
-	const float GetWorldWidth(void);
-	const float GetWorldHeight(void);
-	const float GetDeltaTime(void);
+	const f32 GetWorldWidth(void);
+	const f32 GetWorldHeight(void);
+	const f32 GetDeltaTime(void);
 
 	bool CircleCircleCollision(BaseEntity*& go, BaseEntity*& go2);
 	//bool CircleCircleCollision(AEVec2& center_pos_1, const f32& radius_1, AEVec2& center_pos_2, const f32& radius_2);
@@ -52,9 +53,12 @@ namespace Utils {
 	std::vector<AEVec2> GetCorners(const BaseEntity* go);
 	bool AABB(const BaseEntity* const & go,  const BaseEntity* const& go2);
 	bool OBB(const BaseEntity* const& go, const BaseEntity* const& go2);
+	bool OBBPoint(const BaseEntity* const& go, AEVec2 const& pos);
 	
-	void SetDeltaTime(float dt);
+	void SetDeltaTime(f32 dt);
 
 	void SnapVectorToAxis(AEVec2* result, AEVec2* vec2);
+
+	AEMtx33 GetTransformMatrix(AEVec2 const& pos, AEVec2 const& sca, f32 rot);
 }
 #endif

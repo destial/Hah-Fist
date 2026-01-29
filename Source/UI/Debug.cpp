@@ -40,9 +40,8 @@ namespace DebugUtils {
 		AEMtx33 translate = { 0 };
 		AEMtx33Identity(&translate);
 		AEMtx33Trans(&translate, screenPos.x, screenPos.y);
-		AEMtx33 transform = translate * scale;
 
-		renders.push_back({point, transform, color});
+		renders.push_back({ point, translate * scale, color });
 	}
 
 	void RenderLine(AEVec2 point_a, AEVec2 point_b, Color color) {
@@ -64,8 +63,7 @@ namespace DebugUtils {
 		AEMtx33 translate = { 0 };
 		AEMtx33Identity(&translate);
 		AEMtx33Trans(&translate, screenPos.x, screenPos.y);
-		AEMtx33 transform = translate * rotate * scale;
 
-		renders.push_back({ line, transform, color });
+		renders.push_back({ line, translate * rotate * scale, color });
 	}
 }

@@ -10,50 +10,57 @@
 struct OBBStruct {
 	AEVec2 center;
 	AEVec2 axes[2]; // Local X and Y unit vectors (normalized)
-	float halfWidths[2]; // Half-extents along the axes
+	f32 halfWidths[2]; // Half-extents along the axes
 };
 
 namespace Utils {
-	static float world_width = 48.f;
-	static float world_height = 27.f;
+	static f32 world_width = 48.f;
+	static f32 world_height = 27.f;
 
-	static float deltaTime;
+	static f32 deltaTime;
 
 	unsigned int screen_width = 1600;
 	unsigned int screen_height = 900;
 
-	AEVec2 World_To_Screen(float x, float y) {
+	AEVec2 World_To_Screen(f32 x, f32 y) {
 		return {
 			x * (screen_width / world_width),
 			screen_height - y * (screen_height / world_height)
 		};
 	}
 
-	AEVec2 Screen_To_World(float x, float y) {
+	AEVec2 Screen_To_World(f32 x, f32 y) {
 		return {
 			x * (world_width / screen_width),
 			world_height - y * (world_height / screen_height)
 		};
 	}
 
-	AEVec2 Game_To_Screen(float x, float y) {
+	AEVec2 Game_To_Screen(f32 x, f32 y) {
 		return {
 			x * (screen_width / world_width) - (static_cast<f32>(screen_width) * 0.5f),
 			y * (screen_height / world_height) - (static_cast<f32>(screen_height) * 0.5f)
 		};
 	}
 
-	AEVec2 Game_To_TextScreen(float x, float y) {
+	AEVec2 Game_To_TextScreen(f32 x, f32 y) {
 		return {
 			((x / world_width) * 2.f) - 1.f,
 			((y / world_height) * 2.f) - 1.f
 		};
 	}
 
-	AEVec2 Scale_To_Screen(float x, float y) {
+	AEVec2 Scale_To_Screen(f32 x, f32 y) {
 		return {
 			x * (screen_width / world_width),
 			y * (screen_height / world_height)
+		};
+	}
+
+	AEVec2 Screen_To_Scale(f32 x, f32 y) {
+		return {
+			x / (screen_width / world_width),
+			y / (screen_height / world_height)
 		};
 	}
 
@@ -83,19 +90,19 @@ namespace Utils {
 		return c;
 	}
 
-	const float GetWorldWidth(void) {
+	const f32 GetWorldWidth(void) {
 		return world_width;
 	}
 
-	const float GetWorldHeight(void) {
+	const f32 GetWorldHeight(void) {
 		return world_height;
 	}
 
-	const float GetDeltaTime(void) {
+	const f32 GetDeltaTime(void) {
 		return deltaTime;
 	}
 
-	bool CircleCircleCollision(BaseEntity* & go, BaseEntity*& go2) {
+	bool CircleCircleCollision(BaseEntity*& go, BaseEntity*& go2) {
 		f32 sqrDist = AEVec2SquareDistance(&go->position, &go2->position);
 		f32 combinedRadii = go->scale.x + go2->scale.x;
 		return sqrDist <= combinedRadii * combinedRadii;
@@ -121,8 +128,8 @@ namespace Utils {
 
 	std::vector<AEVec2> GetCorners(const BaseEntity* go) {
 		std::vector<AEVec2> corners(4);
-		float cosA = AECos(go->rotation);
-		float sinA = AESin(go->rotation);
+		f32 cosA = AECos(go->rotation);
+		f32 sinA = AESin(go->rotation);
 
 		// Local axes vectors
 		AEVec2 dirX = { cosA, sinA };
@@ -151,26 +158,26 @@ namespace Utils {
 		// Axes to check: the normals of the sides of both rectangles
 		// For a rectangle, we only need 2 axes per box (perpendicular sides)
 		std::vector<AEVec2> axes = {
-			{ AECos(-go->rotation), -AESin(-go->rotation) },  // Box A Local X
-			{ AESin(-go->rotation), AECos(-go->rotation) }, // Box A Local Y
-			{ AECos(-go2->rotation), -AESin(-go2->rotation) },  // Box B Local X
-			{ AESin(-go2->rotation), AECos(-go2->rotation) }  // Box B Local Y
+			{ AECos(go->rotation), -AESin(go->rotation) },  // Box A Local X
+			{ AESin(go->rotation), AECos(go->rotation) }, // Box A Local Y
+			{ AECos(go2->rotation), -AESin(go2->rotation) },  // Box B Local X
+			{ AESin(go2->rotation), AECos(go2->rotation) }  // Box B Local Y
 		};
 
 		for (auto& axis : axes) {
-			float minA = AEVec2DotProduct(&cornersA[0], &axis);
-			float maxA = minA;
+			f32 minA = AEVec2DotProduct(&cornersA[0], &axis);
+			f32 maxA = minA;
 			for (size_t i = 1; i < 4; ++i) {
-				float p = AEVec2DotProduct(&cornersA[i], &axis);
+				f32 p = AEVec2DotProduct(&cornersA[i], &axis);
 				if (p < minA) minA = p;
 				if (p > maxA) maxA = p;
 			}
 
 			// Project corners of B
-			float minB = AEVec2DotProduct(&cornersB[0], &axis);
-			float maxB = minB;
+			f32 minB = AEVec2DotProduct(&cornersB[0], &axis);
+			f32 maxB = minB;
 			for (size_t i = 1; i < 4; ++i) {
-				float p = AEVec2DotProduct(&cornersB[i], &axis);
+				f32 p = AEVec2DotProduct(&cornersB[i], &axis);
 				if (p < minB) minB = p;
 				if (p > maxB) maxB = p;
 			}
@@ -184,7 +191,15 @@ namespace Utils {
 		return true; // Overlap on all axes means a collision
 	}
 
-	void SetDeltaTime(float dt) {
+	bool OBBPoint(const BaseEntity* const& go, AEVec2 const& pos) {
+		AEVec2 local_pos = pos - go->position;
+		AEVec2Rotate(&local_pos, &local_pos, go->rotation);
+
+		return (local_pos.x <= go->scale.x * 0.5f && local_pos.x >= -go->scale.x * 0.5f &&
+			local_pos.y <= go->scale.y * 0.5f && local_pos.y >= -go->scale.y * 0.5f);
+	}
+
+	void SetDeltaTime(f32 dt) {
 		deltaTime = dt;
 	}
 
@@ -200,5 +215,20 @@ namespace Utils {
 			result->x = 0.0;
 			result->y = vec2->y / abs(vec2->y);
 		}
+	}
+
+	AEMtx33 GetTransformMatrix(AEVec2 const& pos, AEVec2 const& sca, f32 rot) {
+		AEMtx33 scale{ 1.f };
+		AEVec2 s_scale = Utils::Scale_To_Screen(sca.x, sca.y);
+		AEMtx33Identity(&scale);
+		AEMtx33Scale(&scale, s_scale.x, s_scale.y);
+		AEMtx33 rotate = { 0 };
+		AEMtx33Identity(&rotate);
+		AEMtx33Rot(&rotate, rot);
+		AEVec2 screenPos = Utils::Game_To_Screen(pos.x, pos.y);
+		AEMtx33 translate = { 0 };
+		AEMtx33Identity(&translate);
+		AEMtx33Trans(&translate, screenPos.x, screenPos.y);
+		return translate * rotate * scale;
 	}
 }

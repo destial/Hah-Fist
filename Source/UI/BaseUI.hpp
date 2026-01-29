@@ -34,6 +34,7 @@ public:
 	virtual ~BaseUI();
 	virtual void Render();
 	virtual void RenderText();
+	virtual void PostUpdate(const f32& dt);
 };
 
 #endif

@@ -58,7 +58,23 @@ void GameScene::Init() {
 		}
 	});
 
+	ButtonUI* cam = new ButtonUI(AEVec2{ 3.f, Utils::GetWorldHeight() - 1.5f });
+	cam->color = { 0, 0, 0, 0 };
+	cam->overlay_color = cam->color;
+	cam->scale.x = 5.5f;
+	cam->text_size = 5.f;
+	cam->text = "Cam:";
+	cam->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
+	cam->AddUpdateListener(this, [cam]() {
+		f32 x, y;
+		AEGfxGetCamPosition(&x, &y);
+		char b[128];
+		sprintf_s(b, "Cam:%.2f,%.2f", x, y);
+		cam->text = std::string(b);
+	});
+
 	scene_entities.push_back(s);
+	scene_entities.push_back(cam);
 
 	ButtonUI* wk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 1.f }, 'W');
 	ButtonUI* ak = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 3.f, Utils::GetWorldHeight() - 2.f }, 'A');
@@ -96,6 +112,14 @@ void GameScene::Init() {
 		if (m->pBody->is_colliding) {
 			m->color = { 255, 0, 0, 0 };
 		}
+		s32 mouse_x, mouse_y;
+		AEInputGetCursorPosition(&mouse_x, &mouse_y);
+		AEVec2 mouse{ static_cast<f32>(mouse_x), static_cast<f32>(mouse_y) };
+		AEVec2 mouse_world = Utils::Screen_To_World(mouse.x, mouse.y);
+
+		if (Utils::OBBPoint(m, mouse_world) && AEInputCheckCurr(AEVK_LBUTTON)) {
+			m->position = mouse_world;
+		}
 	});
 	m->go_type = GameObjectEntity::KINEMATIC::STATIC;
 
@@ -116,6 +140,32 @@ void GameScene::PreUpdate(const f32& dt) {
 
 void GameScene::Update(const f32& dt) {
 	BaseScene::Update(dt);
+
+	if (AEInputCheckCurr(AEVK_LEFT)) {
+		f32 x, y;
+		AEGfxGetCamPosition(&x, &y);
+		x -= dt * 100;
+		AEGfxSetCamPosition(x, y);
+	}
+	if (AEInputCheckCurr(AEVK_RIGHT)) {
+		f32 x, y;
+		AEGfxGetCamPosition(&x, &y);
+		x += dt * 100;
+		AEGfxSetCamPosition(x, y);
+	}
+	if (AEInputCheckCurr(AEVK_UP)) {
+		f32 x, y;
+		AEGfxGetCamPosition(&x, &y);
+		y += dt * 100;
+		AEGfxSetCamPosition(x, y);
+	}
+	if (AEInputCheckCurr(AEVK_DOWN)) {
+		f32 x, y;
+		AEGfxGetCamPosition(&x, &y);
+		y -= dt * 100;
+		AEGfxSetCamPosition(x, y);
+	}
+
 	//Reset collision state to false;
 	for (auto& go : gameObjects) { go->pBody->is_colliding = false; }
 

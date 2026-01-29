@@ -26,6 +26,15 @@ BaseUI::~BaseUI() {
 	std::printf("Called BaseUI deconstructor\n");
 }
 
+void BaseUI::PostUpdate(const f32& dt) {
+	BaseEntity::PostUpdate(dt);
+
+	AEVec2 cam_pos{ 0.f };
+	AEGfxGetCamPosition(&cam_pos.x, &cam_pos.y);
+	cam_pos = Utils::Screen_To_Scale(cam_pos.x, cam_pos.y);
+	transform = Utils::GetTransformMatrix(position + cam_pos, scale, rotation);
+}
+
 void BaseUI::Render() {
 	if (image && image->image) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
