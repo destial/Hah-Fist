@@ -64,7 +64,7 @@ namespace Utils {
 		};
 	}
 
-	const AEVec2 Get_Mouse_World() {
+	const AEVec2 Get_Mouse_World(bool cam) {
 		s32 mouse_x, mouse_y;
 		AEInputGetCursorPosition(&mouse_x, &mouse_y);
 		AEVec2 mouse{ static_cast<f32>(mouse_x), static_cast<f32>(mouse_y) };
