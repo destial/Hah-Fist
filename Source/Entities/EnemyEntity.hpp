@@ -2,8 +2,13 @@
 #ifndef __ENEMYENTITY_H
 #define __ENEMYENTITY_H
 #include "GameObjectEntity.hpp"
+#include "../Items/SpriteSheet.hpp"
 
 class EnemyEntity : public GameObjectEntity {
+protected:
+	f32 animationTimer, animationFrame;
+	int currentRow, currentCol;
+	SpriteSheet* sprite;
 public:
 	EnemyEntity(AEVec2 pos);
 	virtual ~EnemyEntity();

@@ -4,6 +4,8 @@
 #include "AEEngine.h"
 #include <vector>
 
+#define min_max(v, mn, mx) min(mx, max(mn, v))
+
 namespace Game {
 	void SetGameRunning(bool b);
 }
@@ -60,5 +62,10 @@ namespace Utils {
 	void SnapVectorToAxis(AEVec2* result, AEVec2* vec2);
 
 	AEMtx33 GetTransformMatrix(AEVec2 const& pos, AEVec2 const& sca, f32 rot);
+
+	f32 Math_Lerp(f32 start, f32 end, f32 delta);
+	int Math_Lerp(int start, int end, f32 delta);
+	f32 Math_CLerp(f32 start, f32 end, f32 delta);
+	int Math_CLerp(int start, int end, f32 delta);
 }
 #endif

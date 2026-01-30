@@ -8,11 +8,11 @@
 class Player : public GameObjectEntity {
 protected:
 	f32 animationTimer, animationFrame;
+	int currentRow, currentCol;
+	SpriteSheet* sprite;
 	f32 jumpHeight;
 	f32 jumpVelocity;
 	f32 speed;
-	int currentRow, currentCol;
-	SpriteSheet* sprite;
 public:
 	Player(AEVec2 pos = { 0.f, 0.f });
 	virtual ~Player();

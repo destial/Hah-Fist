@@ -78,12 +78,10 @@ void GameScene::Init() {
 
 	ButtonUI* wk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 1.f }, 'W');
 	ButtonUI* ak = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 3.f, Utils::GetWorldHeight() - 2.f }, 'A');
-	ButtonUI* sk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 2.f }, 'S');
 	ButtonUI* dk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 1.f, Utils::GetWorldHeight() - 2.f }, 'D');
 
 	scene_entities.push_back(wk);
 	scene_entities.push_back(ak);
-	scene_entities.push_back(sk);
 	scene_entities.push_back(dk);
 
 	GameObjectEntity* p = new Player({ 1.f, 1.f });
@@ -91,46 +89,11 @@ void GameScene::Init() {
 	GameObjectEntity* e = new EnemyEntity({ 9.f, 4.5f });
 	e->pBody->mass = 40.0f;
 	std::printf("Enemy mass :%f\n", e->pBody->mass);
-	e->AddPreUpdateListener(this, [e]() {
-		e->color = { 255, 255, 255, 255 };
-	});
-	e->AddUpdateListener(this, [e]() {
-		if (e->pBody->is_colliding) {
-			e->color = { 255, 0, 0, 0 };
-		}
-	});
 
-	GameObjectEntity* m = new EnemyEntity({ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f });
-	m->AddPreUpdateListener(this, [m]() {
-		m->color = { 255, 255, 255, 255 };
-		m->rotation += Utils::GetDeltaTime();
-		if (m->rotation >= 360.f) {
-			m->rotation -= 360.f;
-		}
-	});
-	m->AddUpdateListener(this, [m]() {
-		if (m->pBody->is_colliding) {
-			m->color = { 255, 0, 0, 0 };
-		}
-		s32 mouse_x, mouse_y;
-		f32 cam_x, cam_y;
-		AEInputGetCursorPosition(&mouse_x, &mouse_y);
-		AEVec2 mouse_world = Utils::Screen_To_World(static_cast<f32>(mouse_x), static_cast<f32>(mouse_y));
-		AEGfxGetCamPosition(&cam_x, &cam_y);
-		AEVec2 cam_pos = Utils::Screen_To_Scale(cam_x, cam_y);
-
-		if (Utils::OBBPoint(m, mouse_world + cam_pos) && AEInputCheckCurr(AEVK_LBUTTON)) {
-			m->position = mouse_world + cam_pos;
-		}
-	});
-	m->go_type = GameObjectEntity::KINEMATIC::STATIC;
-
-	scene_entities.push_back(m);
 	scene_entities.push_back(p);
 	scene_entities.push_back(e);
 	gameObjects.push_back(p);
 	gameObjects.push_back(e);
-	gameObjects.push_back(m);
 
 	BaseEntity* w = new Weapon(AEVec2{ 0.f, 0.f }, p);
 	scene_entities.push_back(w);

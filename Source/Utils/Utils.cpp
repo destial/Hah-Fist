@@ -68,7 +68,10 @@ namespace Utils {
 		s32 mouse_x, mouse_y;
 		AEInputGetCursorPosition(&mouse_x, &mouse_y);
 		AEVec2 mouse{ static_cast<f32>(mouse_x), static_cast<f32>(mouse_y) };
-		return Utils::Screen_To_World(mouse.x, mouse.y);
+
+		f32 cam_x, cam_y;
+		AEGfxGetCamPosition(&cam_x, &cam_y);
+		return Utils::Screen_To_World(mouse.x + (cam ? cam_x : 0.f), mouse.y + (cam ? cam_y : 0.f));
 	}
 
 	u32 PackColor(int red, int green, int blue, int alpha) {
@@ -230,5 +233,25 @@ namespace Utils {
 		AEMtx33Identity(&translate);
 		AEMtx33Trans(&translate, screenPos.x, screenPos.y);
 		return translate * rotate * scale;
+	}
+
+	f32 Math_Lerp(f32 start, f32 end, f32 delta) {
+		return start + min_max(delta, 0.f, 1.f) * (end - start);
+	}
+
+	int Math_Lerp(int start, int end, f32 delta) {
+		return static_cast<int>(start + min_max(delta, 0.f, 1.f) * (end - start));
+	}
+
+	f32 Math_CLerp(f32 start, f32 end, f32 delta) {
+		delta = min_max(delta, 0.f, 1.f);
+		f32 p = 1.f - ((AECos(PI * delta) + 1.f) * 0.5f);
+		return Math_Lerp(start, end, p);
+	}
+
+	int Math_CLerp(int start, int end, f32 delta) {
+		delta = min_max(delta, 0.f, 1.f);
+		f32 p = 1.f - ((AECos(PI * delta) + 1.f) * 0.5f);
+		return Math_Lerp(start, end, p);
 	}
 }
