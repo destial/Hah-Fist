@@ -37,7 +37,7 @@ namespace Utils {
 	AEVec2 Screen_To_Scale(f32 x, f32 y);
 	AEVec2 Game_To_TextScreen(f32 x, f32 y);
 
-	const AEVec2 Get_Mouse_World();
+	const AEVec2 Get_Mouse_World(bool camera = false);
 
 	u32 PackColor(int red, int green, int blue, int alpha = 255);
 	u32 PackColor(Color& color);

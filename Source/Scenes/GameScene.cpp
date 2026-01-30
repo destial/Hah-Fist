@@ -113,12 +113,14 @@ void GameScene::Init() {
 			m->color = { 255, 0, 0, 0 };
 		}
 		s32 mouse_x, mouse_y;
+		f32 cam_x, cam_y;
 		AEInputGetCursorPosition(&mouse_x, &mouse_y);
-		AEVec2 mouse{ static_cast<f32>(mouse_x), static_cast<f32>(mouse_y) };
-		AEVec2 mouse_world = Utils::Screen_To_World(mouse.x, mouse.y);
+		AEVec2 mouse_world = Utils::Screen_To_World(static_cast<f32>(mouse_x), static_cast<f32>(mouse_y));
+		AEGfxGetCamPosition(&cam_x, &cam_y);
+		AEVec2 cam_pos = Utils::Screen_To_Scale(cam_x, cam_y);
 
-		if (Utils::OBBPoint(m, mouse_world) && AEInputCheckCurr(AEVK_LBUTTON)) {
-			m->position = mouse_world;
+		if (Utils::OBBPoint(m, mouse_world + cam_pos) && AEInputCheckCurr(AEVK_LBUTTON)) {
+			m->position = mouse_world + cam_pos;
 		}
 	});
 	m->go_type = GameObjectEntity::KINEMATIC::STATIC;

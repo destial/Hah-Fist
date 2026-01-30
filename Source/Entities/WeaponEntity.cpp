@@ -70,7 +70,10 @@ void Weapon::Render() {
 void Weapon::Attack() {
 	float attack_strength = channel_timer / max_channel_time + 0.25;
 
-	AEVec2 attack_direction = Utils::Get_Mouse_World() - player_entity->position;
+	f32 cam_x, cam_y;
+	AEGfxGetCamPosition(&cam_x, &cam_y);
+	AEVec2 cam_pos = Utils::Screen_To_Scale(cam_x, cam_y);
+	AEVec2 attack_direction = Utils::Get_Mouse_World() + cam_pos - player_entity->position;
 	AEVec2Normalize(&attack_direction, &attack_direction);
 
 	dash_timer = max_dash_time;
