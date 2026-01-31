@@ -14,16 +14,20 @@
 #include <cstdio>
 #include <string>
 
-static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, char ch) {
+static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, std::string str) {
 	ButtonUI* b = new ButtonUI(pos);
 	b->image = AssetManager::GetTexture("Assets/Icons/small_button_grey.png");
 	b->color = { 255, 255, 255, 255 };
 	b->overlay_text_color = { 255, 255, 255, 255 };
 	b->overlay_color = b->color;
-	b->text = ch;
+	b->text = str;
 	b->text_size = 7.5f;
 	b->font = AssetManager::GetFontId("Assets/Jersey25-Regular.ttf");
 	return b;
+}
+
+static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, char ch) {
+	return CreateHotKeyDisplay(pos, std::string{ ch });
 }
 
 GameScene::GameScene() : BaseScene() {
@@ -73,16 +77,33 @@ void GameScene::Init() {
 		cam->text = std::string(b);
 	});
 
+	ButtonUI* mw = new ButtonUI(AEVec2{ 3.f, Utils::GetWorldHeight() - 2.5f });
+	mw->color = { 0, 0, 0, 0 };
+	mw->overlay_color = mw->color;
+	mw->scale.x = 5.5f;
+	mw->text_size = 5.f;
+	mw->text = "Mouse:";
+	mw->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
+	mw->AddUpdateListener(this, [mw]() {
+		AEVec2 mwp = Utils::Get_Mouse_World(true);
+		char b[128];
+		sprintf_s(b, "Mouse:%.2f,%.2f", mwp.x, mwp.y);
+		mw->text = std::string(b);
+	});
+
 	scene_entities.push_back(s);
 	scene_entities.push_back(cam);
+	scene_entities.push_back(mw);
 
 	ButtonUI* wk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 1.f }, 'W');
 	ButtonUI* ak = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 3.f, Utils::GetWorldHeight() - 2.f }, 'A');
 	ButtonUI* dk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 1.f, Utils::GetWorldHeight() - 2.f }, 'D');
+	ButtonUI* sk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 2.f }, "Sp");
 
 	scene_entities.push_back(wk);
 	scene_entities.push_back(ak);
 	scene_entities.push_back(dk);
+	scene_entities.push_back(sk);
 
 	GameObjectEntity* p = new Player({ 1.f, 1.f });
 	std::printf("Player mass :%f\n", p->pBody->mass);

@@ -22,7 +22,7 @@ Weapon::~Weapon() {
 
 void Weapon::PreUpdate(const f32& dt) {
 	BaseEntity::PreUpdate(dt);
-	AEVec2 attack_direction = Utils::Get_Mouse_World() - player_entity->position;
+	AEVec2 attack_direction = Utils::Get_Mouse_World(true) - player_entity->position;
 	AEVec2Normalize(&attack_direction, &attack_direction);
 	AEVec2 right = { 1.f, 0 };
 	rotation = AEVec2AngleCCW(&right, &attack_direction);

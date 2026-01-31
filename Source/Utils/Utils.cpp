@@ -71,7 +71,7 @@ namespace Utils {
 
 		f32 cam_x, cam_y;
 		AEGfxGetCamPosition(&cam_x, &cam_y);
-		return Utils::Screen_To_World(mouse.x + (cam ? cam_x : 0.f), mouse.y + (cam ? cam_y : 0.f));
+		return Utils::Screen_To_World(mouse.x + (cam ? cam_x : 0.f), mouse.y + (cam ? -cam_y : 0.f));
 	}
 
 	u32 PackColor(int red, int green, int blue, int alpha) {
@@ -79,7 +79,7 @@ namespace Utils {
 		return color;
 	}
 
-	u32 PackColor(Color& color) {
+	u32 PackColor(Color const& color) {
 		u32 packed = (color.a << 24) + (color.r << 16) + (color.g << 8) + (color.b);
 		return packed;
 	}

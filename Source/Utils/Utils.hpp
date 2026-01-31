@@ -42,7 +42,7 @@ namespace Utils {
 	const AEVec2 Get_Mouse_World(bool camera = false);
 
 	u32 PackColor(int red, int green, int blue, int alpha = 255);
-	u32 PackColor(Color& color);
+	u32 PackColor(Color const& color);
 	Color UnpackColor(u32 color);
 
 	const f32 GetWorldWidth(void);
