@@ -3,6 +3,7 @@
 #define __UTIL_H
 #include "AEEngine.h"
 #include <vector>
+#include <utility>
 
 #define min_max(v, mn, mx) min(mx, max(mn, v))
 
@@ -32,40 +33,39 @@ struct Color {
 };
 
 namespace Utils {
-	AEVec2 World_To_Screen(f32 x, f32 y);
-	AEVec2 Screen_To_World(f32 x, f32 y);
-	AEVec2 Game_To_Screen(f32 x, f32 y);
-	AEVec2 Scale_To_Screen(f32 x, f32 y);
-	AEVec2 Screen_To_Scale(f32 x, f32 y);
-	AEVec2 Game_To_TextScreen(f32 x, f32 y);
+	AEVec2 WorldToScreen(f32 x, f32 y);
+	AEVec2 ScreenToWorld(f32 x, f32 y);
+	AEVec2 GameToScreen(f32 x, f32 y);
+	AEVec2 ScaleToScreen(f32 x, f32 y);
+	AEVec2 ScreenToScale(f32 x, f32 y);
+	AEVec2 GameToTextScreen(f32 x, f32 y);
 
-	const AEVec2 Get_Mouse_World(bool camera = false);
+	const f32 GetWorldWidth(void);
+	const f32 GetWorldHeight(void);
+	const f32 GetDeltaTime(void);
+	std::pair<int, int> GetScreenResolution(void);
+	void SetScreenResolution(unsigned int width, unsigned int height);
+	void SetDeltaTime(f32 dt);
+
+	const AEVec2 GetMouseWorld(bool camera = false);
 
 	u32 PackColor(int red, int green, int blue, int alpha = 255);
 	u32 PackColor(Color const& color);
 	Color UnpackColor(u32 color);
 
-	const f32 GetWorldWidth(void);
-	const f32 GetWorldHeight(void);
-	const f32 GetDeltaTime(void);
-
-	bool CircleCircleCollision(BaseEntity*& go, BaseEntity*& go2);
-	//bool CircleCircleCollision(AEVec2& center_pos_1, const f32& radius_1, AEVec2& center_pos_2, const f32& radius_2);
-	//bool AABB(const AEVec2& bottom_left_1, const f32& width_1, const f32& height_1, const AEVec2& bottom_left_2, const f32& width_2, const f32& height_2);
 	std::vector<AEVec2> GetCorners(const BaseEntity* go);
+	bool CircleCircleCollision(BaseEntity*& go, BaseEntity*& go2);
 	bool AABB(const BaseEntity* const & go,  const BaseEntity* const& go2);
 	bool OBB(const BaseEntity* const& go, const BaseEntity* const& go2);
 	bool OBBPoint(const BaseEntity* const& go, AEVec2 const& pos);
 	
-	void SetDeltaTime(f32 dt);
-
 	void SnapVectorToAxis(AEVec2* result, AEVec2* vec2);
 
 	AEMtx33 GetTransformMatrix(AEVec2 const& pos, AEVec2 const& sca, f32 rot);
 
-	f32 Math_Lerp(f32 start, f32 end, f32 delta);
-	int Math_Lerp(int start, int end, f32 delta);
-	f32 Math_CLerp(f32 start, f32 end, f32 delta);
-	int Math_CLerp(int start, int end, f32 delta);
+	f32 Lerp(f32 start, f32 end, f32 delta);
+	int Lerp(int start, int end, f32 delta);
+	f32 LerpCircle(f32 start, f32 end, f32 delta);
+	int LerpCircle(int start, int end, f32 delta);
 }
 #endif

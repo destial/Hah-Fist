@@ -85,7 +85,7 @@ void GameScene::Init() {
 	mw->text = "Mouse:";
 	mw->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
 	mw->AddUpdateListener(this, [mw]() {
-		AEVec2 mwp = Utils::Get_Mouse_World(true);
+		AEVec2 mwp = Utils::GetMouseWorld(true);
 		char b[128];
 		sprintf_s(b, "Mouse:%.2f,%.2f", mwp.x, mwp.y);
 		mw->text = std::string(b);

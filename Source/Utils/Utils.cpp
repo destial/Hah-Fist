@@ -22,56 +22,65 @@ namespace Utils {
 	unsigned int screen_width = 1600;
 	unsigned int screen_height = 900;
 
-	AEVec2 World_To_Screen(f32 x, f32 y) {
+	AEVec2 WorldToScreen(f32 x, f32 y) {
 		return {
 			x * (screen_width / world_width),
 			screen_height - y * (screen_height / world_height)
 		};
 	}
 
-	AEVec2 Screen_To_World(f32 x, f32 y) {
+	AEVec2 ScreenToWorld(f32 x, f32 y) {
 		return {
 			x * (world_width / screen_width),
 			world_height - y * (world_height / screen_height)
 		};
 	}
 
-	AEVec2 Game_To_Screen(f32 x, f32 y) {
+	AEVec2 GameToScreen(f32 x, f32 y) {
 		return {
 			x * (screen_width / world_width) - (static_cast<f32>(screen_width) * 0.5f),
 			y * (screen_height / world_height) - (static_cast<f32>(screen_height) * 0.5f)
 		};
 	}
 
-	AEVec2 Game_To_TextScreen(f32 x, f32 y) {
+	AEVec2 GameToTextScreen(f32 x, f32 y) {
 		return {
 			((x / world_width) * 2.f) - 1.f,
 			((y / world_height) * 2.f) - 1.f
 		};
 	}
 
-	AEVec2 Scale_To_Screen(f32 x, f32 y) {
+	AEVec2 ScaleToScreen(f32 x, f32 y) {
 		return {
 			x * (screen_width / world_width),
 			y * (screen_height / world_height)
 		};
 	}
 
-	AEVec2 Screen_To_Scale(f32 x, f32 y) {
+	AEVec2 ScreenToScale(f32 x, f32 y) {
 		return {
 			x / (screen_width / world_width),
 			y / (screen_height / world_height)
 		};
 	}
 
-	const AEVec2 Get_Mouse_World(bool cam) {
+	std::pair<int, int> GetScreenResolution(void) {
+		return { screen_width, screen_height };
+	}
+
+	void SetScreenResolution(unsigned int width, unsigned int height) {
+		screen_width = width;
+		screen_height = height;
+	}
+
+	const AEVec2 GetMouseWorld(bool cam) {
 		s32 mouse_x, mouse_y;
 		AEInputGetCursorPosition(&mouse_x, &mouse_y);
 		AEVec2 mouse{ static_cast<f32>(mouse_x), static_cast<f32>(mouse_y) };
 
 		f32 cam_x, cam_y;
 		AEGfxGetCamPosition(&cam_x, &cam_y);
-		return Utils::Screen_To_World(mouse.x + (cam ? cam_x : 0.f), mouse.y + (cam ? -cam_y : 0.f));
+		return Utils::ScreenToWorld(mouse.x + (cam ? cam_x : 0.f), mouse.y + (cam ? -cam_y : 0.f));
 	}
 
 	u32 PackColor(int red, int green, int blue, int alpha) {
@@ -80,8 +89,7 @@ namespace Utils {
 	}
 
 	u32 PackColor(Color const& color) {
-		u32 packed = (color.a << 24) + (color.r << 16) + (color.g << 8) + (color.b);
-		return packed;
+		return PackColor(color.r, color.g, color.b, color.a);
 	}
 
 	Color UnpackColor(u32 color) {
@@ -222,36 +230,36 @@ namespace Utils {
 
 	AEMtx33 GetTransformMatrix(AEVec2 const& pos, AEVec2 const& sca, f32 rot) {
 		AEMtx33 scale{ 1.f };
-		AEVec2 s_scale = Utils::Scale_To_Screen(sca.x, sca.y);
+		AEVec2 s_scale = Utils::ScaleToScreen(sca.x, sca.y);
 		AEMtx33Identity(&scale);
 		AEMtx33Scale(&scale, s_scale.x, s_scale.y);
 		AEMtx33 rotate = { 0 };
 		AEMtx33Identity(&rotate);
 		AEMtx33Rot(&rotate, rot);
-		AEVec2 screenPos = Utils::Game_To_Screen(pos.x, pos.y);
+		AEVec2 screenPos = Utils::GameToScreen(pos.x, pos.y);
 		AEMtx33 translate = { 0 };
 		AEMtx33Identity(&translate);
 		AEMtx33Trans(&translate, screenPos.x, screenPos.y);
 		return translate * rotate * scale;
 	}
 
-	f32 Math_Lerp(f32 start, f32 end, f32 delta) {
+	f32 Lerp(f32 start, f32 end, f32 delta) {
 		return start + min_max(delta, 0.f, 1.f) * (end - start);
 	}
 
-	int Math_Lerp(int start, int end, f32 delta) {
+	int Lerp(int start, int end, f32 delta) {
 		return static_cast<int>(start + min_max(delta, 0.f, 1.f) * (end - start));
 	}
 
-	f32 Math_CLerp(f32 start, f32 end, f32 delta) {
+	f32 LerpCircle(f32 start, f32 end, f32 delta) {
 		delta = min_max(delta, 0.f, 1.f);
 		f32 p = 1.f - ((AECos(PI * delta) + 1.f) * 0.5f);
-		return Math_Lerp(start, end, p);
+		return Lerp(start, end, p);
 	}
 
-	int Math_CLerp(int start, int end, f32 delta) {
+	int LerpCircle(int start, int end, f32 delta) {
 		delta = min_max(delta, 0.f, 1.f);
 		f32 p = 1.f - ((AECos(PI * delta) + 1.f) * 0.5f);
-		return Math_Lerp(start, end, p);
+		return Lerp(start, end, p);
 	}
 }

@@ -47,7 +47,7 @@ namespace DebugUtils {
 		AEMtx33 scale = { 1.f };
 		AEMtx33Identity(&scale);
 		AEMtx33Scale(&scale, 3.f, 3.f);
-		AEVec2 screenPos = Utils::Game_To_Screen(world_pos.x, world_pos.y);
+		AEVec2 screenPos = Utils::GameToScreen(world_pos.x, world_pos.y);
 		AEMtx33 translate = { 0 };
 		AEMtx33Identity(&translate);
 		AEMtx33Trans(&translate, screenPos.x, screenPos.y);
@@ -64,13 +64,13 @@ namespace DebugUtils {
 		AEVec2 up = { 0.f, 1.f };
 		f32 rotation = AEVec2AngleCCW(&up, &dir);
 		AEMtx33 scale = { 1.f };
-		AEVec2 s_scale = Utils::Scale_To_Screen(1.f, AEVec2Length(&dir));
+		AEVec2 s_scale = Utils::ScaleToScreen(1.f, AEVec2Length(&dir));
 		AEMtx33Identity(&scale);
 		AEMtx33Scale(&scale, 3.f, s_scale.y);
 		AEMtx33 rotate = { 0 };
 		AEMtx33Identity(&rotate);
 		AEMtx33Rot(&rotate, rotation);
-		AEVec2 screenPos = Utils::Game_To_Screen(midpoint.x, midpoint.y);
+		AEVec2 screenPos = Utils::GameToScreen(midpoint.x, midpoint.y);
 		AEMtx33 translate = { 0 };
 		AEMtx33Identity(&translate);
 		AEMtx33Trans(&translate, screenPos.x, screenPos.y);

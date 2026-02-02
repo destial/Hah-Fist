@@ -25,7 +25,7 @@ void CircleButtonUI::Update(const f32& dt) {
 	s32 mouse_x, mouse_y;
 	AEInputGetCursorPosition(&mouse_x, &mouse_y);
 	AEVec2 mouse{ static_cast<f32>(mouse_x), static_cast<f32>(mouse_y) };
-	AEVec2 mouse_world = Utils::Screen_To_World(mouse.x, mouse.y);
+	AEVec2 mouse_world = Utils::ScreenToWorld(mouse.x, mouse.y);
 
 	if (AEVec2Distance(&mouse_world, &this->position) <= this->radius) {
 		OnMouseHover(mouse);

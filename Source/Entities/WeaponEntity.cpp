@@ -22,7 +22,7 @@ Weapon::~Weapon() {
 
 void Weapon::PreUpdate(const f32& dt) {
 	BaseEntity::PreUpdate(dt);
-	AEVec2 attack_direction = Utils::Get_Mouse_World(true) - player_entity->position;
+	AEVec2 attack_direction = Utils::GetMouseWorld(true) - player_entity->position;
 	AEVec2Normalize(&attack_direction, &attack_direction);
 	AEVec2 right = { 1.f, 0 };
 	rotation = AEVec2AngleCCW(&right, &attack_direction);
@@ -72,8 +72,8 @@ void Weapon::Attack() {
 
 	f32 cam_x, cam_y;
 	AEGfxGetCamPosition(&cam_x, &cam_y);
-	AEVec2 cam_pos = Utils::Screen_To_Scale(cam_x, cam_y);
-	AEVec2 attack_direction = Utils::Get_Mouse_World() + cam_pos - player_entity->position;
+	AEVec2 cam_pos = Utils::ScreenToScale(cam_x, cam_y);
+	AEVec2 attack_direction = Utils::GetMouseWorld() + cam_pos - player_entity->position;
 	AEVec2Normalize(&attack_direction, &attack_direction);
 
 	dash_timer = max_dash_time;
