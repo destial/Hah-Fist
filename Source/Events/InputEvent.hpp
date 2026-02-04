@@ -4,6 +4,7 @@
 
 #include "AEEngine.h"
 #include <vector>
+#include <map>
 #include <functional>
 
 class InputEvent {
@@ -14,7 +15,7 @@ private:
 	const std::vector<u8>& keys_released;
 public:
 	typedef std::function<void(const InputEvent*)> InputListener;
-	typedef std::vector<InputListener> InputListeners;
+	typedef std::map<void*, std::vector<InputListener>> InputListeners;
 	static InputListeners Listeners;
 	InputEvent(
 		const std::vector<u8>& keys_t,
@@ -35,6 +36,8 @@ public:
 
 bool operator== (InputEvent::InputListener& lhs, const InputEvent::InputListener& rhs);
 InputEvent::InputListeners& operator+= (InputEvent::InputListeners& lhs, InputEvent::InputListener rhs);
-InputEvent::InputListeners& operator-= (InputEvent::InputListeners& lhs, InputEvent::InputListener rhs);
+InputEvent::InputListeners& operator+= (InputEvent::InputListeners& lhs, std::pair<void*, InputEvent::InputListener> rhs);
+InputEvent::InputListeners& operator-= (InputEvent::InputListeners& lhs, std::pair<void*, InputEvent::InputListener> rhs);
+InputEvent::InputListeners& operator-= (InputEvent::InputListeners& lhs, void* ptr);
 
 #endif

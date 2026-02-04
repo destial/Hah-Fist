@@ -59,19 +59,34 @@ bool operator== (InputEvent::InputListener& lhs, const InputEvent::InputListener
 	return lhs.target<InputEvent::InputListener>() == rhs.target<InputEvent::InputListener>();
 }
 
-InputEvent::InputListeners& operator+= (InputEvent::InputListeners& lhs, InputEvent::InputListener rhs) {
-	lhs.push_back(rhs);
+InputEvent::InputListeners& operator+= (InputEvent::InputListeners& lhs, std::pair<void*, InputEvent::InputListener> rhs) {
+	if (lhs.count(rhs.first) == 0) {
+		lhs[rhs.first] = std::vector<InputEvent::InputListener>(0);
+	}
+	lhs[rhs.first].push_back(rhs.second);
 	return lhs;
 }
 
-InputEvent::InputListeners& operator-= (InputEvent::InputListeners& lhs, InputEvent::InputListener rhs) {
+InputEvent::InputListeners& operator-= (InputEvent::InputListeners& lhs, std::pair<void*, InputEvent::InputListener> rhs) {
 	for (InputEvent::InputListeners::iterator it = lhs.begin(); it != lhs.end();) {
-		if (*it == rhs) {
-			it = lhs.erase(it);
+		auto& pair = *it;
+		for (std::vector<InputEvent::InputListener>::iterator vit = pair.second.begin(); vit != pair.second.end();) {
+			if ((*vit) == rhs.second) {
+				vit = pair.second.erase(vit);
+			}
+			else {
+				++vit;
+			}
 		}
-		else {
-			++it;
-		}
+		
+	}
+	return lhs;
+}
+
+InputEvent::InputListeners& operator-= (InputEvent::InputListeners& lhs, void* ptr) {
+	if (lhs.count(ptr) != 0) {
+		lhs[ptr].clear();
+		lhs.erase(ptr);
 	}
 	return lhs;
 }
