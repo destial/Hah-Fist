@@ -14,10 +14,11 @@ Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 	animationFrame = 1.f / (3.f * 3.f);
 	currentRow = currentCol = 0;
 	scale = { 5.f * (static_cast<f32>(sprite->image->width) / sprite->image->height), 5.f };
-	jumpHeight = 6.5f;
+	jumpHeight = 8.5f;
 	jumpVelocity = sqrtf(jumpHeight * 2.f * abs(pBody->gravity.y));
 	speed = 10.f;
 	layer = 2;
+	go_type = KINEMATIC::DYNAMIC;
 }
 
 Player::~Player() {

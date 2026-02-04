@@ -20,6 +20,7 @@ public:
 		STATIC,
 		DYNAMIC
 	}go_type;
+	AEVec2 prev_position;
 	GameObjectEntity();
 	GameObjectEntity(AEVec2 pos = { 0.f, 0.f }, f32 mass = 1.0f, SHAPE type = AABB);
 	virtual ~GameObjectEntity();

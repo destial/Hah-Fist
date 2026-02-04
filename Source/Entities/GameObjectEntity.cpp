@@ -2,12 +2,12 @@
 #include "../Utils/AEOverload.hpp"
 #include "../UI/Debug.hpp"
 
-GameObjectEntity::GameObjectEntity() : health(1.f),damage(1.f), isActive(true), type(CIRCLE), go_type(DYNAMIC), BaseEntity({0.f})
+GameObjectEntity::GameObjectEntity() : health(1.f), damage(1.f), isActive(true), type(SHAPE::AABB), go_type(KINEMATIC::DYNAMIC), prev_position({ 0.f }), BaseEntity({ 0.f })
 {
 	pBody = new PhysicsBody{};
 }
 
-GameObjectEntity::GameObjectEntity(AEVec2 pos, f32 mass, SHAPE type) : health(1.f), damage(1.f),isActive(true), type(type), go_type(DYNAMIC), BaseEntity(pos)
+GameObjectEntity::GameObjectEntity(AEVec2 pos, f32 mass, SHAPE type) : health(1.f), damage(1.f),isActive(true), type(type), go_type(DYNAMIC), prev_position(pos), BaseEntity(pos)
 {
 	pBody = new PhysicsBody{ mass };
 }
@@ -20,6 +20,7 @@ GameObjectEntity::~GameObjectEntity()
 void GameObjectEntity::PreUpdate(const f32& dt)
 {
 	BaseEntity::PreUpdate(dt);
+	this->prev_position = this->position;
 	//this->velocity = { 0.f, velocity.y };
 }
 
