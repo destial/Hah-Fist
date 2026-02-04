@@ -21,12 +21,13 @@ namespace QuadTree
 
 	Node::~Node()
 	{
-		if (!isLeaf)
+		for (QuadTreeEntry* entry : entries)
 		{
-			for (Node* node : subdivisions)
-			{
-				delete node;
-			}
+			delete entry;
+		}
+		for (Node* node : subdivisions)
+		{
+			delete node;
 		}
 	}
 
