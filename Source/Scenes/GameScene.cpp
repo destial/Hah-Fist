@@ -44,7 +44,7 @@ static void OnGameExit(const InputEvent* ev) {
 }
 
 void GameScene::Init() {
-	InputEvent::Listeners += OnGameExit;
+	InputEvent::Listeners += {this, OnGameExit};
 
 	ButtonUI* s = new ButtonUI(AEVec2{ 3.f, Utils::GetWorldHeight() - .6f });
 	s->color = { 0, 0, 0, 0 };
@@ -141,7 +141,7 @@ void GameScene::Init() {
 		});
 	}
 
-	InputEvent::Listeners += [this](const InputEvent* ev) {
+	InputEvent::Listeners += {this, [this](const InputEvent* ev) {
 		if (ev->IsKeyTriggered(AEVK_1)) {
 			GameObjectEntity* go = new GameObjectEntity(Utils::GetMouseWorld(true));
 			go->mesh = MeshRenderer::GetCenterRectMesh();
@@ -149,7 +149,7 @@ void GameScene::Init() {
 			scene_entities.push_back(go);
 			gameObjects.push_back(go);
 		}
-	};
+	}};
 }
 
 void GameScene::PreUpdate(const f32& dt) {
@@ -242,8 +242,8 @@ void GameScene::Update(const f32& dt) {
 				}
 
 				AEVec2 down = { 0, -1.f };
-				f32 dotdown1 = AEVec2DotProduct(&go->velocity, &down);
-				f32 dotdown2 = AEVec2DotProduct(&go2->velocity, &down);
+				f32 dotdown1 = go->velocity * down;
+				f32 dotdown2 = go2->velocity * down;
 
 				if (go->go_type == GameObjectEntity::KINEMATIC::DYNAMIC && go2->go_type == GameObjectEntity::KINEMATIC::STATIC) {
 					if (dotdown1 > 1)
@@ -301,6 +301,6 @@ void GameScene::Render() {
 
 void GameScene::End() {
 	BaseScene::End();
-	InputEvent::Listeners -= OnGameExit;
+	InputEvent::Listeners -= this;
 	gameObjects.clear();
 }

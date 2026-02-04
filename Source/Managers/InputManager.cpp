@@ -71,8 +71,10 @@ void InputHandler::Update(const f32& dt) {
 	if (!keys_t.empty() && !keys_p.empty() && !keys_c.empty() && !keys_r.empty())
 		return;
 
-	for (auto& fn : InputEvent::Listeners) {
-		fn(event);
+	for (auto& pair : InputEvent::Listeners) {
+		for (auto& fn : pair.second) {
+			fn(event);
+		}
 	}
 }
 
@@ -80,4 +82,8 @@ void InputHandler::EndFrame() {
 	keys_t.clear();
 	keys_p.clear();
 	keys_r.clear();
+}
+
+InputEvent::InputListeners& operator+= (InputEvent::InputListeners& lhs, InputEvent::InputListener rhs) {
+	return InputEvent::Listeners += std::pair<void*, InputEvent::InputListener>{InputHandler::GetInstance(), rhs};
 }
