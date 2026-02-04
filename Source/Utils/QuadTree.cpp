@@ -114,6 +114,51 @@ namespace QuadTree
 		return result;
 	}
 
+	std::vector<Node*> Node::GetValidCollisionNodes(Physics::AABB bounds)
+	{
+		std::vector<Node*> result;
+		if (entries.size() > 0)
+		{
+			if (bounds.Intersects(this->bounds))
+			{
+				result.push_back(this);
+			}
+		}
+		if (!isLeaf)
+		{
+			for (Node* node : subdivisions)
+			{
+				for (Node* n2 : node->GetValidCollisionNodes(bounds))
+				{
+					result.push_back(n2);
+				}
+			}
+		}
+		return result;
+	}
+
+	std::vector<GameObjectEntity*> Node::GetPotentialCollisionTargets(GameObjectEntity* gameObject)
+	{
+		Physics::AABB bounds;
+		bounds.min.x = gameObject->position.x - gameObject->scale.x * 0.5f;
+		bounds.min.y = gameObject->position.y - gameObject->scale.y * 0.5f;
+		bounds.max.x = gameObject->position.x + gameObject->scale.x * 0.5f;
+		bounds.max.y = gameObject->position.y + gameObject->scale.y * 0.5f;
+		std::vector<Node*> validNodes = GetValidCollisionNodes(bounds);
+
+		std::vector<GameObjectEntity*> result;
+
+		for (Node* node : validNodes)
+		{
+			for (QuadTreeEntry* entry : node->entries)
+			{
+				result.push_back(entry->gameObject);
+			}
+		}
+
+		return result;
+	}
+
 	Tree::Tree(Physics::AABB bounds, std::vector<GameObjectEntity*> gameObjects, size_t max_entries)
 	{
 		head = new Node(bounds, max_entries);
