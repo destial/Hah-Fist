@@ -3,6 +3,7 @@
 #define __GAMESCENE_H
 #include "BaseScene.hpp"
 #include "../Entities/GameObjectEntity.hpp"
+#include "../Utils/QuadTree.hpp"
 class GameScene : public BaseScene {
 public:
 	GameScene();
@@ -15,6 +16,7 @@ public:
 	virtual void End();
 
 	std::vector<GameObjectEntity*> gameObjects;
+	QuadTree::Tree* qtGameObjects{nullptr};
 };
 
 #endif

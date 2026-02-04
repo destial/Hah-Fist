@@ -108,9 +108,6 @@ void GameScene::Init() {
 
 	GameObjectEntity* p = new Player({ 1.f, 1.f });
 	std::printf("Player mass :%f\n", p->pBody->mass);
-	GameObjectEntity* e = new EnemyEntity({ 9.f, 3.5f });
-	e->pBody->mass = 40.0f;
-	std::printf("Enemy mass :%f\n", e->pBody->mass);
 	GameObjectEntity* wall = new GameObjectEntity({ 20.f, 7.f });
 	wall->go_type = GameObjectEntity::KINEMATIC::STATIC;
 	wall->mesh = MeshRenderer::GetCenterRectMesh();
@@ -120,9 +117,17 @@ void GameScene::Init() {
 	gameObjects.push_back(wall);
 
 	scene_entities.push_back(p);
-	scene_entities.push_back(e);
+	
 	gameObjects.push_back(p);
-	gameObjects.push_back(e);
+
+
+	for (int i{}; i < 2; i++)
+	{
+		GameObjectEntity* e = new EnemyEntity({ 9.f + float(i) * 5.0f, 2.5f});
+		e->pBody->mass = 40.0f;
+		scene_entities.push_back(e);
+		gameObjects.push_back(e);
+	}
 
 	BaseEntity* w = new Weapon(AEVec2{ 0.f, 0.f }, p);
 	scene_entities.push_back(w);
@@ -148,6 +153,12 @@ void GameScene::Init() {
 }
 
 void GameScene::PreUpdate(const f32& dt) {
+	if (qtGameObjects != nullptr)
+	{
+		delete qtGameObjects;
+	}
+	qtGameObjects = new QuadTree::Tree(Physics::AABB{ AEVec2{-500.0f, -500.0f}, AEVec2{500.0f, 500.0f} }, gameObjects, 1);
+
 	BaseScene::PreUpdate(dt);
 }
 
@@ -285,6 +296,7 @@ void GameScene::PostUpdate(const f32& dt) {
 
 void GameScene::Render() {
 	BaseScene::Render();
+	qtGameObjects->RenderDebug();
 }
 
 void GameScene::End() {
