@@ -41,6 +41,12 @@ AEVec2 operator- (const AEVec2& lhs, const AEVec2& rhs);
 AEVec2 operator* (const AEVec2& lhs, f32 magnitude);
 
 /*
+* @brief Scalar operator between a vector and magnitude
+* @return A new vector
+*/
+AEVec2 operator* (f32 magnitude, const AEVec2& rhs);
+
+/*
 * @brief Dot product operator between two vectors
 * @return The dot product
 */

@@ -22,6 +22,13 @@ namespace Utils {
 	unsigned int screen_width = 1600;
 	unsigned int screen_height = 900;
 
+	f32 RandRange(f32 mn, f32 mx) {
+		f32 temp = mn;
+		mn = min(mn, mx);
+		mx = max(temp, mx);
+		return ((mx - mn) * AERandFloat()) + mn;
+	}
+
 	AEVec2 WorldToScreen(f32 x, f32 y) {
 		return {
 			x * (screen_width / world_width),

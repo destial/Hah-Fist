@@ -29,6 +29,10 @@ AEVec2 operator* (const AEVec2& lhs, f32 magnitude) {
 	return { lhs.x * magnitude, lhs.y * magnitude };
 }
 
+AEVec2 operator* (f32 magnitude, const AEVec2& rhs) {
+	return { rhs.x * magnitude, rhs.y * magnitude };
+}
+
 f32 operator* (const AEVec2& lhs, const AEVec2& rhs) {
 	return (lhs.x * rhs.x) + (lhs.y * rhs.y);
 }
