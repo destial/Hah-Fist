@@ -66,3 +66,46 @@ void GameObjectEntity::Render()
 		DebugUtils::RenderLine(corners[3], corners[0], { 255, 255, 255, 0 });
 	}
 }
+
+void GameObjectEntity::OnCollide(GameObjectEntity* go)
+{
+	if (go->go_type == GameObjectEntity::KINEMATIC::STATIC) {
+		AEVec2 down = { 0, -1.f };
+		f32 dotdown1 = velocity * down;
+		f32 dotdown2 = go->velocity * down;
+
+		if (dotdown1 > 1 && position.y >= go->position.y + go->scale.y * 0.5f + scale.y * 0.49f)
+		{
+			position = prev_position;
+			velocity.y = 0.0f;
+		}
+	}
+	else if (go->go_type == GameObjectEntity::KINEMATIC::DYNAMIC) {
+		AEVec2 thisToGO = go->position - position;
+		if (AEVec2DotProduct(&velocity, &thisToGO) > 1)
+		{
+			//Velocity Trading
+
+			AEVec2 tmp{ velocity };
+			AEVec2 tmp2{ go->velocity };
+			f32 mass_total = pBody->mass + go->pBody->mass;
+
+
+			if (position.y >= go->position.y + go->scale.y * 0.5f + scale.y * 0.49f)
+			{
+				position = prev_position;
+				velocity.y = 0.0f;
+				go->velocity.y = (go->velocity.y * (go->pBody->mass - pBody->mass) + tmp.y * 2 * pBody->mass) / mass_total;
+			}
+			else
+			{
+				go->position = go->prev_position;
+				go->velocity.y = 0.0f;
+				velocity.y = (velocity.y * (pBody->mass - go->pBody->mass) + tmp2.y * 2 * go->pBody->mass) / mass_total;
+				velocity.x = (velocity.x * (pBody->mass - go->pBody->mass) + tmp2.x * 2 * go->pBody->mass) / mass_total;
+				go->velocity.x = (go->velocity.x * (go->pBody->mass - pBody->mass) + tmp.x * 2 * pBody->mass) / mass_total;
+
+			}
+		}
+	}
+}

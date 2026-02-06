@@ -2,6 +2,7 @@
 #ifndef __PHYSICSBODY_H
 #define __PHYSICSBODY_H
 #include "AEVec2.h"
+#include <iostream>
 class PhysicsBody {
 public:
 	enum STATE {
@@ -28,5 +29,6 @@ public:
 	void UpdateStates(AEVec2& velocity, AEVec2& position, AEVec2& scale);
 	void ApplyGravity(AEVec2& velocity,const f32& dt);
 };
-
+std::ostream& operator<<(std::ostream&, const PhysicsBody::STATE&);
+std::ostream& operator<<(std::ostream&, const PhysicsBody::VERTICAL_STATE&);
 #endif
