@@ -137,7 +137,7 @@ namespace QuadTree
 		return result;
 	}
 
-	std::vector<GameObjectEntity*> Node::GetPotentialCollisionTargets(GameObjectEntity* gameObject)
+	std::vector<GameObjectEntity*> Node::GetPotentialCollisionTargets(GameObjectEntity* gameObject, std::vector<GameObjectEntity*> ignoredObjects)
 	{
 		Physics::AABB bounds;
 		bounds.min.x = gameObject->position.x - gameObject->scale.x * 0.5f;
@@ -152,7 +152,17 @@ namespace QuadTree
 		{
 			for (QuadTreeEntry* entry : node->entries)
 			{
-				if (entry->gameObject != gameObject)
+				bool isIgnored{ false };
+				for (GameObjectEntity* go : ignoredObjects)
+				{
+					if (entry->gameObject == go)
+					{
+						isIgnored = true;
+						break;
+					}
+				}
+
+				if (!isIgnored)
 				{
 					result.push_back(entry->gameObject);
 				}

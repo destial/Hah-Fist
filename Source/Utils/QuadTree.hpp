@@ -35,7 +35,7 @@ namespace QuadTree
 		void RenderDebug();
 		int GetBranchCount();
 		std::vector<Node*> GetValidCollisionNodes(Physics::AABB bounds);
-		std::vector<GameObjectEntity*> GetPotentialCollisionTargets(GameObjectEntity* gameObject);
+		std::vector<GameObjectEntity*> GetPotentialCollisionTargets(GameObjectEntity* gameObject, std::vector<GameObjectEntity*> ignoredObjects);
 	};
 
 	class Tree
