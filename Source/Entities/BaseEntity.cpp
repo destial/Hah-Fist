@@ -89,23 +89,23 @@ void BaseEntity::Render() {
 }
 
 void BaseEntity::AddUpdateListener(void* owner, std::function<void()> func) {
-	if (!update_listeners.count(owner)) {
-		update_listeners[owner] = std::vector<std::function<void()>>(0);
-	}
+	//if (!update_listeners.count(owner)) {
+	//	update_listeners[owner] = std::vector<std::function<void()>>(0);
+	//}
 	update_listeners[owner].push_back(func);
 }
 
 void BaseEntity::AddPreUpdateListener(void* owner, std::function<void()> func) {
-	if (!preupdate_listeners.count(owner)) {
-		preupdate_listeners[owner] = std::vector<std::function<void()>>(0);
-	}
+	//if (!preupdate_listeners.count(owner)) {
+	//	preupdate_listeners[owner] = std::vector<std::function<void()>>(0);
+	//}
 	preupdate_listeners[owner].push_back(func);
 }
 
 void BaseEntity::AddPostUpdateListener(void* owner, std::function<void()> func) {
-	if (!postupdate_listeners.count(owner)) {
-		postupdate_listeners[owner] = std::vector<std::function<void()>>(0);
-	}
+	//if (!postupdate_listeners.count(owner)) {
+	//	postupdate_listeners[owner] = std::vector<std::function<void()>>(0);
+	//}
 	postupdate_listeners[owner].push_back(func);
 }
 
