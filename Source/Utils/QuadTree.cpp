@@ -152,7 +152,10 @@ namespace QuadTree
 		{
 			for (QuadTreeEntry* entry : node->entries)
 			{
-				result.push_back(entry->gameObject);
+				if (entry->gameObject != gameObject)
+				{
+					result.push_back(entry->gameObject);
+				}
 			}
 		}
 
