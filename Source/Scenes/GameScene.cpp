@@ -197,8 +197,10 @@ void GameScene::Update(const f32& dt) {
 	for (auto& go : gameObjects) { go->pBody->is_colliding = false; }
 
 	// Collision detection 
+	std::vector<GameObjectEntity*> ignoredObjects{};
 	for (GameObjectEntity* go : gameObjects) {
-		for(GameObjectEntity* go2 : qtGameObjects->head->GetPotentialCollisionTargets(go)){
+		ignoredObjects.push_back(go);
+		for(GameObjectEntity* go2 : qtGameObjects->head->GetPotentialCollisionTargets(go, ignoredObjects)){
 			//Checks if either go is inactive, if so, skip this check
 			if (!go->isActive || !go2->isActive)
 				continue;
