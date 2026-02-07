@@ -119,22 +119,64 @@ namespace Utils {
 		return sqrDist <= combinedRadii * combinedRadii;
 	}
 
-	/*bool CircleCircleCollision(const AEVec2& center_pos_1, const f32& radius_1, const AEVec2& center_pos_2, const f32& radius_2) {
-		AEVec2 center_1 = { center_pos_1.x + radius_1, center_pos_1.y + radius_2 };
-		AEVec2 center_2 = { center_pos_2.x + radius_1, center_pos_2.y + radius_2 };
-		f32 sqrDisplacement = AEVec2SquareDistance(&center_1, &center_2);
-		f32 combinedRadii = radius_1 + radius_2;
-		return sqrDisplacement <= combinedRadii * combinedRadii;
-	}*/
-
-	/*bool AABB(const AEVec2& bottom_left_1, const f32& width_1, const f32& height_1, const AEVec2& bottom_left_2, const f32& width_2, const f32& height_2) {
-		return !(bottom_left_1.x + width_1 < bottom_left_2.x || bottom_left_1.x > bottom_left_2.x + width_2 ||
-			bottom_left_1.y + height_1 < bottom_left_2.y || bottom_left_1.y > bottom_left_2.y + height_2);
-	}*/
-
 	bool AABB(const BaseEntity* const& go, const BaseEntity* const& go2) {
 		return !(go->position.x + go->scale.x * 0.5f < go2->position.x - go2->scale.x * 0.5f || go->position.x - go->scale.x * 0.5f > go2->position.x + go2->scale.x * 0.5f ||
 			go->position.y + go->scale.y * 0.5f < go2->position.y - go2->scale.y * 0.5f || go->position.y - go->scale.y * 0.5f > go2->position.y + go2->scale.y * 0.5f);
+	}
+
+	bool DynamicAABB(const BaseEntity* const& go, const BaseEntity* const& go2, AEVec2& contact, AEVec2& normal, float& tCollision, const f32& dt)
+	{
+		AEVec2 relativeVel{ go->velocity - go2->velocity };
+		if (relativeVel == 0.f) {
+			return false;
+		}
+		BaseEntity target = *go2;
+		target.scale += go->scale;
+		if (RayAABB(go->position, go->velocity * dt, &target, contact, normal, tCollision)) {
+			if (tCollision <= 1.0f) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	bool RayAABB(const AEVec2& ray_origin, const AEVec2& ray_dir, const BaseEntity* const& target, AEVec2& contact, AEVec2& normal, float& tNear)
+	{
+		AEVec2 topLeft = { target->position.x - target->scale.x * 0.5f, target->position.y + target->scale.y * 0.5f };
+		AEVec2 bottomRight = { target->position.x + target->scale.x * 0.5f, target->position.y - target->scale.y * 0.5f };
+		AEVec2 tFirst = (topLeft - ray_origin) / ray_dir; // Contains Near X & Near Y
+		AEVec2 tLast = (bottomRight - ray_origin) / ray_dir; // Contains Far X & Far Y
+
+
+		if (std::isnan(tFirst.x) || std::isnan(tFirst.y)) return false;
+		if (std::isnan(tLast.x) || std::isnan(tLast.y)) return false;
+
+
+		if (tFirst.x > tLast.x) std::swap(tFirst.x, tLast.x);
+		if (tFirst.y > tLast.y) std::swap(tFirst.y, tLast.y);
+
+		if (tFirst.x > tLast.y || tFirst.y > tLast.x) return false;
+
+		tNear = AEMax(tFirst.x, tFirst.y);
+		float tFar = AEMin(tLast.x, tLast.y);
+
+		if (tFar < 0) return false;
+
+		contact = ray_origin + ray_dir * tNear;
+
+		if (tFirst.x > tFirst.y) {
+			if (ray_dir.x < 0)
+				normal = { 1.f, 0.f };
+			else
+				normal = { -1.f, 0.f };
+		}
+		else if (tFirst.x < tFirst.y) {
+			if (ray_dir.y < 0)
+				normal = { 0.f, 1.f };
+			else
+				normal = { 0.f, -1.f };
+		}
+		return true;
 	}
 
 	std::vector<AEVec2> GetCorners(const BaseEntity* go) {

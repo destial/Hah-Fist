@@ -54,5 +54,4 @@ void EnemyEntity::Render()
 
 void EnemyEntity::OnCollide(GameObjectEntity* go) {
 	GameObjectEntity::OnCollide(go);
-	std::cout << "ENEMY COLLIDE\n";
 }

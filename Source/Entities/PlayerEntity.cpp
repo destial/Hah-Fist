@@ -80,5 +80,4 @@ void Player::Render() {
 void Player::OnCollide(GameObjectEntity* go)
 {
 	GameObjectEntity::OnCollide(go);
-	std::cout << "PLAYER COLLIDE\n";
 }

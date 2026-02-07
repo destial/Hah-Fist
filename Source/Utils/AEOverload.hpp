@@ -53,6 +53,12 @@ f32 operator* (const AEVec2& lhs, const AEVec2& rhs);
 AEVec2 operator/ (const AEVec2& lhs, f32 magnitude);
 
 /*
+* @brief Division operator between two vectors
+* @return A new vector
+*/
+AEVec2 operator/ (const AEVec2& lhs, const AEVec2& rhs);
+
+/*
 * @brief Addition operator between two vectors
 * @return A reference to the lhs vector
 */
@@ -75,6 +81,12 @@ AEVec2& operator*= (AEVec2& lhs, f32 magnitude);
 * @return A reference to the lhs vector
 */
 AEVec2& operator/= (AEVec2& lhs, f32 magnitude);
+
+/*
+* @brief Checks if a vector matches the scalar
+* @return A boolean - True or false
+*/
+bool operator==(const AEVec2& lhs, const float& scalar);
 
 /*
 * @brief Output stream operator for a vector

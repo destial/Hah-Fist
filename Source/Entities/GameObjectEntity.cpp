@@ -71,10 +71,7 @@ void GameObjectEntity::OnCollide(GameObjectEntity* go)
 {
 	if (go->go_type == GameObjectEntity::KINEMATIC::STATIC) {
 		AEVec2 down = { 0, -1.f };
-		f32 dotdown1 = velocity * down;
-		f32 dotdown2 = go->velocity * down;
-
-		if (dotdown1 > 1 && position.y >= go->position.y + go->scale.y * 0.5f + scale.y * 0.49f)
+		if (velocity * down > 1 && position.y >= go->position.y + go->scale.y * 0.5f + scale.y * 0.49f)
 		{
 			position = prev_position;
 			velocity.y = 0.0f;
