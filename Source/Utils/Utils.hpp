@@ -57,6 +57,8 @@ namespace Utils {
 	std::vector<AEVec2> GetCorners(const BaseEntity* go);
 	bool CircleCircleCollision(BaseEntity*& go, BaseEntity*& go2);
 	bool AABB(const BaseEntity* const & go,  const BaseEntity* const& go2);
+	bool DynamicAABB(const BaseEntity* const& go, const BaseEntity* const& go2, AEVec2& contact, AEVec2& normal, float& tCollision, const f32& dt);
+	bool RayAABB(const AEVec2& ray_origin, const AEVec2& ray_dir, const BaseEntity* const& target, AEVec2& contact, AEVec2& normal, float& tCollision);
 	bool OBB(const BaseEntity* const& go, const BaseEntity* const& go2);
 	bool OBBPoint(const BaseEntity* const& go, AEVec2 const& pos);
 	

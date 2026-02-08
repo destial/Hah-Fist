@@ -76,3 +76,8 @@ void Player::Render() {
 	sprite->Render(transform, color, currentRow, currentCol);
 	GameObjectEntity::Render();
 }
+
+void Player::OnCollide(GameObjectEntity* go)
+{
+	GameObjectEntity::OnCollide(go);
+}

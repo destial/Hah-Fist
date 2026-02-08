@@ -209,43 +209,44 @@ void GameScene::Update(const f32& dt) {
 			DebugUtils::RenderPoint(go2->position + go2->scale * -0.25f, { 255, 0, 255, 255 });
 			if (Utils::OBB(go, go2)) {
 				//go->color = { 255, 0, 0, 0 };
-				AEVec2 go1to2 = go2->position - go->position;
+				//AEVec2 go1to2 = go2->position - go->position;
 				go->pBody->is_colliding = true;
 				go2->pBody->is_colliding = true;
 
-				if (AEVec2DotProduct(&go->velocity, &go1to2) > 1)
-				{
-					//Velocity Trading
+				go->OnCollide(go2);
+				go2->OnCollide(go);
+				//if (AEVec2DotProduct(&go->velocity, &go1to2) > 1)
+				//{
+				//	//Velocity Trading
 
-					AEVec2 tmp{ go->velocity };
-					AEVec2 tmp2{ go2->velocity };
-					f32 mass_total = go->pBody->mass + go2->pBody->mass;
+				//	AEVec2 tmp{ go->velocity };
+				//	AEVec2 tmp2{ go2->velocity };
+				//	f32 mass_total = go->pBody->mass + go2->pBody->mass;
 
-					if (go->go_type == GameObjectEntity::KINEMATIC::DYNAMIC && go2->go_type == GameObjectEntity::KINEMATIC::DYNAMIC) {
-						if (go->position.y > go2->position.y + go2->scale.y * 0.5f)
-						{
-							go->position = go->prev_position;
-							go->velocity.y = 0.0f;
-							go2->velocity.y = (go2->velocity.y * (go2->pBody->mass - go->pBody->mass) + tmp.y * 2 * go->pBody->mass) / mass_total;
-						}
-						else
-						{
-							go2->position = go2->prev_position;
-							go2->velocity.y = 0.0f;
-							go->velocity.y = (go->velocity.y * (go->pBody->mass - go2->pBody->mass) + tmp2.y * 2 * go2->pBody->mass) / mass_total;
-							go->velocity.x = (go->velocity.x * (go->pBody->mass - go2->pBody->mass) + tmp2.x * 2 * go2->pBody->mass) / mass_total;
-							go2->velocity.x = (go2->velocity.x * (go2->pBody->mass - go->pBody->mass) + tmp.x * 2 * go->pBody->mass) / mass_total;
+				//	if (go->go_type == GameObjectEntity::KINEMATIC::DYNAMIC && go2->go_type == GameObjectEntity::KINEMATIC::DYNAMIC) {
+				//		if (go->position.y > go2->position.y + go2->scale.y * 0.5f)
+				//		{
+				//			go->position = go->prev_position;
+				//			go->velocity.y = 0.0f;
+				//			go2->velocity.y = (go2->velocity.y * (go2->pBody->mass - go->pBody->mass) + tmp.y * 2 * go->pBody->mass) / mass_total;
+				//		}
+				//		else
+				//		{
+				//			go2->position = go2->prev_position;
+				//			go2->velocity.y = 0.0f;
+				//			go->velocity.y = (go->velocity.y * (go->pBody->mass - go2->pBody->mass) + tmp2.y * 2 * go2->pBody->mass) / mass_total;
+				//			go->velocity.x = (go->velocity.x * (go->pBody->mass - go2->pBody->mass) + tmp2.x * 2 * go2->pBody->mass) / mass_total;
+				//			go2->velocity.x = (go2->velocity.x * (go2->pBody->mass - go->pBody->mass) + tmp.x * 2 * go->pBody->mass) / mass_total;
 
-						}
-					}
-				}
+				//		}
+				//	}
+				//}
 
-				AEVec2 down = { 0, -1.f };
+				/*AEVec2 down = { 0, -1.f };
 				f32 dotdown1 = go->velocity * down;
 				f32 dotdown2 = go2->velocity * down;
-
 				if (go->go_type == GameObjectEntity::KINEMATIC::DYNAMIC && go2->go_type == GameObjectEntity::KINEMATIC::STATIC) {
-					if (dotdown1 > 1)
+					if (dotdown1 > 1 && go->position.y >= go2->position.y + go2->scale.y * 0.5f + go->scale.y * 0.49f)
 					{
 						go->position = go->prev_position;
 						go->velocity.y = 0.0f;
@@ -253,12 +254,12 @@ void GameScene::Update(const f32& dt) {
 				}
 
 				if (go2->go_type == GameObjectEntity::KINEMATIC::DYNAMIC && go->go_type == GameObjectEntity::KINEMATIC::STATIC) {
-					if (dotdown2 > 1)
+					if (dotdown2 > 1 && go2->position.y >= go->position.y + go->scale.y * 0.5f + go2->scale.y * 0.49f)
 					{
 						go2->position = go2->prev_position;
 						go2->velocity.y = 0.0f;
 					}
-				}
+				}*/
 			}
 		}
 	}

@@ -53,3 +53,14 @@ void PhysicsBody::ApplyGravity(AEVec2& velocity, const f32& dt)
 		velocity += gravity * gravityScale * dt;// *dt;
 	}
 }
+
+// Debug tool for checking the player's state
+std::ostream& operator<<(std::ostream& os, const PhysicsBody::STATE& pState) {
+	os << (pState == PhysicsBody::STATE::IN_AIR ? "IN_AIR" : pState == PhysicsBody::STATE::ON_GROUND ? "ON_GROUND" : "FALLING");
+	return os;
+}
+
+std::ostream& operator<<(std::ostream& os, const PhysicsBody::VERTICAL_STATE& vState) {
+	os << (vState == PhysicsBody::VERTICAL_STATE::VS_FALLING ? "VS_FALLING" : vState == PhysicsBody::VERTICAL_STATE::VS_ON_GROUND ? "ON_GROUND" : "VS_RISING");
+	return os;
+}

@@ -20,6 +20,7 @@ public:
 	virtual void Update(const f32& dt);
 	virtual void PostUpdate(const f32& dt);
 	virtual void Render();
+	virtual void OnCollide(GameObjectEntity* go);
 };
 
 #endif

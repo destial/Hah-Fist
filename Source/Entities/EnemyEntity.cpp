@@ -1,7 +1,7 @@
 #include "EnemyEntity.hpp"
 #include "../Utils/MeshRenderer.hpp"
 #include "../Managers/AssetManager.hpp"
-
+#include "../Utils/AEOverload.hpp"
 
 EnemyEntity::EnemyEntity(AEVec2 pos) : GameObjectEntity(pos)
 {
@@ -50,4 +50,8 @@ void EnemyEntity::Render()
 {
 	sprite->Render(transform, color, currentRow, currentCol);
 	GameObjectEntity::Render();
+}
+
+void EnemyEntity::OnCollide(GameObjectEntity* go) {
+	GameObjectEntity::OnCollide(go);
 }
