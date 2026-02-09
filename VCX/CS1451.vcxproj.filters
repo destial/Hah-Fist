@@ -135,6 +135,9 @@
     <ClCompile Include="..\Source\Utils\QuadTree.cpp">
       <Filter>Source Files\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Items\ParticleSystem.cpp">
+      <Filter>Source Files\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -211,6 +214,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Utils\QuadTree.hpp">
       <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Items\ParticleSystem.hpp">
+      <Filter>Header Files\Items</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

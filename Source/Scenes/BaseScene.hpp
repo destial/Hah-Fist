@@ -5,10 +5,12 @@
 #include <memory>
 #include "AETypes.h"
 #include "../Entities/BaseEntity.hpp"
+#include "../Items/ParticleSystem.hpp"
 
 class BaseScene {
 protected:
 	std::vector<BaseEntity*> scene_entities;
+	ParticleSystem* particleSystem;
 	BaseScene();
 
 public:

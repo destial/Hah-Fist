@@ -74,6 +74,20 @@ void StartMenuScene::PreUpdate(const f32& dt) {
 
 void StartMenuScene::Update(const f32& dt) {
 	BaseScene::Update(dt);
+
+	static f32 elapsed = 0.f;
+	if ((elapsed += dt) > .2f) {
+		particleSystem->SpawnParticles(
+			ParticleType::PARTICLE_SPARKLE, 
+			{ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f },
+			1, 5.f, 4.f, 2.f, 1.f, 5.f);
+
+		particleSystem->SpawnParticles(
+			ParticleType::PARTICLE_STAR,
+			{ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f },
+			1, 2.f, 5.f, 2.f, 1.f, 2.f);
+		elapsed = 0.f;
+	}
 }
 
 void StartMenuScene::PostUpdate(const f32& dt) {

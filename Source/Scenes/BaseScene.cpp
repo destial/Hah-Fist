@@ -2,11 +2,12 @@
 #include <algorithm>
 #include <iostream>
 
-BaseScene::BaseScene() : scene_entities(0) {
+BaseScene::BaseScene() : scene_entities(0), particleSystem(new ParticleSystem) {
 }
 
 BaseScene::~BaseScene() {
 	scene_entities.clear();
+	delete particleSystem;
 }
 
 void BaseScene::PreUpdate(const f32& dt) {
@@ -19,6 +20,7 @@ void BaseScene::Update(const f32& dt) {
 	for (auto& entity : scene_entities) {
 		entity->Update(dt);
 	}
+	particleSystem->Update(dt);
 }
 
 void BaseScene::PostUpdate(const f32& dt) {
@@ -37,6 +39,7 @@ void BaseScene::Render() {
 	for (auto& entity : scene_entities) {
 		entity->Render();
 	}
+	particleSystem->Render();
 }
 
 void BaseScene::End() {
@@ -44,5 +47,6 @@ void BaseScene::End() {
 		delete entity;
 	}
 	scene_entities.clear();
+	particleSystem->Clear();
 	std::cout << "Scene ended\n";
 }
