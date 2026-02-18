@@ -369,4 +369,8 @@ void GameScene::End() {
 	BaseScene::End();
 	InputEvent::Listeners -= this;
 	gameObjects.clear();
+	if (qtGameObjects != nullptr)
+	{
+		delete qtGameObjects;
+	}
 }
