@@ -70,6 +70,9 @@ void Player::PostUpdate(const f32& dt) {
 			currentCol = 0;
 		}
 	}
+	f32 x, y;
+	AEGfxGetCamPosition(&x, &y);
+	AEGfxSetCamPosition(Utils::WorldToScreen(position.x, position.y).x - Utils::GetScreenResolution().first / 2, y);
 }
 
 void Player::Render() {
