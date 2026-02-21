@@ -6,11 +6,13 @@
 #include "AETypes.h"
 #include "../Entities/BaseEntity.hpp"
 #include "../Items/ParticleSystem.hpp"
+#include "../Managers/PhysicsManager.hpp"
 
 class BaseScene {
 protected:
 	std::vector<BaseEntity*> scene_entities;
 	ParticleSystem* particleSystem;
+	PhysicsManager* physicsManager{nullptr};
 	BaseScene();
 
 public:
@@ -21,6 +23,8 @@ public:
 	virtual void PostUpdate(const f32& dt);
 	virtual void Render();
 	virtual void End();
+
+	void AddEntityToScene(BaseEntity* entity);
 };
 
 #endif

@@ -14,6 +14,10 @@ void BaseScene::PreUpdate(const f32& dt) {
 	for (auto& entity : scene_entities) {
 		entity->PreUpdate(dt);
 	}
+	if (physicsManager != nullptr)
+	{
+		physicsManager->PreUpdate(dt);
+	}
 }
 
 void BaseScene::Update(const f32& dt) {
@@ -21,6 +25,10 @@ void BaseScene::Update(const f32& dt) {
 		entity->Update(dt);
 	}
 	particleSystem->Update(dt);
+	if (physicsManager != nullptr)
+	{
+		physicsManager->Update(dt);
+	}
 }
 
 void BaseScene::PostUpdate(const f32& dt) {
@@ -40,6 +48,10 @@ void BaseScene::Render() {
 		entity->Render();
 	}
 	particleSystem->Render();
+	if (physicsManager != nullptr)
+	{
+		physicsManager->Render();
+	}
 }
 
 void BaseScene::End() {
@@ -48,5 +60,24 @@ void BaseScene::End() {
 	}
 	scene_entities.clear();
 	particleSystem->Clear();
+	if (physicsManager != nullptr)
+	{
+		physicsManager->End();
+	}
 	std::cout << "Scene ended\n";
+}
+
+void BaseScene::AddEntityToScene(BaseEntity* entity)
+{
+	scene_entities.push_back(entity);
+	//Checks and creates a new pointer to game object with entity, if the entity derives from gameobject.
+	if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(entity))
+	{
+		if (physicsManager == nullptr)
+		{
+			physicsManager = new PhysicsManager{};
+		}
+
+		physicsManager->PushGameObject(go);
+	}
 }

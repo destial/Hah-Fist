@@ -14,9 +14,6 @@ public:
 	virtual void PostUpdate(const f32& dt);
 	virtual void Render();
 	virtual void End();
-
-	std::vector<GameObjectEntity*> gameObjects;
-	QuadTree::Tree* qtGameObjects{nullptr};
 };
 
 #endif
