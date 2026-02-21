@@ -68,7 +68,8 @@ void Weapon::Render() {
 }
 
 void Weapon::Attack() {
-	float attack_strength = channel_timer / max_channel_time + 0.25;
+	float attack_strength = channel_timer / max_channel_time * 2.0f + 0.75;
+	channel_timer = 0.0f;
 
 	f32 cam_x, cam_y;
 	AEGfxGetCamPosition(&cam_x, &cam_y);

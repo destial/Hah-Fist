@@ -120,7 +120,7 @@ void GameScene::Init() {
 	for (int i{}; i < 2; i++)
 	{
 		GameObjectEntity* e = new EnemyEntity({ 9.f + float(i) * 5.0f, 2.5f});
-		e->pBody->mass = 40.0f;
+		e->pBody->mass = 1.0f;
 		AddEntityToScene(e);
 	}
 
