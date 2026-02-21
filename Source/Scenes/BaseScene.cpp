@@ -62,7 +62,7 @@ void BaseScene::End() {
 	particleSystem->Clear();
 	if (physicsManager != nullptr)
 	{
-		physicsManager->End();
+		delete physicsManager;
 	}
 	std::cout << "Scene ended\n";
 }
