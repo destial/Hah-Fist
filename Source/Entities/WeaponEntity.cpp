@@ -7,9 +7,8 @@
 #include "../UI/Debug.hpp"
 
 
-Weapon::Weapon(AEVec2 pos, GameObjectEntity* player) : BaseEntity(pos), dash_timer(0.f), channel_timer(0.f), channelling(false), weapon_direction({ 0.f, 0.f }) {
+Weapon::Weapon(AEVec2 pos, GameObjectEntity* player) : BaseEntity(pos) {
 	player_entity = player;
-	player_original_mass = player_entity->pBody->mass;
 
 	image = AssetManager::GetTexture("Assets/test_fist.png");
 	mesh = MeshRenderer::GetCenterRectMesh();
@@ -31,10 +30,20 @@ void Weapon::PreUpdate(const f32& dt) {
 
 void Weapon::Update(const f32& dt) {
 	BaseEntity::Update(dt);
-	if (!channelling && AEInputCheckTriggered(AEVK_W)) {
-		channelling = true;
+
+	if (AEInputCheckTriggered(AEVK_W))
+	{
+		if (!weaponChannels)
+		{
+			Attack();
+		}
+		else if(!channelling)
+		{
+			channelling = true;
+		}
 	}
-	else if (channelling) {
+	else if (channelling)
+	{
 		if (AEInputCheckReleased(AEVK_W)) {
 			channelling = false;
 			Attack();
@@ -42,14 +51,6 @@ void Weapon::Update(const f32& dt) {
 		else {
 			channel_timer = AEClamp(channel_timer + dt, 0.0f, max_channel_time);
 		}
-	}
-	if (dash_timer > 0.0f)
-	{
-		dash_timer -= dt;
-	}
-	else if (player_entity->pBody->mass != player_original_mass)
-	{
-		player_entity->pBody->mass = player_original_mass;
 	}
 }
 
@@ -65,19 +66,4 @@ void Weapon::Render() {
 	DebugUtils::RenderLine(corners[1], corners[2], { 255, 0, 255, 0 });
 	DebugUtils::RenderLine(corners[2], corners[3], { 255, 0, 0, 255 });
 	DebugUtils::RenderLine(corners[3], corners[0], { 255, 255, 255, 0 });
-}
-
-void Weapon::Attack() {
-	float attack_strength = channel_timer / max_channel_time * 2.0f + 0.75;
-	channel_timer = 0.0f;
-
-	f32 cam_x, cam_y;
-	AEGfxGetCamPosition(&cam_x, &cam_y);
-	AEVec2 cam_pos = Utils::ScreenToScale(cam_x, cam_y);
-	AEVec2 attack_direction = Utils::GetMouseWorld() + cam_pos - player_entity->position;
-	AEVec2Normalize(&attack_direction, &attack_direction);
-
-	dash_timer = max_dash_time;
-	player_entity->velocity = attack_direction * 60 * attack_strength;
-	player_entity->pBody->mass = 10.0f * attack_strength;
 }

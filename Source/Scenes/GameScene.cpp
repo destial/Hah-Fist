@@ -3,7 +3,7 @@
 #include "../Managers/AssetManager.hpp"
 #include "../Entities/PlayerEntity.hpp"
 #include "../Entities/EnemyEntity.hpp"
-#include "../Entities/WeaponEntity.hpp"
+#include "../Entities/Weapons/TurboFistEntity.hpp"
 #include "../Events/InputEvent.hpp"
 #include "../Utils/AEOverload.hpp"
 #include "../Utils/Utils.hpp"
@@ -124,7 +124,7 @@ void GameScene::Init() {
 		AddEntityToScene(e);
 	}
 
-	BaseEntity* w = new Weapon(AEVec2{ 0.f, 0.f }, p);
+	BaseEntity* w = new TurboFistWeapon(AEVec2{ 0.f, 0.f }, p);
 	AddEntityToScene(w);
 
 	for (GameObjectEntity* go : physicsManager->gameObjects) {

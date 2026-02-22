@@ -21,6 +21,7 @@ public:
 		DYNAMIC
 	}go_type;
 	AEVec2 prev_position;
+	f32 frictionMultiplier{ 1.0 };
 	GameObjectEntity();
 	GameObjectEntity(AEVec2 pos = { 0.f, 0.f }, f32 mass = 1.0f, SHAPE type = AABB);
 	virtual ~GameObjectEntity();
