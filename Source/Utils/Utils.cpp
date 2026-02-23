@@ -147,7 +147,7 @@ namespace Utils {
 		return false;
 	}
 
-	bool RayAABB(const AEVec2& ray_origin, const AEVec2& ray_dir, const BaseEntity* const& target, AEVec2& contact, AEVec2& normal, float& tNear)
+	 bool RayAABB(const AEVec2& ray_origin, const AEVec2& ray_dir, const BaseEntity* const& target, AEVec2& contact, AEVec2& normal, float& tNear)
 	{
 		AEVec2 topLeft = { target->position.x - target->scale.x * 0.5f, target->position.y + target->scale.y * 0.5f };
 		AEVec2 bottomRight = { target->position.x + target->scale.x * 0.5f, target->position.y - target->scale.y * 0.5f };

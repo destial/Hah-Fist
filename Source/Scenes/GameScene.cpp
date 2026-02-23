@@ -2,7 +2,8 @@
 #include "../Managers/SceneManager.hpp"
 #include "../Managers/AssetManager.hpp"
 #include "../Entities/PlayerEntity.hpp"
-#include "../Entities/EnemyEntity.hpp"
+#include "../Entities/Enemies/EnemyEntity.hpp"
+#include "../Entities/Enemies/TrooperEntity.hpp"
 #include "../Entities/Weapons/TurboFistEntity.hpp"
 #include "../Events/InputEvent.hpp"
 #include "../Utils/AEOverload.hpp"
@@ -74,7 +75,8 @@ void GameScene::Init() {
 		e->pBody->mass = 1.0f;
 		AddEntityToScene(e);
 	}
-
+	GameObjectEntity* trooper = new TrooperEntity{ {20.f, 12.f}};
+	AddEntityToScene(trooper);
 	BaseEntity* w = new TurboFistWeapon(AEVec2{ 0.f, 0.f }, p);
 	AddEntityToScene(w);
 }

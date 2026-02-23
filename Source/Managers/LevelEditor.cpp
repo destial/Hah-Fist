@@ -3,7 +3,7 @@
 
 #include "../Utils/MeshRenderer.hpp"
 #include "../UI/Debug.hpp"
-#include "../Entities/EnemyEntity.hpp"
+#include "../Entities/Enemies/EnemyEntity.hpp"
 
 LevelEditor::LevelEditor(BaseScene* b_scene) : scene{ b_scene }, toggled{ false }, currentSelection{ nullptr } {}
 

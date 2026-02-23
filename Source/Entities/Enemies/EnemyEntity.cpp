@@ -1,9 +1,9 @@
 #include "EnemyEntity.hpp"
-#include "../Utils/MeshRenderer.hpp"
-#include "../Managers/AssetManager.hpp"
-#include "../Utils/AEOverload.hpp"
+#include "../../Utils/MeshRenderer.hpp"
+#include "../../Managers/AssetManager.hpp"
+#include "../../Utils/AEOverload.hpp"
 
-EnemyEntity::EnemyEntity(AEVec2 pos) : GameObjectEntity(pos)
+EnemyEntity::EnemyEntity(AEVec2 pos, AEVec2 dir) : state{ FSM::IDLE }, dir{dir}, stateTimer{ 1.f }, GameObjectEntity(pos)
 {
 	sprite = AssetManager::GetSpriteSheet("Assets/test_enemy.png", 3, 3);
 	mesh = nullptr;
@@ -26,6 +26,36 @@ void EnemyEntity::PreUpdate(const f32& dt)
 void EnemyEntity::Update(const f32& dt)
 {
 	GameObjectEntity::Update(dt);
+	stateTimer -= dt;
+	switch (state) {
+		case FSM::IDLE: 
+		{
+			OnIdle(dt);
+			break;
+		}
+		case FSM::PATROL:
+		{
+			OnPatrol(dt);
+			break;
+		}
+		case FSM::CHASE:
+		{
+			OnChase(dt);
+			break;
+		}
+		case FSM::STUN:
+		{
+			OnStun(dt);
+			break;
+		}
+		case FSM::DEAD:
+		{
+			OnDead(dt);
+			break;
+		}
+		default:
+			break;
+	}
 }
 
 void EnemyEntity::PostUpdate(const f32& dt)
@@ -54,4 +84,35 @@ void EnemyEntity::Render()
 
 void EnemyEntity::OnCollide(GameObjectEntity* go) {
 	GameObjectEntity::OnCollide(go);
+}
+
+void EnemyEntity::OnIdle(const f32& dt)
+{
+	// Empty for now
+}
+
+void EnemyEntity::OnPatrol(const f32& dt)
+{
+	// Empty for now
+}
+
+void EnemyEntity::OnChase(const f32& dt)
+{
+	// Empty for now
+}
+
+void EnemyEntity::OnStun(const f32& dt)
+{
+	// Empty for now
+}
+
+void EnemyEntity::OnDead(const f32& dt)
+{
+	// Empty for now
+}
+
+void EnemyEntity::SwitchState(FSM newState, f32 timeInNewState)
+{
+	state = newState;
+	stateTimer = timeInNewState;
 }

@@ -1,7 +1,7 @@
 #include "StartMenuScene.hpp"
 #include "../Managers/AssetManager.hpp"
 #include "../Entities/PlayerEntity.hpp"
-#include "../Entities/EnemyEntity.hpp"
+#include "../Entities/Enemies/EnemyEntity.hpp"
 #include "../Entities/WeaponEntity.hpp"
 #include "../Events/InputEvent.hpp"
 #include "../Utils/AEOverload.hpp"
