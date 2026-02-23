@@ -2,12 +2,14 @@
 #include "../Utils/MeshRenderer.hpp"
 #include "../Utils/Utils.hpp"
 #include "../Utils/AEOverload.hpp"
+#include "../Managers/AssetManager.hpp"
 #include <vector>
 
 namespace DebugUtils {
 	struct DebugRender {
 		AEGfxVertexList* mesh;
 		AEMtx33 transform;
+
 		Color color;
 	};
 
@@ -38,6 +40,15 @@ namespace DebugUtils {
 			}
 		}
 		renders.clear();
+	}
+
+	void RenderText(AEVec2 world_pos, std::string text, Color color, f32 size) {
+		int font = AssetManager::GetFontId("Assets/buggy-font.ttf");
+		AEVec2 screen = Utils::GameToTextScreen(world_pos.x, world_pos.y);
+		const char* str = text.c_str();
+		f32 w, h;
+		AEGfxGetPrintSize(font, str, size, &w, &h); 
+		AEGfxPrint(font, str, screen.x, screen.y - ((h / 2.f) / size * 0.5f), h, color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
 	}
 
 	void RenderPoint(AEVec2 world_pos, Color color) {

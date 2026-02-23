@@ -3,6 +3,7 @@
 #define __SCENEMANAGER_H
 #include "AETypes.h"
 #include "../Scenes/BaseScene.hpp"
+#include "LevelEditor.hpp"
 
 namespace Scenes {
 	typedef enum SceneState {
@@ -16,11 +17,14 @@ namespace Scenes {
 class SceneManager {
 private:
 	static SceneManager* instance;
+	
 protected:
 	BaseScene* all_scenes[Scenes::LAST];
 
 	Scenes::SceneState next_scene;
 	Scenes::SceneState current_scene;
+
+	LevelEditor* editor;
 
 public:
 	SceneManager();

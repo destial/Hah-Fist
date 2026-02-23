@@ -44,57 +44,8 @@ static void OnGameExit(const InputEvent* ev) {
 }
 
 void GameScene::Init() {
+	AEGfxSetCamPosition(0.f, 0.f); // CameraEntity
 	InputEvent::Listeners += OnGameExit;
-
-	ButtonUI* s = new ButtonUI({ 3.f, Utils::GetWorldHeight() - .6f });
-	s->color = { 0, 0, 0, 0 };
-	s->overlay_color = s->color;
-	s->scale.x = 5.5f;
-	s->text_size = 5.f;
-	s->text = "FPS:";
-	s->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
-	static float fps_counter = 0.f;
-	s->AddUpdateListener(this, [s]() {
-		if ((fps_counter += Utils::GetDeltaTime()) > 0.1f) {
-			char b[50];
-			sprintf_s(b, "FPS:%.0f", 1.f / Utils::GetDeltaTime());
-			s->text = std::string(b);
-			fps_counter = 0.f;
-		}
-	});
-
-	ButtonUI* cam = new ButtonUI({ 3.f, Utils::GetWorldHeight() - 1.5f });
-	cam->color = { 0, 0, 0, 0 };
-	cam->overlay_color = cam->color;
-	cam->scale.x = 5.5f;
-	cam->text_size = 5.f;
-	cam->text = "Cam:";
-	cam->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
-	cam->AddUpdateListener(this, [cam]() {
-		f32 x, y;
-		AEGfxGetCamPosition(&x, &y);
-		char b[128];
-		sprintf_s(b, "Cam:%.2f,%.2f", x, y);
-		cam->text = std::string(b);
-	});
-
-	ButtonUI* mw = new ButtonUI({ 3.f, Utils::GetWorldHeight() - 2.5f });
-	mw->color = { 0, 0, 0, 0 };
-	mw->overlay_color = mw->color;
-	mw->scale.x = 5.5f;
-	mw->text_size = 5.f;
-	mw->text = "Mouse:";
-	mw->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
-	mw->AddUpdateListener(this, [mw]() {
-		AEVec2 mwp = Utils::GetMouseWorld(true);
-		char b[128];
-		sprintf_s(b, "Mouse:%.2f,%.2f", mwp.x, mwp.y);
-		mw->text = std::string(b);
-	});
-
-	AddEntityToScene(s);
-	AddEntityToScene(cam);
-	AddEntityToScene(mw);
 
 	ButtonUI* wk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 1.f }, 'W');
 	ButtonUI* ak = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 3.f, Utils::GetWorldHeight() - 2.f }, 'A');
@@ -126,24 +77,6 @@ void GameScene::Init() {
 
 	BaseEntity* w = new TurboFistWeapon(AEVec2{ 0.f, 0.f }, p);
 	AddEntityToScene(w);
-
-	for (GameObjectEntity* go : physicsManager->gameObjects) {
-		go->AddUpdateListener(this, [go]() {
-			AEVec2 mw = Utils::GetMouseWorld(true);
-			if (AEInputCheckCurr(AEVK_LBUTTON) && Utils::OBBPoint(go, mw)) {
-				go->position = mw;
-			}
-		});
-	}
-
-	InputEvent::Listeners += {this, [this](const InputEvent* ev) {
-		if (ev->IsKeyTriggered(AEVK_1)) {
-			GameObjectEntity* go = new GameObjectEntity(Utils::GetMouseWorld(true));
-			go->mesh = MeshRenderer::GetCenterRectMesh();
-			go->go_type = GameObjectEntity::KINEMATIC::STATIC;
-			AddEntityToScene(go);
-		}
-	}};
 }
 
 void GameScene::PreUpdate(const f32& dt) {
@@ -152,34 +85,6 @@ void GameScene::PreUpdate(const f32& dt) {
 
 void GameScene::Update(const f32& dt) {
 	BaseScene::Update(dt);
-
-	if (AEInputCheckCurr(AEVK_LEFT)) {
-		f32 x, y;
-		AEGfxGetCamPosition(&x, &y);
-		x -= dt * 100;
-		AEGfxSetCamPosition(x, y);
-	}
-	if (AEInputCheckCurr(AEVK_RIGHT)) {
-		f32 x, y;
-		AEGfxGetCamPosition(&x, &y);
-		x += dt * 100;
-		AEGfxSetCamPosition(x, y);
-	}
-	if (AEInputCheckCurr(AEVK_UP)) {
-		f32 x, y;
-		AEGfxGetCamPosition(&x, &y);
-		y += dt * 100;
-		AEGfxSetCamPosition(x, y);
-	}
-	if (AEInputCheckCurr(AEVK_DOWN)) {
-		f32 x, y;
-		AEGfxGetCamPosition(&x, &y);
-		y -= dt * 100;
-		AEGfxSetCamPosition(x, y);
-	}
-	if (AEInputCheckTriggered(AEVK_G)) {
-		DebugUtils::ToggleRender(!DebugUtils::IsRendering());
-	}
 }
 
 void GameScene::PostUpdate(const f32& dt) {

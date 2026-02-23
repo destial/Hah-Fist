@@ -60,6 +60,7 @@ void BaseEntity::PostUpdate(const f32& dt) {
 }
 
 void BaseEntity::Render() {
+	transform = Utils::GetTransformMatrix(position, scale, rotation);
 	if (!mesh)
 		return;
 

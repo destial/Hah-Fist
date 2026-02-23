@@ -43,9 +43,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	AEGfxFontSystemStart();
 
 	DebugUtils::ToggleRender(false);
-#ifdef _DEBUG
-	DebugUtils::ToggleRender(true);
-#endif
 
 	Game::bGameRunning = true;
 	{

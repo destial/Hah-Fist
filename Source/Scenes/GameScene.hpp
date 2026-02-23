@@ -4,6 +4,7 @@
 #include "BaseScene.hpp"
 #include "../Entities/GameObjectEntity.hpp"
 #include "../Utils/QuadTree.hpp"
+
 class GameScene : public BaseScene {
 public:
 	GameScene();

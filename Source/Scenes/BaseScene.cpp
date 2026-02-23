@@ -81,3 +81,33 @@ void BaseScene::AddEntityToScene(BaseEntity* entity)
 		physicsManager->PushGameObject(go);
 	}
 }
+
+void BaseScene::RemoveEntityFromScene(BaseEntity* entity)
+{
+	bool deleted = false;
+	for (std::vector<BaseEntity*>::iterator it = scene_entities.begin(); it != scene_entities.end(); it++) {
+		if (entity == *it) {
+			scene_entities.erase(it);
+			deleted = true;
+			break;
+		}
+	}
+
+	GameObjectEntity* go;
+	if (physicsManager && (go = dynamic_cast<GameObjectEntity*>(entity))) {
+		for (std::vector<GameObjectEntity*>::iterator it = physicsManager->gameObjects.begin(); it != physicsManager->gameObjects.end(); it++) {
+			if (*it == go) {
+				physicsManager->gameObjects.erase(it);
+				break;
+			}
+		}
+	}
+
+	if (deleted) {
+		delete entity;
+	}
+}
+
+std::vector<BaseEntity*> const& BaseScene::Entities() const {
+	return scene_entities;
+}

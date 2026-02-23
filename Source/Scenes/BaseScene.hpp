@@ -25,6 +25,9 @@ public:
 	virtual void End();
 
 	void AddEntityToScene(BaseEntity* entity);
+	void RemoveEntityFromScene(BaseEntity* entity);
+
+	std::vector<BaseEntity*> const& Entities() const;
 };
 
 #endif
