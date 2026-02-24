@@ -35,6 +35,7 @@ void LevelEditor::RemoveSelectedEntity() {
 	}
 
 	scene->RemoveEntityFromScene(currentSelection);
+	currentSelection = nullptr;
 }
 
 BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
@@ -68,10 +69,10 @@ void LevelEditor::Update(const f32& dt) {
 	sprintf_s(fps, "FPS:%.0f", cfps);
 	DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 0.25f }, std::string{fps});
 
-	float x, y;
-	AEGfxGetCamPosition(&x, &y);
+	f32 cam_x, cam_y;
+	AEGfxGetCamPosition(&cam_x, &cam_y);
 	char cam[128];
-	sprintf_s(cam, "Cam:%.2f,%.2f", x, y);
+	sprintf_s(cam, "Cam:%.2f,%.2f", cam_x, cam_y);
 	DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 0.75f }, std::string{ cam });
 	
 	AEVec2 mwp = Utils::GetMouseWorld(true);
@@ -89,33 +90,24 @@ void LevelEditor::Update(const f32& dt) {
 		SelectEntity(AddEntity(Editor::GameObjectType::STATIC_PLATFORM));
 	}
 
-	if (currentSelection && AEInputCheckCurr(AEVK_LBUTTON) && Utils::OBBPoint(currentSelection, mwp)) {
-		currentSelection->position = mwp;
+	if (currentSelection) {
+		if (AEInputCheckCurr(AEVK_LBUTTON) && Utils::OBBPoint(currentSelection, mwp)) {
+			currentSelection->position = mwp;
+		}
+
+		if (AEInputCheckTriggered(AEVK_DELETE)) {
+			RemoveSelectedEntity();
+		}
 	}
 
-	if (AEInputCheckCurr(AEVK_LEFT)) {
-		f32 x, y;
-		AEGfxGetCamPosition(&x, &y);
-		x -= dt * 100;
-		AEGfxSetCamPosition(x, y);
-	}
-	if (AEInputCheckCurr(AEVK_RIGHT)) {
-		f32 x, y;
-		AEGfxGetCamPosition(&x, &y);
-		x += dt * 100;
-		AEGfxSetCamPosition(x, y);
-	}
-	if (AEInputCheckCurr(AEVK_UP)) {
-		f32 x, y;
-		AEGfxGetCamPosition(&x, &y);
-		y += dt * 100;
-		AEGfxSetCamPosition(x, y);
-	}
-	if (AEInputCheckCurr(AEVK_DOWN)) {
-		f32 x, y;
-		AEGfxGetCamPosition(&x, &y);
-		y -= dt * 100;
-		AEGfxSetCamPosition(x, y);
+	if (AEInputCheckCurr(AEVK_RBUTTON)) {
+		s32 del_x, del_y;
+		AEInputGetCursorPositionDelta(&del_x, &del_y);
+
+		cam_x -= del_x;
+		cam_y += del_y;
+
+		AEGfxSetCamPosition(cam_x, cam_y);
 	}
 }
 

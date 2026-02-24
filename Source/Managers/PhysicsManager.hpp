@@ -19,6 +19,7 @@ public:
 	void PreUpdate(const f32& dt);
 	void Update(const f32& dt);
 	void Render();
+	void Clear();
 
 	void PushGameObject(GameObjectEntity* gameObject);
 };

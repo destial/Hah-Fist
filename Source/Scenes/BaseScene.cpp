@@ -8,6 +8,8 @@ BaseScene::BaseScene() : scene_entities(0), particleSystem(new ParticleSystem) {
 BaseScene::~BaseScene() {
 	scene_entities.clear();
 	delete particleSystem;
+	if (physicsManager)
+		delete physicsManager;
 }
 
 void BaseScene::PreUpdate(const f32& dt) {
@@ -60,9 +62,8 @@ void BaseScene::End() {
 	}
 	scene_entities.clear();
 	particleSystem->Clear();
-	if (physicsManager != nullptr)
-	{
-		delete physicsManager;
+	if (physicsManager) {
+		physicsManager->Clear();
 	}
 	std::cout << "Scene ended\n";
 }

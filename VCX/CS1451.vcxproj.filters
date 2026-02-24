@@ -67,6 +67,12 @@
     <Filter Include="Source Files\Entities\Enemies">
       <UniqueIdentifier>{3c123471-be0e-4469-8e44-fe0a488c54c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Entities\Weapons">
+      <UniqueIdentifier>{0035bff8-06bc-4f4f-8aa8-c4cefb1fdf4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities\Weapons">
+      <UniqueIdentifier>{47bfa483-5a0c-49c7-b489-bfd9ce53e847}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\main.cpp">
@@ -123,9 +129,6 @@
     <ClCompile Include="..\Source\UI\CircleButtonUI.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Entities\WeaponEntity.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\Items\Image.cpp">
       <Filter>Source Files\Items</Filter>
     </ClCompile>
@@ -147,9 +150,6 @@
     <ClCompile Include="..\Source\Managers\PhysicsManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Entities\Weapons\TurboFistEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\Managers\SerializationManager.cpp">
       <Filter>Source Files\Editor</Filter>
     </ClCompile>
@@ -161,6 +161,12 @@
     </ClCompile>
     <ClCompile Include="..\Source\Entities\Enemies\TrooperEntity.cpp">
       <Filter>Source Files\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Entities\WeaponEntity.cpp">
+      <Filter>Source Files\Entities\Weapons</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Entities\Weapons\TurboFistEntity.cpp">
+      <Filter>Source Files\Entities\Weapons</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -215,9 +221,6 @@
     <ClInclude Include="..\Source\UI\CircleButtonUI.hpp">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Entities\WeaponEntity.hpp">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\Items\Image.hpp">
       <Filter>Header Files\Items</Filter>
     </ClInclude>
@@ -239,9 +242,6 @@
     <ClInclude Include="..\Source\Managers\PhysicsManager.hpp">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Entities\Weapons\TurboFistEntity.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\Managers\SerializationManager.hpp">
       <Filter>Header Files\Editor</Filter>
     </ClInclude>
@@ -253,6 +253,12 @@
     </ClInclude>
     <ClInclude Include="..\Source\Entities\Enemies\TrooperEntity.hpp">
       <Filter>Header Files\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\WeaponEntity.hpp">
+      <Filter>Header Files\Entities\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\Weapons\TurboFistEntity.hpp">
+      <Filter>Header Files\Entities\Weapons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

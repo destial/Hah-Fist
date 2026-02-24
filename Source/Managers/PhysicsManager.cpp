@@ -2,7 +2,8 @@
 #include "../UI/Debug.hpp"
 #include "../Utils/AEOverload.hpp"
 
-PhysicsManager::PhysicsManager(Physics::AABB _worldBounds, size_t _maxEntriesPerNode) : worldBounds(_worldBounds), maxEntriesPerNode(_maxEntriesPerNode)
+PhysicsManager::PhysicsManager(Physics::AABB _worldBounds, size_t _maxEntriesPerNode)
+	: worldBounds(_worldBounds), maxEntriesPerNode(_maxEntriesPerNode), gameObjects(0)
 {
 
 }
@@ -191,7 +192,17 @@ void PhysicsManager::Update(const f32& dt)
 
 void PhysicsManager::Render()
 {
-	qtGameObjects->RenderDebug();
+	if (qtGameObjects)
+		qtGameObjects->RenderDebug();
+}
+
+void PhysicsManager::Clear() {
+	gameObjects.clear();
+	if (qtGameObjects != nullptr)
+	{
+		delete qtGameObjects;
+	}
+	qtGameObjects = nullptr;
 }
 
 void PhysicsManager::PushGameObject(GameObjectEntity* gameObject)
