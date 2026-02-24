@@ -38,6 +38,18 @@ void TurboFistWeapon::Render()
 	}
 }
 
+void TurboFistWeapon::OnCollide(GameObjectEntity* go)
+{
+	if (go == player_entity)
+	{
+		return;
+	}
+	if (dash_timer > 0.0f)
+	{
+		go->color = { 255, 0, 0, 0 };
+	}
+}
+
 void TurboFistWeapon::Attack()
 {
 	float attack_strength = GetCurrentAttackStrength();

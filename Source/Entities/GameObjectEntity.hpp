@@ -18,7 +18,8 @@ public:
 	}type;
 	enum KINEMATIC {
 		STATIC,
-		DYNAMIC
+		DYNAMIC,
+		TRIGGER
 	}go_type;
 	AEVec2 prev_position;
 	f32 frictionMultiplier{ 1.0 };

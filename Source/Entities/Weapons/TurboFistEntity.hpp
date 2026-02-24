@@ -17,6 +17,7 @@ public:
 
 	void Update(const f32& dt) override;
 	void Render() override;
+	void OnCollide(GameObjectEntity* go) override;
 	void Attack() override;
 	float GetCurrentAttackStrength();
 };

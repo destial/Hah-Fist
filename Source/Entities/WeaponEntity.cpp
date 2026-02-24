@@ -7,9 +7,9 @@
 #include "../UI/Debug.hpp"
 
 
-Weapon::Weapon(AEVec2 pos, GameObjectEntity* player) : BaseEntity(pos) {
+Weapon::Weapon(AEVec2 pos, GameObjectEntity* player) : GameObjectEntity(pos) {
 	player_entity = player;
-
+	go_type = KINEMATIC::TRIGGER;
 	image = AssetManager::GetTexture("Assets/test_fist.png");
 	mesh = MeshRenderer::GetCenterRectMesh();
 	layer = 2;
@@ -20,16 +20,16 @@ Weapon::~Weapon() {
 }
 
 void Weapon::PreUpdate(const f32& dt) {
-	BaseEntity::PreUpdate(dt);
+	GameObjectEntity::PreUpdate(dt);
 	AEVec2 attack_direction = Utils::GetMouseWorld(true) - player_entity->position;
 	AEVec2Normalize(&attack_direction, &attack_direction);
 	AEVec2 right = { 1.f, 0 };
 	rotation = AEVec2AngleCCW(&right, &attack_direction);
-	this->position = player_entity->position + attack_direction;
+	this->position = player_entity->position + attack_direction * 3.0f;
 }
 
 void Weapon::Update(const f32& dt) {
-	BaseEntity::Update(dt);
+	GameObjectEntity::Update(dt);
 
 	if (AEInputCheckTriggered(AEVK_W))
 	{
@@ -55,11 +55,11 @@ void Weapon::Update(const f32& dt) {
 }
 
 void Weapon::PostUpdate(const f32& dt) {
-	BaseEntity::PostUpdate(dt);
+	GameObjectEntity::PostUpdate(dt);
 }
 
 void Weapon::Render() {
-	BaseEntity::Render();
+	GameObjectEntity::Render();
 
 	auto corners = Utils::GetCorners(this);
 	DebugUtils::RenderLine(corners[0], corners[1], { 255, 255, 0, 0 });

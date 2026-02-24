@@ -1,11 +1,10 @@
 #pragma once
 #ifndef __WEAPONENTITY_H
 #define __WEAPONENTITY_H
-#include "BaseEntity.hpp"
 #include "GameObjectEntity.hpp"
 
 
-class Weapon : public BaseEntity {
+class Weapon : public GameObjectEntity {
 protected:
 	GameObjectEntity* player_entity;
 
