@@ -28,13 +28,14 @@ void TrooperEntity::Render() {
 
 void TrooperEntity::OnCollide(GameObjectEntity* go) {
 	EnemyEntity::OnCollide(go);
-	if (go->go_type == GameObjectEntity::KINEMATIC::STATIC)
-		ground = go;
+	std::cout << "Colliding\n";
+	ground = (go->go_type == GameObjectEntity::KINEMATIC::STATIC) ? go : nullptr;
+		
 }
 
 void TrooperEntity::OnIdle(const f32& dt) {
 	// Trooper's idle behaviour
-	AEVec2Zero(&velocity);
+	velocity.x = 0.f;
 	if (stateTimer < 0.f) {
 		dir.x *= -1.f; // Flip the direction it is travelling.
 		SwitchState(FSM::PATROL, 0.f);
