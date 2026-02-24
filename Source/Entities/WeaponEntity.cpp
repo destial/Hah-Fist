@@ -21,8 +21,7 @@ Weapon::~Weapon() {
 
 void Weapon::PreUpdate(const f32& dt) {
 	GameObjectEntity::PreUpdate(dt);
-	AEVec2 attack_direction = Utils::GetMouseWorld(true) - player_entity->position;
-	AEVec2Normalize(&attack_direction, &attack_direction);
+	AEVec2 attack_direction = GetAttackDirection();
 	AEVec2 right = { 1.f, 0 };
 	rotation = AEVec2AngleCCW(&right, &attack_direction);
 	this->position = player_entity->position + attack_direction * 3.0f;
@@ -66,4 +65,11 @@ void Weapon::Render() {
 	DebugUtils::RenderLine(corners[1], corners[2], { 255, 0, 255, 0 });
 	DebugUtils::RenderLine(corners[2], corners[3], { 255, 0, 0, 255 });
 	DebugUtils::RenderLine(corners[3], corners[0], { 255, 255, 255, 0 });
+}
+
+AEVec2 Weapon::GetAttackDirection()
+{
+	AEVec2 attack_direction = Utils::GetMouseWorld(true) - player_entity->position;
+	AEVec2Normalize(&attack_direction, &attack_direction);
+	return attack_direction;
 }
