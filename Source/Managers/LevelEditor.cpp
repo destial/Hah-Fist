@@ -4,6 +4,7 @@
 #include "../Utils/MeshRenderer.hpp"
 #include "../UI/Debug.hpp"
 #include "../Entities/Enemies/EnemyEntity.hpp"
+#include "../Entities/WeaponEntity.hpp"
 
 LevelEditor::LevelEditor(BaseScene* b_scene) : scene{ b_scene }, toggled{ false }, currentSelection{ nullptr } {}
 
@@ -31,6 +32,10 @@ void LevelEditor::SelectEntity(BaseEntity* entity) {
 
 void LevelEditor::RemoveSelectedEntity() {
 	if (currentSelection == nullptr) {
+		return;
+	}
+
+	if (Weapon* w = dynamic_cast<Weapon*>(currentSelection)) {
 		return;
 	}
 
@@ -80,6 +85,12 @@ void LevelEditor::Update(const f32& dt) {
 	sprintf_s(mos, "Mouse:%.2f,%.2f", mwp.x, mwp.y);
 	DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 1.25f }, std::string{ mos });
 
+	s32 scroll;
+	AEInputMouseWheelDelta(&scroll);
+	char scr[32];
+	sprintf_s(scr, "Scroll:%d", scroll);
+	DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 1.75f }, std::string{ scr });
+
 	for (BaseEntity* go : scene->Entities()) {
 		if (AEInputCheckTriggered(AEVK_LBUTTON) && Utils::OBBPoint(go, mwp)) {
 			SelectEntity(go);
@@ -91,8 +102,20 @@ void LevelEditor::Update(const f32& dt) {
 	}
 
 	if (currentSelection) {
-		if (AEInputCheckCurr(AEVK_LBUTTON) && Utils::OBBPoint(currentSelection, mwp)) {
-			currentSelection->position = mwp;
+		if (AEInputCheckCurr(AEVK_LBUTTON)) {
+			if (Utils::OBBPoint(currentSelection, mwp)) {
+				currentSelection->position = mwp;
+			}
+
+			if (scroll != 0) {
+				currentSelection->scale.x += scroll * dt;
+			}
+		}
+
+		if (AEInputCheckCurr(AEVK_RBUTTON)) {
+			if (scroll != 0) {
+				currentSelection->scale.y += scroll * dt;
+			}
 		}
 
 		if (AEInputCheckTriggered(AEVK_DELETE)) {
