@@ -55,11 +55,7 @@ void TurboFistWeapon::Attack()
 	float attack_strength = GetCurrentAttackStrength();
 	channel_timer = 0.0f;
 
-	f32 cam_x, cam_y;
-	AEGfxGetCamPosition(&cam_x, &cam_y);
-	AEVec2 cam_pos = Utils::ScreenToScale(cam_x, cam_y);
-	AEVec2 attack_direction = Utils::GetMouseWorld() + cam_pos - player_entity->position;
-	AEVec2Normalize(&attack_direction, &attack_direction);
+	AEVec2 attack_direction = GetAttackDirection();
 
 	dash_timer = max_dash_time;
 	player_entity->velocity = attack_direction * 20 * attack_strength;

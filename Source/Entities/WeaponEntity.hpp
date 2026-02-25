@@ -21,6 +21,8 @@ public:
 	virtual void PostUpdate(const f32& dt);
 	virtual void Render();
 	virtual void Attack() = 0;
+
+	AEVec2 GetAttackDirection();
 };
 
 #endif
