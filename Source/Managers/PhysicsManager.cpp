@@ -43,15 +43,15 @@ void PhysicsManager::Update(const f32& dt)
 			DebugUtils::RenderPoint(go->position + go->scale * 0.25f, { 255, 255, 255, 0 });
 			DebugUtils::RenderPoint(go2->position + go2->scale * -0.25f, { 255, 0, 255, 255 });
 			if (Utils::OBB(go, go2)) {
-				if (go->go_type == GameObjectEntity::KINEMATIC::TRIGGER && go2->go_type == GameObjectEntity::KINEMATIC::TRIGGER)
+				if (go->go_type == GameObjectEntity::PhysicsType::TRIGGER && go2->go_type == GameObjectEntity::PhysicsType::TRIGGER)
 				{
 					continue;
 				}
-				if (go->go_type == GameObjectEntity::KINEMATIC::TRIGGER)
+				if (go->go_type == GameObjectEntity::PhysicsType::TRIGGER)
 				{
 					go->OnCollide(go2);
 				}
-				else if(go2->go_type == GameObjectEntity::KINEMATIC::TRIGGER)
+				else if(go2->go_type == GameObjectEntity::PhysicsType::TRIGGER)
 				{
 					go2->OnCollide(go);
 				}

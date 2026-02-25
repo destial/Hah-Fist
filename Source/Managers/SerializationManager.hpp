@@ -4,16 +4,18 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "../Entities/PlayerEntity.hpp"
-
-typedef struct SerializedEntity SerializedEntity;
+#include "../Entities/BaseEntity.hpp"
 
 namespace Serialization {
-	SerializedEntity* SerializePlayer(Player* p);
+	struct SerializedEntity;
 
-	void WriteToFile(const char* filename, std::vector<SerializedEntity*> entities);
-	std::vector<SerializedEntity*> LoadFromFile(const char* filename);
-	void LoadToMemory(std::vector<BaseEntity*>& scene_entities, std::vector<SerializedEntity*>& serialized);
+	SerializedEntity Serialize(BaseEntity* p);
+	BaseEntity* Unserialize(SerializedEntity const& en);
+	std::vector<SerializedEntity> SerializeAll(std::vector<BaseEntity*>& scene_entities);
+
+	void WriteToFile(const char* filename, std::vector<SerializedEntity> entities);
+	std::vector<SerializedEntity> LoadFromFile(const char* filename);
+	void LoadToMemory(std::vector<BaseEntity*>& scene_entities, std::vector<SerializedEntity>& serialized);
 }
 
 #endif

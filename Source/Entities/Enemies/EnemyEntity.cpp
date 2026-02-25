@@ -11,7 +11,7 @@ EnemyEntity::EnemyEntity(AEVec2 pos, AEVec2 dir) : state{ FSM::IDLE }, dir{dir},
 	animationFrame = 1.f / (3.f * 3.f);
 	currentRow = currentCol = 0;
 	scale = { 5.f * (static_cast<f32>(sprite->image->width) / sprite->image->height), 5.f };
-	layer = 2;
+	layer = RenderLayer::ENTITY;
 }
 
 EnemyEntity::~EnemyEntity()

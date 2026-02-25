@@ -61,9 +61,8 @@ void GameScene::Init() {
 	GameObjectEntity* p = new Player({ 1.f, 1.f });
 	std::printf("Player mass :%f\n", p->pBody->mass);
 	GameObjectEntity* wall = new GameObjectEntity({ 20.f, 7.f });
-	wall->go_type = GameObjectEntity::KINEMATIC::STATIC;
+	wall->go_type = GameObjectEntity::PhysicsType::STATIC;
 	wall->mesh = MeshRenderer::GetCenterRectMesh();
-	wall->layer = 3;
 	wall->scale = { 30.f, 1.f };
 	AddEntityToScene(wall);
 

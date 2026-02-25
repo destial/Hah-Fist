@@ -17,7 +17,7 @@ BaseUI::BaseUI(AEVec2 pos) : BaseEntity(pos),
 	overlay_texture(nullptr),
 	overlay_color({ 255, 128, 128, 128 })
 {
-	layer = 5;
+	layer = RenderLayer::UI;
 	mesh = MeshRenderer::GetCenterRectMesh();
 	font = AssetManager::GetFontId("Assets/buggy-font.ttf");
 }

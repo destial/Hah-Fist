@@ -4,6 +4,7 @@
 #include "../Utils/MeshRenderer.hpp"
 #include "../UI/Debug.hpp"
 #include "../Entities/Enemies/EnemyEntity.hpp"
+#include "../Entities/Enemies/TrooperEntity.hpp"
 #include "../Entities/WeaponEntity.hpp"
 
 LevelEditor::LevelEditor(BaseScene* b_scene) : scene{ b_scene }, toggled{ false }, currentSelection{ nullptr } {}
@@ -48,12 +49,17 @@ BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
 	case Editor::GameObjectType::STATIC_PLATFORM: {
 		GameObjectEntity* go = new GameObjectEntity(Utils::GetMouseWorld(true));
 		go->mesh = MeshRenderer::GetCenterRectMesh();
-		go->go_type = GameObjectEntity::KINEMATIC::STATIC;
+		go->go_type = GameObjectEntity::PhysicsType::STATIC;
 		scene->AddEntityToScene(go);
 		return go;
 	}
 	case Editor::GameObjectType::ENEMY_1: {
 		EnemyEntity* enemy = new EnemyEntity(Utils::GetMouseWorld(true));
+		scene->AddEntityToScene(enemy);
+		return enemy;
+	}
+	case Editor::GameObjectType::ENEMY_2: {
+		EnemyEntity* enemy = new TrooperEntity(Utils::GetMouseWorld(true));
 		scene->AddEntityToScene(enemy);
 		return enemy;
 	}
@@ -99,6 +105,14 @@ void LevelEditor::Update(const f32& dt) {
 
 	if (AEInputCheckTriggered(AEVK_1)) {
 		SelectEntity(AddEntity(Editor::GameObjectType::STATIC_PLATFORM));
+	}
+
+	if (AEInputCheckTriggered(AEVK_2)) {
+		SelectEntity(AddEntity(Editor::GameObjectType::ENEMY_1));
+	}
+
+	if (AEInputCheckTriggered(AEVK_3)) {
+		SelectEntity(AddEntity(Editor::GameObjectType::ENEMY_2));
 	}
 
 	if (currentSelection) {

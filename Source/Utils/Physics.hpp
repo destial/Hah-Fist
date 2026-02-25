@@ -10,8 +10,8 @@ namespace Physics
 		AEVec2 min;
 		AEVec2 max;
 
-		bool CanFit(AABB& a);
-		bool Intersects(AABB& a);
+		bool CanFit(AABB& a) const;
+		bool Intersects(AABB& a) const;
 	};
 
 

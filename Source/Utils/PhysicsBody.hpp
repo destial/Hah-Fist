@@ -5,16 +5,16 @@
 #include <iostream>
 class PhysicsBody {
 public:
-	enum STATE {
+	enum struct STATE {
 		IN_AIR = 0,
 		ON_GROUND
-	}state;
+	} state;
 
-	enum VERTICAL_STATE {
+	enum struct VERTICAL_STATE {
 		VS_RISING = 0,
 		VS_FALLING,
 		VS_ON_GROUND,
-	}vertical_state;
+	} vertical_state;
 
 	AEVec2 gravity;
 	AEVec2 force;

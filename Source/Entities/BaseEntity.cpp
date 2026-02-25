@@ -10,7 +10,7 @@ BaseEntity::BaseEntity(AEVec2 position) :
 	scale({ 1.f, 1.f }),
 	rotation(0),
 	transform({ 0 }),
-	layer(0),
+	layer{RenderLayer::WORLD},
 	mesh(nullptr), image(nullptr), color({255, 255, 255, 255})
 {
 }

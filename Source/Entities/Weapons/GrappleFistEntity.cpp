@@ -72,7 +72,7 @@ void GrappleFistWeapon::Render()
 
 void GrappleFistWeapon::OnCollide(GameObjectEntity* go)
 {
-	if (go->go_type == GameObjectEntity::TRIGGER)
+	if (go->go_type == PhysicsType::TRIGGER)
 	{
 		return;
 	}
@@ -83,7 +83,7 @@ void GrappleFistWeapon::OnCollide(GameObjectEntity* go)
 	if (grappleState == SHOOTING || grappleState == RETURNING)
 	{
 		grappledObject = go;
-		if (go->go_type == GameObjectEntity::DYNAMIC)
+		if (go->go_type == PhysicsType::DYNAMIC)
 		{
 			grappleState = HOOKING_OBJECT_TO_PLAYER;
 		}

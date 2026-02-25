@@ -17,8 +17,8 @@ Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 	jumpHeight = 8.5f;
 	jumpVelocity = sqrtf(jumpHeight * 2.f * abs(pBody->gravity.y));
 	speed = 10.f;
-	layer = 2;
-	go_type = KINEMATIC::DYNAMIC;
+	layer = RenderLayer::PLAYER;
+	go_type = PhysicsType::DYNAMIC;
 }
 
 Player::~Player() {
