@@ -13,6 +13,43 @@ struct OBBStruct {
 	f32 halfWidths[2]; // Half-extents along the axes
 };
 
+Color::Color(int a, int r, int g, int b) 
+: a{ static_cast<unsigned char>(a) },
+  r{ static_cast<unsigned char>(r) },
+  g{ static_cast<unsigned char>(g) },
+  b{ static_cast<unsigned char>(b) } {}
+
+Color::Color(u32 packed)
+: a{ static_cast<unsigned char>((packed >> 24) & 255) },
+  r{ static_cast<unsigned char>((packed >> 16) & 255) }, 
+  g{ static_cast<unsigned char>((packed >> 8) & 255) }, 
+  b{ static_cast<unsigned char>(packed & 255) } {}
+
+Color::Color(Color const& copy) 
+: a{ copy.a }, r{ copy.r }, g{ copy.g }, b{ copy.b } {}
+
+u32 Color::Pack() const {
+	u32 color = (alpha << 24) + (red << 16) + (green << 8) + (blue);
+	return color;
+}
+
+Color::Color(f32 a, f32 r, f32 g, f32 b)
+: a{ static_cast<unsigned char>(255 * a) },
+  r{ static_cast<unsigned char>(255 * r) },
+  g{ static_cast<unsigned char>(255 * g) },
+  b{ static_cast<unsigned char>(255 * b) } {}
+
+std::istream& operator>> (std::istream& is, Color& color) {
+	u32 packed;
+	is >> packed;
+	color = Color{ packed };
+	return is;
+}
+
+std::ostream& operator<< (std::ostream& os, Color const& color) {
+	return os << color.Pack();
+}
+
 namespace Utils {
 	static f32 world_width = 48.f;
 	static f32 world_height = 27.f;
@@ -88,24 +125,6 @@ namespace Utils {
 		f32 cam_x, cam_y;
 		AEGfxGetCamPosition(&cam_x, &cam_y);
 		return Utils::ScreenToWorld(mouse.x + (cam ? cam_x : 0.f), mouse.y + (cam ? -cam_y : 0.f));
-	}
-
-	u32 PackColor(int red, int green, int blue, int alpha) {
-		u32 color = (alpha << 24) + (red << 16) + (green << 8) + (blue);
-		return color;
-	}
-
-	u32 PackColor(Color const& color) {
-		return PackColor(color.r, color.g, color.b, color.a);
-	}
-
-	Color UnpackColor(u32 color) {
-		Color c{ 0, 0, 0, 0 };
-		c.a = static_cast<unsigned char>((color >> 24) & 255);
-		c.r = static_cast<unsigned char>((color >> 16) & 255);
-		c.g = static_cast<unsigned char>((color >> 8) & 255);
-		c.b = static_cast<unsigned char>(color & 255);
-		return c;
 	}
 
 	const f32 GetWorldWidth(void) {

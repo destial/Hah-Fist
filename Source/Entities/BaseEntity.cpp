@@ -5,13 +5,15 @@
 #include <cstdio>
 
 BaseEntity::BaseEntity(AEVec2 position) :
-	position(position),
-	velocity({ 0 }),
-	scale({ 1.f, 1.f }),
-	rotation(0),
-	transform({ 0 }),
+	position{ position },
+	velocity{ 0 },
+	scale{ 1.f, 1.f },
+	rotation{ 0 },
+	transform{ 0 },
 	layer{RenderLayer::WORLD},
-	mesh(nullptr), image(nullptr), color({255, 255, 255, 255})
+	mesh{ nullptr }, 
+	image{ nullptr }, 
+	color{ 255, 255, 255, 255 }
 {
 }
 
