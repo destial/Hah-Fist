@@ -66,6 +66,11 @@ void Weapon::Render() {
 	DebugUtils::RenderLine(corners[3], corners[0], { 255, 255, 255, 0 });
 }
 
+void Weapon::SetPlayerEntity(GameObjectEntity* player)
+{
+	player_entity = player;
+}
+
 AEVec2 Weapon::GetAttackDirection()
 {
 	AEVec2 attack_direction = Utils::GetMouseWorld(true) - player_entity->position;
