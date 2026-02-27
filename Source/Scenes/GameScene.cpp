@@ -47,7 +47,7 @@ static void OnGameExit(const InputEvent* ev) {
 
 void GameScene::Init() {
 	AEGfxSetCamPosition(0.f, 0.f); // CameraEntity
-	InputEvent::Listeners += OnGameExit;
+	InputEvent::Listeners += {this, OnGameExit};
 
 	ButtonUI* wk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 1.f }, 'W');
 	ButtonUI* ak = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 3.f, Utils::GetWorldHeight() - 2.f }, 'A');
