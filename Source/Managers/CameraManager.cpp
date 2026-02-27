@@ -18,15 +18,6 @@ CameraManager* CameraManager::GetInstance()
     }
     return instance;
 }
-void CameraManager::Init()
-{
-    x = targetx = 0.f;
-    y = targety = 0.f;
-
-    shaketimer = 0.f;
-    shakeduration = 0.f;
-    shakestrength = 0.f;
-}
 
 void CameraManager::Free()
 {
@@ -64,14 +55,12 @@ void CameraManager::Shake(float duration, float strength)
 }
 void CameraManager::Update(float dt)
 {
-    // Smooth lerp follow
     x += (targetx - x) * smoothspeed * dt;
     y += (targety - y) * smoothspeed * dt;
 
     float finalX = x;
     float finalY = y;
 
-    // Shake effect
     if (shaketimer > 0.f)
     {
         shaketimer -= dt;
@@ -85,11 +74,9 @@ void CameraManager::Update(float dt)
         finalY += offsetY;
     }
 
-    // Center camera on screen
     auto screenRes = Utils::GetScreenResolution(); 
     finalX -= screenRes.first / 2.f;
     //finalY -= screenRes.second / 2.f;
 
-    // Apply to engine
     AEGfxSetCamPosition(finalX, finalY);
 }
