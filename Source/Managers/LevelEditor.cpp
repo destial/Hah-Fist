@@ -126,13 +126,15 @@ void LevelEditor::Update(const f32& dt) {
 			}
 
 			if (scroll != 0) {
-				currentSelection->scale.x += scroll * dt;
+				currentSelection->scale.x += scroll;
+				currentSelection->scale.x = max(currentSelection->scale.x, 1);
 			}
 		}
 
 		if (AEInputCheckCurr(AEVK_RBUTTON)) {
 			if (scroll != 0) {
-				currentSelection->scale.y += scroll * dt;
+				currentSelection->scale.y += scroll;
+				currentSelection->scale.y = max(currentSelection->scale.y, 1);
 			}
 		}
 
