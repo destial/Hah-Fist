@@ -2,8 +2,7 @@
 #include <algorithm>
 #include <iostream>
 
-BaseScene::BaseScene() : scene_entities(0), particleSystem(new ParticleSystem) {
-}
+BaseScene::BaseScene() : scene_entities(0), particleSystem(new ParticleSystem), camManager(CameraManager::GetInstance()) {}
 
 BaseScene::~BaseScene() {
 	scene_entities.clear();
@@ -27,10 +26,12 @@ void BaseScene::Update(const f32& dt) {
 		entity->Update(dt);
 	}
 	particleSystem->Update(dt);
+	camManager->Update(dt);
 	if (physicsManager != nullptr)
 	{
 		physicsManager->Update(dt);
 	}
+
 }
 
 void BaseScene::PostUpdate(const f32& dt) {

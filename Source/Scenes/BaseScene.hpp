@@ -7,12 +7,15 @@
 #include "../Entities/BaseEntity.hpp"
 #include "../Items/ParticleSystem.hpp"
 #include "../Managers/PhysicsManager.hpp"
+#include "../Managers/CameraManager.hpp"
+
 
 class BaseScene {
 protected:
 	std::vector<BaseEntity*> scene_entities;
 	ParticleSystem* particleSystem;
 	PhysicsManager* physicsManager{nullptr};
+	CameraManager* camManager;
 	BaseScene();
 
 public:

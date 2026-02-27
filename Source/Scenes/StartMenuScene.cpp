@@ -32,7 +32,7 @@ StartMenuScene::~StartMenuScene() {
 }
 
 void StartMenuScene::Init() {
-	AEGfxSetCamPosition(0.f, 0.f);
+	//AEGfxSetCamPosition(0.f, 0.f);
 	ButtonUI* s = new ButtonUI(AEVec2{ 3.f, Utils::GetWorldHeight() - .6f });
 	s->color = { 0, 0, 0, 0 };
 	s->overlay_color = s->color;

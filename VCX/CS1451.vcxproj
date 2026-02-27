@@ -113,6 +113,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="..\Source\Items\SpriteSheet.cpp" />
     <ClCompile Include="..\Source\main.cpp" />
     <ClCompile Include="..\Source\Managers\AssetManager.cpp" />
+    <ClCompile Include="..\Source\Managers\CameraManager.cpp" />
     <ClCompile Include="..\Source\Managers\InputManager.cpp" />
     <ClCompile Include="..\Source\Managers\LevelEditor.cpp" />
     <ClCompile Include="..\Source\Managers\PhysicsManager.cpp" />
@@ -146,6 +147,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="..\Source\Items\ParticleSystem.hpp" />
     <ClInclude Include="..\Source\Items\SpriteSheet.hpp" />
     <ClInclude Include="..\Source\Managers\AssetManager.hpp" />
+    <ClInclude Include="..\Source\Managers\CameraManager.hpp" />
     <ClInclude Include="..\Source\Managers\InputManager.hpp" />
     <ClInclude Include="..\Source\Managers\LevelEditor.hpp" />
     <ClInclude Include="..\Source\Managers\PhysicsManager.hpp" />
