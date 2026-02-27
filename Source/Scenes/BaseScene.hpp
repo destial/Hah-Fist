@@ -27,6 +27,9 @@ public:
 	void AddEntityToScene(BaseEntity* entity);
 	void RemoveEntityFromScene(BaseEntity* entity);
 
+	template<typename E> E* GetFirstEntityOfType() const;
+	template<typename E> std::vector<E*> GetEntitesOfType() const;
+
 	std::vector<BaseEntity*> const& Entities() const;
 };
 

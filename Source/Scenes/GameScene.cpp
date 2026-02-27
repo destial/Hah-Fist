@@ -67,15 +67,12 @@ void GameScene::Init() {
 			BaseEntity* en = Serialization::Unserialize(sen);
 			if (en) {
 				AddEntityToScene(en);
+				if (Player* p = dynamic_cast<Player*>(en)) {
+					player = p;
+				}
 			}
 		}
 		std::printf("Loaded from file");
-		for (BaseEntity* en : scene_entities) {
-			if (Player* p = dynamic_cast<Player*>(en)) {
-				player = p;
-				break;
-			}
-		}
 	}
 	else {
 		player = new Player({ 1.f, 1.f });

@@ -43,7 +43,6 @@ namespace Serialization {
 
 	void WriteToFile(const char* filename, std::vector<SerializedEntity> const& entities);
 	std::vector<SerializedEntity> LoadFromFile(const char* filename);
-	void LoadToMemory(std::vector<BaseEntity*>& scene_entities, std::vector<SerializedEntity>& serialized);
 }
 
 #endif

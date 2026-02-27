@@ -143,7 +143,4 @@ namespace Serialization {
 		}
 		return vect;
 	}
-
-	void LoadToMemory(std::vector<BaseEntity*>& scene_entities, std::vector<SerializedEntity>& serialized) {
-	}
 }
