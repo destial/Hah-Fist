@@ -2,6 +2,7 @@
 #ifndef __UTIL_H
 #define __UTIL_H
 #include "AEEngine.h"
+#include <iostream>
 #include <vector>
 #include <utility>
 
@@ -14,6 +15,13 @@ namespace Game {
 class BaseEntity;
 
 struct Color {
+	Color(u32 packed = 0);
+	Color(int a, int r, int g, int b);
+	Color(f32 a, f32 r, f32 g, f32 b);
+	Color(Color const& copy);
+
+	u32 Pack() const;
+
 	union {
 		unsigned char a;
 		unsigned char alpha;
@@ -32,6 +40,10 @@ struct Color {
 	};
 };
 
+std::istream& operator>> (std::istream& is, Color& color);
+
+std::ostream& operator<< (std::ostream& os, Color const& color);
+
 namespace Utils {
 	AEVec2 WorldToScreen(f32 x, f32 y);
 	AEVec2 ScreenToWorld(f32 x, f32 y);
@@ -49,10 +61,6 @@ namespace Utils {
 	void SetDeltaTime(f32 dt);
 
 	const AEVec2 GetMouseWorld(bool camera = false);
-
-	u32 PackColor(int red, int green, int blue, int alpha = 255);
-	u32 PackColor(Color const& color);
-	Color UnpackColor(u32 color);
 
 	std::vector<AEVec2> GetCorners(const BaseEntity* go);
 	bool CircleCircleCollision(BaseEntity*& go, BaseEntity*& go2);

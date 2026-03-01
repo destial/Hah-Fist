@@ -6,13 +6,12 @@
 #include "../Managers/AssetManager.hpp"
 #include "../UI/Debug.hpp"
 
-
 Weapon::Weapon(AEVec2 pos, GameObjectEntity* player) : GameObjectEntity(pos) {
 	player_entity = player;
-	go_type = KINEMATIC::TRIGGER;
+	go_type = PhysicsType::TRIGGER;
 	image = AssetManager::GetTexture("Assets/test_fist.png");
 	mesh = MeshRenderer::GetCenterRectMesh();
-	layer = 2;
+	layer = RenderLayer::PLAYER;;
 }
 
 Weapon::~Weapon() {
@@ -65,6 +64,11 @@ void Weapon::Render() {
 	DebugUtils::RenderLine(corners[1], corners[2], { 255, 0, 255, 0 });
 	DebugUtils::RenderLine(corners[2], corners[3], { 255, 0, 0, 255 });
 	DebugUtils::RenderLine(corners[3], corners[0], { 255, 255, 255, 0 });
+}
+
+void Weapon::SetPlayerEntity(GameObjectEntity* player)
+{
+	player_entity = player;
 }
 
 AEVec2 Weapon::GetAttackDirection()

@@ -6,31 +6,27 @@
 #include "../Utils/PhysicsBody.hpp"
 
 class GameObjectEntity : public BaseEntity {
-protected:
-	f32 health;
-	f32 damage;
 public:
 	PhysicsBody* pBody;
-	enum SHAPE {
-		CIRCLE,
-		AABB,
-		TOTAL
-	}type;
-	enum KINEMATIC {
-		STATIC,
-		DYNAMIC,
-		TRIGGER
-	}go_type;
+	enum struct CollisionShape {
+		CIRCLE, AABB, TOTAL
+	} shape;
+	enum struct PhysicsType {
+		STATIC, DYNAMIC, TRIGGER, TOTAL
+	} go_type;
 	AEVec2 prev_position;
 	f32 frictionMultiplier{ 1.0 };
 	GameObjectEntity();
-	GameObjectEntity(AEVec2 pos = { 0.f, 0.f }, f32 mass = 1.0f, SHAPE type = AABB);
+	GameObjectEntity(AEVec2 pos = { 0.f, 0.f }, f32 mass = 1.0f, CollisionShape type = CollisionShape::AABB);
 	virtual ~GameObjectEntity();
 	virtual void PreUpdate(const f32& dt);
 	virtual void Update(const f32& dt);
 	virtual void PostUpdate(const f32& dt);
 	virtual void Render();
 	virtual void OnCollide(GameObjectEntity* go);
+
 	bool isActive;
+	f32 health;
+	f32 damage;
 };
 #endif

@@ -28,9 +28,8 @@ void TrooperEntity::Render() {
 
 void TrooperEntity::OnCollide(GameObjectEntity* go) {
 	EnemyEntity::OnCollide(go);
-	std::cout << "Colliding\n";
-	ground = (go->go_type == GameObjectEntity::KINEMATIC::STATIC) ? go : nullptr;
-		
+	if (go->go_type == PhysicsType::STATIC)
+		ground = go;
 }
 
 void TrooperEntity::OnIdle(const f32& dt) {

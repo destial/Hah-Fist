@@ -1,6 +1,7 @@
 #include "GameScene.hpp"
 #include "../Managers/SceneManager.hpp"
 #include "../Managers/AssetManager.hpp"
+#include "../Managers/SerializationManager.hpp"
 #include "../Entities/PlayerEntity.hpp"
 #include "../Entities/Enemies/EnemyEntity.hpp"
 #include "../Entities/Enemies/TrooperEntity.hpp"
@@ -45,8 +46,8 @@ static void OnGameExit(const InputEvent* ev) {
 }
 
 void GameScene::Init() {
-	AEGfxSetCamPosition(0.f, 0.f); // CameraEntity
-	InputEvent::Listeners += OnGameExit;
+	//AEGfxSetCamPosition(0.f, 0.f); // CameraEntity
+	InputEvent::Listeners += {this, OnGameExit};
 
 	ButtonUI* wk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 1.f }, 'W');
 	ButtonUI* ak = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 3.f, Utils::GetWorldHeight() - 2.f }, 'A');
@@ -58,26 +59,40 @@ void GameScene::Init() {
 	AddEntityToScene(dk);
 	AddEntityToScene(sk);
 
-	GameObjectEntity* p = new Player({ 1.f, 1.f });
-	std::printf("Player mass :%f\n", p->pBody->mass);
-	GameObjectEntity* wall = new GameObjectEntity({ 20.f, 7.f });
-	wall->go_type = GameObjectEntity::KINEMATIC::STATIC;
-	wall->mesh = MeshRenderer::GetCenterRectMesh();
-	wall->layer = 3;
-	wall->scale = { 30.f, 1.f };
-	AddEntityToScene(wall);
+	std::vector<Serialization::SerializedEntity> ens = Serialization::LoadFromFile("Assets/level_0.dat");
 
-	AddEntityToScene(p);
-
-	for (int i{}; i < 2; i++)
-	{
-		GameObjectEntity* e = new EnemyEntity({ 9.f + float(i) * 5.0f, 2.5f});
-		e->pBody->mass = 1.0f;
-		AddEntityToScene(e);
+	Player* player = nullptr;
+	if (!ens.empty()) {
+		for (Serialization::SerializedEntity const& sen : ens) {
+			BaseEntity* en = Serialization::Unserialize(sen);
+			if (en) {
+				AddEntityToScene(en);
+				if (Player* p = dynamic_cast<Player*>(en)) {
+					player = p;
+				}
+			}
+		}
+		std::printf("Loaded from file");
 	}
-	GameObjectEntity* trooper = new TrooperEntity{ {20.f, 12.f}};
-	AddEntityToScene(trooper);
-	BaseEntity* w = new TurboFistWeapon(AEVec2{ 0.f, 0.f }, p);
+	else {
+		player = new Player({ 1.f, 1.f });
+		std::printf("Player mass :%f\n", player->pBody->mass);
+		GameObjectEntity* wall = new GameObjectEntity({ 20.f, 7.f });
+		wall->go_type = GameObjectEntity::PhysicsType::STATIC;
+		wall->mesh = MeshRenderer::GetCenterRectMesh();
+		wall->scale = { 30.f, 1.f };
+		AddEntityToScene(wall);
+		AddEntityToScene(player);
+		for (int i{}; i < 2; i++)
+		{
+			GameObjectEntity* e = new EnemyEntity({ 9.f + float(i) * 5.0f, 2.5f });
+			e->pBody->mass = 1.0f;
+			AddEntityToScene(e);
+		}
+		GameObjectEntity* trooper = new TrooperEntity{ {20.f, 12.f} };
+		AddEntityToScene(trooper);
+	}
+	BaseEntity* w = new TurboFistWeapon(AEVec2{ 0.f, 0.f }, player);
 	AddEntityToScene(w);
 }
 

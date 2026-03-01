@@ -4,6 +4,7 @@
 #include "../Utils/AEOverload.hpp"
 #include "../Utils/Utils.hpp"
 #include "../Managers/AssetManager.hpp"
+#include "../Managers/CameraManager.hpp"
 #include <iostream>
 #include <cstdio>
 
@@ -17,8 +18,8 @@ Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 	jumpHeight = 8.5f;
 	jumpVelocity = sqrtf(jumpHeight * 2.f * abs(pBody->gravity.y));
 	speed = 10.f;
-	layer = 2;
-	go_type = KINEMATIC::DYNAMIC;
+	layer = RenderLayer::PLAYER;
+	go_type = PhysicsType::DYNAMIC;
 }
 
 Player::~Player() {
@@ -53,6 +54,10 @@ void Player::Update(const f32& dt) {
 	if (AEInputCheckCurr(AEVK_SPACE) && abs(velocity.y) == 0) {
 		velocity.y += jumpVelocity;
 	}
+	//Testing Camera Function
+	if (AEInputCheckCurr(AEVK_R)) {
+		CameraManager::GetInstance()->Shake(0.1f, 5.f);
+	}
 }
 
 void Player::PostUpdate(const f32& dt) {
@@ -70,9 +75,10 @@ void Player::PostUpdate(const f32& dt) {
 			currentCol = 0;
 		}
 	}
-	f32 x, y;
+	/*f32 x, y;
 	AEGfxGetCamPosition(&x, &y);
-	AEGfxSetCamPosition(Utils::WorldToScreen(position.x, position.y).x - Utils::GetScreenResolution().first / 2.f, 0.f);
+	AEGfxSetCamPosition(Utils::WorldToScreen(position.x, position.y).x - Utils::GetScreenResolution().first / 2.f, 0.f);*/
+	CameraManager::GetInstance()->SetPosition(Utils::WorldToScreen(position.x, position.y).x,0);
 }
 
 void Player::Render() {

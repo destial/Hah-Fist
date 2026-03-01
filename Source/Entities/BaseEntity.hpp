@@ -22,7 +22,9 @@ public:
 	AEVec2 scale;
 	f32 rotation;
 	Color color;
-	int layer;
+	enum struct RenderLayer {
+		WORLD = 0, ENTITY = 1, PLAYER = 2, UI = 5
+	} layer;
 
 	std::map<void*, std::vector<std::function<void()>>> preupdate_listeners;
 	std::map<void*, std::vector<std::function<void()>>> update_listeners;

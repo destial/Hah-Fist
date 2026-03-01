@@ -2,7 +2,7 @@
 
 namespace Physics
 {
-	bool AABB::CanFit(AABB& a)
+	bool AABB::CanFit(AABB& a) const
 	{
 		if (this->min.x <= a.min.x && this->max.x >= a.max.x && this->min.y <= a.min.y && this->max.y >= a.max.y)
 		{
@@ -11,7 +11,7 @@ namespace Physics
 		return false;
 	}
 
-	bool AABB::Intersects(AABB& a)
+	bool AABB::Intersects(AABB& a) const
 	{
 		if (this->min.x > a.max.x || this->max.x < a.min.x || this->min.y > a.max.y || this->max.y < a.min.y)
 		{

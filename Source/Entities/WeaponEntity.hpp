@@ -22,6 +22,8 @@ public:
 	virtual void Render();
 	virtual void Attack() = 0;
 
+	void SetPlayerEntity(GameObjectEntity* player);
+
 	AEVec2 GetAttackDirection();
 };
 

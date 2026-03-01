@@ -6,13 +6,9 @@
 // Enemy Base class
 class EnemyEntity : public GameObjectEntity {
 protected:
-	enum FSM {
-		IDLE,
-		PATROL,
-		CHASE,
-		STUN,
-		DEAD
-	}state;
+	enum struct FSM {
+		IDLE, PATROL, CHASE, STUN, DEAD, TOTAL
+	} state;
 	AEVec2 dir;
 	f32 animationTimer, animationFrame, stateTimer;
 	int currentRow, currentCol;

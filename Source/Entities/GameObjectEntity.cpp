@@ -2,12 +2,12 @@
 #include "../Utils/AEOverload.hpp"
 #include "../UI/Debug.hpp"
 
-GameObjectEntity::GameObjectEntity() : health(1.f), damage(1.f), isActive(true), type(SHAPE::AABB), go_type(KINEMATIC::DYNAMIC), prev_position({ 0.f }), BaseEntity({ 0.f })
+GameObjectEntity::GameObjectEntity() : health(1.f), damage(1.f), isActive(true), shape(CollisionShape::AABB), go_type(PhysicsType::DYNAMIC), prev_position({ 0.f }), BaseEntity({ 0.f })
 {
 	pBody = new PhysicsBody{};
 }
 
-GameObjectEntity::GameObjectEntity(AEVec2 pos, f32 mass, SHAPE type) : health(1.f), damage(1.f),isActive(true), type(type), go_type(DYNAMIC), prev_position(pos), BaseEntity(pos)
+GameObjectEntity::GameObjectEntity(AEVec2 pos, f32 mass, CollisionShape shape) : health(1.f), damage(1.f),isActive(true), shape(shape), go_type(PhysicsType::DYNAMIC), prev_position(pos), BaseEntity(pos)
 {
 	pBody = new PhysicsBody{ mass };
 }
@@ -27,7 +27,7 @@ void GameObjectEntity::PreUpdate(const f32& dt)
 void GameObjectEntity::Update(const f32& dt)
 {
 	BaseEntity::Update(dt);
-	if (go_type == DYNAMIC) {
+	if (go_type == PhysicsType::DYNAMIC) {
 		pBody->UpdateStates(this->velocity, this->position, this->scale);
 		pBody->ApplyGravity(this->velocity, dt);
 	}
@@ -69,7 +69,7 @@ void GameObjectEntity::Render()
 
 void GameObjectEntity::OnCollide(GameObjectEntity* go)
 {
-	if (go->go_type == GameObjectEntity::KINEMATIC::STATIC) {
+	if (go->go_type == PhysicsType::STATIC) {
 		AEVec2 down = { 0, -1.f };
 		if (velocity * down > 1 && position.y >= go->position.y + go->scale.y * 0.5f + scale.y * 0.49f)
 		{
@@ -77,7 +77,7 @@ void GameObjectEntity::OnCollide(GameObjectEntity* go)
 			velocity.y = 0.0f;
 		}
 	}
-	else if (go->go_type == GameObjectEntity::KINEMATIC::DYNAMIC) {
+	else if (go->go_type == PhysicsType::DYNAMIC) {
 		AEVec2 thisToGO = go->position - position;
 		if (AEVec2DotProduct(&velocity, &thisToGO) > 1)
 		{

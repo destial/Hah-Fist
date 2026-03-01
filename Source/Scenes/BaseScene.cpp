@@ -2,8 +2,7 @@
 #include <algorithm>
 #include <iostream>
 
-BaseScene::BaseScene() : scene_entities(0), particleSystem(new ParticleSystem) {
-}
+BaseScene::BaseScene() : scene_entities(0), particleSystem(new ParticleSystem), camManager(CameraManager::GetInstance()) {}
 
 BaseScene::~BaseScene() {
 	scene_entities.clear();
@@ -27,10 +26,12 @@ void BaseScene::Update(const f32& dt) {
 		entity->Update(dt);
 	}
 	particleSystem->Update(dt);
+	camManager->Update(dt);
 	if (physicsManager != nullptr)
 	{
 		physicsManager->Update(dt);
 	}
+
 }
 
 void BaseScene::PostUpdate(const f32& dt) {
@@ -111,4 +112,24 @@ void BaseScene::RemoveEntityFromScene(BaseEntity* entity)
 
 std::vector<BaseEntity*> const& BaseScene::Entities() const {
 	return scene_entities;
+}
+
+template<typename E> E* BaseScene::GetFirstEntityOfType() const {
+	static_assert(std::is_base_of<BaseEntity, E>::value, "E must derive from BaseEntity!");
+	for (BaseEntity* en : scene_entities) {
+		if (E* first = dynamic_cast<E*>(en)) {
+			return first;
+		}
+	}
+}
+
+template<typename E> std::vector<E*> BaseScene::GetEntitesOfType() const {
+	static_assert(std::is_base_of<BaseEntity, E>::value, "E must derive from BaseEntity!");
+	std::vector<E*> vect;
+	for (BaseEntity* en : scene_entities) {
+		if (E* type = dynamic_cast<E*>(en)) {
+			vect.push_back(type);
+		}
+	}
+	return vect;
 }

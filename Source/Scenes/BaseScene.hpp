@@ -7,12 +7,15 @@
 #include "../Entities/BaseEntity.hpp"
 #include "../Items/ParticleSystem.hpp"
 #include "../Managers/PhysicsManager.hpp"
+#include "../Managers/CameraManager.hpp"
+
 
 class BaseScene {
 protected:
 	std::vector<BaseEntity*> scene_entities;
 	ParticleSystem* particleSystem;
 	PhysicsManager* physicsManager{nullptr};
+	CameraManager* camManager;
 	BaseScene();
 
 public:
@@ -26,6 +29,9 @@ public:
 
 	void AddEntityToScene(BaseEntity* entity);
 	void RemoveEntityFromScene(BaseEntity* entity);
+
+	template<typename E> E* GetFirstEntityOfType() const;
+	template<typename E> std::vector<E*> GetEntitesOfType() const;
 
 	std::vector<BaseEntity*> const& Entities() const;
 };

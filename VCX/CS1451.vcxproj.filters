@@ -168,6 +168,9 @@
     <ClCompile Include="..\Source\Entities\Weapons\TurboFistEntity.cpp">
       <Filter>Source Files\Entities\Weapons</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Entities\Weapons\GrappleFistEntity.cpp">
+      <Filter>Source Files\Entities\Weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -258,6 +261,9 @@
       <Filter>Header Files\Entities\Weapons</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Entities\Weapons\TurboFistEntity.hpp">
+      <Filter>Header Files\Entities\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\Weapons\GrappleFistEntity.hpp">
       <Filter>Header Files\Entities\Weapons</Filter>
     </ClInclude>
   </ItemGroup>

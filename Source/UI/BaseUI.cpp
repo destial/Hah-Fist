@@ -5,19 +5,19 @@
 #include "../Managers/AssetManager.hpp"
 #include <iostream>
 
-BaseUI::BaseUI(AEVec2 pos) : BaseEntity(pos),
-	font(0),
-	clicked_this_frame(false),
-	mouse_hovered(false),
-	text("BaseUI"),
-	text_size(1.f),
-	text_alignment(CENTER),
-	text_color({255, 0, 0, 0}),
-	overlay_text_color({255, 0, 0, 0}),
-	overlay_texture(nullptr),
-	overlay_color({ 255, 128, 128, 128 })
+BaseUI::BaseUI(AEVec2 pos) : BaseEntity{ pos },
+	font{0},
+	clicked_this_frame{ false },
+	mouse_hovered{ false },
+	text{ "BaseUI" },
+	text_size{ 1.f },
+	text_alignment{ TEXT_ALIGNMENT::CENTER },
+	text_color{255, 0, 0, 0},
+	overlay_text_color{255, 0, 0, 0},
+	overlay_texture{ nullptr },
+	overlay_color{ 255, 128, 128, 128 }
 {
-	layer = 5;
+	layer = RenderLayer::UI;
 	mesh = MeshRenderer::GetCenterRectMesh();
 	font = AssetManager::GetFontId("Assets/buggy-font.ttf");
 }

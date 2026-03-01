@@ -1,12 +1,16 @@
 #include "LevelEditor.hpp"
+#include "../UI/Debug.hpp"
+#include "../Managers/SerializationManager.hpp"
 #include "../Utils/Utils.hpp"
 
 #include "../Utils/MeshRenderer.hpp"
-#include "../UI/Debug.hpp"
 #include "../Entities/Enemies/EnemyEntity.hpp"
+#include "../Entities/Enemies/TrooperEntity.hpp"
 #include "../Entities/WeaponEntity.hpp"
 
-LevelEditor::LevelEditor(BaseScene* b_scene) : scene{ b_scene }, toggled{ false }, currentSelection{ nullptr } {}
+LevelEditor::LevelEditor(BaseScene* b_scene)
+	: scene{ b_scene }, toggled{ false }, currentSelection{ nullptr }, level{ 0 } {
+}
 
 LevelEditor::~LevelEditor() {}
 
@@ -48,12 +52,17 @@ BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
 	case Editor::GameObjectType::STATIC_PLATFORM: {
 		GameObjectEntity* go = new GameObjectEntity(Utils::GetMouseWorld(true));
 		go->mesh = MeshRenderer::GetCenterRectMesh();
-		go->go_type = GameObjectEntity::KINEMATIC::STATIC;
+		go->go_type = GameObjectEntity::PhysicsType::STATIC;
 		scene->AddEntityToScene(go);
 		return go;
 	}
 	case Editor::GameObjectType::ENEMY_1: {
 		EnemyEntity* enemy = new EnemyEntity(Utils::GetMouseWorld(true));
+		scene->AddEntityToScene(enemy);
+		return enemy;
+	}
+	case Editor::GameObjectType::ENEMY_2: {
+		EnemyEntity* enemy = new TrooperEntity(Utils::GetMouseWorld(true));
 		scene->AddEntityToScene(enemy);
 		return enemy;
 	}
@@ -66,6 +75,7 @@ BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
 void LevelEditor::Update(const f32& dt) {
 	static float fps_counter = 0.f;
 	static float cfps = 1.f / Utils::GetDeltaTime();
+	static float saved = 0.f;
 	if ((fps_counter += Utils::GetDeltaTime()) > 0.1f) {
 		cfps = 1.f / Utils::GetDeltaTime();
 		fps_counter = 0.f;
@@ -101,6 +111,14 @@ void LevelEditor::Update(const f32& dt) {
 		SelectEntity(AddEntity(Editor::GameObjectType::STATIC_PLATFORM));
 	}
 
+	if (AEInputCheckTriggered(AEVK_2)) {
+		SelectEntity(AddEntity(Editor::GameObjectType::ENEMY_1));
+	}
+
+	if (AEInputCheckTriggered(AEVK_3)) {
+		SelectEntity(AddEntity(Editor::GameObjectType::ENEMY_2));
+	}
+
 	if (currentSelection) {
 		if (AEInputCheckCurr(AEVK_LBUTTON)) {
 			if (Utils::OBBPoint(currentSelection, mwp)) {
@@ -108,13 +126,15 @@ void LevelEditor::Update(const f32& dt) {
 			}
 
 			if (scroll != 0) {
-				currentSelection->scale.x += scroll * dt;
+				currentSelection->scale.x += scroll;
+				currentSelection->scale.x = max(currentSelection->scale.x, 1);
 			}
 		}
 
 		if (AEInputCheckCurr(AEVK_RBUTTON)) {
 			if (scroll != 0) {
-				currentSelection->scale.y += scroll * dt;
+				currentSelection->scale.y += scroll;
+				currentSelection->scale.y = max(currentSelection->scale.y, 1);
 			}
 		}
 
@@ -132,6 +152,18 @@ void LevelEditor::Update(const f32& dt) {
 
 		AEGfxSetCamPosition(cam_x, cam_y);
 	}
+
+	if (AEInputCheckCurr(AEVK_LCTRL) && AEInputCheckTriggered(AEVK_S)) {
+		char filename[50];
+		sprintf_s(filename, 50, "Assets/level_%d.dat", level);
+		Serialization::WriteToFile(filename, Serialization::SerializeAll(scene->Entities()));
+		saved = 1.f;
+	}
+
+	if (saved > 0.f) {
+		saved -= dt;
+		DebugUtils::RenderText({ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f }, "Saved!");
+	}
 }
 
 void LevelEditor::Render() {
@@ -141,5 +173,9 @@ void LevelEditor::Render() {
 		DebugUtils::RenderLine(currentSelection->position, normal, { 255, 255, 0, 0 });
 		DebugUtils::RenderLine(currentSelection->position, right, { 255, 0, 255, 0 });
 	}
+}
+
+void LevelEditor::SetLevel(int l) {
+	level = l;
 }
 
