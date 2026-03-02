@@ -28,8 +28,10 @@ void TrooperEntity::Render() {
 
 void TrooperEntity::OnCollide(GameObjectEntity* go) {
 	EnemyEntity::OnCollide(go);
-	if (go->go_type == PhysicsType::STATIC)
-		ground = go;
+	ground = go->go_type == PhysicsType::STATIC ? go : nullptr;
+	if (go->go_type == PhysicsType::DYNAMIC) {
+		SwitchState(FSM::IDLE, 3.f);
+	}
 }
 
 void TrooperEntity::OnIdle(const f32& dt) {
@@ -37,7 +39,7 @@ void TrooperEntity::OnIdle(const f32& dt) {
 	velocity.x = 0.f;
 	if (stateTimer < 0.f) {
 		dir.x *= -1.f; // Flip the direction it is travelling.
-		SwitchState(FSM::PATROL, 0.f);
+		SwitchState(FSM::PATROL);
 		return;
 	}
 }
@@ -49,7 +51,6 @@ void TrooperEntity::OnPatrol(const f32& dt) {
 	velocity.x = dir.x * 10.f;
 	// Checks if it is on the ledge.
 	if (ground != nullptr && !(Utils::RayAABB({ position.x + scale.x * dir.x * 0.5f, position.y }, AEVec2{ 0.f, -1.f }, ground, contactPt, normal, timeCollide)) ) {
-		std::cout << "Off platform\n";
 		velocity.x = 0.f;
 		SwitchState(FSM::IDLE, 3.f); // Switching of states
 	}

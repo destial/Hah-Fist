@@ -14,7 +14,7 @@ protected:
 	int currentRow, currentCol;
 	SpriteSheet* sprite;
 	// Helper function for switching the state.
-	void SwitchState(FSM newState, f32 timeInNewState); 
+	void SwitchState(FSM newState, f32 timeInNewState = 0.0f); 
 public:
 	EnemyEntity(AEVec2 pos, AEVec2 dir = { 0.0f,0.0f });
 	virtual ~EnemyEntity();
