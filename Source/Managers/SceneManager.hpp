@@ -12,6 +12,7 @@ namespace Scenes {
 		SPLASH_SCREEN = 0,
 		MAIN_MENU,
 		GAME,
+		CREDITS,
 		LAST,
 	} SceneState;
 }

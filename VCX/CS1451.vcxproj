@@ -121,6 +121,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="..\Source\Managers\SceneManager.cpp" />
     <ClCompile Include="..\Source\Managers\SerializationManager.cpp" />
     <ClCompile Include="..\Source\Scenes\BaseScene.cpp" />
+    <ClCompile Include="..\Source\Scenes\CreditsScene.cpp" />
     <ClCompile Include="..\Source\Scenes\GameScene.cpp" />
     <ClCompile Include="..\Source\Scenes\SplashScreen.cpp" />
     <ClCompile Include="..\Source\Scenes\StartMenuScene.cpp" />
@@ -157,6 +158,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="..\Source\Managers\SceneManager.hpp" />
     <ClInclude Include="..\Source\Managers\SerializationManager.hpp" />
     <ClInclude Include="..\Source\Scenes\BaseScene.hpp" />
+    <ClInclude Include="..\Source\Scenes\CreditsScene.hpp" />
     <ClInclude Include="..\Source\Scenes\GameScene.hpp" />
     <ClInclude Include="..\Source\Scenes\SplashScreen.hpp" />
     <ClInclude Include="..\Source\Scenes\StartMenuScene.hpp" />

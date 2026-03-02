@@ -310,24 +310,4 @@ namespace Utils {
 		AEMtx33Trans(&translate, screenPos.x, screenPos.y);
 		return translate * rotate * scale;
 	}
-
-	f32 Lerp(f32 start, f32 end, f32 delta) {
-		return start + min_max(delta, 0.f, 1.f) * (end - start);
-	}
-
-	int Lerp(int start, int end, f32 delta) {
-		return static_cast<int>(start + min_max(delta, 0.f, 1.f) * (end - start));
-	}
-
-	f32 LerpCircle(f32 start, f32 end, f32 delta) {
-		delta = min_max(delta, 0.f, 1.f);
-		f32 p = 1.f - ((AECos(PI * delta) + 1.f) * 0.5f);
-		return Lerp(start, end, p);
-	}
-
-	int LerpCircle(int start, int end, f32 delta) {
-		delta = min_max(delta, 0.f, 1.f);
-		f32 p = 1.f - ((AECos(PI * delta) + 1.f) * 0.5f);
-		return Lerp(start, end, p);
-	}
 }

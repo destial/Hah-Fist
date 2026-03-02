@@ -1,14 +1,14 @@
-#include "SplashScreen.hpp"
+#include "CreditsScene.hpp"
 #include "../UI/ButtonUI.hpp"
 #include "../Utils/Utils.hpp"
 #include "../Managers/AssetManager.hpp"
 #include "../Managers/SceneManager.hpp"
 
-SplashScreen::SplashScreen() : BaseScene{} {}
+CreditsScene::CreditsScene() : BaseScene{} {}
 
-SplashScreen::~SplashScreen() {}
+CreditsScene::~CreditsScene() {}
 
-void SplashScreen::Init() {
+void CreditsScene::Init() {
 	ButtonUI* screen = new ButtonUI{ { Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f } };
 	screen->image = AssetManager::GetTexture("Assets/splash_screen.png");
 	screen->scale = { Utils::GetWorldWidth(), Utils::GetWorldHeight() };
@@ -18,11 +18,11 @@ void SplashScreen::Init() {
 	Game::SetBackgroundColor(Color{ 1.f, 0.f, 0.f, 0.f });
 };
 
-void SplashScreen::PreUpdate(const f32& dt) {
+void CreditsScene::PreUpdate(const f32& dt) {
 	BaseScene::PreUpdate(dt);
 }
 
-void SplashScreen::Update(const f32& dt) {
+void CreditsScene::Update(const f32& dt) {
 	BaseScene::Update(dt);
 	static f32 timer = 0.f;
 	scene_entities[0]->color.a = static_cast<unsigned char>(timer < 1.f ? 255 * timer : 255 * (2.f - timer));
@@ -31,14 +31,14 @@ void SplashScreen::Update(const f32& dt) {
 	}
 }
 
-void SplashScreen::PostUpdate(const f32& dt) {
+void CreditsScene::PostUpdate(const f32& dt) {
 	BaseScene::PostUpdate(dt);
 }
 
-void SplashScreen::Render() {
+void CreditsScene::Render() {
 	BaseScene::Render();
 }
 
-void SplashScreen::End() {
+void CreditsScene::End() {
 	BaseScene::End();
 }

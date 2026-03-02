@@ -16,7 +16,7 @@
 static ButtonUI* CreateButtonDisplay(AEVec2 pos, const char* ch) {
 	ButtonUI* b = new ButtonUI(pos);
 	b->image = AssetManager::GetTexture("Assets/Icons/small_button_grey.png");
-	b->scale = { 10.f, 7.f };
+	b->scale = { 12.5f, 4.f };
 	b->color = { 255, 255, 255, 255 };
 	b->overlay_color = { 255, 128, 128, 128 };
 	b->overlay_text_color = { 255, 255, 255, 255 };
@@ -33,28 +33,10 @@ StartMenuScene::~StartMenuScene() {
 }
 
 void StartMenuScene::Init() {
-	//AEGfxSetCamPosition(0.f, 0.f);
-	ButtonUI* s = new ButtonUI(AEVec2{ 3.f, Utils::GetWorldHeight() - .6f });
-	s->color = { 0, 0, 0, 0 };
-	s->overlay_color = s->color;
-	s->scale.x = 5.5f;
-	s->text_size = 5.f;
-	s->text = "FPS:";
-	s->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
-	static float fps_counter = 0.f;
-	s->AddUpdateListener(this, [s](const f32& dt) {
-		if ((fps_counter += dt) > 0.1f) {
-			char b[50];
-			sprintf_s(b, "FPS:%.0f", 1.f / dt);
-			s->text = std::string(b);
-			fps_counter = 0.f;
-		}
-	});
-
 	static f32 level_panel = 0.f;
 	static bool panel_active = false;
 
-	ButtonUI* start = CreateButtonDisplay({ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f + 5.f }, "Play  ");
+	ButtonUI* start = CreateButtonDisplay({ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f }, "Play  ");
 	start->AddClickListener([](BaseUI::MouseButton b) {
 		if (b & BaseUI::MouseButton::LEFT) {
 			panel_active = true;
@@ -73,6 +55,26 @@ void StartMenuScene::Init() {
 		start->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f, level_panel);
 	});
 
+	ButtonUI* credits = CreateButtonDisplay({ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f - 5.5f }, "Credits   ");
+	credits->AddClickListener([](BaseUI::MouseButton b) {
+		if (b & BaseUI::MouseButton::LEFT) {
+			SceneManager::GetInstance()->SetNextScene(Scenes::CREDITS);
+		}
+	});
+	credits->AddUpdateListener(this, [credits](const f32& dt) {
+		credits->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f, level_panel);
+	});
+
+	ButtonUI* quit = CreateButtonDisplay({ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f - 11.f }, "Quit  ");
+	quit->AddClickListener([](BaseUI::MouseButton b) {
+		if (b & BaseUI::MouseButton::LEFT) {
+			Game::SetGameRunning(false);
+		}
+	});
+	quit->AddUpdateListener(this, [quit](const f32& dt) {
+		quit->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f, level_panel); 
+	});
+
 	ButtonUI* back = CreateButtonDisplay({ Utils::GetWorldWidth() + 2.5f, Utils::GetWorldHeight() - 5.f }, "<");
 	back->scale = { 2.5f, 2.5f };
 	back->AddClickListener([](BaseUI::MouseButton b) {
@@ -82,16 +84,6 @@ void StartMenuScene::Init() {
 	});
 	back->AddUpdateListener(this, [back](const f32& dt) {
 		back->position.x = Utils::LerpCircle(Utils::GetWorldWidth() + 2.5f, Utils::GetWorldWidth() + 2.5f - Utils::GetWorldWidth(), level_panel);
-	});
-
-	ButtonUI* quit = CreateButtonDisplay({ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f - 5.f }, "Quit  ");
-	quit->AddClickListener([](BaseUI::MouseButton b) {
-		if (b & BaseUI::MouseButton::LEFT) {
-			Game::SetGameRunning(false);
-		}
-	});
-	quit->AddUpdateListener(this, [quit](const f32& dt) {
-		quit->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f, level_panel); 
 	});
 
 	for (int i = 0; i < 3; ++i) {
@@ -114,7 +106,9 @@ void StartMenuScene::Init() {
 	scene_entities.push_back(start);
 	scene_entities.push_back(quit);
 	scene_entities.push_back(back);
-	scene_entities.push_back(s);
+	scene_entities.push_back(credits);
+
+	Game::SetBackgroundColor(Color{ 1.f, 0.3f, 0.3f, 0.3f });
 }
 
 void StartMenuScene::PreUpdate(const f32& dt) {

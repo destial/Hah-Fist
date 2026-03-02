@@ -2,6 +2,7 @@
 #include "../Scenes/GameScene.hpp"
 #include "../Scenes/SplashScreen.hpp"
 #include "../Scenes/StartMenuScene.hpp"
+#include "../Scenes/CreditsScene.hpp"
 #include "../UI/Debug.hpp"
 
 namespace DebugUtils {
@@ -13,6 +14,7 @@ SceneManager::SceneManager() : all_scenes{}, next_scene{ Scenes::INIT }, current
 	all_scenes[Scenes::SPLASH_SCREEN] = new SplashScreen();
 	all_scenes[Scenes::MAIN_MENU] = new StartMenuScene();
 	all_scenes[Scenes::GAME] = new GameScene();
+	all_scenes[Scenes::CREDITS] = new CreditsScene();
 	editor = new LevelEditor{ all_scenes[0] };
 }
 

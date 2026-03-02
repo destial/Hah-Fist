@@ -75,9 +75,16 @@ namespace Utils {
 
 	AEMtx33 GetTransformMatrix(AEVec2 const& pos, AEVec2 const& sca, f32 rot);
 
-	f32 Lerp(f32 start, f32 end, f32 delta);
-	int Lerp(int start, int end, f32 delta);
-	f32 LerpCircle(f32 start, f32 end, f32 delta);
-	int LerpCircle(int start, int end, f32 delta);
+	template<typename N>
+	N Lerp(N start, N end, f32 delta) {
+		return start + min_max(delta, 0.f, 1.f) * (end - start);
+	}
+
+	template<typename N>
+	N LerpCircle(N start, N end, f32 delta) {
+		delta = min_max(delta, 0.f, 1.f);
+		f32 p = 1.f - ((AECos(PI * delta) + 1.f) * 0.5f);
+		return Lerp<N>(start, end, p);
+	}
 }
 #endif

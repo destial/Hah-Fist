@@ -75,7 +75,7 @@ void ButtonUI::Render() {
 	}
 	AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxSetTransparency(1.0f);
+	AEGfxSetTransparency(color.a / 255.f);
 	AEGfxSetTransform(this->transform.m);
 	AEGfxMeshDraw(mesh, MeshRenderer::RenderMode);
 	AEGfxTextureSet(nullptr, 0.f, 0.f);
