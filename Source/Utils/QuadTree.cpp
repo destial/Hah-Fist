@@ -139,6 +139,11 @@ namespace QuadTree
 
 	std::vector<GameObjectEntity*> Node::GetPotentialCollisionTargets(GameObjectEntity* gameObject, std::vector<GameObjectEntity*> ignoredObjects)
 	{
+		return GetPotentialCollisionTargets(gameObject, ignoredObjects, GameObjectEntity::PhysicsType::TOTAL);
+	}
+
+	std::vector<GameObjectEntity*> Node::GetPotentialCollisionTargets(GameObjectEntity* gameObject, std::vector<GameObjectEntity*> ignoredObjects, GameObjectEntity::PhysicsType type_filter)
+	{
 		Physics::AABB bounds;
 		bounds.min.x = gameObject->position.x - gameObject->scale.x * 0.5f;
 		bounds.min.y = gameObject->position.y - gameObject->scale.y * 0.5f;
@@ -152,13 +157,24 @@ namespace QuadTree
 		{
 			for (QuadTreeEntry* entry : node->entries)
 			{
-				bool isIgnored{ false };
-				for (GameObjectEntity* go : ignoredObjects)
+				if (type_filter != GameObjectEntity::PhysicsType::TOTAL)
 				{
-					if (entry->gameObject == go)
+					if (entry->gameObject->go_type != type_filter)
 					{
-						isIgnored = true;
-						break;
+						continue;
+					}
+				}
+
+				bool isIgnored{ false };
+				if (ignoredObjects.size() > 0)
+				{
+					for (GameObjectEntity* go : ignoredObjects)
+					{
+						if (entry->gameObject == go)
+						{
+							isIgnored = true;
+							break;
+						}
 					}
 				}
 
@@ -170,6 +186,11 @@ namespace QuadTree
 		}
 
 		return result;
+	}
+
+	std::vector<GameObjectEntity*> Node::GetPotentialCollisionTargets(GameObjectEntity* gameObject, GameObjectEntity::PhysicsType type_filter)
+	{
+		return GetPotentialCollisionTargets(gameObject, {}, type_filter);
 	}
 
 	Tree::Tree(Physics::AABB bounds, std::vector<GameObjectEntity*> gameObjects, size_t max_entries)

@@ -31,182 +31,66 @@ void PhysicsManager::Update(const f32& dt)
 	//Reset collision state to false;
 	for (auto& go : gameObjects) { go->pBody->is_colliding = false; }
 
-	// Collision detection 
-	std::vector<GameObjectEntity*> ignoredObjects{};
-	for (GameObjectEntity* go : gameObjects) {
-		ignoredObjects.push_back(go);
-		for (GameObjectEntity* go2 : qtGameObjects->head->GetPotentialCollisionTargets(go, ignoredObjects)) {
+	// Collision: DYNAMIC vs TRIGGER
+	for (GameObjectEntity* trigger : gameObjects) {
+		//If trigger inactive, continue
+		if (!trigger->isActive) { continue; }
+
+		//If GameObject is not a trigger, continue
+		if (trigger->go_type != GameObjectEntity::PhysicsType::TRIGGER) { continue; }
+		
+		for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(trigger, GameObjectEntity::PhysicsType::DYNAMIC)) {
 			//Checks if either go is inactive, if so, skip this check
-			if (!go->isActive || !go2->isActive)
-				continue;
-
-			DebugUtils::RenderPoint(go->position + go->scale * 0.25f, { 255, 255, 255, 0 });
-			DebugUtils::RenderPoint(go2->position + go2->scale * -0.25f, { 255, 0, 255, 255 });
-			if (Utils::OBB(go, go2)) {
-				if (go->go_type == GameObjectEntity::PhysicsType::TRIGGER && go2->go_type == GameObjectEntity::PhysicsType::TRIGGER)
-				{
-					continue;
-				}
-				if (go->go_type == GameObjectEntity::PhysicsType::TRIGGER)
-				{
-					go->OnCollide(go2);
-				}
-				else if(go2->go_type == GameObjectEntity::PhysicsType::TRIGGER)
-				{
-					go2->OnCollide(go);
-				}
-				else
-				{
-					go->pBody->is_colliding = true;
-					go2->pBody->is_colliding = true;
-
-					go->OnCollide(go2);
-					go2->OnCollide(go);
-				}
-
-
-
-				//go->color = { 255, 0, 0, 0 };
-				//AEVec2 go1to2 = go2->position - go->position;
+			if (!dynamic->isActive) { continue; }
 				
-				//if (AEVec2DotProduct(&go->velocity, &go1to2) > 1)
-				//{
-				//	//Velocity Trading
-
-				//	AEVec2 tmp{ go->velocity };
-				//	AEVec2 tmp2{ go2->velocity };
-				//	f32 mass_total = go->pBody->mass + go2->pBody->mass;
-
-				//	if (go->go_type == GameObjectEntity::KINEMATIC::DYNAMIC && go2->go_type == GameObjectEntity::KINEMATIC::DYNAMIC) {
-				//		if (go->position.y > go2->position.y + go2->scale.y * 0.5f)
-				//		{
-				//			go->position = go->prev_position;
-				//			go->velocity.y = 0.0f;
-				//			go2->velocity.y = (go2->velocity.y * (go2->pBody->mass - go->pBody->mass) + tmp.y * 2 * go->pBody->mass) / mass_total;
-				//		}
-				//		else
-				//		{
-				//			go2->position = go2->prev_position;
-				//			go2->velocity.y = 0.0f;
-				//			go->velocity.y = (go->velocity.y * (go->pBody->mass - go2->pBody->mass) + tmp2.y * 2 * go2->pBody->mass) / mass_total;
-				//			go->velocity.x = (go->velocity.x * (go->pBody->mass - go2->pBody->mass) + tmp2.x * 2 * go2->pBody->mass) / mass_total;
-				//			go2->velocity.x = (go2->velocity.x * (go2->pBody->mass - go->pBody->mass) + tmp.x * 2 * go->pBody->mass) / mass_total;
-
-				//		}
-				//	}
-				//}
-
-				/*AEVec2 down = { 0, -1.f };
-				f32 dotdown1 = go->velocity * down;
-				f32 dotdown2 = go2->velocity * down;
-				if (go->go_type == GameObjectEntity::KINEMATIC::DYNAMIC && go2->go_type == GameObjectEntity::KINEMATIC::STATIC) {
-					if (dotdown1 > 1 && go->position.y >= go2->position.y + go2->scale.y * 0.5f + go->scale.y * 0.49f)
-					{
-						go->position = go->prev_position;
-						go->velocity.y = 0.0f;
-					}
-				}
-
-				if (go2->go_type == GameObjectEntity::KINEMATIC::DYNAMIC && go->go_type == GameObjectEntity::KINEMATIC::STATIC) {
-					if (dotdown2 > 1 && go2->position.y >= go->position.y + go->scale.y * 0.5f + go2->scale.y * 0.49f)
-					{
-						go2->position = go2->prev_position;
-						go2->velocity.y = 0.0f;
-					}
-				}*/
+			if (Utils::OBB(trigger, dynamic)) {
+				trigger->OnCollide(dynamic);
 			}
 		}
 	}
-	//for (int i{}; i < gameObjects.size(); i++) {
-	//	// Starts loop only from the next object
-	//	for (int j{ i + 1 }; j < gameObjects.size(); j++) {
-	//		GameObjectEntity* go = gameObjects[i];
-	//		GameObjectEntity* go2 = gameObjects[j];
-	//		//Checks if either go is inactive, if so, skip this check
-	//		if (!go->isActive || !go2->isActive)
-	//			continue;
 
-	//		DebugUtils::RenderPoint(go->position + go->scale * 0.25f, { 255, 255, 255, 0 });
-	//		DebugUtils::RenderPoint(go2->position + go2->scale * -0.25f, { 255, 0, 255, 255 });
-	//		if (Utils::OBB(go, go2)) {
-	//			//go->color = { 255, 0, 0, 0 };
-	//			AEVec2 go1to2 = go2->position - go->position;
-	//			go->pBody->is_colliding = true;
-	//			go2->pBody->is_colliding = true;
+	// Collision: DYNAMIC vs DYNAMIC
+	std::vector<GameObjectEntity*> ignoredObjects{};
+	for (GameObjectEntity* dynamic1 : gameObjects) {
+		ignoredObjects.push_back(dynamic1);
+		//If trigger inactive, continue
+		if (!dynamic1->isActive) { continue; }
 
-	//			if (AEVec2DotProduct(&go->velocity, &go1to2) > 1)
-	//			{
-	//				//Velocity Trading
+		//If GameObject is not a trigger, continue
+		if (dynamic1->go_type != GameObjectEntity::PhysicsType::DYNAMIC) { continue; }
 
-	//				AEVec2 tmp{ go->velocity };
-	//				AEVec2 tmp2{ go2->velocity };
-	//				f32 mass_total = go->pBody->mass + go2->pBody->mass;
+		for (GameObjectEntity* dynamic2 : qtGameObjects->head->GetPotentialCollisionTargets(dynamic1, ignoredObjects, GameObjectEntity::PhysicsType::DYNAMIC)) {
+			//Checks if either go is inactive, if so, skip this check
+			if (!dynamic1->isActive) { continue; }
 
-	//				if (go->go_type == GameObjectEntity::KINEMATIC::DYNAMIC && go2->go_type == GameObjectEntity::KINEMATIC::DYNAMIC) {
-	//					if (go->position.y > go2->position.y + go2->scale.y * 0.5f)
-	//					{
-	//						go->position = go->prev_position;
-	//						go->velocity.y = 0.0f;
-	//						go2->velocity.y = (go2->velocity.y * (go2->pBody->mass - go->pBody->mass) + tmp.y * 2 * go->pBody->mass) / mass_total;
-	//					}
-	//					else
-	//					{
-	//						go2->position = go2->prev_position;
-	//						go2->velocity.y = 0.0f;
-	//						go->velocity.y = (go->velocity.y * (go->pBody->mass - go2->pBody->mass) + tmp2.y * 2 * go2->pBody->mass) / mass_total;
-	//						go->velocity.x = (go->velocity.x * (go->pBody->mass - go2->pBody->mass) + tmp2.x * 2 * go2->pBody->mass) / mass_total;
-	//						go2->velocity.x = (go2->velocity.x * (go2->pBody->mass - go->pBody->mass) + tmp.x * 2 * go->pBody->mass) / mass_total;
+			if (Utils::OBB(dynamic1, dynamic2)) {
+				dynamic1->OnCollide(dynamic2);
+				dynamic2->OnCollide(dynamic1);
+				dynamic1->pBody->is_colliding = true;
+				dynamic2->pBody->is_colliding = true;
+			}
+		}
+	}
 
-	//					}
-	//				}
-	//			}
+	// Collision: DYNAMIC vs STATIC
+	for (GameObjectEntity* _static : gameObjects) {
+		//If trigger inactive, continue
+		if (!_static->isActive) { continue; }
 
-	//			AEVec2 down = { 0, -1.f };
-	//			f32 dotdown1 = AEVec2DotProduct(&go->velocity, &down);
-	//			f32 dotdown2 = AEVec2DotProduct(&go2->velocity, &down);
+		//If GameObject is not a trigger, continue
+		if (_static->go_type != GameObjectEntity::PhysicsType::STATIC) { continue; }
 
-	//			if (go->go_type == GameObjectEntity::KINEMATIC::DYNAMIC && go2->go_type == GameObjectEntity::KINEMATIC::STATIC) {
-	//				if (dotdown1 > 1)
-	//				{
-	//					go->position = go->prev_position;
-	//					go->velocity.y = 0.0f;
-	//				}
-	//			}
+		for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(_static, GameObjectEntity::PhysicsType::DYNAMIC)) {
+			//Checks if either go is inactive, if so, skip this check
+			if (!dynamic->isActive) { continue; }
 
-	//			if (go2->go_type == GameObjectEntity::KINEMATIC::DYNAMIC && go->go_type == GameObjectEntity::KINEMATIC::STATIC) {
-	//				if (dotdown2 > 1)
-	//				{
-	//					go2->position = go2->prev_position;
-	//					go2->velocity.y = 0.0f;
-	//				}
-	//			}
-	//		}
-
-
-	//		/*AEVec2 go1_push = go->position - go2->position;
-	//		AEVec2 go2_push = go2->position - go->position;
-	//		Utils::SnapVectorToAxis(&go1_push, &go1_push);
-	//		Utils::SnapVectorToAxis(&go2_push, &go2_push);
-	//		go->velocity += go1_push;
-	//		go2->velocity += go2_push;*/
-	//		/*if (go1_push.y > go1_push.x || go2_push.y > go2_push.x)
-	//		{
-	//			if (go->position.y > go2->position.y)
-	//			{
-	//				go->velocity.y = 0;
-	//			}
-	//			else
-	//			{
-	//				go2->velocity.y = 0;
-	//			}
-	//		}
-	//		else
-	//		{
-	//			go->velocity += go1_push;
-	//			go2->velocity += go2_push;
-	//		}*/
-	//	}
-	//}
+			if (Utils::OBB(_static, dynamic)) {
+				_static->OnCollide(dynamic);
+				dynamic->OnCollide(_static);
+				dynamic->pBody->is_colliding = true;
+			}
+		}
+	}
 }
 
 void PhysicsManager::Render()
