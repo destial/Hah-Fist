@@ -14,8 +14,8 @@ static uint32_t ntohl(uint32_t const net) {
 		| ((uint32_t)data[0] << 24);
 }
 
-Image::Image(const char* filename) : image(AEGfxTextureLoad(filename)), height(0), width(0) {
-	if (image) {
+Image::Image(const char* filename) : data(AEGfxTextureLoad(filename)), height(0), width(0) {
+	if (data) {
 		std::ifstream ifs(filename);
 		ifs.seekg(16);
 		ifs.read((char*)&width, 4);
@@ -27,8 +27,8 @@ Image::Image(const char* filename) : image(AEGfxTextureLoad(filename)), height(0
 }
 
 Image::~Image() {
-	if (image) {
-		AEGfxTextureUnload(image);
-		image = nullptr;
+	if (data) {
+		AEGfxTextureUnload(data);
+		data = nullptr;
 	}
 }

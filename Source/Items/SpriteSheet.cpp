@@ -26,8 +26,8 @@ SpriteSheet::~SpriteSheet() {
 
 void SpriteSheet::Render(AEMtx33& t, Color color, int row, int column) {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-	if (image->image) {
-		AEGfxTextureSet(image->image, static_cast<f32>(column) / columns, static_cast<f32>(row) / rows);
+	if (image->data) {
+		AEGfxTextureSet(image->data, static_cast<f32>(column) / columns, static_cast<f32>(row) / rows);
 	}
 	AEGfxSetColorToMultiply(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
 	AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);

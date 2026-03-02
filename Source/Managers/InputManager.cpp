@@ -2,29 +2,13 @@
 #include "AEEngine.h"
 #include "AssetManager.hpp"
 
-InputHandler* InputHandler::instance = nullptr;
-
 InputHandler::InputHandler() : keys_t(0), keys_c(0), keys_r(0), keys_p(0) {
 	this->event = new InputEvent(keys_t, keys_p, keys_c, keys_r);
 	this->EndFrame();
 }
 InputHandler::~InputHandler() {
+	InputEvent::Listeners.clear();
 	delete event;
-}
-
-InputHandler* InputHandler::GetInstance() {
-	if (instance == nullptr) {
-		instance = new InputHandler();
-	}
-	return instance;
-}
-
-void InputHandler::Free() {
-	if (instance) {
-		InputEvent::Listeners.clear();
-		delete instance;
-		instance = nullptr;
-	}
 }
 
 void InputHandler::Update(const f32& dt) {

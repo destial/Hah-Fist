@@ -66,9 +66,9 @@ void BaseEntity::Render() {
 	if (!mesh)
 		return;
 
-	if (image && image->image) {
+	if (image && image->data) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		AEGfxTextureSet(image->image, 0.f, 0.f);
+		AEGfxTextureSet(image->data, 0.f, 0.f);
 	}
 	else {
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);

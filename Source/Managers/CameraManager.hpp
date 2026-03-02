@@ -2,22 +2,17 @@
 #ifndef __CAMERAMANAGER_H
 #define __CAMERAMANAGER_H
 #include <iostream>
+#include "../Utils/Singleton.hpp"
 
 /*
 * @brief Singleton class that handles Camera Movement and Effects
 */
-class CameraManager
-{
-private:
-    CameraManager();
-
-    static CameraManager* instance;
+class CameraManager : public Singleton<CameraManager> {
+private: 
     float x, y, targetx, targety, smoothspeed, shaketimer, shakeduration, shakestrength;
-
 public:
+    CameraManager();
     ~CameraManager();
-    static CameraManager* GetInstance();
-    static void Free();
 
     void Update(float dt);
 

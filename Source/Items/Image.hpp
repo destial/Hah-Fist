@@ -6,7 +6,7 @@
 class Image {
 public:
 	unsigned int width, height;
-	AEGfxTexture* image;
+	AEGfxTexture* data;
 
 	Image(const char* file);
 	~Image();

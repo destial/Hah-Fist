@@ -3,6 +3,7 @@
 #define __SCENEMANAGER_H
 #include "AETypes.h"
 #include "../Scenes/BaseScene.hpp"
+#include "../Utils/Singleton.hpp"
 #include "LevelEditor.hpp"
 
 namespace Scenes {
@@ -14,10 +15,7 @@ namespace Scenes {
 	} SceneState;
 }
 
-class SceneManager {
-private:
-	static SceneManager* instance;
-	
+class SceneManager : public Singleton<SceneManager> {
 protected:
 	BaseScene* all_scenes[Scenes::LAST];
 
@@ -43,8 +41,6 @@ public:
 	void SetNextScene(Scenes::SceneState next);
 	BaseScene* GetCurrentScene() const;
 	Scenes::SceneState GetCurrentState() const;
-
-	static SceneManager* GetInstance();
 };
 
 #endif

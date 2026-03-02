@@ -167,6 +167,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="..\Source\Utils\Physics.hpp" />
     <ClInclude Include="..\Source\Utils\PhysicsBody.hpp" />
     <ClInclude Include="..\Source\Utils\QuadTree.hpp" />
+    <ClInclude Include="..\Source\Utils\Singleton.hpp" />
     <ClInclude Include="..\Source\Utils\Utils.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
