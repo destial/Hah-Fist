@@ -38,7 +38,7 @@ BaseEntity::~BaseEntity() {
 void BaseEntity::PreUpdate(const f32& dt) {
 	for (auto& entry : preupdate_listeners) {
 		for (auto& func : entry.second) {
-			func();
+			func(dt);
 		}
 	}
 }
@@ -46,7 +46,7 @@ void BaseEntity::PreUpdate(const f32& dt) {
 void BaseEntity::Update(const f32& dt) {
 	for (auto& entry : update_listeners) {
 		for (auto& func : entry.second) {
-			func();
+			func(dt);
 		}
 	}
 }
@@ -54,7 +54,7 @@ void BaseEntity::Update(const f32& dt) {
 void BaseEntity::PostUpdate(const f32& dt) {
 	for (auto& entry : postupdate_listeners) {
 		for (auto& func : entry.second) {
-			func();
+			func(dt);
 		}
 	}
 
@@ -91,21 +91,21 @@ void BaseEntity::Render() {
 	AEGfxTextureSet(nullptr, 0.f, 0.f);
 }
 
-void BaseEntity::AddUpdateListener(void* owner, std::function<void()> func) {
+void BaseEntity::AddUpdateListener(void* owner, std::function<void(const f32&)> func) {
 	//if (!update_listeners.count(owner)) {
 	//	update_listeners[owner] = std::vector<std::function<void()>>(0);
 	//}
 	update_listeners[owner].push_back(func);
 }
 
-void BaseEntity::AddPreUpdateListener(void* owner, std::function<void()> func) {
+void BaseEntity::AddPreUpdateListener(void* owner, std::function<void(const f32&)> func) {
 	//if (!preupdate_listeners.count(owner)) {
 	//	preupdate_listeners[owner] = std::vector<std::function<void()>>(0);
 	//}
 	preupdate_listeners[owner].push_back(func);
 }
 
-void BaseEntity::AddPostUpdateListener(void* owner, std::function<void()> func) {
+void BaseEntity::AddPostUpdateListener(void* owner, std::function<void(const f32&)> func) {
 	//if (!postupdate_listeners.count(owner)) {
 	//	postupdate_listeners[owner] = std::vector<std::function<void()>>(0);
 	//}

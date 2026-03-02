@@ -2,6 +2,7 @@
 #include "../Managers/SceneManager.hpp"
 #include "../Managers/AssetManager.hpp"
 #include "../Managers/SerializationManager.hpp"
+#include "../Managers/LevelManager.hpp"
 #include "../Entities/PlayerEntity.hpp"
 #include "../Entities/Enemies/EnemyEntity.hpp"
 #include "../Entities/Enemies/TrooperEntity.hpp"
@@ -46,7 +47,6 @@ static void OnGameExit(const InputEvent* ev) {
 }
 
 void GameScene::Init() {
-	//AEGfxSetCamPosition(0.f, 0.f); // CameraEntity
 	InputEvent::Listeners += {this, OnGameExit};
 
 	ButtonUI* wk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 1.f }, 'W');
@@ -59,7 +59,10 @@ void GameScene::Init() {
 	AddEntityToScene(dk);
 	AddEntityToScene(sk);
 
-	std::vector<Serialization::SerializedEntity> ens = Serialization::LoadFromFile("Assets/level_0.dat");
+	std::string filename = "Assets/level_";
+	filename += std::string{ static_cast<char>('0' + LevelManager::GetLevel()) };
+	filename += ".dat";
+	std::vector<Serialization::SerializedEntity> ens = Serialization::LoadFromFile(filename.c_str());
 
 	Player* player = nullptr;
 	if (!ens.empty()) {

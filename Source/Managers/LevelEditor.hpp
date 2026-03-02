@@ -18,7 +18,6 @@ private:
 	bool toggled;
 	BaseScene* scene;
 	BaseEntity* currentSelection;
-	int level;
 public:
 	LevelEditor(BaseScene* scene);
 	~LevelEditor();
@@ -34,8 +33,6 @@ public:
 
 	void Update(const f32& dt);
 	void Render();
-
-	void SetLevel(int l);
 };
 
 #endif

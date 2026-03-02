@@ -9,6 +9,7 @@
 #include "../UI/ButtonUI.hpp"
 #include "../UI/CircleButtonUI.hpp"
 #include "../Managers/SceneManager.hpp"
+#include "../Managers/LevelManager.hpp"
 #include <cstdio>
 #include <string>
 
@@ -41,31 +42,78 @@ void StartMenuScene::Init() {
 	s->text = "FPS:";
 	s->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
 	static float fps_counter = 0.f;
-	s->AddUpdateListener(this, [s]() {
-		if ((fps_counter += Utils::GetDeltaTime()) > 0.1f) {
+	s->AddUpdateListener(this, [s](const f32& dt) {
+		if ((fps_counter += dt) > 0.1f) {
 			char b[50];
-			sprintf_s(b, "FPS:%.0f", 1.f / Utils::GetDeltaTime());
+			sprintf_s(b, "FPS:%.0f", 1.f / dt);
 			s->text = std::string(b);
 			fps_counter = 0.f;
 		}
 	});
 
-	ButtonUI* start = CreateButtonDisplay(AEVec2{ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f + 5.f }, "Start  ");
+	static f32 level_panel = 0.f;
+	static bool panel_active = false;
+
+	ButtonUI* start = CreateButtonDisplay({ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f + 5.f }, "Play  ");
 	start->AddClickListener([](BaseUI::MouseButton b) {
 		if (b & BaseUI::MouseButton::LEFT) {
-			SceneManager::GetInstance()->SetNextScene(Scenes::GAME);
+			panel_active = true;
 		}
 	});
+	start->AddPreUpdateListener(this, [start](const f32& dt) {
+		if (panel_active) {
+			level_panel += dt;
+		}
+		else {
+			level_panel -= dt;
+		}
+		level_panel = min_max(level_panel, 0.f, 1.f);
+	});
+	start->AddUpdateListener(this, [start](const f32& dt){
+		start->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f, level_panel);
+	});
 
-	ButtonUI* quit = CreateButtonDisplay(AEVec2{ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f - 5.f }, "Quit  ");
+	ButtonUI* back = CreateButtonDisplay({ Utils::GetWorldWidth() + 2.5f, Utils::GetWorldHeight() - 5.f }, "<");
+	back->scale = { 2.5f, 2.5f };
+	back->AddClickListener([](BaseUI::MouseButton b) {
+		if (b & BaseUI::MouseButton::LEFT) {
+			panel_active = false;
+		}
+	});
+	back->AddUpdateListener(this, [back](const f32& dt) {
+		back->position.x = Utils::LerpCircle(Utils::GetWorldWidth() + 2.5f, Utils::GetWorldWidth() + 2.5f - Utils::GetWorldWidth(), level_panel);
+	});
+
+	ButtonUI* quit = CreateButtonDisplay({ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f - 5.f }, "Quit  ");
 	quit->AddClickListener([](BaseUI::MouseButton b) {
 		if (b & BaseUI::MouseButton::LEFT) {
 			Game::SetGameRunning(false);
 		}
 	});
+	quit->AddUpdateListener(this, [quit](const f32& dt) {
+		quit->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f, level_panel); 
+	});
+
+	for (int i = 0; i < 3; ++i) {
+		float w = Utils::GetWorldWidth() + 2.f + (i * 3.f);
+		ButtonUI* level_button = CreateButtonDisplay({ w, Utils::GetWorldHeight() * 0.5f }, std::string{ static_cast<char>('1' + i) }.c_str());
+		level_button->scale = { 2.f, 2.f };
+		scene_entities.push_back(level_button);
+		level_button->AddClickListener([i](BaseUI::MouseButton b) {
+			const int l = i;
+			if (b & BaseUI::MouseButton::LEFT) {
+				LevelManager::SetLevel(l);
+				SceneManager::GetInstance()->SetNextScene(Scenes::GAME);
+			}
+		});
+		level_button->AddUpdateListener(this, [level_button, w](const f32& dt) {
+			level_button->position.x = Utils::LerpCircle(w, w - Utils::GetWorldWidth(), level_panel);
+		});
+	}
 
 	scene_entities.push_back(start);
 	scene_entities.push_back(quit);
+	scene_entities.push_back(back);
 	scene_entities.push_back(s);
 }
 

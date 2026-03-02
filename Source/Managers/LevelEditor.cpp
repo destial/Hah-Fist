@@ -1,6 +1,7 @@
 #include "LevelEditor.hpp"
 #include "../UI/Debug.hpp"
 #include "../Managers/SerializationManager.hpp"
+#include "../Managers/LevelManager.hpp"
 #include "../Utils/Utils.hpp"
 
 #include "../Utils/MeshRenderer.hpp"
@@ -9,7 +10,7 @@
 #include "../Entities/WeaponEntity.hpp"
 
 LevelEditor::LevelEditor(BaseScene* b_scene)
-	: scene{ b_scene }, toggled{ false }, currentSelection{ nullptr }, level{ 0 } {
+	: scene{ b_scene }, toggled{ false }, currentSelection{ nullptr } {
 }
 
 LevelEditor::~LevelEditor() {}
@@ -155,7 +156,7 @@ void LevelEditor::Update(const f32& dt) {
 
 	if (AEInputCheckCurr(AEVK_LCTRL) && AEInputCheckTriggered(AEVK_S)) {
 		char filename[50];
-		sprintf_s(filename, 50, "Assets/level_%d.dat", level);
+		sprintf_s(filename, 50, "Assets/level_%d.dat", LevelManager::GetLevel());
 		Serialization::WriteToFile(filename, Serialization::SerializeAll(scene->Entities()));
 		saved = 1.f;
 	}
@@ -173,9 +174,5 @@ void LevelEditor::Render() {
 		DebugUtils::RenderLine(currentSelection->position, normal, { 255, 255, 0, 0 });
 		DebugUtils::RenderLine(currentSelection->position, right, { 255, 0, 255, 0 });
 	}
-}
-
-void LevelEditor::SetLevel(int l) {
-	level = l;
 }
 

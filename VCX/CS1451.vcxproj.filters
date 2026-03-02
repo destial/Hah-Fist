@@ -171,6 +171,12 @@
     <ClCompile Include="..\Source\Entities\Weapons\GrappleFistEntity.cpp">
       <Filter>Source Files\Entities\Weapons</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Managers\LevelManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Managers\CameraManager.cpp">
+      <Filter>Source Files\Managers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -265,6 +271,12 @@
     </ClInclude>
     <ClInclude Include="..\Source\Entities\Weapons\GrappleFistEntity.hpp">
       <Filter>Header Files\Entities\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Managers\LevelManager.hpp">
+      <Filter>Header Files\Managers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Managers\CameraManager.hpp">
+      <Filter>Header Files\Managers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

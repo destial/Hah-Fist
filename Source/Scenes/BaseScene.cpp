@@ -9,6 +9,7 @@ BaseScene::~BaseScene() {
 	delete particleSystem;
 	if (physicsManager)
 		delete physicsManager;
+	CameraManager::Free();
 }
 
 void BaseScene::PreUpdate(const f32& dt) {

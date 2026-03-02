@@ -26,18 +26,18 @@ public:
 		WORLD = 0, ENTITY = 1, PLAYER = 2, UI = 5
 	} layer;
 
-	std::map<void*, std::vector<std::function<void()>>> preupdate_listeners;
-	std::map<void*, std::vector<std::function<void()>>> update_listeners;
-	std::map<void*, std::vector<std::function<void()>>> postupdate_listeners;
+	std::map<void*, std::vector<std::function<void(const f32&)>>> preupdate_listeners;
+	std::map<void*, std::vector<std::function<void(const f32&)>>> update_listeners;
+	std::map<void*, std::vector<std::function<void(const f32&)>>> postupdate_listeners;
 
 	virtual void PreUpdate(const f32& dt);
 	virtual void Update(const f32& dt);
 	virtual void PostUpdate(const f32& dt);
 	virtual void Render();
 
-	void AddUpdateListener(void* owner, std::function<void()> func);
-	void AddPreUpdateListener(void* owner, std::function<void()> func);
-	void AddPostUpdateListener(void* owner, std::function<void()> func);
+	void AddUpdateListener(void* owner, std::function<void(const f32&)> func);
+	void AddPreUpdateListener(void* owner, std::function<void(const f32&)> func);
+	void AddPostUpdateListener(void* owner, std::function<void(const f32&)> func);
 
 	bool RemoveUpdateListener(void* owner);
 	bool RemovePreUpdateListener(void* owner);
