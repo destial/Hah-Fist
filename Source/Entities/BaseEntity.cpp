@@ -84,7 +84,7 @@ void BaseEntity::Render() {
 	// Set blend mode to AE_GFX_BM_BLEND
 	// This will allow transparency.
 	AEGfxSetBlendMode(AE_GFX_BM_BLEND);
-	AEGfxSetTransparency(1.0f);
+	AEGfxSetTransparency(color.a / 255.f);
 
 	AEGfxSetTransform(this->transform.m);
 	AEGfxMeshDraw(mesh, MeshRenderer::RenderMode);

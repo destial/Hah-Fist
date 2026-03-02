@@ -9,7 +9,8 @@
 namespace Scenes {
 	typedef enum SceneState {
 		INIT = -1,
-		MAIN_MENU = 0,
+		SPLASH_SCREEN = 0,
+		MAIN_MENU,
 		GAME,
 		LAST,
 	} SceneState;

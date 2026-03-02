@@ -8,10 +8,6 @@
 
 #define min_max(v, mn, mx) min(mx, max(mn, v))
 
-namespace Game {
-	void SetGameRunning(bool b);
-}
-
 class BaseEntity;
 
 struct Color {
@@ -43,6 +39,11 @@ struct Color {
 std::istream& operator>> (std::istream& is, Color& color);
 
 std::ostream& operator<< (std::ostream& os, Color const& color);
+
+namespace Game {
+	void SetGameRunning(bool b);
+	void SetBackgroundColor(Color c);
+}
 
 namespace Utils {
 	AEVec2 WorldToScreen(f32 x, f32 y);

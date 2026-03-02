@@ -14,8 +14,13 @@
 
 namespace Game {
 	bool bGameRunning;
+	Color bgdColor;
 	void SetGameRunning(bool b) {
 		bGameRunning = b;
+	}
+
+	void SetBackgroundColor(Color c) {
+		bgdColor = c;
 	}
 }
 
@@ -45,10 +50,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	DebugUtils::ToggleRender(false);
 
 	Game::bGameRunning = true;
+	Game::bgdColor = { 1.f, 0.3f, 0.3f, 0.3f };
 	{
 		SceneManager sceneManager;
 		// dont need to call delete after, already handled in ~scene manager destructor
-		sceneManager.SetNextScene(Scenes::MAIN_MENU);
+		sceneManager.SetNextScene(Scenes::SPLASH_SCREEN);
 		
 		// Game Loop
 		while (Game::bGameRunning) {
@@ -75,8 +81,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 			// -=-=-=-=-=-=-=- Rendering Logic Start -=-=-=-=-=-=-=-
 
-			// Set background color to gray	
-			AEGfxSetBackgroundColor(0.3f, 0.3f, 0.3f);
+			// Set background color
+			AEGfxSetBackgroundColor(Game::bgdColor.r / 255.f, Game::bgdColor.g / 255.f, Game::bgdColor.b / 255.f);
 			sceneManager.Render();
 
 			// Informing the system about the loop's end

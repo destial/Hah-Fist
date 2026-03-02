@@ -34,11 +34,9 @@ static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, char ch) {
 	return CreateHotKeyDisplay(pos, std::string{ ch });
 }
 
-GameScene::GameScene() : BaseScene() {
-}
+GameScene::GameScene() : BaseScene() {}
 
-GameScene::~GameScene() {
-}
+GameScene::~GameScene() {}
 
 static void OnGameExit(const InputEvent* ev) {
 	if (ev->IsKeyTriggered(AEVK_ESCAPE)) {
@@ -97,6 +95,8 @@ void GameScene::Init() {
 	}
 	BaseEntity* w = new TurboFistWeapon(AEVec2{ 0.f, 0.f }, player);
 	AddEntityToScene(w);
+
+	Game::SetBackgroundColor(Color{ 1.f, 0.3f, 0.3f, 0.3f });
 }
 
 void GameScene::PreUpdate(const f32& dt) {
