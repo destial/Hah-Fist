@@ -2,31 +2,12 @@
 #include "AEEngine.h"
 #include "../Utils/Utils.hpp"
 
-CameraManager* CameraManager::instance = nullptr;
-
-CameraManager::CameraManager(): x(0.0f), y(0.0f),targetx(0.0f), targety(0.0f), smoothspeed(5.f), shaketimer(0.f), shakeduration(0.f), shakestrength(0.f)
-{
-}
+CameraManager::CameraManager()
+: x(0.0f), y(0.0f), targetx(0.0f), targety(0.0f),
+  smoothspeed(5.f), shaketimer(0.f), shakeduration(0.f), shakestrength(0.f) {}
 
 CameraManager::~CameraManager(){}
 
-CameraManager* CameraManager::GetInstance()
-{
-    if (instance == nullptr)
-    {
-        instance = new CameraManager();
-    }
-    return instance;
-}
-
-void CameraManager::Free()
-{
-    if (instance != nullptr)
-    {
-        delete instance;
-        instance = nullptr;
-    }
-}
 void CameraManager::SetPosition(float newX, float newY)
 {
     x = newX;

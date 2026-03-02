@@ -6,7 +6,7 @@
 #include "../Utils/Utils.hpp"
 
 /*
-* @brief Represents a image formatted as a spritesheet
+* @brief Represents a data formatted as a spritesheet
 */
 class SpriteSheet {
 protected:

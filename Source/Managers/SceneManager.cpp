@@ -7,8 +7,6 @@ namespace DebugUtils {
 	void _RenderAll();
 }
 
-SceneManager* SceneManager::instance = nullptr;
-
 SceneManager::SceneManager() : all_scenes{}, next_scene{ Scenes::INIT }, current_scene{ Scenes::INIT }, editor{nullptr} {
 	instance = this;
 	all_scenes[Scenes::MAIN_MENU] = new StartMenuScene();
@@ -93,8 +91,4 @@ BaseScene* SceneManager::GetCurrentScene() const {
 
 Scenes::SceneState SceneManager::GetCurrentState() const {
 	return current_scene;
-}
-
-SceneManager* SceneManager::GetInstance() {
-	return instance;
 }

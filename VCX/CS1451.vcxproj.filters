@@ -278,5 +278,8 @@
     <ClInclude Include="..\Source\Managers\CameraManager.hpp">
       <Filter>Header Files\Managers</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Utils\Singleton.hpp">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

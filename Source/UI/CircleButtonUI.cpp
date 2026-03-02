@@ -56,18 +56,18 @@ void CircleButtonUI::PostUpdate(const f32& dt) {
 }
 
 void CircleButtonUI::Render() {
-	if (image && image->image) {
+	if (image && image->data) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-		AEGfxTextureSet(image->image, 0.f, 0.f);
+		AEGfxTextureSet(image->data, 0.f, 0.f);
 	}
 	else {
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR);
 	}
 	AEGfxSetColorToMultiply(color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
 	if (this->mouse_hovered) {
-		if (this->overlay_texture && this->overlay_texture->image) {
+		if (this->overlay_texture && this->overlay_texture->data) {
 			AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
-			AEGfxTextureSet(overlay_texture->image, 0.f, 0.f);
+			AEGfxTextureSet(overlay_texture->data, 0.f, 0.f);
 		}
 		else {
 			AEGfxSetRenderMode(AE_GFX_RM_COLOR);

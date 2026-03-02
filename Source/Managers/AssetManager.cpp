@@ -1,34 +1,25 @@
 #include "AssetManager.hpp"
 
-AssetManager* AssetManager::instance = nullptr;
-
 AssetManager::AssetManager() {}
 
 AssetManager::~AssetManager() {
 	for (auto& entry : asset_map) {
-		if (entry.second->type == TEXTURE && entry.second->image) {
+		if (entry.second->type == AssetType::TEXTURE && entry.second->image) {
 			delete entry.second->image;
 		}
-		else if (entry.second->type == FONT && entry.second->font) {
+		else if (entry.second->type == AssetType::FONT && entry.second->font) {
 			AEGfxDestroyFont(entry.second->font);
 		}
-		else if (entry.second->type == AUDIO) {
+		else if (entry.second->type == AssetType::AUDIO) {
 			AEAudioUnloadAudio(entry.second->audio);
 		}
-		else if (entry.second->type == SPRITE) {
+		else if (entry.second->type == AssetType::SPRITE) {
 			delete entry.second->spritesheet;
 		}
 
 		delete entry.second;
 	}
 	asset_map.clear();
-}
-
-void AssetManager::Free() {
-	if (instance) {
-		delete instance;
-		instance = nullptr;
-	}
 }
 
 Image* AssetManager::GetTexture(std::string file_name) {
@@ -38,7 +29,7 @@ Image* AssetManager::GetTexture(std::string file_name) {
 	}
 	instance->asset_map[file_name] = new Asset();
 	instance->asset_map[file_name]->image = new Image(file_name.c_str());
-	instance->asset_map[file_name]->type = TEXTURE;
+	instance->asset_map[file_name]->type = AssetType::TEXTURE;
 	return instance->asset_map[file_name]->image;
 }
 
@@ -49,7 +40,7 @@ SpriteSheet* AssetManager::GetSpriteSheet(std::string file_name, int rows, int c
 	}
 	instance->asset_map[file_name] = new Asset();
 	instance->asset_map[file_name]->spritesheet = new SpriteSheet(file_name.c_str(), rows, cols);
-	instance->asset_map[file_name]->type = SPRITE;
+	instance->asset_map[file_name]->type = AssetType::SPRITE;
 	return instance->asset_map[file_name]->spritesheet;
 }
 
@@ -60,7 +51,7 @@ s8 AssetManager::GetFontId(std::string file_name) {
 	}
 	instance->asset_map[file_name] = new Asset();
 	instance->asset_map[file_name]->font = AEGfxCreateFont(file_name.c_str(), 50);
-	instance->asset_map[file_name]->type = FONT;
+	instance->asset_map[file_name]->type = AssetType::FONT;
 	return instance->asset_map[file_name]->font;
 }
 
@@ -71,13 +62,6 @@ AEAudio& AssetManager::GetAudio(std::string file_name) {
 	}
 	instance->asset_map[file_name] = new Asset();
 	instance->asset_map[file_name]->audio = AEAudioLoadSound(file_name.c_str());
-	instance->asset_map[file_name]->type = AUDIO;
+	instance->asset_map[file_name]->type = AssetType::AUDIO;
 	return instance->asset_map[file_name]->audio;
-}
-
-AssetManager* AssetManager::GetInstance() {
-	if (!instance) {
-		instance = new AssetManager();
-	}
-	return instance;
 }
