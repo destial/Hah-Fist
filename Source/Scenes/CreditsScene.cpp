@@ -18,10 +18,6 @@ void CreditsScene::Init() {
 	Game::SetBackgroundColor(Color{ 1.f, 0.f, 0.f, 0.f });
 };
 
-void CreditsScene::PreUpdate(const f32& dt) {
-	BaseScene::PreUpdate(dt);
-}
-
 void CreditsScene::Update(const f32& dt) {
 	BaseScene::Update(dt);
 	static f32 timer = 0.f;
@@ -29,16 +25,4 @@ void CreditsScene::Update(const f32& dt) {
 	if ((timer += dt) > 2.f) {
 		SceneManager::GetInstance()->SetNextScene(Scenes::MAIN_MENU);
 	}
-}
-
-void CreditsScene::PostUpdate(const f32& dt) {
-	BaseScene::PostUpdate(dt);
-}
-
-void CreditsScene::Render() {
-	BaseScene::Render();
-}
-
-void CreditsScene::End() {
-	BaseScene::End();
 }

@@ -26,11 +26,9 @@ static ButtonUI* CreateButtonDisplay(AEVec2 pos, const char* ch) {
 	return b;
 }
 
-StartMenuScene::StartMenuScene() : BaseScene() {
-}
+StartMenuScene::StartMenuScene() : BaseScene() {}
 
-StartMenuScene::~StartMenuScene() {
-}
+StartMenuScene::~StartMenuScene() {}
 
 void StartMenuScene::Init() {
 	static f32 level_panel = 0.f;
@@ -109,24 +107,4 @@ void StartMenuScene::Init() {
 	scene_entities.push_back(credits);
 
 	Game::SetBackgroundColor(Color{ 1.f, 0.3f, 0.3f, 0.3f });
-}
-
-void StartMenuScene::PreUpdate(const f32& dt) {
-	BaseScene::PreUpdate(dt);
-}
-
-void StartMenuScene::Update(const f32& dt) {
-	BaseScene::Update(dt);
-}
-
-void StartMenuScene::PostUpdate(const f32& dt) {
-	BaseScene::PostUpdate(dt);
-}
-
-void StartMenuScene::Render() {
-	BaseScene::Render();
-}
-
-void StartMenuScene::End() {
-	BaseScene::End();
 }

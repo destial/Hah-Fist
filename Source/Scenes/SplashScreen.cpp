@@ -18,10 +18,6 @@ void SplashScreen::Init() {
 	Game::SetBackgroundColor(Color{ 1.f, 0.f, 0.f, 0.f });
 };
 
-void SplashScreen::PreUpdate(const f32& dt) {
-	BaseScene::PreUpdate(dt);
-}
-
 void SplashScreen::Update(const f32& dt) {
 	BaseScene::Update(dt);
 	static f32 timer = 0.f;
@@ -29,16 +25,4 @@ void SplashScreen::Update(const f32& dt) {
 	if ((timer += dt) > 2.f) {
 		SceneManager::GetInstance()->SetNextScene(Scenes::MAIN_MENU);
 	}
-}
-
-void SplashScreen::PostUpdate(const f32& dt) {
-	BaseScene::PostUpdate(dt);
-}
-
-void SplashScreen::Render() {
-	BaseScene::Render();
-}
-
-void SplashScreen::End() {
-	BaseScene::End();
 }

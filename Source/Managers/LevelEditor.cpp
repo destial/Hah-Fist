@@ -32,6 +32,9 @@ void LevelEditor::SetScene(BaseScene* b_scene)
 }
 
 void LevelEditor::SelectEntity(BaseEntity* entity) {
+	if (Weapon* w = dynamic_cast<Weapon*>(entity)) {
+		return;
+	}
 	currentSelection = entity;
 }
 
@@ -54,16 +57,19 @@ BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
 		GameObjectEntity* go = new GameObjectEntity(Utils::GetMouseWorld(true));
 		go->mesh = MeshRenderer::GetCenterRectMesh();
 		go->go_type = GameObjectEntity::PhysicsType::STATIC;
+		go->layer = BaseEntity::RenderLayer::WORLD;
 		scene->AddEntityToScene(go);
 		return go;
 	}
 	case Editor::GameObjectType::ENEMY_1: {
 		EnemyEntity* enemy = new EnemyEntity(Utils::GetMouseWorld(true));
+		enemy->layer = BaseEntity::RenderLayer::ENTITY;
 		scene->AddEntityToScene(enemy);
 		return enemy;
 	}
 	case Editor::GameObjectType::ENEMY_2: {
 		EnemyEntity* enemy = new TrooperEntity(Utils::GetMouseWorld(true));
+		enemy->layer = BaseEntity::RenderLayer::ENTITY;
 		scene->AddEntityToScene(enemy);
 		return enemy;
 	}

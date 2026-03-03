@@ -7,11 +7,12 @@ AssetManager::~AssetManager() {
 		if (entry.second->type == AssetType::TEXTURE && entry.second->image) {
 			delete entry.second->image;
 		}
-		else if (entry.second->type == AssetType::FONT && entry.second->font) {
+		else if (entry.second->type == AssetType::FONT && entry.second->font != -1) {
 			AEGfxDestroyFont(entry.second->font);
 		}
 		else if (entry.second->type == AssetType::AUDIO) {
-			AEAudioUnloadAudio(entry.second->audio);
+			AEAudioUnloadAudio(*entry.second->audio);
+			delete entry.second->audio;
 		}
 		else if (entry.second->type == AssetType::SPRITE) {
 			delete entry.second->spritesheet;
@@ -27,7 +28,7 @@ Image* AssetManager::GetTexture(std::string file_name) {
 	if (instance->asset_map.count(file_name)) {
 		return instance->asset_map[file_name]->image;
 	}
-	instance->asset_map[file_name] = new Asset();
+	instance->asset_map[file_name] = new Asset;
 	instance->asset_map[file_name]->image = new Image(file_name.c_str());
 	instance->asset_map[file_name]->type = AssetType::TEXTURE;
 	return instance->asset_map[file_name]->image;
@@ -38,7 +39,7 @@ SpriteSheet* AssetManager::GetSpriteSheet(std::string file_name, int rows, int c
 	if (instance->asset_map.count(file_name)) {
 		return instance->asset_map[file_name]->spritesheet;
 	}
-	instance->asset_map[file_name] = new Asset();
+	instance->asset_map[file_name] = new Asset;
 	instance->asset_map[file_name]->spritesheet = new SpriteSheet(file_name.c_str(), rows, cols);
 	instance->asset_map[file_name]->type = AssetType::SPRITE;
 	return instance->asset_map[file_name]->spritesheet;
@@ -49,19 +50,23 @@ s8 AssetManager::GetFontId(std::string file_name) {
 	if (instance->asset_map.count(file_name)) {
 		return instance->asset_map[file_name]->font;
 	}
-	instance->asset_map[file_name] = new Asset();
+	instance->asset_map[file_name] = new Asset;
 	instance->asset_map[file_name]->font = AEGfxCreateFont(file_name.c_str(), 50);
 	instance->asset_map[file_name]->type = AssetType::FONT;
 	return instance->asset_map[file_name]->font;
 }
 
-AEAudio& AssetManager::GetAudio(std::string file_name) {
+AEAudio* AssetManager::GetAudio(std::string file_name) {
 	GetInstance();
 	if (instance->asset_map.count(file_name)) {
 		return instance->asset_map[file_name]->audio;
 	}
-	instance->asset_map[file_name] = new Asset();
-	instance->asset_map[file_name]->audio = AEAudioLoadSound(file_name.c_str());
-	instance->asset_map[file_name]->type = AssetType::AUDIO;
-	return instance->asset_map[file_name]->audio;
+	AEAudio audio = AEAudioLoadSound(file_name.c_str());
+	if (!AEAudioIsValidAudio(audio)) {
+		instance->asset_map[file_name] = new Asset;
+		instance->asset_map[file_name]->audio = new AEAudio{ audio };
+		instance->asset_map[file_name]->type = AssetType::AUDIO;
+		return instance->asset_map[file_name]->audio;
+	}
+	return nullptr;
 }

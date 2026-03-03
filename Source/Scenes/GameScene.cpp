@@ -3,6 +3,7 @@
 #include "../Managers/AssetManager.hpp"
 #include "../Managers/SerializationManager.hpp"
 #include "../Managers/LevelManager.hpp"
+#include "../Entities/GameObjectEntity.hpp"
 #include "../Entities/PlayerEntity.hpp"
 #include "../Entities/Enemies/EnemyEntity.hpp"
 #include "../Entities/Enemies/TrooperEntity.hpp"
