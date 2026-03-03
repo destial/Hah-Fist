@@ -24,8 +24,7 @@ bool LevelEditor::IsToggled() const {
 	return toggled;
 }
 
-void LevelEditor::SetScene(BaseScene* b_scene)
-{
+void LevelEditor::SetScene(BaseScene* b_scene) {
 	scene = b_scene;
 	currentSelection = nullptr;
 	toggled = false;
@@ -89,7 +88,7 @@ void LevelEditor::Update(const f32& dt) {
 	}
 	char fps[50];
 	sprintf_s(fps, "FPS:%.0f", cfps);
-	DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 0.25f }, std::string{fps});
+	DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 0.25f }, std::string{ fps });
 
 	f32 cam_x, cam_y;
 	AEGfxGetCamPosition(&cam_x, &cam_y);
@@ -107,6 +106,10 @@ void LevelEditor::Update(const f32& dt) {
 	char scr[32];
 	sprintf_s(scr, "Scroll:%d", scroll);
 	DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 1.75f }, std::string{ scr });
+
+	char amt[32];
+	sprintf_s(amt, "Entities:%d", static_cast<int>(scene->Entities().size()));
+	DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 2.25f }, std::string{ amt });
 
 	for (BaseEntity* go : scene->Entities()) {
 		if (AEInputCheckTriggered(AEVK_LBUTTON) && Utils::OBBPoint(go, mwp)) {
