@@ -20,8 +20,10 @@ public:
 	AEVec2 force;
 	f32 mass;
 	f32 gravityScale;
+	f32 air_strength{ 0.0f };
 
-	bool is_colliding = false;
+	//bool is_colliding = false;
+	bool is_standing_above = false;
 
 	PhysicsBody(f32 mass = 1.f, f32 gravityScale = 1.f, AEVec2 gravity = AEVec2{0.0f, -98.f});
 	~PhysicsBody();

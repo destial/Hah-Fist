@@ -46,8 +46,11 @@ void Player::Update(const f32& dt) {
 	}
 	if (dir.x)
 	{
-		f32 spd = velocity.y == 0 ? speed : speed * 0.75f;
-		velocity.x = dir.x * spd;
+		f32 spd = velocity.y == 0 ? speed : speed * pBody->air_strength * 0.75f;
+		if (abs(velocity.x) < spd)
+		{
+			velocity.x += dir.x * spd;
+		}
 	}
 
 

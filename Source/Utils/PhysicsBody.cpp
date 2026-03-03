@@ -38,10 +38,12 @@ void PhysicsBody::UpdateStates(AEVec2& velocity, AEVec2& position, AEVec2& scale
 		if (velocity.y > 0)
 		{
 			state = STATE::IN_AIR;
+			air_strength = 1.0;
 		}
-		else if (!is_colliding && position.y > scale.y * 0.5f)
+		else if (!is_standing_above && position.y > scale.y * 0.5f)
 		{
 			state = STATE::IN_AIR;
+			air_strength = 1.0;
 		}
 	}
 }

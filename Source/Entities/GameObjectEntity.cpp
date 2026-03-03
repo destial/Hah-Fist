@@ -30,6 +30,8 @@ void GameObjectEntity::Update(const f32& dt)
 	if (go_type == PhysicsType::DYNAMIC) {
 		pBody->UpdateStates(this->velocity, this->position, this->scale);
 		pBody->ApplyGravity(this->velocity, dt);
+
+		pBody->air_strength = AEClamp(pBody->air_strength - 2 * dt, 0.0, 1.0);
 	}
 }
 

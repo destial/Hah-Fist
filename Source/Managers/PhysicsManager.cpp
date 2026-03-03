@@ -29,7 +29,7 @@ void PhysicsManager::PreUpdate(const f32& dt)
 void PhysicsManager::Update(const f32& dt)
 {
 	//Reset collision state to false;
-	for (auto& go : gameObjects) { go->pBody->is_colliding = false; }
+	for (auto& go : gameObjects) { go->pBody->is_standing_above = false; }
 
 	// Collision: DYNAMIC vs TRIGGER
 	for (GameObjectEntity* trigger : gameObjects) {
@@ -66,8 +66,19 @@ void PhysicsManager::Update(const f32& dt)
 			if (Utils::OBB(dynamic1, dynamic2)) {
 				dynamic1->OnCollide(dynamic2);
 				dynamic2->OnCollide(dynamic1);
-				dynamic1->pBody->is_colliding = true;
-				dynamic2->pBody->is_colliding = true;
+
+				float length = abs(dynamic1->position.y - dynamic2->position.y);
+				if (length <= dynamic1->scale.y * 0.5f + dynamic2->scale.y * 0.5f)
+				{
+					if (dynamic1->position.y > dynamic2->position.y)
+					{
+						dynamic1->pBody->is_standing_above = true;
+					}
+					else
+					{
+						dynamic2->pBody->is_standing_above = true;
+					}
+				}
 			}
 		}
 	}
@@ -87,7 +98,14 @@ void PhysicsManager::Update(const f32& dt)
 			if (Utils::OBB(_static, dynamic)) {
 				_static->OnCollide(dynamic);
 				dynamic->OnCollide(_static);
-				dynamic->pBody->is_colliding = true;
+				float length = abs(dynamic->position.y - _static->position.y);
+				if (length <= dynamic->scale.y * 0.5f + _static->scale.y * 0.5f)
+				{
+					if (dynamic->position.y > _static->position.y)
+					{
+						dynamic->pBody->is_standing_above = true;
+					}
+				}
 			}
 		}
 	}
