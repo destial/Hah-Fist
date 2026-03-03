@@ -85,14 +85,14 @@ namespace Utils {
 
 	template<typename N>
 	N Lerp(N start, N end, f32 delta) {
-		return start + min_max(delta, 0.f, 1.f) * (end - start);
+		return start + AEClamp(delta, 0.f, 1.f) * (end - start);
 	}
 
 	template<typename N>
 	N LerpCircle(N start, N end, f32 delta) {
-		delta = min_max(delta, 0.f, 1.f);
+		delta = AEClamp(delta, 0.f, 1.f);
 		f32 p = 1.f - ((AECos(PI * delta) + 1.f) * 0.5f);
-		return Lerp<N>(start, end, p);
+		return Lerp(start, end, p);
 	}
 }
 #endif

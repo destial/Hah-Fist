@@ -10,9 +10,7 @@ class BaseProjectile : public GameObjectEntity
 protected:
     f32 lifetime{ 5.f };
     f32 age{ 0.f };
-    bool isActive{ true };
     AEVec2 direction;
-    f32 damage;
     f32 speed;
     f32 animationTimer, animationFrame;
     int currentRow, currentCol;

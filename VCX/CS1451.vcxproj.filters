@@ -183,6 +183,9 @@
     <ClCompile Include="..\Source\Scenes\CreditsScene.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Entities\Projectiles\BaseProjectile.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -292,6 +295,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Scenes\CreditsScene.hpp">
       <Filter>Header Files\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\Projectiles\BaseProjectile.hpp">
+      <Filter>Header Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

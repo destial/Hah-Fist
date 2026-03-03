@@ -284,15 +284,15 @@ namespace Utils {
 
 	void SnapVectorToAxis(AEVec2* result, AEVec2* vec2)
 	{
-		if (abs(vec2->x) > abs(vec2->y))
+		if (std::abs(vec2->x) > std::abs(vec2->y))
 		{
-			result->x = vec2->x / abs(vec2->x);
+			result->x = vec2->x / std::abs(vec2->x);
 			result->y = 0.0;
 		}
 		else
 		{
 			result->x = 0.0;
-			result->y = vec2->y / abs(vec2->y);
+			result->y = vec2->y / std::abs(vec2->y);
 		}
 	}
 

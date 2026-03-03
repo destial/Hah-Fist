@@ -2,9 +2,9 @@
 #include <cmath>
 #include "../../Managers/AssetManager.hpp"
 
-BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 damage) : GameObjectEntity(pos), direction(dir), speed(speed), damage(damage)
-{
-
+BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg)
+: GameObjectEntity{ pos, 1.f, CollisionShape::AABB }, direction{ dir }, speed{ speed } {
+    damage = dmg;
     sprite = AssetManager::GetSpriteSheet("Assets/test_enemy.png", 1, 1); // single-frame bullet
     mesh = nullptr;
 
@@ -15,25 +15,19 @@ BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 damage) : 
     //try removing
 
     scale = { 2.f * (static_cast<f32>(sprite->image->width) / sprite->image->height), 2.f };
-
     layer = RenderLayer::ENTITY;
-
-    pBody = new PhysicsBody(1.f);
     pBody->gravityScale = 0.f;
     this->frictionMultiplier = 0.f;
     velocity.x = dir.x * speed;
 }
 
 
-void BaseProjectile::PreUpdate(const f32& dt)
-{
+void BaseProjectile::PreUpdate(const f32& dt) {
     GameObjectEntity::PreUpdate(dt);
 }
 
-void BaseProjectile::Update(const f32& dt)
-{
-    if (!isActive)
-    {
+void BaseProjectile::Update(const f32& dt) {
+    if (!isActive) {
         return;
     }
     position.x += velocity.x * dt;

@@ -1,31 +1,29 @@
 #include "GameObjectEntity.hpp"
 #include "../Utils/AEOverload.hpp"
 #include "../UI/Debug.hpp"
+#include <cmath>
 
-GameObjectEntity::GameObjectEntity() : health(1.f), damage(1.f), isActive(true), shape(CollisionShape::AABB), go_type(PhysicsType::DYNAMIC), prev_position({ 0.f }), BaseEntity({ 0.f })
-{
-	pBody = new PhysicsBody{};
-}
+GameObjectEntity::GameObjectEntity()
+: BaseEntity{ { 0.f } }, health{ 1.f }, damage{ 1.f }, isActive{ true },
+  shape{ CollisionShape::AABB }, go_type{ PhysicsType::DYNAMIC }, 
+	prev_position{ 0.f }, pBody{ new PhysicsBody{0.f} } {}
 
-GameObjectEntity::GameObjectEntity(AEVec2 pos, f32 mass, CollisionShape shape) : health(1.f), damage(1.f),isActive(true), shape(shape), go_type(PhysicsType::DYNAMIC), prev_position(pos), BaseEntity(pos)
-{
-	pBody = new PhysicsBody{ mass };
-}
+GameObjectEntity::GameObjectEntity(AEVec2 pos, f32 mass, CollisionShape shape)
+: BaseEntity{ pos }, health{ 1.f }, damage{ 1.f }, isActive{ true },
+  shape{ shape } , go_type{ PhysicsType::DYNAMIC },
+	prev_position{ 0.f }, pBody{ new PhysicsBody{mass} } {}
 
-GameObjectEntity::~GameObjectEntity() 
-{
+GameObjectEntity::~GameObjectEntity() {
 	delete pBody;
 }
 
-void GameObjectEntity::PreUpdate(const f32& dt)
-{
+void GameObjectEntity::PreUpdate(const f32& dt) {
 	BaseEntity::PreUpdate(dt);
 	this->prev_position = this->position;
 	//this->velocity = { 0.f, velocity.y };
 }
 
-void GameObjectEntity::Update(const f32& dt)
-{
+void GameObjectEntity::Update(const f32& dt) {
 	BaseEntity::Update(dt);
 	if (go_type == PhysicsType::DYNAMIC) {
 		pBody->UpdateStates(this->velocity, this->position, this->scale);
@@ -35,8 +33,7 @@ void GameObjectEntity::Update(const f32& dt)
 	}
 }
 
-void GameObjectEntity::PostUpdate(const f32& dt) 
-{
+void GameObjectEntity::PostUpdate(const f32& dt)  {
 	this->position += this->velocity * dt;
 	this->position.y = AEClamp(this->position.y, this->scale.y * 0.5f, Utils::GetWorldHeight() - (this->scale.y * 0.5f));
 	/*if (this->position.x <= 0.f) {
@@ -46,19 +43,16 @@ void GameObjectEntity::PostUpdate(const f32& dt)
 		velocity.y = 0;
 	}
 	
-	if (velocity.y == 0)
-	{
+	if (velocity.y == 0) {
 		velocity.x -= velocity.x * (frictionMultiplier * 20.0f) * dt; // later change 5.0 to friction perhaps
-		if (abs(velocity.x) < 0.3)
-		{
+		if (std::abs(velocity.x) < 0.3) {
 			velocity.x = 0.0;
 		}
 	}
 	BaseEntity::PostUpdate(dt);
 }
 
-void GameObjectEntity::Render()
-{
+void GameObjectEntity::Render() {
 	if (isActive) {
 		BaseEntity::Render();
 		auto corners = Utils::GetCorners(this);
@@ -69,8 +63,7 @@ void GameObjectEntity::Render()
 	}
 }
 
-void GameObjectEntity::OnCollide(GameObjectEntity* go)
-{
+void GameObjectEntity::OnCollide(GameObjectEntity* go) {
 	if (go->go_type == PhysicsType::STATIC) {
 		AEVec2 down = { 0, -1.f };
 		if (velocity * down > 1 && position.y >= go->position.y + go->scale.y * 0.5f + scale.y * 0.49f)
@@ -81,8 +74,7 @@ void GameObjectEntity::OnCollide(GameObjectEntity* go)
 	}
 	else if (go->go_type == PhysicsType::DYNAMIC) {
 		AEVec2 thisToGO = go->position - position;
-		if (AEVec2DotProduct(&velocity, &thisToGO) > 1)
-		{
+		if (AEVec2DotProduct(&velocity, &thisToGO) > 1) {
 			//Velocity Trading
 
 			AEVec2 tmp{ velocity };
@@ -90,14 +82,12 @@ void GameObjectEntity::OnCollide(GameObjectEntity* go)
 			f32 mass_total = pBody->mass + go->pBody->mass;
 
 
-			if (position.y >= go->position.y + go->scale.y * 0.5f + scale.y * 0.49f)
-			{
+			if (position.y >= go->position.y + go->scale.y * 0.5f + scale.y * 0.49f) {
 				position = prev_position;
 				velocity.y = 0.0f;
 				go->velocity.y = (go->velocity.y * (go->pBody->mass - pBody->mass) + tmp.y * 2 * pBody->mass) / mass_total;
 			}
-			else
-			{
+			else {
 				go->position = go->prev_position;
 				go->velocity.y = 0.0f;
 				velocity.y = (velocity.y * (pBody->mass - go->pBody->mass) + tmp2.y * 2 * go->pBody->mass) / mass_total;
