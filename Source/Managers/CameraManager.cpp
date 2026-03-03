@@ -13,6 +13,7 @@ void CameraManager::Init()
     x = targetx = 0.f;
     y = targety = 0.f;
 
+    shaketimer = 0.f;
     shakeduration = 0.f;
     shakestrength = 0.f;
 }
