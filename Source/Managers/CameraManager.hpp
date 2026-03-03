@@ -13,7 +13,7 @@ private:
 public:
     CameraManager();
     ~CameraManager();
-
+    void Init();
     void Update(float dt);
 
     // Camera movement

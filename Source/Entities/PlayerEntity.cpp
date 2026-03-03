@@ -5,6 +5,9 @@
 #include "../Utils/Utils.hpp"
 #include "../Managers/AssetManager.hpp"
 #include "../Managers/CameraManager.hpp"
+#include "Projectiles/BaseProjectile.hpp"
+#include "../Scenes/BaseScene.hpp"  
+#include "../Managers/SceneManager.hpp"
 #include <iostream>
 #include <cstdio>
 
@@ -57,6 +60,18 @@ void Player::Update(const f32& dt) {
 	//Testing Camera Function
 	if (AEInputCheckCurr(AEVK_R)) {
 		CameraManager::GetInstance()->Shake(0.1f, 5.f);
+
+	}
+	//Testing Shooting Function
+	if (AEInputCheckCurr(AEVK_T) && abs(velocity.y) == 0) {
+		//Spawning 3 bullets crashes? trying to solve but pushing first
+		velocity.y += jumpVelocity;
+		AEVec2 playerPos = position;
+		f32 bulletSpeed = 50.f;
+		f32 bulletDamage = 25.f;
+		BaseProjectile* bullet = new BaseProjectile(playerPos, dir, bulletSpeed, bulletDamage);
+		BaseScene* scene = SceneManager::GetInstance()->GetCurrentScene();
+		scene->AddEntityToScene(bullet);
 	}
 }
 

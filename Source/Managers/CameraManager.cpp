@@ -8,6 +8,15 @@ CameraManager::CameraManager()
 
 CameraManager::~CameraManager(){}
 
+void CameraManager::Init()
+{
+    x = targetx = 0.f;
+    y = targety = 0.f;
+
+    shakeduration = 0.f;
+    shakestrength = 0.f;
+}
+
 void CameraManager::SetPosition(float newX, float newY)
 {
     x = newX;

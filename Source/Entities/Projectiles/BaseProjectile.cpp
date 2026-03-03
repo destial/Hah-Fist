@@ -1,0 +1,81 @@
+#include "BaseProjectile.hpp"
+#include <cmath>
+#include "../../Managers/AssetManager.hpp"
+
+BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 damage) : GameObjectEntity(pos), direction(dir), speed(speed), damage(damage)
+{
+
+    sprite = AssetManager::GetSpriteSheet("Assets/test_enemy.png", 1, 1); // single-frame bullet
+    mesh = nullptr;
+
+    //Might not need any of this
+    animationTimer = 0.f;
+    animationFrame = 1.f / (1.f * 1.f);
+    currentRow = currentCol = 0;
+    //try removing
+
+    scale = { 2.f * (static_cast<f32>(sprite->image->width) / sprite->image->height), 2.f };
+
+    layer = RenderLayer::ENTITY;
+
+    pBody = new PhysicsBody(1.f);
+    pBody->gravityScale = 0.f;
+    this->frictionMultiplier = 0.f;
+    velocity.x = dir.x * speed;
+}
+
+
+void BaseProjectile::PreUpdate(const f32& dt)
+{
+    GameObjectEntity::PreUpdate(dt);
+}
+
+void BaseProjectile::Update(const f32& dt)
+{
+    if (!isActive)
+    {
+        return;
+    }
+    position.x += velocity.x * dt;
+    position.y += velocity.y * dt;
+    age += dt;
+    if (age >= lifetime)
+    {
+        OnExpire();
+        isActive = false;   
+    }
+    GameObjectEntity::Update(dt);
+}
+void BaseProjectile::PostUpdate(const f32& dt)
+{
+    GameObjectEntity::PostUpdate(dt);
+}
+
+void BaseProjectile::Render()
+{
+    sprite->Render(transform, color, currentRow, currentCol);
+    GameObjectEntity::Render();
+}
+
+void BaseProjectile::OnCollide(GameObjectEntity* other)
+{
+    if (!other || other == this)
+        return;
+
+    if (!other->isActive)
+        return;
+
+    OnHit(other);
+}
+void BaseProjectile::OnHit(GameObjectEntity* other)
+{
+    // Apply direct damage
+    other->health -= damage;
+
+    // Destroy projectile
+    isActive = false;
+}
+void BaseProjectile::OnExpire()
+{
+    // Default: just disappear
+}
