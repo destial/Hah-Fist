@@ -1,3 +1,11 @@
+/*!
+* @file Utils.hpp
+* @author Rance Andres (andresrancerowell.g@digipen.edu)
+* @date 13 January 2026
+* @course CSD1451
+* @brief Declaration file for a particle system within a scene
+*/
+
 #pragma once
 #ifndef __UTIL_H
 #define __UTIL_H

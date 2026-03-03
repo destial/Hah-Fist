@@ -1,3 +1,11 @@
+/*!
+* @file AEOverload.hpp
+* @author Rance Andres (andresrancerowell.g@digipen.edu)
+* @date 7 January 2026
+* @course CSD1451
+* @brief Declaration of overload operators for the AEVec2 and AEMtx33 classes
+*/
+
 #pragma once
 #ifndef __AEOVERLOAD_H
 #define __AEOVERLOAD_H
@@ -6,18 +14,25 @@
 
 /*
 * @brief Additional rotation Vector utility function
+* @param result - The destination to store the results after rotation
+* @param pVec - The vector to rotate
+* @param radians - The rotation in radians
 * @return The rotated vector
 */
 void AEVec2Rotate(AEVec2* result, AEVec2* pVec, float radians);
 
 /*
 * @brief Additional angle Vector utility function
+* @param vec1 - The first vector
+* @param vec2 - The second vector
 * @return The minimum angle between two vectors
 */
 f32 AEVec2Angle(AEVec2* vec1, AEVec2* vec2);
 
 /*
 * @brief Additional angle Vector utility function
+* @param vec1 - The first vector
+* @param vec2 - The second vector
 * @return The counter-clockwise angle between two vectors
 */
 f32 AEVec2AngleCCW(AEVec2* vec1, AEVec2* vec2);

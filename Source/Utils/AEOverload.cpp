@@ -1,3 +1,10 @@
+/*!
+* @file AEOverload.cpp
+* @author Rance Andres (andresrancerowell.g@digipen.edu)
+* @date 7 January 2026
+* @course CSD1451
+* @brief Declaration of overload operators for the AEVec2 and AEMtx33 classes
+*/
 #include "AEOverload.hpp"
 #include <cmath>
 
