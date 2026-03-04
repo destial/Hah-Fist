@@ -73,6 +73,12 @@
     <Filter Include="Header Files\Entities\Weapons">
       <UniqueIdentifier>{47bfa483-5a0c-49c7-b489-bfd9ce53e847}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entities\Projectiles">
+      <UniqueIdentifier>{866abeb5-1ccb-4e0f-83ee-bc54fa15bc6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Projectiles">
+      <UniqueIdentifier>{c4bfee66-69be-46cf-977f-85472877d4ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\main.cpp">
@@ -184,7 +190,7 @@
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Entities\Projectiles\BaseProjectile.cpp">
-      <Filter>Source Files\Entities</Filter>
+      <Filter>Source Files\Entities\Projectiles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -297,7 +303,7 @@
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Entities\Projectiles\BaseProjectile.hpp">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>Header Files\Entities\Projectiles</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

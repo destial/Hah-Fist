@@ -1,6 +1,9 @@
 #include "BaseProjectile.hpp"
 #include <cmath>
 #include "../../Managers/AssetManager.hpp"
+#include "../../Scenes/BaseScene.hpp"  
+#include "../../Managers/SceneManager.hpp"
+
 
 BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg)
 : GameObjectEntity{ pos, 1.f, CollisionShape::AABB }, direction{ dir }, speed{ speed } {
@@ -18,7 +21,9 @@ BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg)
     layer = RenderLayer::ENTITY;
     pBody->gravityScale = 0.f;
     this->frictionMultiplier = 0.f;
+    isActive = true;
     velocity.x = dir.x * speed;
+    velocity.y = dir.y * speed;
 }
 
 
@@ -27,18 +32,19 @@ void BaseProjectile::PreUpdate(const f32& dt) {
 }
 
 void BaseProjectile::Update(const f32& dt) {
+
     if (!isActive) {
         return;
     }
-    position.x += velocity.x * dt;
-    position.y += velocity.y * dt;
+    GameObjectEntity::Update(dt);
+ 
     age += dt;
     if (age >= lifetime)
     {
         OnExpire();
         isActive = false;   
     }
-    GameObjectEntity::Update(dt);
+
 }
 void BaseProjectile::PostUpdate(const f32& dt)
 {
@@ -65,9 +71,15 @@ void BaseProjectile::OnHit(GameObjectEntity* other)
 {
     // Apply direct damage
     other->health -= damage;
+    if (other->health < 0)
+    {
+        SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(other);
+
+    }
 
     // Destroy projectile
     isActive = false;
+    SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 }
 void BaseProjectile::OnExpire()
 {

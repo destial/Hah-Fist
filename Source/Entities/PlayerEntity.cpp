@@ -69,12 +69,13 @@ void Player::Update(const f32& dt) {
 	if (AEInputCheckCurr(AEVK_T) && abs(velocity.y) == 0) {
 		//Spawning 3 bullets crashes? trying to solve but pushing first
 		velocity.y += jumpVelocity;
-		AEVec2 playerPos = position;
+		//Have to offset so it does not instantly collide and delete its own projectile
+		AEVec2 playerPosOff{position.x + dir.x*3.f,position.y};
 		f32 bulletSpeed = 50.f;
 		f32 bulletDamage = 25.f;
-		BaseProjectile* bullet = new BaseProjectile(playerPos, dir, bulletSpeed, bulletDamage);
-		BaseScene* scene = SceneManager::GetInstance()->GetCurrentScene();
-		scene->AddEntityToScene(bullet);
+		BaseProjectile* bullet = new BaseProjectile(playerPosOff, dir, bulletSpeed, bulletDamage);
+		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
+
 	}
 }
 

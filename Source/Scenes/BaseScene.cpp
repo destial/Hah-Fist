@@ -25,8 +25,12 @@ BaseScene::~BaseScene() {
 }
 
 void BaseScene::PreUpdate(const f32& dt) {
-	for (auto& entity : scene_entities) {
-		entity->PreUpdate(dt);
+	// Need to use an index-based loop instead of an iterator because entities may be added to scene_entities. 
+	// Adding elements to a std::vector can trigger a reallocation, which invalidates all iterators and references. 
+	// Using indices avoids iterator invalidation issues during modification.
+	for (int i = 0; i < scene_entities.size(); ++i)
+	{
+		scene_entities[i]->PreUpdate(dt);
 	}
 	if (physicsManager != nullptr) {
 		physicsManager->PreUpdate(dt);
@@ -34,8 +38,12 @@ void BaseScene::PreUpdate(const f32& dt) {
 }
 
 void BaseScene::Update(const f32& dt) {
-	for (auto& entity : scene_entities) {
-		entity->Update(dt);
+	// Need to use an index-based loop instead of an iterator because entities may be added to scene_entities. 
+	// Adding elements to a std::vector can trigger a reallocation, which invalidates all iterators and references. 
+	// Using indices avoids iterator invalidation issues during modification.
+	for (int i = 0; i < scene_entities.size(); ++i)
+	{
+		scene_entities[i]->Update(dt);
 	}
 	particleSystem->Update(dt);
 	camManager->Update(dt);
@@ -46,8 +54,12 @@ void BaseScene::Update(const f32& dt) {
 }
 
 void BaseScene::PostUpdate(const f32& dt) {
-	for (auto& entity : scene_entities) {
-		entity->PostUpdate(dt);
+	// Need to use an index-based loop instead of an iterator because entities may be added to scene_entities. 
+	// Adding elements to a std::vector can trigger a reallocation, which invalidates all iterators and references. 
+	// Using indices avoids iterator invalidation issues during modification.
+	for (int i = 0; i < scene_entities.size(); ++i)
+	{
+		scene_entities[i]->PostUpdate(dt);
 	}
 }
 
