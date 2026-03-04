@@ -67,7 +67,6 @@ void Player::Update(const f32& dt) {
 	}
 	//Testing Shooting Function
 	if (AEInputCheckCurr(AEVK_T) && abs(velocity.y) == 0) {
-		//Spawning 3 bullets crashes? trying to solve but pushing first
 		velocity.y += jumpVelocity;
 		//Have to offset so it does not instantly collide and delete its own projectile
 		AEVec2 playerPosOff{position.x + dir.x*3.f,position.y};
