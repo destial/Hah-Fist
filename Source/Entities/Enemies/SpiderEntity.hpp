@@ -1,13 +1,14 @@
 #pragma once
-#ifndef __TROOPERENTITY_H
-#define __TROOPERENTITY_H
+#ifndef __SPIDERENTITY_H
+#define __SPIDERENTITY_H
 #include "EnemyEntity.hpp"
-class TrooperEntity : public EnemyEntity {
+class SpiderEntity : public EnemyEntity {
 protected:
 	GameObjectEntity* ground;
+	bool bSpawnHatchlings;
 public:
-	TrooperEntity(AEVec2 pos, f32 speed = 10.f);
-	~TrooperEntity() override;
+	SpiderEntity(AEVec2 pos, f32 speed = 10.f, bool spawnHatchlings = true);
+	~SpiderEntity() override;
 	void PreUpdate(const f32& dt) override;
 	void Update(const f32& dt) override;
 	void PostUpdate(const f32& dt) override;
@@ -21,4 +22,7 @@ public:
 	void OnStun(const f32& dt) override;
 	void OnDead(const f32& dt) override;
 };
+
+
+
 #endif

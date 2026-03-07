@@ -3,7 +3,7 @@
 #include "../../Managers/AssetManager.hpp"
 #include "../../Scenes/BaseScene.hpp"  
 #include "../../Managers/SceneManager.hpp"
-
+#include "../../Entities/Enemies/EnemyEntity.hpp"
 
 BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameObjectEntity* own)
 : GameObjectEntity{ pos, 1.f, CollisionShape::AABB }, direction{ dir }, speed{ speed } {
@@ -76,8 +76,11 @@ void BaseProjectile::OnHit(GameObjectEntity* other)
     other->health -= damage;
     if (other->health < 0)
     {
-        SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(other);
-
+        if (EnemyEntity* e = dynamic_cast<EnemyEntity*>(other))
+            e->SwitchState(EnemyEntity::FSM::DEAD);
+        else
+            SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(other);
+        
     }
 
     // Destroy projectile

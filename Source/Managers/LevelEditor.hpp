@@ -7,8 +7,10 @@
 namespace Editor {
 	enum GameObjectType {
 		STATIC_PLATFORM,
+		STATIC_WALL,
 		ENEMY_1,
 		ENEMY_2,
+		SPIDER,
 		BOSS_1,
 	};
 };

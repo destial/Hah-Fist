@@ -5,8 +5,10 @@
 #include "../Utils/Utils.hpp"
 
 #include "../Utils/MeshRenderer.hpp"
+#include "../Entities/StaticEntity.hpp"
 #include "../Entities/Enemies/EnemyEntity.hpp"
 #include "../Entities/Enemies/TrooperEntity.hpp"
+#include "../Entities/Enemies/SpiderEntity.hpp"
 #include "../Entities/WeaponEntity.hpp"
 
 LevelEditor::LevelEditor(BaseScene* b_scene)
@@ -53,9 +55,16 @@ void LevelEditor::RemoveSelectedEntity() {
 BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
 	switch (type) {
 	case Editor::GameObjectType::STATIC_PLATFORM: {
-		GameObjectEntity* go = new GameObjectEntity(Utils::GetMouseWorld(true));
+		StaticEntity* go = new StaticEntity(StaticEntity::STATIC_TYPE::TYPE_PLATFORM,Utils::GetMouseWorld(true));
 		go->mesh = MeshRenderer::GetCenterRectMesh();
-		go->go_type = GameObjectEntity::PhysicsType::STATIC;
+		//go->go_type = GameObjectEntity::PhysicsType::STATIC;
+		go->layer = BaseEntity::RenderLayer::WORLD;
+		scene->AddEntityToScene(go);
+		return go;
+	}
+	case Editor::GameObjectType::STATIC_WALL: {
+		StaticEntity* go = new StaticEntity(StaticEntity::STATIC_TYPE::TYPE_WALL, Utils::GetMouseWorld(true));
+		go->mesh = MeshRenderer::GetCenterRectMesh();
 		go->layer = BaseEntity::RenderLayer::WORLD;
 		scene->AddEntityToScene(go);
 		return go;
@@ -68,6 +77,12 @@ BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
 	}
 	case Editor::GameObjectType::ENEMY_2: {
 		EnemyEntity* enemy = new TrooperEntity(Utils::GetMouseWorld(true));
+		enemy->layer = BaseEntity::RenderLayer::ENTITY;
+		scene->AddEntityToScene(enemy);
+		return enemy;
+	}
+	case Editor::SPIDER: {
+		EnemyEntity* enemy = new SpiderEntity(Utils::GetMouseWorld(true));
 		enemy->layer = BaseEntity::RenderLayer::ENTITY;
 		scene->AddEntityToScene(enemy);
 		return enemy;
@@ -129,6 +144,13 @@ void LevelEditor::Update(const f32& dt) {
 		SelectEntity(AddEntity(Editor::GameObjectType::ENEMY_2));
 	}
 
+	if (AEInputCheckTriggered(AEVK_4)) {
+		SelectEntity(AddEntity(Editor::GameObjectType::SPIDER));
+	}
+
+	if (AEInputCheckTriggered(AEVK_5)) {
+		SelectEntity(AddEntity(Editor::GameObjectType::STATIC_WALL));
+	}
 	if (currentSelection) {
 		if (AEInputCheckCurr(AEVK_LBUTTON)) {
 			if (Utils::OBBPoint(currentSelection, mwp)) {
@@ -138,6 +160,14 @@ void LevelEditor::Update(const f32& dt) {
 			if (scroll != 0) {
 				currentSelection->scale.x += scroll;
 				currentSelection->scale.x = max(currentSelection->scale.x, 1);
+			}
+			if (AEInputCheckCurr(AEVK_W)) {
+				currentSelection->scale.y += dt * 2.f;
+				currentSelection->scale.y = max(currentSelection->scale.y, dt * 2.f);
+			}
+			if (AEInputCheckCurr(AEVK_S)) {
+				currentSelection->scale.y -= dt * 2.f;
+				currentSelection->scale.y = max(currentSelection->scale.y, -dt * 2.f);
 			}
 		}
 

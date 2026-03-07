@@ -1,4 +1,5 @@
 #include "GameObjectEntity.hpp"
+#include "StaticEntity.hpp"
 #include "../Utils/AEOverload.hpp"
 #include "../UI/Debug.hpp"
 #include <cmath>
@@ -8,9 +9,9 @@ GameObjectEntity::GameObjectEntity()
   shape{ CollisionShape::AABB }, go_type{ PhysicsType::DYNAMIC }, 
 	prev_position{ 0.f }, pBody{ new PhysicsBody{0.f} } {}
 
-GameObjectEntity::GameObjectEntity(AEVec2 pos, f32 mass, CollisionShape shape)
+GameObjectEntity::GameObjectEntity(AEVec2 pos, f32 mass, CollisionShape shape, PhysicsType go_type)
 : BaseEntity{ pos }, health{ 1.f }, damage{ 1.f }, isActive{ true },
-  shape{ shape } , go_type{ PhysicsType::DYNAMIC },
+  shape{ shape } , go_type{ go_type },
 	prev_position{ 0.f }, pBody{ new PhysicsBody{mass} } {}
 
 GameObjectEntity::~GameObjectEntity() {
@@ -36,9 +37,6 @@ void GameObjectEntity::Update(const f32& dt) {
 void GameObjectEntity::PostUpdate(const f32& dt)  {
 	this->position += this->velocity * dt;
 	this->position.y = AEClamp(this->position.y, this->scale.y * 0.5f, Utils::GetWorldHeight() - (this->scale.y * 0.5f));
-	/*if (this->position.x <= 0.f) {
-		velocity.x = 0;
-	}*/
 	if (this->position.y <= this->scale.y * 0.5f) {
 		velocity.y = 0;
 	}
@@ -64,12 +62,19 @@ void GameObjectEntity::Render() {
 }
 
 void GameObjectEntity::OnCollide(GameObjectEntity* go) {
-	if (go->go_type == PhysicsType::STATIC) {
-		AEVec2 down = { 0, -1.f };
-		if (velocity * down > 1 && position.y >= go->position.y + go->scale.y * 0.5f + scale.y * 0.49f)
-		{
-			position = prev_position;
-			velocity.y = 0.0f;
+	if (go->go_type == PhysicsType::STATIC){//StaticEntity* se = dynamic_cast<StaticEntity*>(go)) {
+		StaticEntity* se = dynamic_cast<StaticEntity*>(go);
+		if (se == nullptr)
+			return;
+		if (se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_PLATFORM) {
+			AEVec2 down = { 0, -1.f };
+			if (velocity * down > 1 && position.y >= go->position.y + go->scale.y * 0.5f + scale.y * 0.49f)
+			{
+				position = prev_position;
+				velocity.y = 0.0f;
+			}
+		}
+		else {
 		}
 	}
 	else if (go->go_type == PhysicsType::DYNAMIC) {

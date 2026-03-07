@@ -192,6 +192,12 @@
     <ClCompile Include="..\Source\Entities\Projectiles\BaseProjectile.cpp">
       <Filter>Source Files\Entities\Projectiles</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Entities\Enemies\SpiderEntity.cpp">
+      <Filter>Source Files\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Entities\StaticEntity.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -304,6 +310,12 @@
     </ClInclude>
     <ClInclude Include="..\Source\Entities\Projectiles\BaseProjectile.hpp">
       <Filter>Header Files\Entities\Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\Enemies\SpiderEntity.hpp">
+      <Filter>Header Files\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\StaticEntity.hpp">
+      <Filter>Header Files\Entities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

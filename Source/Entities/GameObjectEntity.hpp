@@ -1,5 +1,4 @@
 #pragma once
-#pragma once
 #ifndef __GAMEOBJECTENTITY_H
 #define __GAMEOBJECTENTITY_H
 #include "BaseEntity.hpp"
@@ -17,7 +16,7 @@ public:
 	AEVec2 prev_position;
 	f32 frictionMultiplier{ 1.0 };
 	GameObjectEntity();
-	GameObjectEntity(AEVec2 pos = { 0.f, 0.f }, f32 mass = 1.0f, CollisionShape type = CollisionShape::AABB);
+	GameObjectEntity(AEVec2 pos = { 0.f, 0.f }, f32 mass = 1.0f, CollisionShape type = CollisionShape::AABB, PhysicsType go_type = PhysicsType::DYNAMIC);
 	virtual ~GameObjectEntity();
 	virtual void PreUpdate(const f32& dt);
 	virtual void Update(const f32& dt);

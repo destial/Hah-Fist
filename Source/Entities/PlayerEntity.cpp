@@ -70,9 +70,11 @@ void Player::Update(const f32& dt) {
 		velocity.y += jumpVelocity;
 		//Have to offset so it does not instantly collide and delete its own projectile
 		AEVec2 playerPosOff{position.x + dir.x + 2.f,position.y};
+		AEVec2 shootDir{ scale.x, 0.f };
+		AEVec2Normalize(&shootDir, &shootDir);
 		f32 bulletSpeed = 50.f;
 		f32 bulletDamage = 25.f;
-		BaseProjectile* bullet = new BaseProjectile(playerPosOff, dir, bulletSpeed, bulletDamage, this);
+		BaseProjectile* bullet = new BaseProjectile(playerPosOff, {scale.x, 0.f}, bulletSpeed, bulletDamage, this);
 		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
 
 	}

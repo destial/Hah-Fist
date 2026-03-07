@@ -3,10 +3,12 @@
 #include "SerializationManager.hpp"
 #include "AEEngine.h"
 #include "../Entities/GameObjectEntity.hpp"
+#include "../Entities/StaticEntity.hpp"
 #include "../Entities/PlayerEntity.hpp"
 #include "../Entities/WeaponEntity.hpp"
 #include "../Entities/Enemies/EnemyEntity.hpp"
 #include "../Entities/Enemies/TrooperEntity.hpp"
+#include "../Entities/Enemies/SpiderEntity.hpp"
 #include "../Utils/MeshRenderer.hpp"
 
 namespace Serialization {
@@ -54,13 +56,18 @@ namespace Serialization {
 			s.damage = go->damage;
 			s.type = EntityType::PLATFORM;
 			s.mass = go->pBody->mass;
-
-			if (Player* p = dynamic_cast<Player*>(en)) {
+			if (StaticEntity* se = dynamic_cast<StaticEntity*>(en)) {
+				s.type = (se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_WALL) ? EntityType::WALL : EntityType::PLATFORM;
+			}
+			else if (Player* p = dynamic_cast<Player*>(en)) {
 				s.type = EntityType::PLAYER;
 			}
 			else if (EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(en)) {
 				if (TrooperEntity* trooper = dynamic_cast<TrooperEntity*>(enemy)) {
 					s.type = EntityType::TROOPER;
+				}
+				else if (SpiderEntity* spider = dynamic_cast<SpiderEntity*>(enemy)) {
+					s.type = EntityType::SPIDER;
 				}
 				else {
 					s.type = EntityType::ENEMY;
@@ -74,9 +81,16 @@ namespace Serialization {
 		BaseEntity* entity = nullptr;
 		switch (en.type) {
 			case EntityType::PLATFORM: {
-				entity = new GameObjectEntity(AEVec2{ en.x, en.y });
+				entity = new StaticEntity(StaticEntity::STATIC_TYPE::TYPE_PLATFORM,AEVec2{ en.x, en.y });
 				if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(entity)) {
-					go->go_type = GameObjectEntity::PhysicsType::STATIC;
+					//go->go_type = GameObjectEntity::PhysicsType::STATIC;
+					go->mesh = MeshRenderer::GetCenterRectMesh();
+				}
+				break;
+			}
+			case EntityType::WALL: {
+				entity = new StaticEntity(StaticEntity::STATIC_TYPE::TYPE_WALL,AEVec2{ en.x, en.y });
+				if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(entity)) {
 					go->mesh = MeshRenderer::GetCenterRectMesh();
 				}
 				break;
@@ -87,6 +101,10 @@ namespace Serialization {
 			}
 			case EntityType::TROOPER: {
 				entity = new TrooperEntity(AEVec2{ en.x, en.y });
+				break;
+			}
+			case EntityType::SPIDER: {
+				entity = new SpiderEntity(AEVec2{ en.x, en.y });
 				break;
 			}
 			case EntityType::ENEMY: {

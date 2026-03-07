@@ -1,9 +1,10 @@
 #include "EnemyEntity.hpp"
 #include "../../Utils/MeshRenderer.hpp"
 #include "../../Managers/AssetManager.hpp"
+#include "../../Managers/SceneManager.hpp"
 #include "../../Utils/AEOverload.hpp"
 
-EnemyEntity::EnemyEntity(AEVec2 pos, AEVec2 dir) : state{ FSM::IDLE }, dir{dir}, stateTimer{ 1.f }, GameObjectEntity(pos)
+EnemyEntity::EnemyEntity(AEVec2 pos, AEVec2 dir, f32 speed) : state{ FSM::IDLE }, dir{ dir }, speed{ speed }, stateTimer{ 1.f }, GameObjectEntity(pos)
 {
 	sprite = AssetManager::GetSpriteSheet("Assets/test_enemy.png", 3, 3);
 	mesh = nullptr;
@@ -109,6 +110,7 @@ void EnemyEntity::OnStun(const f32& dt)
 void EnemyEntity::OnDead(const f32& dt)
 {
 	// Empty for now
+	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 }
 
 void EnemyEntity::SwitchState(FSM newState, f32 timeInNewState)

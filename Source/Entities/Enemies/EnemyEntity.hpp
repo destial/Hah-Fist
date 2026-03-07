@@ -6,17 +6,16 @@
 // Enemy Base class
 class EnemyEntity : public GameObjectEntity {
 protected:
-	enum struct FSM {
-		IDLE, PATROL, CHASE, STUN, DEAD, TOTAL
-	} state;
 	AEVec2 dir;
+	f32 speed;
 	f32 animationTimer, animationFrame, stateTimer;
 	int currentRow, currentCol;
 	SpriteSheet* sprite;
-	// Helper function for switching the state.
-	void SwitchState(FSM newState, f32 timeInNewState = 0.0f); 
 public:
-	EnemyEntity(AEVec2 pos, AEVec2 dir = { 0.0f,0.0f });
+	enum struct FSM {
+		IDLE, PATROL, CHASE, STUN, DEAD, TOTAL
+	} state;
+	EnemyEntity(AEVec2 pos, AEVec2 dir = { 0.0f,0.0f }, f32 speed = 10.f);
 	virtual ~EnemyEntity();
 	virtual void PreUpdate(const f32& dt);
 	virtual void Update(const f32& dt);
@@ -30,5 +29,8 @@ public:
 	virtual void OnChase(const f32& dt);
 	virtual void OnStun(const f32& dt);
 	virtual void OnDead(const f32& dt);
+
+	// Helper function for switching the state.
+	void SwitchState(FSM newState, f32 timeInNewState = 0.0f);
 };
 #endif

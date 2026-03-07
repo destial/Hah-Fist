@@ -1,9 +1,11 @@
 #include "TrooperEntity.hpp"
+#include "../StaticEntity.hpp"
 #include "../../Utils/Utils.hpp"
 #include "../../Managers/AssetManager.hpp"
-TrooperEntity::TrooperEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }) {
-	sprite = AssetManager::GetSpriteSheet("Assets/test_troop.png", 3, 3);
-	// Empty for now
+#include "../../Managers/SceneManager.hpp"
+TrooperEntity::TrooperEntity(AEVec2 pos, f32 speed) : ground{ nullptr }, EnemyEntity(pos, { 1.f,0.f }, speed) {
+	sprite = AssetManager::GetSpriteSheet("Assets/slimetroop.png", 2, 3);
+	animationFrame = 1.f / (2.f * 3.f);
 }
 
 TrooperEntity::~TrooperEntity() {
@@ -19,7 +21,21 @@ void TrooperEntity::Update(const f32& dt) {
 }
 
 void TrooperEntity::PostUpdate(const f32& dt) {
-	EnemyEntity::PostUpdate(dt);
+	GameObjectEntity::PostUpdate(dt);
+	// Animation of Trooper Entity
+	if (velocity.x > 0) {
+		currentRow = 0;
+	}
+	if (velocity.x < 0) {
+		currentRow = 1;
+	}
+	if ((animationTimer += dt) > animationFrame) {
+		animationTimer = 0.f;
+		if (++currentCol >= 3) {
+			currentCol = 0;
+		}
+	}
+	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
 void TrooperEntity::Render() {
@@ -48,7 +64,11 @@ void TrooperEntity::OnPatrol(const f32& dt) {
 	// Trooper's patrol behaviour
 	AEVec2 contactPt, normal;
 	f32 timeCollide;
-	velocity.x = dir.x * 10.f;
+	// Clamps the acceleration of object
+	if (abs(velocity.x) < speed)
+	{
+		velocity.x += dir.x * speed;
+	}
 	// Checks if it is on the ledge.
 	if (ground != nullptr && !(Utils::RayAABB({ position.x + scale.x * dir.x * 0.5f, position.y }, AEVec2{ 0.f, -1.f }, ground, contactPt, normal, timeCollide)) ) {
 		velocity.x = 0.f;
@@ -66,4 +86,5 @@ void TrooperEntity::OnStun(const f32& dt) {
 
 void TrooperEntity::OnDead(const f32& dt) {
 	// Trooper's death behaviour
+	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 }
