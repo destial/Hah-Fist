@@ -5,7 +5,7 @@
 #include "../../Managers/SceneManager.hpp"
 
 
-BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg)
+BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameObjectEntity* own)
 : GameObjectEntity{ pos, 1.f, CollisionShape::AABB }, direction{ dir }, speed{ speed } {
     damage = dmg;
     sprite = AssetManager::GetSpriteSheet("Assets/test_enemy.png", 1, 1); // single-frame bullet
@@ -24,6 +24,8 @@ BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg)
     isActive = true;
     velocity.x = dir.x * speed;
     velocity.y = dir.y * speed;
+    health = 1;
+    owner = own;
 }
 
 
@@ -60,7 +62,7 @@ void BaseProjectile::Render()
 
 void BaseProjectile::OnCollide(GameObjectEntity* other)
 {
-    if (!other || other == this)
+    if (!other || other == this || other == owner)
         return;
 
     if (!other->isActive)

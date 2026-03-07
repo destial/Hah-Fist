@@ -15,8 +15,10 @@ protected:
     f32 animationTimer, animationFrame;
     int currentRow, currentCol;
     SpriteSheet* sprite;
+    GameObjectEntity* owner;
 public:
-    BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 damage);
+
+    BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 damage, GameObjectEntity* own);
 
     virtual ~BaseProjectile() = default;
 
