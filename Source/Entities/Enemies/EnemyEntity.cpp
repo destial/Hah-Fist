@@ -118,3 +118,13 @@ void EnemyEntity::SwitchState(FSM newState, f32 timeInNewState)
 	state = newState;
 	stateTimer = timeInNewState;
 }
+
+EnemyEntity::FSM EnemyEntity::GetCurrentState()
+{
+	return state;
+}
+
+void EnemyEntity::FlipDir()
+{
+	dir.x *= -1.f;
+}
