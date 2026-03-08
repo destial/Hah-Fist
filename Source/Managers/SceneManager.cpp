@@ -96,3 +96,7 @@ BaseScene* SceneManager::GetCurrentScene() const {
 Scenes::SceneState SceneManager::GetCurrentState() const {
 	return current_scene;
 }
+
+LevelEditor* SceneManager::GetEditor() const {
+	return editor;
+}

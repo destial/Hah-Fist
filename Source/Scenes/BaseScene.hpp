@@ -26,6 +26,8 @@
 *		 physics manager and camera manager
 */
 class BaseScene {
+private:
+	std::vector<BaseEntity*> awaiting_deletion;
 protected:
 	std::vector<BaseEntity*> scene_entities; // vector of entity pointers
 	ParticleSystem* particleSystem; // pointer to its own particle system

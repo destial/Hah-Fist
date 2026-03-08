@@ -82,6 +82,12 @@ public:
 	* @return The currently played scene state
 	*/
 	Scenes::SceneState GetCurrentState() const;
+
+	/*!
+	* @brief Get LevelEditor pointer
+	* @return The pointer to the LevelEditor
+	*/
+	LevelEditor* GetEditor() const;
 };
 
 #endif

@@ -10,13 +10,15 @@
 */
 
 #include "BaseScene.hpp"
+#include "../Managers/SceneManager.hpp"
 #include <algorithm>
 #include <iostream>
 
 BaseScene::BaseScene() 
-	: scene_entities(0), particleSystem{ new ParticleSystem }, camManager{ CameraManager::GetInstance() } {}
+: awaiting_deletion(0), scene_entities(0), particleSystem{ new ParticleSystem }, camManager{ CameraManager::GetInstance() } {}
 
 BaseScene::~BaseScene() {
+	awaiting_deletion.clear();
 	scene_entities.clear();
 	delete particleSystem;
 	if (physicsManager)
@@ -25,11 +27,11 @@ BaseScene::~BaseScene() {
 }
 
 void BaseScene::PreUpdate(const f32& dt) {
+	awaiting_deletion.clear();
 	// Need to use an index-based loop instead of an iterator because entities may be added to scene_entities. 
 	// Adding elements to a std::vector can trigger a reallocation, which invalidates all iterators and references. 
 	// Using indices avoids iterator invalidation issues during modification.
-	for (int i = 0; i < scene_entities.size(); ++i)
-	{
+	for (int i = 0; i < scene_entities.size(); ++i) {
 		scene_entities[i]->PreUpdate(dt);
 	}
 	if (physicsManager != nullptr) {
@@ -41,8 +43,7 @@ void BaseScene::Update(const f32& dt) {
 	// Need to use an index-based loop instead of an iterator because entities may be added to scene_entities. 
 	// Adding elements to a std::vector can trigger a reallocation, which invalidates all iterators and references. 
 	// Using indices avoids iterator invalidation issues during modification.
-	for (int i = 0; i < scene_entities.size(); ++i)
-	{
+	for (int i = 0; i < scene_entities.size(); ++i) {
 		scene_entities[i]->Update(dt);
 	}
 	particleSystem->Update(dt);
@@ -57,9 +58,37 @@ void BaseScene::PostUpdate(const f32& dt) {
 	// Need to use an index-based loop instead of an iterator because entities may be added to scene_entities. 
 	// Adding elements to a std::vector can trigger a reallocation, which invalidates all iterators and references. 
 	// Using indices avoids iterator invalidation issues during modification.
-	for (int i = 0; i < scene_entities.size(); ++i)
-	{
+	for (int i = 0; i < scene_entities.size(); ++i) {
 		scene_entities[i]->PostUpdate(dt);
+	}
+
+	for (int i = 0; i < awaiting_deletion.size(); ++i) {
+		BaseEntity* entity = awaiting_deletion[i];
+		bool deleted = false;
+		// Remove from scene entities
+		for (std::vector<BaseEntity*>::iterator it = scene_entities.begin(); it != scene_entities.end(); it++) {
+			if (entity == *it) {
+				scene_entities.erase(it);
+				deleted = true;
+				break;
+			}
+		}
+
+		// Remove from physics manager
+		GameObjectEntity* go;
+		if (physicsManager && (go = dynamic_cast<GameObjectEntity*>(entity))) {
+			for (std::vector<GameObjectEntity*>::iterator it = physicsManager->gameObjects.begin(); it != physicsManager->gameObjects.end(); it++) {
+				if (*it == go) {
+					physicsManager->gameObjects.erase(it);
+					break;
+				}
+			}
+		}
+
+		// delete memory
+		if (deleted) {
+			delete entity;
+		}
 	}
 }
 
@@ -105,30 +134,35 @@ void BaseScene::AddEntityToScene(BaseEntity* entity) {
 }
 
 void BaseScene::RemoveEntityFromScene(BaseEntity* entity) {
-	bool deleted = false;
-	// Remove from scene entities
-	for (std::vector<BaseEntity*>::iterator it = scene_entities.begin(); it != scene_entities.end(); it++) {
-		if (entity == *it) {
-			scene_entities.erase(it);
-			deleted = true;
-			break;
-		}
-	}
-
-	// Remove from physics manager
-	GameObjectEntity* go;
-	if (physicsManager && (go = dynamic_cast<GameObjectEntity*>(entity))) {
-		for (std::vector<GameObjectEntity*>::iterator it = physicsManager->gameObjects.begin(); it != physicsManager->gameObjects.end(); it++) {
-			if (*it == go) {
-				physicsManager->gameObjects.erase(it);
+	if (SceneManager::GetInstance()->GetEditor()->IsToggled()) {
+		bool deleted = false;
+		// Remove from scene entities
+		for (std::vector<BaseEntity*>::iterator it = scene_entities.begin(); it != scene_entities.end(); it++) {
+			if (entity == *it) {
+				scene_entities.erase(it);
+				deleted = true;
 				break;
 			}
 		}
-	}
 
-	// delete memory
-	if (deleted) {
-		delete entity;
+		// Remove from physics manager
+		GameObjectEntity* go;
+		if (physicsManager && (go = dynamic_cast<GameObjectEntity*>(entity))) {
+			for (std::vector<GameObjectEntity*>::iterator it = physicsManager->gameObjects.begin(); it != physicsManager->gameObjects.end(); it++) {
+				if (*it == go) {
+					physicsManager->gameObjects.erase(it);
+					break;
+				}
+			}
+		}
+
+		// delete memory
+		if (deleted) {
+			delete entity;
+		}
+	}
+	else {
+		awaiting_deletion.push_back(entity);
 	}
 }
 
