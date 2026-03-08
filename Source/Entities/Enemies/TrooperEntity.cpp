@@ -44,9 +44,17 @@ void TrooperEntity::Render() {
 
 void TrooperEntity::OnCollide(GameObjectEntity* go) {
 	EnemyEntity::OnCollide(go);
-	ground = go->go_type == PhysicsType::STATIC ? go : nullptr;
-	if (go->go_type == PhysicsType::DYNAMIC) {
-		SwitchState(FSM::IDLE, 3.f);
+	if (go == nullptr)
+			return;
+	StaticEntity* se = dynamic_cast<StaticEntity*>(go);
+	if(se != nullptr) // This sets the ground properly which are your platforms.
+		ground = (dynamic_cast<StaticEntity*>(go)->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_PLATFORM) ? go : nullptr; //go->go_type == PhysicsType::STATIC ? go : nullptr;
+	if (go->go_type == PhysicsType::DYNAMIC || se && se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_WALL) {
+		SwitchState(FSM::IDLE, 2.f);
+	}
+	else if (EnemyEntity* e = dynamic_cast<EnemyEntity*>(go)) {
+		if (e->GetCurrentState() == EnemyEntity::FSM::PATROL)
+			e->FlipDir();
 	}
 }
 
@@ -54,7 +62,7 @@ void TrooperEntity::OnIdle(const f32& dt) {
 	// Trooper's idle behaviour
 	velocity.x = 0.f;
 	if (stateTimer < 0.f) {
-		dir.x *= -1.f; // Flip the direction it is travelling.
+		FlipDir(); // Flip the direction it is travelling.
 		SwitchState(FSM::PATROL);
 		return;
 	}

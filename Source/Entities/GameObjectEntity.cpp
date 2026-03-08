@@ -75,12 +75,12 @@ void GameObjectEntity::OnCollide(GameObjectEntity* go) {
 			}
 		}
 		else if(se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_WALL) { // Collision with a wall
-			
 			AEVec2 down = { 0, -1.f };
+			position = prev_position;
 			if (position.y >= go->position.y + go->scale.y * 0.5f + scale.y * 0.49f)
 			{
 				if (velocity * down > 1) {
-					position = prev_position;
+					
 					velocity.y = 0.0f;
 				}
 			}
