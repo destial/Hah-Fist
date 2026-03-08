@@ -12,12 +12,13 @@
 #include <cstdio>
 
 Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
-	sprite = AssetManager::GetSpriteSheet("Assets/test_sprite.png", 3, 3);
+
+	sprite = AssetManager::GetSpriteSheet("Assets/player.png", 2, 32);
 	mesh = nullptr;
 	animationTimer = 0.f;
-	animationFrame = 1.f / (3.f * 3.f);
+	animationFrame = 1.f / (2.f * 32.f);
 	currentRow = currentCol = 0;
-	scale = { 5.f * (static_cast<f32>(sprite->image->width) / sprite->image->height), 5.f };
+	scale = { 5.f * ((static_cast<f32>(sprite->image->width) / 32) / (sprite->image->height / 2)) , 5.f };
 	jumpHeight = 8.5f;
 	jumpVelocity = sqrtf(jumpHeight * 2.f * abs(pBody->gravity.y));
 	speed = 10.f;
@@ -55,6 +56,15 @@ void Player::Update(const f32& dt) {
 			velocity.x += dir.x * spd;
 		}
 	}
+	if (AEInputCheckCurr(AEVK_1)) {
+		SwitchWeapon(0);
+	}
+	else if (AEInputCheckCurr(AEVK_2)) {
+		SwitchWeapon(1);
+	}
+	else if (AEInputCheckCurr(AEVK_3)) {
+		SwitchWeapon(2);
+	}
 
 
 	if (AEInputCheckCurr(AEVK_SPACE) && abs(velocity.y) == 0) {
@@ -82,16 +92,29 @@ void Player::Update(const f32& dt) {
 
 void Player::PostUpdate(const f32& dt) {
 	GameObjectEntity::PostUpdate(dt);
-	currentRow = 0;
-	if (velocity.x > 0) {
-		currentRow = 1;
+	currentRow = 1;
+	if (velocity.x != 0) {
+		currentRow = 0;
+		if (velocity.x < 0)
+		{
+			if (this->scale.x > 0)
+			{
+				this->scale.x *= -1;
+			}
+		}
+		else
+		{
+			if (this->scale.x < 0)
+			{
+				this->scale.x *= -1;
+			}
+		}
 	}
-	if (velocity.x < 0) {
-		currentRow = 2;
-	}
+	
+
 	if ((animationTimer += dt) > animationFrame) {
 		animationTimer = 0.f;
-		if (++currentCol >= 3) {
+		if (++currentCol >= 32) {
 			currentCol = 0;
 		}
 	}
@@ -109,4 +132,23 @@ void Player::Render() {
 void Player::OnCollide(GameObjectEntity* go)
 {
 	GameObjectEntity::OnCollide(go);
+}
+
+void Player::AddWeapon(Weapon* weapon)
+{
+	weapons.push_back(weapon);
+}
+
+void Player::SwitchWeapon(int index)
+{
+	if (weapons.size() <= index) { return; }
+
+	for (int i{ 0 }; i < weapons.size(); ++i)
+	{
+		if (i != index)
+		{
+			weapons[i]->ResetWeapon();
+		}
+		weapons[i]->isActive = i == index;
+	}
 }

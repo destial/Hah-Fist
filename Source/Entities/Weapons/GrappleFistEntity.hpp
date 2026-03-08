@@ -25,5 +25,6 @@ public:
 	void Render() override;
 	void OnCollide(GameObjectEntity* go) override;
 	void Attack() override;
+	void ResetWeapon();
 };
 #endif

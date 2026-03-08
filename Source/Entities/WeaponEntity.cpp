@@ -9,7 +9,8 @@
 Weapon::Weapon(AEVec2 pos, GameObjectEntity* player) : GameObjectEntity(pos) {
 	player_entity = player;
 	go_type = PhysicsType::TRIGGER;
-	image = AssetManager::GetTexture("Assets/test_fist.png");
+	image = AssetManager::GetTexture("Assets/fist1.png");
+	scale = { 2.5f, 2.5f };
 	mesh = MeshRenderer::GetCenterRectMesh();
 	layer = RenderLayer::PLAYER;;
 }
@@ -69,6 +70,13 @@ void Weapon::Render() {
 void Weapon::SetPlayerEntity(GameObjectEntity* player)
 {
 	player_entity = player;
+}
+
+void Weapon::ResetWeapon()
+{
+	channel_timer = 0.0f;
+	channelling = false;
+	weapon_direction = { 0.f, 0.f };
 }
 
 AEVec2 Weapon::GetAttackDirection()
