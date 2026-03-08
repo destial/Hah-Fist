@@ -47,6 +47,15 @@ void PhysicsManager::Update(const f32& dt)
 				trigger->OnCollide(dynamic);
 			}
 		}
+
+		for (GameObjectEntity* _static : qtGameObjects->head->GetPotentialCollisionTargets(trigger, GameObjectEntity::PhysicsType::STATIC)) {
+			//Checks if either go is inactive, if so, skip this check
+			if (!_static->isActive) { continue; }
+
+			if (Utils::OBB(trigger, _static)) {
+				trigger->OnCollide(_static);
+			}
+		}
 	}
 
 	// Collision: DYNAMIC vs DYNAMIC
