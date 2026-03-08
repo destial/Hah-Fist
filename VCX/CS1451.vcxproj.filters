@@ -198,6 +198,15 @@
     <ClCompile Include="..\Source\Entities\StaticEntity.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Entities\Enemies\PayloadEntity.cpp">
+      <Filter>Source Files\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Entities\Enemies\TitanEntity.cpp">
+      <Filter>Source Files\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Entities\Enemies\IronsideEntity.cpp">
+      <Filter>Source Files\Entities\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -316,6 +325,15 @@
     </ClInclude>
     <ClInclude Include="..\Source\Entities\StaticEntity.hpp">
       <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\Enemies\PayloadEntity.hpp">
+      <Filter>Header Files\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\Enemies\TitanEntity.hpp">
+      <Filter>Header Files\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\Enemies\IronsideEntity.hpp">
+      <Filter>Header Files\Entities\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
