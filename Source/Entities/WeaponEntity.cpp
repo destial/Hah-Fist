@@ -25,30 +25,47 @@ void Weapon::PreUpdate(const f32& dt) {
 	AEVec2 right = { 1.f, 0 };
 	rotation = AEVec2AngleCCW(&right, &attack_direction);
 	this->position = player_entity->position + attack_direction * 3.0f;
+	if (this->position.x < player_entity->position.x)
+	{
+		this->scale.y = -2.5f;
+	}
+	else
+	{
+		this->scale.y = 2.5f;
+	}
 }
 
 void Weapon::Update(const f32& dt) {
 	GameObjectEntity::Update(dt);
 
-	if (AEInputCheckTriggered(AEVK_W))
+	if (cd_timer > 0.0f)
 	{
-		if (!weaponChannels)
-		{
-			Attack();
-		}
-		else if(!channelling)
-		{
-			channelling = true;
-		}
+		cd_timer -= dt;
 	}
-	else if (channelling)
+	else
 	{
-		if (AEInputCheckReleased(AEVK_W)) {
-			channelling = false;
-			Attack();
+		if (AEInputCheckTriggered(AEVK_W))
+		{
+			if (!weaponChannels)
+			{
+				Attack();
+				cd_timer = cd_duration;
+			}
+			else if (!channelling)
+			{
+				channelling = true;
+			}
 		}
-		else {
-			channel_timer = AEClamp(channel_timer + dt, 0.0f, max_channel_time);
+		else if (channelling)
+		{
+			if (AEInputCheckReleased(AEVK_W)) {
+				channelling = false;
+				Attack();
+				cd_timer = cd_duration;
+			}
+			else {
+				channel_timer = AEClamp(channel_timer + dt, 0.0f, max_channel_time);
+			}
 		}
 	}
 }

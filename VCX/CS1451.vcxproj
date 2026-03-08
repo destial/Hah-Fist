@@ -111,6 +111,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="..\Source\Entities\Projectiles\BaseProjectile.cpp" />
     <ClCompile Include="..\Source\Entities\StaticEntity.cpp" />
     <ClCompile Include="..\Source\Entities\WeaponEntity.cpp" />
+    <ClCompile Include="..\Source\Entities\Weapons\FingerGunEntity.cpp" />
     <ClCompile Include="..\Source\Entities\Weapons\GrappleFistEntity.cpp" />
     <ClCompile Include="..\Source\Entities\Weapons\TurboFistEntity.cpp" />
     <ClCompile Include="..\Source\Events\InputEvent.cpp" />
@@ -155,6 +156,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="..\Source\Entities\Projectiles\BaseProjectile.hpp" />
     <ClInclude Include="..\Source\Entities\StaticEntity.hpp" />
     <ClInclude Include="..\Source\Entities\WeaponEntity.hpp" />
+    <ClInclude Include="..\Source\Entities\Weapons\FingerGunEntity.hpp" />
     <ClInclude Include="..\Source\Entities\Weapons\GrappleFistEntity.hpp" />
     <ClInclude Include="..\Source\Entities\Weapons\TurboFistEntity.hpp" />
     <ClInclude Include="..\Source\Events\InputEvent.hpp" />

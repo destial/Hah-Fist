@@ -9,6 +9,7 @@
 #include "../Entities/Enemies/TrooperEntity.hpp"
 #include "../Entities/Weapons/TurboFistEntity.hpp"
 #include "../Entities/Weapons/GrappleFistEntity.hpp"
+#include "../Entities/Weapons/FingerGunEntity.hpp"
 #include "../Events/InputEvent.hpp"
 #include "../Utils/AEOverload.hpp"
 #include "../Utils/Utils.hpp"
@@ -100,8 +101,11 @@ void GameScene::Init() {
 	AddEntityToScene(w);
 	Weapon* w2 = new GrappleFistWeapon(AEVec2{ 0.f, 0.f }, player);
 	AddEntityToScene(w2);
+	Weapon* w3= new FingerGunWeapon(AEVec2{ 0.f, 0.f }, player);
+	AddEntityToScene(w3);
 	player->AddWeapon(w);
 	player->AddWeapon(w2);
+	player->AddWeapon(w3);
 
 	player->SwitchWeapon(0);
 

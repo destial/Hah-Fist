@@ -207,6 +207,9 @@
     <ClCompile Include="..\Source\Entities\Enemies\IronsideEntity.cpp">
       <Filter>Source Files\Entities\Enemies</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Entities\Weapons\FingerGunEntity.cpp">
+      <Filter>Source Files\Entities\Weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -334,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Entities\Enemies\IronsideEntity.hpp">
       <Filter>Header Files\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\Weapons\FingerGunEntity.hpp">
+      <Filter>Header Files\Entities\Weapons</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
