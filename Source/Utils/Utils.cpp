@@ -127,6 +127,12 @@ namespace Utils {
 		return Utils::ScreenToWorld(mouse.x + (cam ? cam_x : 0.f), mouse.y + (cam ? -cam_y : 0.f));
 	}
 
+	void GetMinMaxAABB(const GameObjectEntity* const& go, AEVec2& min, AEVec2& max)
+	{
+		min = { go->prev_position.x - go->scale.x * 0.5f, go->prev_position.y - go->scale.y * 0.5f };
+		max = { go->prev_position.x + go->scale.x * 0.5f, go->prev_position.y + go->scale.y * 0.5f };
+	}
+
 	const f32 GetWorldWidth(void) {
 		return world_width;
 	}
@@ -150,21 +156,90 @@ namespace Utils {
 			go->position.y + go->scale.y * 0.5f < go2->position.y - go2->scale.y * 0.5f || go->position.y - go->scale.y * 0.5f > go2->position.y + go2->scale.y * 0.5f);
 	}
 
-	bool DynamicAABB(const BaseEntity* const& go, const BaseEntity* const& go2, AEVec2& contact, AEVec2& normal, float& tCollision, const f32& dt)
+	bool DynamicAABB(const GameObjectEntity* const& go, const GameObjectEntity* const& go2, float& tCollision, const float& dt)
 	{
-		AEVec2 relativeVel{ go->velocity - go2->velocity };
-		if (relativeVel == 0.f) {
-			return false;
+		AEVec2 minGO, maxGO, minGO2, maxGO2;
+		GetMinMaxAABB(go, minGO, maxGO);
+		GetMinMaxAABB(go2, minGO2, maxGO2);
+
+
+		float tFirst = 0.0f;
+		float tLast = dt;
+		AEVec2 bRelative = { go2->velocity.x - go->velocity.x, go2->velocity.y - go->velocity.y };
+		if (bRelative.x < 0) {
+			if (minGO.x > maxGO2.x)
+				return false;
+			if (maxGO.x < minGO2.x)
+				tFirst = AEMax((maxGO.x - minGO2.x) / bRelative.x, tFirst);
+			if (minGO.x < maxGO2.x)
+				tLast = AEMin((minGO.x - maxGO2.x) / bRelative.x, tLast);
 		}
-		BaseEntity target = *go2;
-		target.scale += go->scale;
-		if (RayAABB(go->position, go->velocity * dt, &target, contact, normal, tCollision)) {
-			if (tCollision <= 1.0f) {
-				return true;
+		else if (bRelative.x > 0) {
+			if (maxGO.x < minGO2.x)
+				return false;
+			if (minGO.x > maxGO2.x) {
+				tFirst = AEMax((minGO.x - maxGO2.x) / bRelative.x, tFirst);
+			}
+			if (maxGO.x > minGO2.x) {
+				tLast = AEMin((maxGO.x - minGO2.x) / bRelative.x, tLast);
 			}
 		}
-		return false;
+		else {
+			if (maxGO.x < minGO2.x)
+				return false;
+			else if (minGO.x > maxGO2.x)
+				return false;
+		}
+
+		if (tFirst > tLast)
+			return false;
+		if (bRelative.y < 0) {
+			if (minGO.y > maxGO2.y)
+				return false;
+			if (maxGO.y < minGO2.y)
+				tFirst = AEMax((maxGO.y - minGO2.y) / bRelative.y, tFirst);
+			if (minGO.y < maxGO2.y)
+				tLast = AEMin((minGO.y - maxGO2.y) / bRelative.y, tLast);
+		}
+		else if (bRelative.y > 0) {
+			if (minGO.y > maxGO2.y) {
+				tFirst = AEMax((minGO.y - maxGO2.y) / bRelative.y, tFirst);
+			}
+			if (maxGO.y > minGO2.y) {
+				tLast = AEMin((maxGO.y - minGO2.y) / bRelative.y, tLast);
+			}
+			if (maxGO.y < minGO2.y)
+				return false;
+		}
+		else {
+			if (maxGO.y < minGO2.y)
+				return false;
+			else if (minGO.y > maxGO2.y)
+				return false;
+		}
+
+		if (tFirst > tLast)
+			return false;
+		tCollision = tFirst;
+		return true;
 	}
+
+	//bool DynamicAABB(const BaseEntity* const& go, const BaseEntity* const& go2, AEVec2& contact, AEVec2& normal, float& tCollision, const f32& dt)
+	//{
+	//	AEVec2 relativeVel{ go->velocity - go2->velocity };
+	//	if (relativeVel == 0.f) {
+	//		return false;
+	//	}
+	//	//BaseEntity target = *go2;
+	//	//target.scale += go->scale;
+	//	
+	//	if (RayAABB(go->position, go->velocity * dt, go2, contact, normal, tCollision)) {
+	//		if (tCollision <= 1.0f) {
+	//			return true;
+	//		}
+	//	}
+	//	return false;
+	//}
 
 	 bool RayAABB(const AEVec2& ray_origin, const AEVec2& ray_dir, const BaseEntity* const& target, AEVec2& contact, AEVec2& normal, float& tNear)
 	{

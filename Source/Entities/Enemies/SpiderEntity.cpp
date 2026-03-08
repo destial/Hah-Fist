@@ -54,10 +54,12 @@ void SpiderEntity::Render()
 void SpiderEntity::OnCollide(GameObjectEntity* go)
 {
 	EnemyEntity::OnCollide(go);
+	if (go == nullptr)
+		return;
 	StaticEntity* se = dynamic_cast<StaticEntity*>(go);
 	if(se != nullptr)
 		ground = (dynamic_cast<StaticEntity*>(go)->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_PLATFORM) ? go : nullptr; //go->go_type == PhysicsType::STATIC ? go : nullptr;
-	if (go->go_type == PhysicsType::DYNAMIC || dynamic_cast<StaticEntity*>(go)->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_WALL) {
+	if (go->go_type == PhysicsType::DYNAMIC || se && se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_WALL) {
 		SwitchState(FSM::IDLE, 2.f);
 	}
 }
@@ -103,7 +105,7 @@ void SpiderEntity::OnDead(const f32& dt)
 	if (bSpawnHatchlings) {
 		SpiderEntity* baby = new SpiderEntity(position, 15.f, false);
 		f32 dir = rand() % 2 ? -1.f : 1;
-		baby->velocity = { AERandFloat() * 5.f, AERandFloat() * 5.f };
+		baby->velocity = { AERandFloat() * -5.f, AERandFloat() * 5.f };
 		baby->state = FSM::PATROL;
 		baby->scale = { scale.x * 0.5f * dir, scale.y * 0.5f };
 		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(baby);

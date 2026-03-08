@@ -94,7 +94,7 @@ void PhysicsManager::Update(const f32& dt)
 		for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(_static, GameObjectEntity::PhysicsType::DYNAMIC)) {
 			//Checks if either go is inactive, if so, skip this check
 			if (!dynamic->isActive) { continue; }
-
+			float tCollide{};
 			if (Utils::OBB(_static, dynamic)) {
 				_static->OnCollide(dynamic);
 				dynamic->OnCollide(_static);
@@ -106,6 +106,14 @@ void PhysicsManager::Update(const f32& dt)
 						dynamic->pBody->is_standing_above = true;
 					}
 				}
+			}
+			else if (Utils::DynamicAABB(dynamic, _static, tCollide, dt)) {
+				dynamic->position.x = dynamic->velocity.x * tCollide + dynamic->prev_position.x;
+				dynamic->position.y = dynamic->velocity.y * tCollide + dynamic->prev_position.y;
+				dynamic->velocity.x = 0.0f;
+
+				_static->OnCollide(dynamic);
+				dynamic->OnCollide(_static);
 			}
 		}
 	}

@@ -75,6 +75,9 @@ void GameObjectEntity::OnCollide(GameObjectEntity* go) {
 			}
 		}
 		else {
+			position = prev_position;
+			velocity.x = 0.0f;
+			velocity.y = 0.0f;
 		}
 	}
 	else if (go->go_type == PhysicsType::DYNAMIC) {
