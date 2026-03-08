@@ -4,6 +4,8 @@
 #include "GameObjectEntity.hpp"
 #include "../Items/SpriteSheet.hpp"
 #include "../Events/InputEvent.hpp"
+#include "../Entities/WeaponEntity.hpp"
+#include <vector>
 
 class Player : public GameObjectEntity {
 protected:
@@ -13,6 +15,7 @@ protected:
 	f32 jumpHeight;
 	f32 jumpVelocity;
 	f32 speed;
+	std::vector<Weapon*> weapons;
 public:
 	Player(AEVec2 pos = { 0.f, 0.f });
 	virtual ~Player();
@@ -21,6 +24,9 @@ public:
 	virtual void PostUpdate(const f32& dt);
 	virtual void Render();
 	virtual void OnCollide(GameObjectEntity* go);
+
+	void AddWeapon(Weapon* weapon);
+	void SwitchWeapon(int index);
 };
 
 #endif

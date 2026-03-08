@@ -1,9 +1,12 @@
 #include "GrappleFistEntity.hpp"
 #include "../../Utils/AEOverload.hpp"
+#include "../../Managers/AssetManager.hpp"
+
 
 GrappleFistWeapon::GrappleFistWeapon(AEVec2 pos, GameObjectEntity* player) : Weapon(pos, player)
 {
 	weaponChannels = false;
+	image = AssetManager::GetTexture("Assets/fist2.png");
 }
 GrappleFistWeapon::~GrappleFistWeapon()
 {
@@ -20,6 +23,10 @@ void GrappleFistWeapon::PreUpdate(const f32& dt)
 
 void GrappleFistWeapon::Update(const f32& dt)
 {
+	if (!isActive)
+	{
+		return;
+	}
 	Weapon::Update(dt);
 	AEVec2 travel_direction = position - player_entity->position;
 	if (grappleState == SHOOTING)
@@ -35,7 +42,7 @@ void GrappleFistWeapon::Update(const f32& dt)
 	}
 	else if (grappleState == RETURNING)
 	{
-		if (AEVec2Length(&travel_direction) <= 3.0f)
+		if (AEVec2Length(&travel_direction) <= 5.0f)
 		{
 			grappleState = INACTIVE;
 		}
@@ -45,7 +52,7 @@ void GrappleFistWeapon::Update(const f32& dt)
 	}
 	else if (grappledObject != nullptr)
 	{
-		if (AEVec2Length(&travel_direction) <= 3.0f)
+		if (AEVec2Length(&travel_direction) <= 5.0f)
 		{
 			grappledObject = nullptr;
 			grappleState = INACTIVE;
@@ -98,4 +105,13 @@ void GrappleFistWeapon::Attack()
 {
 	grappleState = SHOOTING;
 	snapshottedAttackDirection = GetAttackDirection();
+}
+
+void GrappleFistWeapon::ResetWeapon()
+{
+	Weapon::ResetWeapon();
+	grappleState = GRAPPLE_STATE::INACTIVE;
+	travelDuration = 0.0f;
+	grappledObject = nullptr;
+	snapshottedAttackDirection = { 0.0f, 0.0f };
 }

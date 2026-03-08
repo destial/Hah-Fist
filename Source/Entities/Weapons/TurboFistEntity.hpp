@@ -20,6 +20,7 @@ public:
 	void OnCollide(GameObjectEntity* go) override;
 	void Attack() override;
 	float GetCurrentAttackStrength();
+	void ResetWeapon();
 };
 
 #endif

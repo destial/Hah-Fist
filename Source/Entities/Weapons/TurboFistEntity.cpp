@@ -1,10 +1,12 @@
 #include "TurboFistEntity.hpp"
 #include "../../Utils/AEOverload.hpp"
 #include "../../UI/Debug.hpp"
+#include "../../Managers/AssetManager.hpp"
 
 TurboFistWeapon::TurboFistWeapon(AEVec2 pos, GameObjectEntity* player) : Weapon(pos, player)
 {
 	weaponChannels = true;
+	image = AssetManager::GetTexture("Assets/fist1.png");
 	player_original_mass = player->pBody->mass;
 }
 
@@ -15,6 +17,10 @@ TurboFistWeapon::~TurboFistWeapon()
 
 void TurboFistWeapon::Update(const f32& dt)
 {
+	if (!isActive)
+	{
+		return;
+	}
 	Weapon::Update(dt);
 	if (dash_timer > 0.0f)
 	{
@@ -66,4 +72,11 @@ void TurboFistWeapon::Attack()
 float TurboFistWeapon::GetCurrentAttackStrength()
 {
 	return 1.0f + (2.0f * (static_cast<f32>(std::trunc(channel_timer)) / max_channel_time));
+}
+
+void TurboFistWeapon::ResetWeapon()
+{
+	Weapon::ResetWeapon();
+	dash_timer = 0.0f;
+	dashing = false;
 }
