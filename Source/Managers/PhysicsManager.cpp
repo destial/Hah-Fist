@@ -110,10 +110,17 @@ void PhysicsManager::Update(const f32& dt)
 			else if (Utils::DynamicAABB(dynamic, _static, tCollide, dt)) {
 				dynamic->position.x = dynamic->velocity.x * tCollide + dynamic->prev_position.x;
 				dynamic->position.y = dynamic->velocity.y * tCollide + dynamic->prev_position.y;
-				dynamic->velocity.x = 0.0f;
-
 				_static->OnCollide(dynamic);
 				dynamic->OnCollide(_static);
+				float length = abs(dynamic->position.y - _static->position.y);
+				if (length <= dynamic->scale.y * 0.5f + _static->scale.y * 0.5f)
+				{
+					if (dynamic->position.y > _static->position.y)
+					{
+						dynamic->pBody->is_standing_above = true;
+					}
+				}
+
 			}
 		}
 	}

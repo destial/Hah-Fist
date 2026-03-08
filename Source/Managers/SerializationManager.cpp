@@ -111,7 +111,6 @@ namespace Serialization {
 				entity = new EnemyEntity(AEVec2{ en.x, en.y });
 				break;
 			}
-
 			default: break;
 		}
 

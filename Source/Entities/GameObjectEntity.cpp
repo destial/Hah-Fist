@@ -66,7 +66,7 @@ void GameObjectEntity::OnCollide(GameObjectEntity* go) {
 		StaticEntity* se = dynamic_cast<StaticEntity*>(go);
 		if (se == nullptr)
 			return;
-		if (se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_PLATFORM) {
+		if (se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_PLATFORM) { // Collision with a platform
 			AEVec2 down = { 0, -1.f };
 			if (velocity * down > 1 && position.y >= go->position.y + go->scale.y * 0.5f + scale.y * 0.49f)
 			{
@@ -74,10 +74,27 @@ void GameObjectEntity::OnCollide(GameObjectEntity* go) {
 				velocity.y = 0.0f;
 			}
 		}
-		else {
-			position = prev_position;
-			velocity.x = 0.0f;
-			velocity.y = 0.0f;
+		else if(se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_WALL) { // Collision with a wall
+			
+			AEVec2 down = { 0, -1.f };
+			if (position.y >= go->position.y + go->scale.y * 0.5f + scale.y * 0.49f)
+			{
+				if (velocity * down > 1) {
+					position = prev_position;
+					velocity.y = 0.0f;
+				}
+			}
+			else {
+				if (velocity.x < 0.f && position.x > go->position.x) {
+					velocity.x = 0.f;
+				}
+				if (velocity.x > 0.f && position.x < go->position.x) {
+					velocity.x = 0.f;
+				}
+				if (velocity.y > 0.f && position.y < go->position.y) {
+					velocity.y = 0.f;
+				}
+			}
 		}
 	}
 	else if (go->go_type == PhysicsType::DYNAMIC) {

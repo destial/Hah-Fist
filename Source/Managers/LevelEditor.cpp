@@ -155,6 +155,9 @@ void LevelEditor::Update(const f32& dt) {
 		if (AEInputCheckCurr(AEVK_LBUTTON)) {
 			if (Utils::OBBPoint(currentSelection, mwp)) {
 				currentSelection->position = mwp;
+				if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(currentSelection)) {
+					go->prev_position = mwp;
+				}
 			}
 
 			if (scroll != 0) {
