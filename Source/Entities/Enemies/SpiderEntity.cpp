@@ -30,10 +30,10 @@ void SpiderEntity::PostUpdate(const f32& dt)
 	// Animation
 	currentRow = 0;
 	if (velocity.x > 0) {
-		currentRow = 1;
+		currentRow = 2;
 	}
 	if (velocity.x < 0) {
-		currentRow = 2;
+		currentRow = 1;
 	}/*
 	if (death) {
 		currentRow = 3
