@@ -163,6 +163,9 @@ void BaseScene::RemoveEntityFromScene(BaseEntity* entity) {
 	}
 	else {
 		awaiting_deletion.push_back(entity);
+		if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(entity)) {
+			go->isActive = false;
+		}
 	}
 }
 

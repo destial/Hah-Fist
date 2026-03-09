@@ -133,6 +133,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="..\Source\Scenes\GameScene.cpp" />
     <ClCompile Include="..\Source\Scenes\SplashScreen.cpp" />
     <ClCompile Include="..\Source\Scenes\StartMenuScene.cpp" />
+    <ClCompile Include="..\Source\UI\BarUI.cpp" />
     <ClCompile Include="..\Source\UI\BaseUI.cpp" />
     <ClCompile Include="..\Source\UI\ButtonUI.cpp" />
     <ClCompile Include="..\Source\UI\CircleButtonUI.cpp" />
@@ -178,6 +179,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="..\Source\Scenes\GameScene.hpp" />
     <ClInclude Include="..\Source\Scenes\SplashScreen.hpp" />
     <ClInclude Include="..\Source\Scenes\StartMenuScene.hpp" />
+    <ClInclude Include="..\Source\UI\BarUI.hpp" />
     <ClInclude Include="..\Source\UI\BaseUI.hpp" />
     <ClInclude Include="..\Source\UI\ButtonUI.hpp" />
     <ClInclude Include="..\Source\UI\CircleButtonUI.hpp" />

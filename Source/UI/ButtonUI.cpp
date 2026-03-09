@@ -20,6 +20,8 @@ ButtonUI::~ButtonUI() {
 
 void ButtonUI::Update(const f32& dt) {
 	BaseUI::Update(dt);
+	if (!interactive)
+		return;
 	s32 mouse_x, mouse_y;
 	AEInputGetCursorPosition(&mouse_x, &mouse_y);
 	AEVec2 mouse{ static_cast<f32>(mouse_x), static_cast<f32>(mouse_y) };

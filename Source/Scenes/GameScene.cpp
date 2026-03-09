@@ -15,6 +15,7 @@
 #include "../Utils/Utils.hpp"
 #include "../Utils/MeshRenderer.hpp"
 #include "../UI/ButtonUI.hpp"
+#include "../UI/BarUI.hpp"
 #include "../UI/CircleButtonUI.hpp"
 #include "../UI/Debug.hpp"
 #include "AEMath.h"
@@ -60,6 +61,13 @@ void GameScene::Init() {
 	AddEntityToScene(ak);
 	AddEntityToScene(dk);
 	AddEntityToScene(sk);
+
+	/*BarUI* power = new BarUI{ AEVec2{ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f } };
+	power->scale = { 5.f, 1.f };
+	power->SetInteractive(true);
+	power->SetValue(0.5f);
+	std::printf("c: %d | oc: %d | c.r: %d | oc.r: %d\n" , power->color.a, power->overlay_color.a, power->color.r, power->overlay_color.r);
+	AddEntityToScene(power);*/
 
 	std::string filename = "Assets/level_";
 	filename += std::string{ static_cast<char>('0' + LevelManager::GetLevel()) };

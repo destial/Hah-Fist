@@ -20,6 +20,7 @@ private:
 	bool toggled;
 	BaseScene* scene;
 	BaseEntity* currentSelection;
+	AEVec2 currentOffset{ 0.f,0.f };
 public:
 	LevelEditor(BaseScene* scene);
 	~LevelEditor();

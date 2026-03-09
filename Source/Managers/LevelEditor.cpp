@@ -3,7 +3,7 @@
 #include "../Managers/SerializationManager.hpp"
 #include "../Managers/LevelManager.hpp"
 #include "../Utils/Utils.hpp"
-
+#include "../Utils/AEOverload.hpp"
 #include "../Utils/MeshRenderer.hpp"
 #include "../Entities/StaticEntity.hpp"
 #include "../Entities/Enemies/EnemyEntity.hpp"
@@ -12,7 +12,7 @@
 #include "../Entities/WeaponEntity.hpp"
 
 LevelEditor::LevelEditor(BaseScene* b_scene)
-	: scene{ b_scene }, toggled{ false }, currentSelection{ nullptr } {
+: scene{ b_scene }, toggled{ false }, currentSelection{ nullptr } {
 }
 
 LevelEditor::~LevelEditor() {}
@@ -128,6 +128,7 @@ void LevelEditor::Update(const f32& dt) {
 
 	for (BaseEntity* go : scene->Entities()) {
 		if (AEInputCheckTriggered(AEVK_LBUTTON) && Utils::OBBPoint(go, mwp)) {
+			currentOffset = mwp - go->position;
 			SelectEntity(go);
 		}
 	}
@@ -154,7 +155,7 @@ void LevelEditor::Update(const f32& dt) {
 	if (currentSelection) {
 		if (AEInputCheckCurr(AEVK_LBUTTON)) {
 			if (Utils::OBBPoint(currentSelection, mwp)) {
-				currentSelection->position = mwp;
+				currentSelection->position = mwp - currentOffset;
 				if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(currentSelection)) {
 					go->prev_position = mwp;
 				}

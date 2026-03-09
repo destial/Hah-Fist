@@ -8,6 +8,7 @@
 
 class BaseUI : public BaseEntity {
 protected:
+	bool interactive;
 	bool mouse_hovered;
 	bool clicked_this_frame;
 	BaseUI(AEVec2 pos = { 0.f, 0.f });
@@ -35,6 +36,9 @@ public:
 	virtual void Render();
 	virtual void RenderText();
 	virtual void PostUpdate(const f32& dt);
+
+	bool IsInteractive() const;
+	virtual void SetInteractive(bool i);
 };
 
 #endif

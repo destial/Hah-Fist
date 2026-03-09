@@ -213,6 +213,9 @@
     <ClCompile Include="..\Source\Entities\Projectiles\MissileProjectile.cpp">
       <Filter>Source Files\Entities\Projectiles</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\UI\BarUI.cpp">
+      <Filter>Source Files\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -346,6 +349,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Entities\Projectiles\MissileProjectile.hpp">
       <Filter>Header Files\Entities\Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\UI\BarUI.hpp">
+      <Filter>Header Files\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
