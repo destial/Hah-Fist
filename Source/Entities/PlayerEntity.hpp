@@ -27,6 +27,8 @@ public:
 
 	void AddWeapon(Weapon* weapon);
 	void SwitchWeapon(int index);
+
+	Weapon* CurrentWeapon() const;
 };
 
 #endif

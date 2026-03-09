@@ -62,13 +62,6 @@ void GameScene::Init() {
 	AddEntityToScene(dk);
 	AddEntityToScene(sk);
 
-	/*BarUI* power = new BarUI{ AEVec2{ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f } };
-	power->scale = { 5.f, 1.f };
-	power->SetInteractive(true);
-	power->SetValue(0.5f);
-	std::printf("c: %d | oc: %d | c.r: %d | oc.r: %d\n" , power->color.a, power->overlay_color.a, power->color.r, power->overlay_color.r);
-	AddEntityToScene(power);*/
-
 	std::string filename = "Assets/level_";
 	filename += std::string{ static_cast<char>('0' + LevelManager::GetLevel()) };
 	filename += ".dat";
@@ -116,6 +109,23 @@ void GameScene::Init() {
 	player->AddWeapon(w3);
 
 	player->SwitchWeapon(0);
+
+	BarUI* power = new BarUI{ AEVec2{ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f } };
+	power->scale = { 3.f, .25f };
+	power->overlay_color = { 255, 255, 0, 0 };
+	power->text = "";
+	power->SetInteractive(false);
+	power->SetValue(0.5f);
+	power->layer = BaseUI::RenderLayer::PLAYER;
+	power->text_size = 7.f;
+	power->font = AssetManager::GetFontId("Assets/Jersey25-Regular.ttf");
+	AddEntityToScene(power);
+	power->AddUpdateListener(this, [power, player](const f32& dt) {
+		Weapon* current = player->CurrentWeapon();
+		power->SetValue(current->GetChannelTimer() / current->GetMaxChannelTime());
+		power->position = current->position;
+		power->position.y -= std::abs(current->scale.y) * 0.65f;
+	});
 
 	Game::SetBackgroundColor(Color{ 1.f, 0.3f, 0.3f, 0.3f });
 }

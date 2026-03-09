@@ -102,3 +102,19 @@ AEVec2 Weapon::GetAttackDirection()
 	AEVec2Normalize(&attack_direction, &attack_direction);
 	return attack_direction;
 }
+
+f32 Weapon::GetChannelTimer() const {
+	return channel_timer;
+}
+
+f32 Weapon::GetMaxChannelTime() const {
+	return max_channel_time;
+}
+
+f32 Weapon::GetCooldownTimer() const {
+	return cd_timer;
+}
+
+f32 Weapon::GetCooldownDuration() const {
+	return cd_duration;
+}

@@ -152,3 +152,12 @@ void Player::SwitchWeapon(int index)
 		weapons[i]->isActive = i == index;
 	}
 }
+
+Weapon* Player::CurrentWeapon() const {
+	for (int i{ 0 }; i < weapons.size(); ++i) {
+		if (weapons[i]->isActive) {
+			return weapons[i];
+		}
+	}
+	return nullptr;
+}

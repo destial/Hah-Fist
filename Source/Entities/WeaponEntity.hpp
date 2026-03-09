@@ -29,6 +29,11 @@ public:
 	void SetPlayerEntity(GameObjectEntity* player);
 
 	AEVec2 GetAttackDirection();
+
+	f32 GetChannelTimer() const;
+	f32 GetMaxChannelTime() const;
+	f32 GetCooldownTimer() const;
+	f32 GetCooldownDuration() const;
 };
 
 #endif

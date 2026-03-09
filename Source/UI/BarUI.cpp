@@ -1,21 +1,13 @@
 #include "BarUI.hpp"
 #include "../Utils/MeshRenderer.hpp"
 #include "../Utils/AEOverload.hpp"
+#include "../Managers/SceneManager.hpp"
 
 BarUI::BarUI(AEVec2 pos) 
 	: BaseUI{ pos }, value{ 0.f }, overlay_transform{ 1.f } {
 }
 
 BarUI::~BarUI() {}
-
-void BarUI::PostUpdate(const f32& dt) {
-	BaseUI::PostUpdate(dt);
-	AEVec2 pos{ this->position.x, this->position.y }, scl{ this->scale.x, this->scale.y };
-	//scl.x *= value;
-	//pos.x -= scl.x * 0.5f;
-
-	overlay_transform = Utils::GetTransformMatrix(this->position, this->scale, this->rotation);
-}
 
 void BarUI::Update(const f32& dt) {
 	BaseUI::Update(dt);
@@ -50,8 +42,33 @@ void BarUI::Update(const f32& dt) {
 	}
 }
 
+void BarUI::PostUpdate(const f32& dt) {
+	BaseUI::PostUpdate(dt);
+	AEVec2 pos{ this->position.x, this->position.y }, scl{ this->scale.x, this->scale.y };
+	f32 w = scl.x;
+	scl.x *= value;
+	AEVec2 dir{ -1.f, 0.f };
+	AEVec2Rotate(&dir, &dir, this->rotation);
+	dir.x *= w * (1.f - value) * 0.5f;
+	dir.y *= w * (1.f - value) * 0.5f;
+	pos += dir;
+
+	if (layer == RenderLayer::UI) {
+		AEVec2 cam_pos{ 0.f };
+		AEGfxGetCamPosition(&cam_pos.x, &cam_pos.y);
+		cam_pos = Utils::ScreenToScale(cam_pos.x, cam_pos.y);
+		overlay_transform = Utils::GetTransformMatrix(pos + cam_pos, scl, this->rotation);
+	}
+	else {
+		overlay_transform = Utils::GetTransformMatrix(pos, scl, this->rotation);
+	}
+}
+
 void BarUI::Render() {
-	/*if (image && image->data) {
+	if (SceneManager::GetInstance()->GetEditor()->IsToggled()) {
+		PostUpdate(Utils::GetDeltaTime());
+	}
+	if (image && image->data) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxTextureSet(image->data, 0.f, 0.f);
 	}
@@ -64,9 +81,9 @@ void BarUI::Render() {
 	AEGfxSetTransparency(color.a / 255.f);
 	AEGfxSetTransform(this->transform.m);
 	AEGfxMeshDraw(mesh, MeshRenderer::RenderMode);
-	AEGfxTextureSet(nullptr, 0.f, 0.f);*/
+	AEGfxTextureSet(nullptr, 0.f, 0.f);
 
-	if (this->overlay_texture && this->overlay_texture->data) {
+	if (overlay_texture && overlay_texture->data) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxTextureSet(overlay_texture->data, 0.f, 0.f);
 	}

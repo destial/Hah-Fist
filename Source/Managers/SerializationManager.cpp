@@ -9,6 +9,7 @@
 #include "../Entities/Enemies/EnemyEntity.hpp"
 #include "../Entities/Enemies/TrooperEntity.hpp"
 #include "../Entities/Enemies/SpiderEntity.hpp"
+#include "../UI/BaseUI.hpp"
 #include "../Utils/MeshRenderer.hpp"
 
 namespace Serialization {
@@ -140,6 +141,9 @@ namespace Serialization {
 		std::vector<SerializedEntity> vect;
 		for (BaseEntity* en : scene_entities) {
 			if (en->layer == BaseEntity::RenderLayer::UI)
+				continue;
+
+			if (dynamic_cast<BaseUI*>(en))
 				continue;
 
 			if (dynamic_cast<Weapon*>(en))

@@ -2,6 +2,7 @@
 #include "../Utils/Utils.hpp"
 #include "../Utils/MeshRenderer.hpp"
 #include "../Utils/AEOverload.hpp"
+#include "../Managers/SceneManager.hpp"
 
 CircleButtonUI::CircleButtonUI(AEVec2 pos) : BaseUI(pos),
 	click_listeners(0),
@@ -56,6 +57,9 @@ void CircleButtonUI::PostUpdate(const f32& dt) {
 }
 
 void CircleButtonUI::Render() {
+	if (SceneManager::GetInstance()->GetEditor()->IsToggled()) {
+		BaseUI::PostUpdate(Utils::GetDeltaTime());
+	}
 	if (image && image->data) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxTextureSet(image->data, 0.f, 0.f);

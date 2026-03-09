@@ -59,7 +59,7 @@ namespace Utils {
 	AEVec2 GameToScreen(f32 x, f32 y);
 	AEVec2 ScaleToScreen(f32 x, f32 y);
 	AEVec2 ScreenToScale(f32 x, f32 y);
-	AEVec2 GameToTextScreen(f32 x, f32 y);
+	AEVec2 GameToTextScreen(f32 x, f32 y, bool cam = false);
 
 	f32 RandRange(f32 mn, f32 mx);
 	const f32 GetWorldWidth(void);

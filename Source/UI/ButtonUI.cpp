@@ -2,6 +2,7 @@
 #include "../Utils/Utils.hpp"
 #include "../Utils/MeshRenderer.hpp"
 #include "../Utils/AEOverload.hpp"
+#include "../Managers/SceneManager.hpp"
 
 ButtonUI::ButtonUI(AEVec2 pos) : BaseUI(pos),
 	click_listeners(0),
@@ -51,6 +52,9 @@ void ButtonUI::Update(const f32& dt) {
 }
 
 void ButtonUI::Render() {
+	if (SceneManager::GetInstance()->GetEditor()->IsToggled()) {
+		BaseUI::PostUpdate(Utils::GetDeltaTime());
+	}
 	if (image && image->data) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		if (this->mouse_hovered && this->overlay_texture && this->overlay_texture->data) {

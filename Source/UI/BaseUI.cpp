@@ -3,6 +3,7 @@
 #include "../Utils/MeshRenderer.hpp"
 #include "../Utils/AEOverload.hpp"
 #include "../Managers/AssetManager.hpp"
+#include "../Managers/SceneManager.hpp"
 #include <iostream>
 
 BaseUI::BaseUI(AEVec2 pos) : BaseEntity{ pos },
@@ -30,10 +31,15 @@ BaseUI::~BaseUI() {
 void BaseUI::PostUpdate(const f32& dt) {
 	BaseEntity::PostUpdate(dt);
 
-	AEVec2 cam_pos{ 0.f };
-	AEGfxGetCamPosition(&cam_pos.x, &cam_pos.y);
-	cam_pos = Utils::ScreenToScale(cam_pos.x, cam_pos.y);
-	transform = Utils::GetTransformMatrix(position + cam_pos, scale, rotation);
+	if (layer == RenderLayer::UI) {
+		AEVec2 cam_pos{ 0.f };
+		AEGfxGetCamPosition(&cam_pos.x, &cam_pos.y);
+		cam_pos = Utils::ScreenToScale(cam_pos.x, cam_pos.y);
+		transform = Utils::GetTransformMatrix(position + cam_pos, scale, rotation);
+	}
+	else {
+		transform = Utils::GetTransformMatrix(position, scale, rotation);
+	}
 }
 
 bool BaseUI::IsInteractive() const {
@@ -45,6 +51,9 @@ void BaseUI::SetInteractive(bool i) {
 }
 
 void BaseUI::Render() {
+	if (SceneManager::GetInstance()->GetEditor()->IsToggled()) {
+		BaseUI::PostUpdate(Utils::GetDeltaTime());
+	}
 	if (image && image->data) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxTextureSet(image->data, 0.f, 0.f);
@@ -72,15 +81,15 @@ void BaseUI::RenderText() {
 	t_color[2] = (interactive && mouse_hovered ? overlay_text_color : text_color).b / 255.f;
 	t_color[3] = (interactive && mouse_hovered ? overlay_text_color : text_color).a / 255.f;
 	if (text_alignment == TEXT_ALIGNMENT::CENTER) {
-		AEVec2 screen = Utils::GameToTextScreen(this->position.x, this->position.y);
+		AEVec2 screen = Utils::GameToTextScreen(this->position.x, this->position.y, layer != RenderLayer::UI);
 		AEGfxPrint(font, str, screen.x - ((w / 2.f) / text_size * 0.5f), screen.y - ((h / 2.f) / text_size * 0.5f), h, t_color[0], t_color[1], t_color[2], t_color[3]);
 	}
 	else if (text_alignment == TEXT_ALIGNMENT::LEFT_CORNER) {
-		AEVec2 screen = Utils::GameToTextScreen(this->position.x - (this->scale.x * 0.5f), this->position.y);
+		AEVec2 screen = Utils::GameToTextScreen(this->position.x - (this->scale.x * 0.5f), this->position.y, layer != RenderLayer::UI);
 		AEGfxPrint(font, str, screen.x, screen.y - ((h / 2.f) / text_size * 0.5f), h, t_color[0], t_color[1], t_color[2], t_color[3]);
 	}
 	else if (text_alignment == TEXT_ALIGNMENT::RIGHT_CORNER) {
-		AEVec2 screen = Utils::GameToTextScreen(this->position.x + (this->scale.x * 0.5f), this->position.y);
+		AEVec2 screen = Utils::GameToTextScreen(this->position.x + (this->scale.x * 0.5f), this->position.y, layer != RenderLayer::UI);
 		AEGfxPrint(font, str, screen.x - ((w / 2.f) / text_size), screen.y - ((h / 2.f) / text_size * 0.5f), h, t_color[0], t_color[1], t_color[2], t_color[3]);
 	}
 }
