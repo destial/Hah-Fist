@@ -210,6 +210,9 @@
     <ClCompile Include="..\Source\Entities\Weapons\FingerGunEntity.cpp">
       <Filter>Source Files\Entities\Weapons</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Entities\Projectiles\MissileProjectile.cpp">
+      <Filter>Source Files\Entities\Projectiles</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -340,6 +343,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Entities\Weapons\FingerGunEntity.hpp">
       <Filter>Header Files\Entities\Weapons</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\Projectiles\MissileProjectile.hpp">
+      <Filter>Header Files\Entities\Projectiles</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

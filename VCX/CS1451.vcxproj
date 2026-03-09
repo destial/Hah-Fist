@@ -109,6 +109,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="..\Source\Entities\GameObjectEntity.cpp" />
     <ClCompile Include="..\Source\Entities\PlayerEntity.cpp" />
     <ClCompile Include="..\Source\Entities\Projectiles\BaseProjectile.cpp" />
+    <ClCompile Include="..\Source\Entities\Projectiles\MissileProjectile.cpp" />
     <ClCompile Include="..\Source\Entities\StaticEntity.cpp" />
     <ClCompile Include="..\Source\Entities\WeaponEntity.cpp" />
     <ClCompile Include="..\Source\Entities\Weapons\FingerGunEntity.cpp" />
@@ -154,6 +155,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="..\Source\Entities\GameObjectEntity.hpp" />
     <ClInclude Include="..\Source\Entities\PlayerEntity.hpp" />
     <ClInclude Include="..\Source\Entities\Projectiles\BaseProjectile.hpp" />
+    <ClInclude Include="..\Source\Entities\Projectiles\MissileProjectile.hpp" />
     <ClInclude Include="..\Source\Entities\StaticEntity.hpp" />
     <ClInclude Include="..\Source\Entities\WeaponEntity.hpp" />
     <ClInclude Include="..\Source\Entities\Weapons\FingerGunEntity.hpp" />

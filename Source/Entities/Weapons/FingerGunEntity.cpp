@@ -1,7 +1,7 @@
 #include "FingerGunEntity.hpp"
 #include "../../Utils/AEOverload.hpp"
 #include "../../Managers/AssetManager.hpp"
-#include "../Projectiles/BaseProjectile.hpp"
+#include "../Projectiles/MissileProjectile.hpp"
 #include "../../Managers/SceneManager.hpp"
 
 FingerGunWeapon::FingerGunWeapon(AEVec2 pos, GameObjectEntity* player) : Weapon(pos, player)
@@ -38,9 +38,9 @@ void FingerGunWeapon::Render()
 
 void FingerGunWeapon::Attack()
 {
-	f32 bulletSpeed = 50.f;
+	f32 bulletSpeed = 5.f;
 	f32 bulletDamage = 25.f;
-	BaseProjectile* bullet = new BaseProjectile(this->position, GetAttackDirection(), bulletSpeed, bulletDamage, this->player_entity);
+	MissileProjectile* bullet = new MissileProjectile(this->position, GetAttackDirection(), bulletSpeed, bulletDamage, this->player_entity);
 	SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
 }
 

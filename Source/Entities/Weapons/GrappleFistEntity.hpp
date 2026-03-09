@@ -12,6 +12,7 @@ protected:
 		RETURNING,
 		HOOKING_OBJECT_TO_PLAYER,
 		HOOKING_PLAYER_TO_STATIC_OBJECT,
+		HOOKING_PLAYER_TO_DYNAMIC_OBJECT,
 	}grappleState{ INACTIVE };
 	f32 travelDuration{ 0.0f };
 	GameObjectEntity* grappledObject{ nullptr };
@@ -22,6 +23,7 @@ public:
 
 	void PreUpdate(const f32& dt) override;
 	void Update(const f32& dt) override;
+	void PostUpdate(const f32& dt) override;
 	void Render() override;
 	void OnCollide(GameObjectEntity* go) override;
 	void Attack() override;
