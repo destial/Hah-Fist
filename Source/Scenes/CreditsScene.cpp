@@ -13,6 +13,7 @@ void CreditsScene::Init() {
 	screen->image = AssetManager::GetTexture("Assets/splash_screen.png");
 	screen->scale = { Utils::GetWorldWidth(), Utils::GetWorldHeight() };
 	screen->color.a = 0;
+	screen->SetInteractive(false);
 
 	scene_entities.push_back(screen);
 	Game::SetBackgroundColor(Color{ 1.f, 0.f, 0.f, 0.f });

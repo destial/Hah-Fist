@@ -26,7 +26,7 @@ namespace Serialization {
 	struct SerializedEntity {
 		f32 x, y;
 		f32 scale_x, scale_y, rotation;
-		f32 health, damage, mass;
+		f32 health, damage, mass, max_health;
 		EntityType type;
 		// TODO: add more serialization options if needed
 

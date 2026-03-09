@@ -15,8 +15,9 @@
 namespace Serialization {
 
 	SerializedEntity::SerializedEntity()
-		: x{ 0 }, y{ 0 }, scale_x{ 0 }, scale_y{ 0 }, rotation{ 0 }, health{ 0 }, damage{ 0 }, mass{ 0 }, type{ EntityType::PLATFORM } {
-	}
+	: x{ 0 }, y{ 0 }, scale_x{ 0 }, scale_y{ 0 },
+	  rotation{ 0 }, health{ 0 }, damage{ 0 }, 
+	  mass{ 0 }, max_health{ 0 }, type { EntityType::PLATFORM } {}
 
 	SerializedEntity& SerializedEntity::operator=(SerializedEntity const& rhs) {
 		x = rhs.x;
@@ -28,6 +29,7 @@ namespace Serialization {
 		damage = rhs.damage;
 		health = rhs.health;
 		mass = rhs.mass;
+		max_health = rhs.max_health;
 
 		return *this;
 	}
@@ -35,14 +37,21 @@ namespace Serialization {
 	std::ostream& SerializedEntity::operator<< (std::ostream& rhs) const {
 		return rhs << x << ',' << y << ',' << scale_x << ','
 			<< scale_y << ',' << rotation << ',' << health
-			<< ',' << damage << ',' << mass << ',' << type << '|';
+			<< ',' << damage << ',' << mass << ',' << type << ',' << max_health << '|';
 	}
 
 	std::istream& SerializedEntity::operator>> (std::istream& rhs) {
 		char c;
-		return rhs >> x >> c >> y >> c >> scale_x >> c >> scale_y
+		rhs >> x >> c >> y >> c >> scale_x >> c >> scale_y
 			>> c >> rotation >> c >> health >> c >> damage >> c
 			>> mass >> c >> type >> c;
+		if (c == '|') {
+			max_health = health;
+			return rhs;
+		}
+		else {
+			return rhs >> max_health >> c;
+		}
 	}
 
 	SerializedEntity Serialize(BaseEntity* en) {
@@ -54,6 +63,7 @@ namespace Serialization {
 		s.rotation = en->rotation;
 		if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(en)) {
 			s.health = go->health;
+			s.max_health = go->max_health;
 			s.damage = go->damage;
 			s.type = EntityType::PLATFORM;
 			s.mass = go->pBody->mass;
@@ -83,17 +93,12 @@ namespace Serialization {
 		switch (en.type) {
 			case EntityType::PLATFORM: {
 				entity = new StaticEntity(StaticEntity::STATIC_TYPE::TYPE_PLATFORM,AEVec2{ en.x, en.y });
-				if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(entity)) {
-					//go->go_type = GameObjectEntity::PhysicsType::STATIC;
-					go->mesh = MeshRenderer::GetCenterRectMesh();
-				}
+				entity->mesh = MeshRenderer::GetCenterRectMesh();
 				break;
 			}
 			case EntityType::WALL: {
 				entity = new StaticEntity(StaticEntity::STATIC_TYPE::TYPE_WALL,AEVec2{ en.x, en.y });
-				if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(entity)) {
-					go->mesh = MeshRenderer::GetCenterRectMesh();
-				}
+				entity->mesh = MeshRenderer::GetCenterRectMesh();
 				break;
 			}
 			case EntityType::PLAYER: {
@@ -121,6 +126,7 @@ namespace Serialization {
 
 			if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(entity)) {
 				go->health = en.health;
+				go->max_health = en.max_health;
 				go->damage = en.damage;
 				go->pBody->mass = en.mass;
 			}
