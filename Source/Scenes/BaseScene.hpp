@@ -28,13 +28,13 @@
 class BaseScene {
 private:
 	std::vector<BaseEntity*> awaiting_deletion;
+	std::map<BaseEntity*, BaseEntity*> linked_entities;
 protected:
 	std::vector<BaseEntity*> scene_entities; // vector of entity pointers
 	ParticleSystem* particleSystem; // pointer to its own particle system
 	PhysicsManager* physicsManager{ nullptr }; // pointer to its own physics manager
 	CameraManager* camManager; // pointer to its own camera manager
 	BaseScene(); // Ctor (protected here so cant be called outside of inherited classes)
-
 public:
 	virtual ~BaseScene(); // Dtor, calls delete for all entities in the scene
 
@@ -84,6 +84,10 @@ public:
 	*/
 	void RemoveEntityFromScene(BaseEntity* entity);
 
+	/*!
+	* @brief Get a constant reference to all the entities in the scene
+	* @return A constant vector reference to the scene entities
+	*/
 	std::vector<BaseEntity*> const& Entities() const;
 
 	/*!

@@ -110,19 +110,24 @@ void GameScene::Init() {
 
 	player->SwitchWeapon(0);
 
-	BarUI* power = new BarUI{ AEVec2{ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f } };
-	power->scale = { 3.f, .25f };
-	power->overlay_color = { 255, 255, 0, 0 };
+	BarUI* power = new BarUI{ AEVec2{ 0.f, 0.f } };
+	power->scale = { 2.f, .25f };
 	power->text = "";
 	power->SetInteractive(false);
 	power->SetValue(0.5f);
 	power->layer = BaseUI::RenderLayer::PLAYER;
 	power->text_size = 7.f;
-	power->font = AssetManager::GetFontId("Assets/Jersey25-Regular.ttf");
 	AddEntityToScene(power);
 	power->AddUpdateListener(this, [power, player](const f32& dt) {
 		Weapon* current = player->CurrentWeapon();
-		power->SetValue(current->GetChannelTimer() / current->GetMaxChannelTime());
+		power->overlay_color = { 255, 255, 0, 0 };
+		if (current->GetCooldownTimer() > 0) {
+			power->SetValue(current->GetCooldownTimer() / current->GetCooldownDuration());
+			power->overlay_color = { 255, 128, 128, 128 };
+		}
+		else {
+			power->SetValue(current->GetChannelTimer() / current->GetMaxChannelTime());
+		}
 		power->position = current->position;
 		power->position.y -= std::abs(current->scale.y) * 0.65f;
 	});

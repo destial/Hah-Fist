@@ -11,13 +11,17 @@
 
 #include "BaseScene.hpp"
 #include "../Managers/SceneManager.hpp"
+#include "../Entities/Enemies/EnemyEntity.hpp"
+#include "../UI/BarUI.hpp"
 #include <algorithm>
+#include <cmath>
 #include <iostream>
 
 BaseScene::BaseScene() 
 : awaiting_deletion(0), scene_entities(0), particleSystem{ new ParticleSystem }, camManager{ CameraManager::GetInstance() } {}
 
 BaseScene::~BaseScene() {
+	linked_entities.clear();
 	awaiting_deletion.clear();
 	scene_entities.clear();
 	delete particleSystem;
@@ -87,6 +91,10 @@ void BaseScene::PostUpdate(const f32& dt) {
 
 		// delete memory
 		if (deleted) {
+			if (BaseEntity* linked = linked_entities[entity]) {
+				linked_entities.erase(entity);
+				RemoveEntityFromScene(linked);
+			}
 			delete entity;
 		}
 	}
@@ -131,6 +139,25 @@ void BaseScene::AddEntityToScene(BaseEntity* entity) {
 
 		physicsManager->PushGameObject(go);
 	}
+
+	if (EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(entity)) {
+		BarUI* healthbar = new BarUI{ AEVec2{ 0.f, 0.f } };
+		healthbar->scale = { 2.f, .25f };
+		healthbar->overlay_color = { 255, 0, 255, 0 };
+		healthbar->color = { 255, 128, 128, 128 };
+		healthbar->text = "";
+		healthbar->SetInteractive(false);
+		healthbar->layer = BaseUI::RenderLayer::ENTITY;
+		healthbar->text_size = 7.f;
+		healthbar->AddUpdateListener(this, [healthbar, enemy](const f32& dt) {
+			healthbar->SetValue(enemy->health / enemy->max_health);
+			healthbar->position = enemy->position;
+			healthbar->position.y += std::abs(enemy->scale.y) * 0.6f;
+		});
+
+		AddEntityToScene(healthbar);
+		linked_entities[enemy] = healthbar;
+	}
 }
 
 void BaseScene::RemoveEntityFromScene(BaseEntity* entity) {
@@ -158,6 +185,10 @@ void BaseScene::RemoveEntityFromScene(BaseEntity* entity) {
 
 		// delete memory
 		if (deleted) {
+			if (BaseEntity* linked = linked_entities[entity]) {
+				linked_entities.erase(entity);
+				RemoveEntityFromScene(linked);
+			}
 			delete entity;
 		}
 	}
@@ -165,6 +196,10 @@ void BaseScene::RemoveEntityFromScene(BaseEntity* entity) {
 		awaiting_deletion.push_back(entity);
 		if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(entity)) {
 			go->isActive = false;
+		}
+		if (BaseEntity* linked = linked_entities[entity]) {
+			linked_entities.erase(entity);
+			awaiting_deletion.push_back(linked);
 		}
 	}
 }

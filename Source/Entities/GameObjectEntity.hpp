@@ -26,6 +26,7 @@ public:
 
 	bool isActive;
 	f32 health;
+	f32 max_health;
 	f32 damage;
 };
 #endif
