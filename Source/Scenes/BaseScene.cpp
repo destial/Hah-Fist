@@ -66,37 +66,9 @@ void BaseScene::PostUpdate(const f32& dt) {
 		scene_entities[i]->PostUpdate(dt);
 	}
 
+	// Use a seperate loop when deleting to avoid concurrent modification errors
 	for (int i = 0; i < awaiting_deletion.size(); ++i) {
-		BaseEntity* entity = awaiting_deletion[i];
-		bool deleted = false;
-		// Remove from scene entities
-		for (std::vector<BaseEntity*>::iterator it = scene_entities.begin(); it != scene_entities.end(); it++) {
-			if (entity == *it) {
-				scene_entities.erase(it);
-				deleted = true;
-				break;
-			}
-		}
-
-		// Remove from physics manager
-		GameObjectEntity* go;
-		if (physicsManager && (go = dynamic_cast<GameObjectEntity*>(entity))) {
-			for (std::vector<GameObjectEntity*>::iterator it = physicsManager->gameObjects.begin(); it != physicsManager->gameObjects.end(); it++) {
-				if (*it == go) {
-					physicsManager->gameObjects.erase(it);
-					break;
-				}
-			}
-		}
-
-		// delete memory
-		if (deleted) {
-			if (BaseEntity* linked = linked_entities[entity]) {
-				linked_entities.erase(entity);
-				RemoveEntityFromScene(linked);
-			}
-			delete entity;
-		}
+		DeleteEntityFromScene(awaiting_deletion[i]);
 	}
 }
 
@@ -140,67 +112,79 @@ void BaseScene::AddEntityToScene(BaseEntity* entity) {
 		physicsManager->PushGameObject(go);
 	}
 
+	// Spawn a new healthbar entity and link it to this enemy entity
 	if (EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(entity)) {
 		BarUI* healthbar = new BarUI{ AEVec2{ 0.f, 0.f } };
 		healthbar->scale = { 2.f, .25f };
 		healthbar->overlay_color = { 255, 0, 255, 0 };
 		healthbar->color = { 255, 128, 128, 128 };
 		healthbar->text = "";
-		healthbar->SetInteractive(false);
 		healthbar->layer = BaseUI::RenderLayer::ENTITY;
 		healthbar->text_size = 7.f;
-		healthbar->AddUpdateListener(this, [healthbar, enemy](const f32& dt) {
+		healthbar->SetInteractive(false);
+		healthbar->AddPostUpdateListener(this, [healthbar, enemy](const f32& dt) {
 			healthbar->SetValue(enemy->health / enemy->max_health);
 			healthbar->position = enemy->position;
 			healthbar->position.y += std::abs(enemy->scale.y) * 0.6f;
 		});
 
 		AddEntityToScene(healthbar);
+		// Link the enemy to this healthbar
 		linked_entities[enemy] = healthbar;
 	}
 }
 
 void BaseScene::RemoveEntityFromScene(BaseEntity* entity) {
 	if (SceneManager::GetInstance()->GetEditor()->IsToggled()) {
-		bool deleted = false;
-		// Remove from scene entities
-		for (std::vector<BaseEntity*>::iterator it = scene_entities.begin(); it != scene_entities.end(); it++) {
-			if (entity == *it) {
-				scene_entities.erase(it);
-				deleted = true;
-				break;
-			}
-		}
-
-		// Remove from physics manager
-		GameObjectEntity* go;
-		if (physicsManager && (go = dynamic_cast<GameObjectEntity*>(entity))) {
-			for (std::vector<GameObjectEntity*>::iterator it = physicsManager->gameObjects.begin(); it != physicsManager->gameObjects.end(); it++) {
-				if (*it == go) {
-					physicsManager->gameObjects.erase(it);
-					break;
-				}
-			}
-		}
-
-		// delete memory
-		if (deleted) {
-			if (BaseEntity* linked = linked_entities[entity]) {
-				linked_entities.erase(entity);
-				RemoveEntityFromScene(linked);
-			}
-			delete entity;
-		}
+		// Level editor is toggled, so BaseScene update functions will not get called
+		// so it is safe to immediately delete
+		DeleteEntityFromScene(entity);
 	}
 	else {
+		// Use a seperate loop when deleting to avoid concurrent modification errors
+		// In the case we remove while inside the update loop
 		awaiting_deletion.push_back(entity);
 		if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(entity)) {
 			go->isActive = false;
 		}
+
+		// Special cases with entities linked to other entities (e.g. health bar UI entity)
 		if (BaseEntity* linked = linked_entities[entity]) {
 			linked_entities.erase(entity);
 			awaiting_deletion.push_back(linked);
 		}
+	}
+}
+
+void BaseScene::DeleteEntityFromScene(BaseEntity* entity) {
+	bool deleted = false;
+	// Remove from scene entities
+	for (std::vector<BaseEntity*>::iterator it = scene_entities.begin(); it != scene_entities.end(); it++) {
+		if (entity == *it) {
+			scene_entities.erase(it);
+			deleted = true;
+			break;
+		}
+	}
+
+	// Remove from physics manager
+	GameObjectEntity* go;
+	if (physicsManager && (go = dynamic_cast<GameObjectEntity*>(entity))) {
+		for (std::vector<GameObjectEntity*>::iterator it = physicsManager->gameObjects.begin(); it != physicsManager->gameObjects.end(); it++) {
+			if (*it == go) {
+				physicsManager->gameObjects.erase(it);
+				break;
+			}
+		}
+	}
+
+	// delete memory
+	if (deleted) {
+		if (BaseEntity* linked = linked_entities[entity]) {
+			linked_entities.erase(entity);
+			DeleteEntityFromScene(linked);
+		}
+		delete entity;
 	}
 }
 
