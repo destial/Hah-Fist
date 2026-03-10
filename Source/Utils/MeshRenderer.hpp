@@ -13,6 +13,8 @@ namespace MeshRenderer {
 
 	AEGfxVertexList* GetCenterRectMesh();
 
+	AEGfxVertexList* GetCornerRectMesh();
+
 	void Free();
 }
 

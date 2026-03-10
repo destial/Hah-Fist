@@ -3,7 +3,8 @@
 
 namespace MeshRenderer {
 
-	static AEGfxVertexList* centerRectMesh = nullptr;
+	static AEGfxVertexList* centerRectMesh{ nullptr };
+	static AEGfxVertexList* cornerRectMesh{ nullptr };
 	static std::map<int, AEGfxVertexList*> circleMeshes;
 
 	AEGfxVertexList* GetCircleMesh(int slices) {
@@ -45,10 +46,31 @@ namespace MeshRenderer {
 		return centerRectMesh = AEGfxMeshEnd();
 	}
 
+	AEGfxVertexList* GetCornerRectMesh()
+	{
+		if (cornerRectMesh)
+			return cornerRectMesh;
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			0.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
+			1.f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+			0.f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+
+		AEGfxTriAdd(
+			1.f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
+			1.f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
+			0.f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
+		return cornerRectMesh = AEGfxMeshEnd();
+	}
+
 	void Free() {
 		if (centerRectMesh) {
 			AEGfxMeshFree(centerRectMesh);
 			centerRectMesh = nullptr;
+		}
+		if (cornerRectMesh) {
+			AEGfxMeshFree(cornerRectMesh);
+			cornerRectMesh = nullptr;
 		}
 		for (auto& entry : circleMeshes) {
 			AEGfxMeshFree(entry.second);
