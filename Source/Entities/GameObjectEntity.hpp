@@ -33,7 +33,7 @@ public:
 
 	GameObjectEntity(); // Ctor
 	GameObjectEntity(AEVec2 pos = { 0.f, 0.f }, f32 mass = 1.0f, CollisionShape type = CollisionShape::AABB, PhysicsType go_type = PhysicsType::DYNAMIC); // Ctor
-	GameObjectEntity(GameObjectEntity& const) = delete; // Remove copy ctor
+	GameObjectEntity(GameObjectEntity const&) = delete; // Remove copy ctor
 	GameObjectEntity& operator=(GameObjectEntity const&) = delete; // Remove copy assignment
 	virtual ~GameObjectEntity(); // Dtor
 

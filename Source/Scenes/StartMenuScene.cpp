@@ -7,6 +7,7 @@
 #include "../Utils/AEOverload.hpp"
 #include "../Utils/Utils.hpp"
 #include "../UI/ButtonUI.hpp"
+#include "../UI/ImageUI.hpp"
 #include "../UI/CircleButtonUI.hpp"
 #include "../Managers/SceneManager.hpp"
 #include "../Managers/LevelManager.hpp"
@@ -73,6 +74,14 @@ void StartMenuScene::Init() {
 		quit->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f, level_panel); 
 	});
 
+	ImageUI* title = new ImageUI{ "Assets/title.png", AEVec2{Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f + 6.5f}, 6, 5 };
+	title->SetSpriteDuration(2.f);
+	title->scale = { 25.f, 15.f };
+	title->SetInteractive(false);
+	title->AddUpdateListener(this, [title](const f32& dt) {
+		title->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f + 6.5f, level_panel);
+	});
+
 	ButtonUI* back = CreateButtonDisplay({ Utils::GetWorldWidth() + 2.5f, Utils::GetWorldHeight() - 5.f }, "<");
 	back->scale = { 2.5f, 2.5f };
 	back->AddClickListener([](BaseUI::MouseButton b) {
@@ -105,6 +114,6 @@ void StartMenuScene::Init() {
 	scene_entities.push_back(quit);
 	scene_entities.push_back(back);
 	scene_entities.push_back(credits);
-
+	scene_entities.push_back(title);
 	Game::SetBackgroundColor(Color{ 1.f, 0.3f, 0.3f, 0.3f });
 }
