@@ -47,10 +47,3 @@ Image::~Image() {
 		data = nullptr;
 	}
 }
-
-Image& Image::operator=(Image& copy) {
-	std::swap(width, copy.width);
-	std::swap(height, copy.height);
-	std::swap(data, copy.data);
-	return *this;
-}

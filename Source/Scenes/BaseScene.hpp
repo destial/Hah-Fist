@@ -22,8 +22,8 @@
 
 /*!
 * @brief Base scene class
-*		 Every scene should have its entities, particle system,
-*		 physics manager and camera manager
+* @brief Every scene should have its entities, particle system,
+* @brief physics manager and camera manager
 */
 class BaseScene {
 private:
@@ -47,7 +47,7 @@ public:
 	virtual ~BaseScene(); // Dtor, calls delete for all entities in the scene
 
 	/*!
-	* @brief Initialize the scene with starting points, entities, level, etc.
+	* @brief Initialize the scene with
 	*/
 	virtual void Init() = 0;
 
