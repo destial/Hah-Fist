@@ -97,6 +97,7 @@ void LevelEditor::Update(const f32& dt) {
 	static float fps_counter = 0.f;
 	static float cfps = 1.f / Utils::GetDeltaTime();
 	static float saved = 0.f;
+	static bool scaleX{ true };
 	if ((fps_counter += Utils::GetDeltaTime()) > 0.1f) {
 		cfps = 1.f / Utils::GetDeltaTime();
 		fps_counter = 0.f;
@@ -152,6 +153,10 @@ void LevelEditor::Update(const f32& dt) {
 	if (AEInputCheckTriggered(AEVK_5)) {
 		SelectEntity(AddEntity(Editor::GameObjectType::STATIC_WALL));
 	}
+	// Toggling to switch from scaling the X axis to Y axis
+	if (AEInputCheckTriggered(AEVK_X)) {
+		scaleX = !scaleX;
+	}
 	if (currentSelection) {
 		if (AEInputCheckCurr(AEVK_LBUTTON)) {
 			if (Utils::OBBPoint(currentSelection, mwp)) {
@@ -160,18 +165,9 @@ void LevelEditor::Update(const f32& dt) {
 					go->prev_position = mwp;
 				}
 			}
-
 			if (scroll != 0) {
-				currentSelection->scale.x += scroll;
-				currentSelection->scale.x = max(currentSelection->scale.x, 1);
-			}
-			if (AEInputCheckCurr(AEVK_W)) {
-				currentSelection->scale.y += dt * 2.f;
-				currentSelection->scale.y = max(currentSelection->scale.y, dt * 2.f);
-			}
-			if (AEInputCheckCurr(AEVK_S)) {
-				currentSelection->scale.y -= dt * 2.f;
-				currentSelection->scale.y = max(currentSelection->scale.y, -dt * 2.f);
+				(scaleX ? currentSelection->scale.x : currentSelection->scale.y) += scroll;
+				(scaleX ? currentSelection->scale.x : currentSelection->scale.y) = max(scaleX ? currentSelection->scale.x : currentSelection->scale.y,1);
 			}
 		}
 
