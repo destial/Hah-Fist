@@ -135,22 +135,6 @@ void GameScene::Init() {
 	Game::SetBackgroundColor(Color{ 1.f, 0.3f, 0.3f, 0.3f });
 }
 
-void GameScene::PreUpdate(const f32& dt) {
-	BaseScene::PreUpdate(dt);
-}
-
-void GameScene::Update(const f32& dt) {
-	BaseScene::Update(dt);
-}
-
-void GameScene::PostUpdate(const f32& dt) {
-	BaseScene::PostUpdate(dt);
-}
-
-void GameScene::Render() {
-	BaseScene::Render();
-}
-
 void GameScene::End() {
 	BaseScene::End();
 	InputEvent::Listeners -= this;

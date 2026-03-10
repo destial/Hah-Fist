@@ -14,15 +14,25 @@
 #define __GAMESCENE_H
 #include "BaseScene.hpp"
 
+/*!
+* @brief Game scene class
+* @brief Contains the level data, player, enemies, etc.
+*/
 class GameScene : public BaseScene {
 public:
-	GameScene();
-	~GameScene();
+	GameScene(); // Ctor
+	GameScene(GameScene const&) = delete; // Remove copy ctor
+	GameScene& operator=(GameScene const&) = delete; // Remove copy assignment
+	virtual ~GameScene(); // Dtor
+
+	/*!
+	* @brief Inherited: Initialize the scene with starting points, entities, level, etc.
+	*/
 	virtual void Init();
-	virtual void PreUpdate(const f32& dt);
-	virtual void Update(const f32& dt);
-	virtual void PostUpdate(const f32& dt);
-	virtual void Render();
+
+	/*!
+	* @brief Inherited: Clear the entities from the scene.
+	*/
 	virtual void End();
 };
 

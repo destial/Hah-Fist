@@ -1,5 +1,6 @@
 #include "BaseProjectile.hpp"
 #include <cmath>
+#include "../../Utils/AEOverload.hpp"
 #include "../../Managers/AssetManager.hpp"
 #include "../../Scenes/BaseScene.hpp"  
 #include "../../Managers/SceneManager.hpp"
@@ -8,7 +9,7 @@
 BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameObjectEntity* own)
 : GameObjectEntity{ pos, 1.f, CollisionShape::AABB }, direction{ dir }, speed{ speed } {
     damage = dmg;
-    sprite = AssetManager::GetSpriteSheet("Assets/test_enemy.png", 1, 1); // single-frame bullet
+    sprite = AssetManager::GetSpriteSheet("Assets/projectile.png", 1, 1); // single-frame bullet
     mesh = nullptr;
 
     //Might not need any of this
@@ -31,6 +32,8 @@ BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameO
 
 void BaseProjectile::PreUpdate(const f32& dt) {
     GameObjectEntity::PreUpdate(dt);
+    AEVec2 right = { 1.f, 0 };
+    rotation = AEVec2AngleCCW(&right, &velocity);
 }
 
 void BaseProjectile::Update(const f32& dt) {
@@ -78,8 +81,8 @@ void BaseProjectile::OnHit(GameObjectEntity* other)
     {
         if (EnemyEntity* e = dynamic_cast<EnemyEntity*>(other))
             e->SwitchState(EnemyEntity::FSM::DEAD);
-        else
-            SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(other);
+        //else
+        //    SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(other);
         
     }
 

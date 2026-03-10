@@ -1,3 +1,11 @@
+/*!
+* @file InputEvent.cpp
+* @author Rance Andres (andresrancerowell.g@digipen.edu)
+* @date 12 January 2026
+* @course CSD1451
+* @brief Definition file for an input event that stores processed input data
+*/
+
 #include "InputEvent.hpp"
 
 InputEvent::InputListeners InputEvent::Listeners;

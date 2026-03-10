@@ -22,8 +22,8 @@
 
 /*!
 * @brief Base scene class
-*		 Every scene should have its entities, particle system,
-*		 physics manager and camera manager
+* @brief Every scene should have its entities, particle system,
+* @brief physics manager and camera manager
 */
 class BaseScene {
 private:
@@ -35,11 +35,19 @@ protected:
 	PhysicsManager* physicsManager{ nullptr }; // pointer to its own physics manager
 	CameraManager* camManager; // pointer to its own camera manager
 	BaseScene(); // Ctor (protected here so cant be called outside of inherited classes)
+	BaseScene(BaseScene const&) = delete; // Delete copy ctor
+	BaseScene& operator=(BaseScene const&) = delete; // Delete copy assignment
+
+	/*!
+	* @brief Internal function to delete an entity's allocated memory from the scene
+	* @param entity - The entity to be deleted in this function call
+	*/
+	void DeleteEntityFromScene(BaseEntity* entity);
 public:
 	virtual ~BaseScene(); // Dtor, calls delete for all entities in the scene
 
 	/*!
-	* @brief Initialize the scene with starting points, entities, level, etc.
+	* @brief Initialize the scene with
 	*/
 	virtual void Init() = 0;
 

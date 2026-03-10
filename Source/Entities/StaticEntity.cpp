@@ -1,8 +1,9 @@
 #include "StaticEntity.hpp"
 
-StaticEntity::StaticEntity(STATIC_TYPE static_type, AEVec2 pos, f32 mass, CollisionShape shape, PhysicsType go_type) :static_type{ static_type }, GameObjectEntity(pos, mass, shape, go_type)
-{
-}
+StaticEntity::StaticEntity(STATIC_TYPE static_type, AEVec2 pos, f32 mass, CollisionShape shape, PhysicsType go_type) 
+	: GameObjectEntity{ pos, mass, shape, go_type }, static_type{ static_type } {}
+
+StaticEntity::~StaticEntity() {}
 
 void StaticEntity::PreUpdate(const f32& dt)
 {

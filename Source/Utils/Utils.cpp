@@ -135,7 +135,7 @@ namespace Utils {
 		return Utils::ScreenToWorld(mouse.x + (cam ? cam_x : 0.f), mouse.y + (cam ? -cam_y : 0.f));
 	}
 
-	void GetMinMaxAABB(const GameObjectEntity* const& go, AEVec2& min, AEVec2& max)
+	void GetMinMaxAABB(GameObjectEntity* const& go, AEVec2& min, AEVec2& max)
 	{
 		min = { go->prev_position.x - go->scale.x * 0.5f, go->prev_position.y - go->scale.y * 0.5f };
 		max = { go->prev_position.x + go->scale.x * 0.5f, go->prev_position.y + go->scale.y * 0.5f };
@@ -153,18 +153,18 @@ namespace Utils {
 		return deltaTime;
 	}
 
-	bool CircleCircleCollision(BaseEntity*& go, BaseEntity*& go2) {
+	bool CircleCircleCollision(BaseEntity* const& go, BaseEntity* const& go2) {
 		f32 sqrDist = AEVec2SquareDistance(&go->position, &go2->position);
-		f32 combinedRadii = go->scale.x + go2->scale.x;
+		f32 combinedRadii = max(go->scale.x, go->scale.y) + max(go2->scale.x, go2->scale.y);
 		return sqrDist <= combinedRadii * combinedRadii;
 	}
 
-	bool AABB(const BaseEntity* const& go, const BaseEntity* const& go2) {
+	bool AABB(BaseEntity* const& go, BaseEntity* const& go2) {
 		return !(go->position.x + go->scale.x * 0.5f < go2->position.x - go2->scale.x * 0.5f || go->position.x - go->scale.x * 0.5f > go2->position.x + go2->scale.x * 0.5f ||
 			go->position.y + go->scale.y * 0.5f < go2->position.y - go2->scale.y * 0.5f || go->position.y - go->scale.y * 0.5f > go2->position.y + go2->scale.y * 0.5f);
 	}
 
-	bool DynamicAABB(const GameObjectEntity* const& go, const GameObjectEntity* const& go2, float& tCollision, const float& dt)
+	bool DynamicAABB(GameObjectEntity* const& go, GameObjectEntity* const& go2, float& tCollision, const float& dt)
 	{
 		AEVec2 minGO, maxGO, minGO2, maxGO2;
 		GetMinMaxAABB(go, minGO, maxGO);
@@ -313,7 +313,11 @@ namespace Utils {
 		return corners;
 	}
 
-	bool OBB(const BaseEntity* const& go, const BaseEntity* const& go2) {
+	bool OBB(BaseEntity* const& go, BaseEntity* const& go2) {
+		// Initial broader phase collision check
+		if (!CircleCircleCollision(go, go2))
+			return false;
+
 		auto cornersA = GetCorners(go);
 		auto cornersB = GetCorners(go2);
 
@@ -344,7 +348,7 @@ namespace Utils {
 				if (p > maxB) maxB = p;
 			}
 
-			// SAT Gap Check: If the "shadows" on this axis don't overlap, there's no collision
+			// SAT Gap Check: If the projections on this axis don't overlap, there's no collision
 			if (maxA < minB || maxB < minA) {
 				return false;
 			}
@@ -353,7 +357,7 @@ namespace Utils {
 		return true; // Overlap on all axes means a collision
 	}
 
-	bool OBBPoint(const BaseEntity* const& go, AEVec2 const& pos) {
+	bool OBBPoint(BaseEntity* const& go, AEVec2 const& pos) {
 		AEVec2 local_pos = pos - go->position;
 		AEVec2Rotate(&local_pos, &local_pos, go->rotation);
 

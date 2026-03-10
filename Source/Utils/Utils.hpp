@@ -70,15 +70,15 @@ namespace Utils {
 	void SetDeltaTime(f32 dt);
 
 	const AEVec2 GetMouseWorld(bool camera = false);
-	void GetMinMaxAABB(const GameObjectEntity* const& go, AEVec2& min,AEVec2& max);
+	void GetMinMaxAABB(GameObjectEntity* const& go, AEVec2& min,AEVec2& max);
 	std::vector<AEVec2> GetCorners(const BaseEntity* go);
-	bool CircleCircleCollision(BaseEntity*& go, BaseEntity*& go2);
-	bool AABB(const BaseEntity* const & go,  const BaseEntity* const& go2);
-	bool DynamicAABB(const GameObjectEntity* const& go, const GameObjectEntity* const& go2, float& tCollision, const float& dt);
+	bool CircleCircleCollision(BaseEntity* const& go, BaseEntity* const& go2);
+	bool AABB(BaseEntity* const& go, BaseEntity* const& go2);
+	bool DynamicAABB(GameObjectEntity* const& go, GameObjectEntity* const& go2, float& tCollision, const float& dt);
 	//bool DynamicAABB(const BaseEntity* const& go, const BaseEntity* const& go2, AEVec2& contact, AEVec2& normal, float& tCollision, const f32& dt);
 	bool RayAABB(const AEVec2& ray_origin, const AEVec2& ray_dir, const BaseEntity* const& target, AEVec2& contact, AEVec2& normal, float& tCollision);
-	bool OBB(const BaseEntity* const& go, const BaseEntity* const& go2);
-	bool OBBPoint(const BaseEntity* const& go, AEVec2 const& pos);
+	bool OBB(BaseEntity* const& go, BaseEntity* const& go2);
+	bool OBBPoint(BaseEntity* const& go, AEVec2 const& pos);
 	
 	void SnapVectorToAxis(AEVec2* result, AEVec2* vec2);
 

@@ -5,9 +5,9 @@
 #include <cmath>
 
 GameObjectEntity::GameObjectEntity()
-	: BaseEntity{ { 0.f } }, health{ 1.f }, max_health{ 1.f }, damage { 1.f }, isActive{ true },
+: BaseEntity{ { 0.f } }, health{ 1.f }, max_health{ 1.f }, damage { 1.f }, isActive{ true },
   shape{ CollisionShape::AABB }, go_type{ PhysicsType::DYNAMIC }, 
-	prev_position{ 0.f }, pBody{ new PhysicsBody{0.f} } {}
+  prev_position{ 0.f }, pBody{ new PhysicsBody{0.f} } {}
 
 GameObjectEntity::GameObjectEntity(AEVec2 pos, f32 mass, CollisionShape shape, PhysicsType go_type)
 : BaseEntity{ pos }, health{ 1.f }, max_health{ 1.f }, damage{ 1.f }, isActive{ true },

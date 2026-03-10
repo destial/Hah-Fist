@@ -21,8 +21,9 @@ public:
 	AEGfxTexture* data;
 
 	Image(const char* file); // Ctor
+	Image(Image const&) = delete; // Remove copy ctor
+	Image& operator=(Image const&) = delete; // Remove copy assignment
 	~Image(); // Dtor
-	Image& operator= (Image& copy); // Copy assignment
 };
 
 #endif
