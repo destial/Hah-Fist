@@ -3,6 +3,7 @@
 #include "../../Managers/AssetManager.hpp"
 #include "../../Managers/SceneManager.hpp"
 #include "../../Utils/AEOverload.hpp"
+#include "../DropEntities/CoinEntity.hpp"
 
 EnemyEntity::EnemyEntity(AEVec2 pos, AEVec2 dir, f32 speed) 
 : GameObjectEntity{ pos }, state{ FSM::IDLE }, dir{ dir }, speed{ speed }, stateTimer{ 1.f }
@@ -119,7 +120,8 @@ void EnemyEntity::OnStun(const f32& dt)
 
 void EnemyEntity::OnDead(const f32& dt)
 {
-	// Empty for now
+	CoinEntity* coin = new CoinEntity(Utils::GetMouseWorld(true));
+	SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(coin);
 	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 }
 

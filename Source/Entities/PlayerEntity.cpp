@@ -31,6 +31,10 @@ Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 
 Player::~Player() {
 	std::printf("Called Player deconstructor\n");
+	for (Weapon* wp : weapons)
+	{
+		SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(wp);
+	}
 }
 
 void Player::PreUpdate(const f32& dt) {
