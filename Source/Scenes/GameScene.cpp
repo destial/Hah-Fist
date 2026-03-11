@@ -126,7 +126,9 @@ void GameScene::Init() {
 	power->text_size = 7.f;
 	AddEntityToScene(power);
 	power->AddUpdateListener(this, [power, player](const f32& dt) {
+		if (player == nullptr) { return; }
 		Weapon* current = player->CurrentWeapon();
+		if (current == nullptr) { return; }
 		power->overlay_color = { 255, 255, 0, 0 };
 		if (current->GetCooldownTimer() > 0) {
 			power->SetValue(current->GetCooldownTimer() / current->GetCooldownDuration());
