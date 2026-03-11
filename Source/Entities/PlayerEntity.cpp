@@ -12,13 +12,15 @@
 #include <cstdio>
 
 Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
+	int columns{ 18 };
+	int rows{ 3 };
 
-	sprite = AssetManager::GetSpriteSheet("Assets/player.png", 2, 32);
+	sprite = AssetManager::GetSpriteSheet("Assets/player.png", rows, columns);
 	mesh = nullptr;
 	animationTimer = 0.f;
-	animationFrame = 1.f / (2.f * 32.f);
+	animationFrame = 1.f / static_cast<f32>(columns * rows);
 	currentRow = currentCol = 0;
-	scale = { 5.f * ((static_cast<f32>(sprite->image->width) / 32) / (sprite->image->height / 2)) , 5.f };
+	scale = { 5.f * ((static_cast<f32>(sprite->image->width) / static_cast<f32>(columns)) / (sprite->image->height / static_cast<f32>(rows))) , 5.f };
 	jumpHeight = 8.5f;
 	jumpVelocity = sqrtf(jumpHeight * 2.f * abs(pBody->gravity.y));
 	speed = 10.f;
@@ -108,6 +110,10 @@ void Player::PostUpdate(const f32& dt) {
 			{
 				this->scale.x *= -1;
 			}
+		}
+		if (AEVec2Length(&velocity) > 50.0f)
+		{
+			currentRow = 2;
 		}
 	}
 	

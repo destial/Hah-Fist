@@ -25,7 +25,7 @@ void Weapon::PreUpdate(const f32& dt) {
 	AEVec2 attack_direction = GetAttackDirection();
 	AEVec2 right = { 1.f, 0 };
 	rotation = AEVec2AngleCCW(&right, &attack_direction);
-	this->position = player_entity->position + attack_direction * 3.0f;
+	this->position = player_entity->position + attack_direction * 2.0f;
 	if (this->position.x < player_entity->position.x)
 	{
 		this->scale.y = -2.5f;
