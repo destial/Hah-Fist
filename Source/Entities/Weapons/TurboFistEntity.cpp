@@ -2,6 +2,8 @@
 #include "../../Utils/AEOverload.hpp"
 #include "../../UI/Debug.hpp"
 #include "../../Managers/AssetManager.hpp"
+#include "../Projectiles/BaseProjectile.hpp"
+
 
 TurboFistWeapon::TurboFistWeapon(AEVec2 pos, GameObjectEntity* player) : Weapon(pos, player)
 {
@@ -60,6 +62,12 @@ void TurboFistWeapon::OnCollide(GameObjectEntity* go)
 			go->health -= damage * AEVec2Length(&player_entity->velocity);
 			//go->velocity += player_entity->velocity * 1.25;
 			dash_timer = 0;
+		}
+		else if (go->entity_type == EntityType::PROJECTILE)
+		{
+			go->velocity = player_entity->velocity * 1.25f;
+			BaseProjectile* e = dynamic_cast<BaseProjectile*>(go);
+			e->ChangeOwnership(player_entity);
 		}
 	}
 }
