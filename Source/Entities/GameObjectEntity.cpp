@@ -56,10 +56,10 @@ void GameObjectEntity::Render() {
 	if (isActive) {
 		BaseEntity::Render();
 		auto corners = Utils::GetCorners(this);
-		DebugUtils::RenderLine(corners[0], corners[1], { 255, 0, 255, 0 });
-		DebugUtils::RenderLine(corners[1], corners[2], { 255, 0, 255, 0 });
-		DebugUtils::RenderLine(corners[2], corners[3], { 255, 0, 255, 0 });
-		DebugUtils::RenderLine(corners[3], corners[0], { 255, 0, 255, 0 });
+		DebugUtils::RenderLine(corners[0], corners[1]);
+		DebugUtils::RenderLine(corners[1], corners[2]);
+		DebugUtils::RenderLine(corners[2], corners[3]);
+		DebugUtils::RenderLine(corners[3], corners[0]);
 
 		if (DebugUtils::IsRendering()) {
 			char pos[64];

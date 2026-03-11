@@ -31,7 +31,7 @@ namespace DebugUtils {
 			for (DebugRender& r : renders) {
 				AEGfxTextureSet(nullptr, 0.f, 0.f);
 				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-				AEGfxSetColorToMultiply(r.color.r / 255.f, r.color.b / 255.f, r.color.g / 255.f, r.color.a / 255.f);
+				AEGfxSetColorToMultiply(r.color.r / 255.f, r.color.g / 255.f, r.color.b / 255.f, r.color.a / 255.f);
 				AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
 				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 				AEGfxSetTransparency(1.0f);
