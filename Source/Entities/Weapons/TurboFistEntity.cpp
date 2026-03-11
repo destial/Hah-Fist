@@ -65,9 +65,13 @@ void TurboFistWeapon::OnCollide(GameObjectEntity* go)
 		}
 		else if (go->entity_type == EntityType::PROJECTILE)
 		{
-			go->velocity = player_entity->velocity * 1.25f;
 			BaseProjectile* e = dynamic_cast<BaseProjectile*>(go);
-			e->ChangeOwnership(player_entity);
+			
+			//i think this is correct, not sure
+			if (e->TryChangeOwnership(player_entity))
+			{
+				go->velocity = player_entity->velocity * 1.25f;
+			}
 		}
 	}
 }

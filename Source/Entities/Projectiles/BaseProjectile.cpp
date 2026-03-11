@@ -98,7 +98,12 @@ void BaseProjectile::OnExpire()
     // Default: just disappear
 }
 
-void BaseProjectile::ChangeOwnership(GameObjectEntity* newOwner)
+bool BaseProjectile::TryChangeOwnership(GameObjectEntity* newOwner)
 {
+    if (this->owner == newOwner)
+    {
+        return false;
+    }
     this->owner = newOwner;
+    return true;
 }
