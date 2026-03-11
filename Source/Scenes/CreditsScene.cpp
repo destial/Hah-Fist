@@ -9,7 +9,7 @@ CreditsScene::CreditsScene() : BaseScene{} {}
 CreditsScene::~CreditsScene() {}
 
 void CreditsScene::Init() {
-	ImageUI* screen = new ImageUI{ "Assets/splash_screen.png", { Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f } };
+	ImageUI* screen = new ImageUI{ ASSET_SPLASHSCREEN_IMAGE, { Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f } };
 	screen->scale = { Utils::GetWorldWidth(), Utils::GetWorldHeight() };
 	screen->color.a = 0;
 	screen->SetInteractive(false);

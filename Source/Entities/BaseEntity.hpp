@@ -47,8 +47,8 @@ public:
 	AEVec2 scale; // World scaling
 	f32 rotation; // In radians
 	Color color; // Blend mesh color for rendering
-	enum struct RenderLayer {
-		WORLD = 0, ENTITY = 1, PLAYER = 2, UI = 5
+	enum struct RenderLayer : int {
+		WORLD = 0, ENTITY = 1, PLAYER = 2, WORLD_UI = 4, UI = 5
 	} layer; // Rendering layer for Z-layering
 
 	/*!

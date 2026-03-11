@@ -15,7 +15,7 @@ Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 	int columns{ 18 };
 	int rows{ 3 };
 
-	sprite = AssetManager::GetSpriteSheet("Assets/player.png", rows, columns);
+	sprite = AssetManager::GetSpriteSheet(ASSET_PLAYER_SPRITE, rows, columns);
 	mesh = nullptr;
 	animationTimer = 0.f;
 	animationFrame = 1.f / static_cast<f32>(columns * rows);
@@ -140,7 +140,11 @@ void Player::Render() {
 
 void Player::OnCollide(GameObjectEntity* go)
 {
+	f32 p_health = health;
 	GameObjectEntity::OnCollide(go);
+	if (p_health < health) {
+		AEAudioPlay(AssetManager::GetAudio(ASSET_PLAYERHURT_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
+	}
 }
 
 void Player::AddWeapon(Weapon* weapon)

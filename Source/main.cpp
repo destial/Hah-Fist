@@ -61,13 +61,22 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	Game::bGameRunning = true;
 	Game::bgdColor = { 1.f, 0.3f, 0.3f, 0.3f };
+
+	Game::music = AEAudioCreateGroup();
+	while (!AEAudioIsValidGroup(Game::music)) {
+		AEAudioUnloadAudioGroup(Game::music);
+		Game::music = AEAudioCreateGroup();
+	}
+	Game::sfx = AEAudioCreateGroup();
+	while (!AEAudioIsValidGroup(Game::sfx)) {
+		AEAudioUnloadAudioGroup(Game::sfx);
+		Game::sfx = AEAudioCreateGroup();
+	}
 	{
 		SceneManager sceneManager;
 		// dont need to call delete after, already handled in ~scene manager destructor
 		sceneManager.SetNextScene(Scenes::SPLASH_SCREEN);
-		
-		Game::music = AEAudioCreateGroup();
-		Game::sfx = AEAudioCreateGroup();
+
 		// Game Loop
 		while (Game::bGameRunning) {
 			// Informing the system about the loop's start
@@ -108,13 +117,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 
 		sceneManager.GetCurrentScene()->End();
-
-		AEAudioStopGroup(Game::music);
-		AEAudioStopGroup(Game::sfx);
-
-		MeshRenderer::Free();
-		InputHandler::Free();
-		AssetManager::Free();
 	}
+
+	AEAudioUnloadAudioGroup(Game::music);
+	AEAudioUnloadAudioGroup(Game::sfx);
+
+	MeshRenderer::Free();
+	InputHandler::Free();
+	AssetManager::Free();
 	AESysExit();
 }

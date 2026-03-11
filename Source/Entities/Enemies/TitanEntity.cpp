@@ -7,7 +7,7 @@
 #include "../PlayerEntity.hpp"
 
 TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }) {
-	sprite = AssetManager::GetSpriteSheet("Assets/test_troop.png", 3, 3);
+	sprite = AssetManager::GetSpriteSheet(ASSET_TROOPER_SPRITE, 3, 3);
 	this->health = 500;
 	this->max_health = 500;
 	shootTimer = 0.f;

@@ -10,7 +10,7 @@
 Weapon::Weapon(AEVec2 pos, GameObjectEntity* player) : GameObjectEntity(pos) {
 	player_entity = player;
 	go_type = PhysicsType::TRIGGER;
-	image = AssetManager::GetTexture("Assets/fist1.png");
+	image = AssetManager::GetTexture(ASSET_TURBOFIST_IMAGE);
 	scale = { 2.5f, 2.5f };
 	mesh = MeshRenderer::GetCenterRectMesh();
 	layer = RenderLayer::PLAYER;

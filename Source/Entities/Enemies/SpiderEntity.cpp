@@ -5,7 +5,7 @@
 #include "../StaticEntity.hpp"
 SpiderEntity::SpiderEntity(AEVec2 pos, f32 speed, bool spawnHatchlings) : ground{ nullptr }, bSpawnHatchlings{spawnHatchlings}, EnemyEntity(pos, {1.f,0.f}, speed)
 {
-	sprite = AssetManager::GetSpriteSheet("Assets/spider_enemy.png", 4, 6);
+	sprite = AssetManager::GetSpriteSheet(ASSET_SPIDER_SPRITE, 4, 6);
 	animationFrame = 1.f / (4.f * 6.f);
 }
 
@@ -66,6 +66,11 @@ void SpiderEntity::OnCollide(GameObjectEntity* go)
 		}
 		SwitchState(FSM::IDLE, 2.f);
 	}
+}
+
+void SpiderEntity::OnHit()
+{
+	AEAudioPlay(AssetManager::GetAudio(ASSET_SPIDERHURT_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
 }
 
 void SpiderEntity::OnIdle(const f32& dt)

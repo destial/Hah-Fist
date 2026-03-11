@@ -2,7 +2,7 @@
 #include "../../Utils/Utils.hpp"
 #include "../../Managers/AssetManager.hpp"
 IronsideEntity::IronsideEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }) {
-	sprite = AssetManager::GetSpriteSheet("Assets/test_troop.png", 3, 3);
+	sprite = AssetManager::GetSpriteSheet(ASSET_TROOPER_SPRITE, 3, 3);
 	// Empty for now
 }
 

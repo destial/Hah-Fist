@@ -7,7 +7,7 @@
 EnemyEntity::EnemyEntity(AEVec2 pos, AEVec2 dir, f32 speed) 
 : GameObjectEntity{ pos }, state{ FSM::IDLE }, dir{ dir }, speed{ speed }, stateTimer{ 1.f }
 {
-	sprite = AssetManager::GetSpriteSheet("Assets/test_enemy.png", 3, 3);
+	sprite = AssetManager::GetSpriteSheet(ASSET_BASEENEMY_SPRITE, 3, 3);
 	mesh = nullptr;
 	animationTimer = 0.f;
 	animationFrame = 1.f / (3.f * 3.f);
@@ -90,6 +90,11 @@ void EnemyEntity::Render()
 
 void EnemyEntity::OnCollide(GameObjectEntity* go) {
 	GameObjectEntity::OnCollide(go);
+}
+
+void EnemyEntity::OnHit()
+{
+	AEAudioPlay(AssetManager::GetAudio(ASSET_ENEMYHURT_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
 }
 
 void EnemyEntity::OnIdle(const f32& dt)

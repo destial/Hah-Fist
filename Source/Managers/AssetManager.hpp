@@ -16,6 +16,31 @@
 #include <map>
 #include <string>
 
+#define ASSET_PLAYER_SPRITE "Assets/player.png"
+#define ASSET_TROOPER_SPRITE "Assets/test_troop.png"
+#define ASSET_BASEENEMY_SPRITE "Assets/test_enemy.png"
+#define ASSET_SLIMETROOP_SPRITE "Assets/slimetroop.png"
+#define ASSET_SPIDER_SPRITE "Assets/spider_enemy.png"
+#define ASSET_TITLE_SPRITE "Assets/title.png"
+#define ASSET_SPARKLE_SPRITE "Assets/sparkle_sheet.png"
+#define ASSET_STAR_SPRITE "Assets/star.png"
+
+#define ASSET_PROJECTILE_IMAGE "Assets/projectile.png"
+#define ASSET_SPLASHSCREEN_IMAGE "Assets/splash_screen.png"
+#define ASSET_TURBOFIST_IMAGE "Assets/fist1.png"
+#define ASSET_GRAPPLEFIST_IMAGE "Assets/fist2.png"
+#define ASSET_FINGERGUN_IMAGE "Assets/fist3.png"
+#define ASSET_SMALLBUTTON_IMAGE "Assets/Icons/small_button_grey.png"
+
+#define ASSET_DEFAULT_FONT "Assets/Jersey25-Regular.ttf"
+#define ASSET_DEBUG_FONT "Assets/buggy-font.ttf"
+
+#define ASSET_MAINMENUBGM_AUDIO "Assets/bgm.mp3"
+#define ASSET_TURBOFIST_AUDIO "Assets/turbofist.ogg"
+#define ASSET_ENEMYHURT_AUDIO "Assets/enemy_hurt.mp3"
+#define ASSET_SPIDERHURT_AUDIO "Assets/spider_hurt.ogg"
+#define ASSET_PLAYERHURT_AUDIO "Assets/player_hurt.ogg"
+
 /*!
 * @brief Declare asset type
 */

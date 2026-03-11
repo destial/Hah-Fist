@@ -21,7 +21,7 @@ BaseUI::BaseUI(AEVec2 pos) : BaseEntity{ pos },
 {
 	layer = RenderLayer::UI;
 	mesh = MeshRenderer::GetCenterRectMesh();
-	font = AssetManager::GetFontId("Assets/buggy-font.ttf");
+	font = AssetManager::GetFontId(ASSET_DEFAULT_FONT);
 }
 
 BaseUI::~BaseUI() {

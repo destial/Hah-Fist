@@ -8,7 +8,7 @@ FingerGunWeapon::FingerGunWeapon(AEVec2 pos, GameObjectEntity* player) : Weapon(
 {
 	weaponChannels = false;
 	cd_duration = 0.25f;
-	image = AssetManager::GetTexture("Assets/fist3.png");
+	image = AssetManager::GetTexture(ASSET_FINGERGUN_IMAGE);
 }
 FingerGunWeapon::~FingerGunWeapon()
 {

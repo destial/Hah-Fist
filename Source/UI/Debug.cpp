@@ -43,7 +43,7 @@ namespace DebugUtils {
 	}
 
 	void RenderText(AEVec2 world_pos, std::string text, Color color, f32 size, bool cam) {
-		int font = AssetManager::GetFontId("Assets/buggy-font.ttf");
+		int font = AssetManager::GetFontId(ASSET_DEBUG_FONT);
 		AEVec2 screen = Utils::GameToTextScreen(world_pos.x, world_pos.y, cam);
 		const char* str = text.c_str();
 		f32 w, h;

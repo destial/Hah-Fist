@@ -7,7 +7,7 @@
 GrappleFistWeapon::GrappleFistWeapon(AEVec2 pos, GameObjectEntity* player) : Weapon(pos, player)
 {
 	weaponChannels = false;
-	image = AssetManager::GetTexture("Assets/fist2.png");
+	image = AssetManager::GetTexture(ASSET_GRAPPLEFIST_IMAGE);
 	cd_duration = 1.5f;
 }
 GrappleFistWeapon::~GrappleFistWeapon()

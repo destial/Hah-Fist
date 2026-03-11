@@ -26,6 +26,7 @@ public:
 	virtual void OnCollide(GameObjectEntity* go);
 
 	// Virtual methods to Enemy Base class
+	virtual void OnHit();
 	virtual void OnIdle(const f32& dt);
 	virtual void OnPatrol(const f32& dt);
 	virtual void OnChase(const f32& dt);

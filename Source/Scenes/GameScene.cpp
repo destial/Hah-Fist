@@ -24,13 +24,13 @@
 
 static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, std::string str) {
 	ButtonUI* b = new ButtonUI(pos);
-	b->image = AssetManager::GetTexture("Assets/Icons/small_button_grey.png");
+	b->image = AssetManager::GetTexture(ASSET_SMALLBUTTON_IMAGE);
 	b->color = { 255, 255, 255, 255 };
 	b->overlay_text_color = { 255, 255, 255, 255 };
 	b->overlay_color = b->color;
 	b->text = str;
 	b->text_size = 7.5f;
-	b->font = AssetManager::GetFontId("Assets/Jersey25-Regular.ttf");
+	b->font = AssetManager::GetFontId(ASSET_DEFAULT_FONT);
 	return b;
 }
 
@@ -52,7 +52,7 @@ void GameScene::Init() {
 	camManager->Init();
 	InputEvent::Listeners += {this, OnGameExit};
 
-	ButtonUI* wk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 1.f }, 'W');
+	ButtonUI* wk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 1.f }, "LB");
 	ButtonUI* ak = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 3.f, Utils::GetWorldHeight() - 2.f }, 'A');
 	ButtonUI* dk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 1.f, Utils::GetWorldHeight() - 2.f }, 'D');
 	ButtonUI* sk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 2.f }, "Sp");

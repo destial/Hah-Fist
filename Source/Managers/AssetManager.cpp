@@ -1,6 +1,7 @@
 #include "AssetManager.hpp"
 
-AssetManager::AssetManager() {}
+AssetManager::AssetManager() {
+}
 
 AssetManager::~AssetManager() {
 	for (auto& entry : asset_map) {
@@ -62,7 +63,7 @@ AEAudio AssetManager::GetAudio(std::string file_name) {
 		return instance->asset_map[file_name]->audio;
 	}
 	AEAudio audio = AEAudioLoadSound(file_name.c_str());
-	if (!AEAudioIsValidAudio(audio)) {
+	if (AEAudioIsValidAudio(audio)) {
 		instance->asset_map[file_name] = new Asset;
 		instance->asset_map[file_name]->audio = audio;
 		instance->asset_map[file_name]->type = AssetType::AUDIO;

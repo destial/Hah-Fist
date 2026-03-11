@@ -4,7 +4,7 @@
 #include "../../Managers/AssetManager.hpp"
 #include "../../Managers/SceneManager.hpp"
 TrooperEntity::TrooperEntity(AEVec2 pos, f32 speed) : ground{ nullptr }, EnemyEntity(pos, { 1.f,0.f }, speed) {
-	sprite = AssetManager::GetSpriteSheet("Assets/slimetroop.png", 2, 3);
+	sprite = AssetManager::GetSpriteSheet(ASSET_SLIMETROOP_SPRITE, 2, 3);
 	animationFrame = 1.f / (2.f * 3.f);
 }
 
@@ -56,6 +56,11 @@ void TrooperEntity::OnCollide(GameObjectEntity* go) {
 		}
 		SwitchState(FSM::IDLE, 2.f);
 	}
+}
+
+void TrooperEntity::OnHit()
+{
+	EnemyEntity::OnHit();
 }
 
 void TrooperEntity::OnIdle(const f32& dt) {

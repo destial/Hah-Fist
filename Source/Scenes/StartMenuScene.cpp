@@ -16,13 +16,13 @@
 
 static ButtonUI* CreateButtonDisplay(AEVec2 pos, const char* ch) {
 	ButtonUI* b = new ButtonUI(pos);
-	b->image = AssetManager::GetTexture("Assets/Icons/small_button_grey.png");
+	b->image = AssetManager::GetTexture(ASSET_SMALLBUTTON_IMAGE);
 	b->scale = { 12.5f, 4.f };
 	b->color = { 255, 255, 255, 255 };
 	b->overlay_color = { 255, 128, 128, 128 };
 	b->overlay_text_color = { 255, 255, 255, 255 };
 	b->text = ch;
-	b->text_size = 7.5f;
+	b->text_size = 15.f;
 	b->text_alignment = BaseUI::TEXT_ALIGNMENT::CENTER;
 	return b;
 }
@@ -35,7 +35,62 @@ void StartMenuScene::Init() {
 	static f32 level_panel = 0.f;
 	static bool panel_active = false;
 
-	ButtonUI* start = CreateButtonDisplay({ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f }, "Play  ");
+	ImageUI* fist = new ImageUI{ ASSET_TURBOFIST_IMAGE, { 0, Utils::GetWorldHeight() * 0.5f } };
+	fist->AddUpdateListener(this, [fist](const f32& dt) {
+		if (fist->scale.x > 0) {
+			fist->position.x += dt * 5.f;
+			if (fist->position.x + fist->scale.x * 0.5f > Utils::GetWorldWidth()) {
+				fist->scale.x *= -1;
+			}
+		}
+		else {
+			fist->position.x -= dt * 5.f;
+			if (fist->position.x + fist->scale.x * 0.5f < 0) {
+				fist->scale.x *= -1;
+			}
+		}
+	});
+	fist->scale = { 5.f, 5.f };
+
+	ImageUI* fist2 = new ImageUI{ ASSET_GRAPPLEFIST_IMAGE, { 10.f, Utils::GetWorldHeight() * 0.25f } };
+	fist2->AddUpdateListener(this, [fist2](const f32& dt) {
+		if (fist2->scale.x > 0) {
+			fist2->position.x += dt * 5.f;
+			if (fist2->position.x + fist2->scale.x * 0.5f > Utils::GetWorldWidth()) {
+				fist2->scale.x *= -1;
+			}
+		}
+		else {
+			fist2->position.x -= dt * 5.f;
+			if (fist2->position.x + fist2->scale.x * 0.5f < 0) {
+				fist2->scale.x *= -1;
+			}
+		}
+	});
+	fist2->scale = { 5.f, 5.f };
+
+	ImageUI* fist3 = new ImageUI{ ASSET_FINGERGUN_IMAGE, { -10.f, Utils::GetWorldHeight() * 0.75f } };
+	fist3->AddUpdateListener(this, [fist3](const f32& dt) {
+		if (fist3->scale.x > 0) {
+			fist3->position.x += dt * 5.f;
+			if (fist3->position.x + fist3->scale.x * 0.5f > Utils::GetWorldWidth()) {
+				fist3->scale.x *= -1;
+			}
+		}
+		else {
+			fist3->position.x -= dt * 5.f;
+			if (fist3->position.x + fist3->scale.x * 0.5f < 0) {
+				fist3->scale.x *= -1;
+			}
+		}
+	});
+	fist3->scale = { 5.f, 5.f };
+
+	scene_entities.push_back(fist);
+	scene_entities.push_back(fist2);
+	scene_entities.push_back(fist3);
+
+	ButtonUI* start = CreateButtonDisplay({ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f }, "Play     ");
 	start->AddClickListener([](BaseUI::MouseButton b) {
 		if (b & BaseUI::MouseButton::LEFT) {
 			panel_active = true;
@@ -54,7 +109,7 @@ void StartMenuScene::Init() {
 		start->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f, level_panel);
 	});
 
-	ButtonUI* credits = CreateButtonDisplay({ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f - 5.5f }, "Credits   ");
+	ButtonUI* credits = CreateButtonDisplay({ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f - 5.5f }, "Credits         ");
 	credits->AddClickListener([](BaseUI::MouseButton b) {
 		if (b & BaseUI::MouseButton::LEFT) {
 			SceneManager::GetInstance()->SetNextScene(Scenes::CREDITS);
@@ -64,7 +119,7 @@ void StartMenuScene::Init() {
 		credits->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f, level_panel);
 	});
 
-	ButtonUI* quit = CreateButtonDisplay({ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f - 11.f }, "Quit  ");
+	ButtonUI* quit = CreateButtonDisplay({ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f - 11.f }, "Quit      ");
 	quit->AddClickListener([](BaseUI::MouseButton b) {
 		if (b & BaseUI::MouseButton::LEFT) {
 			Game::SetGameRunning(false);
@@ -74,7 +129,7 @@ void StartMenuScene::Init() {
 		quit->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f, level_panel); 
 	});
 
-	ImageUI* title = new ImageUI{ "Assets/title.png", AEVec2{Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f + 6.5f}, 6, 5 };
+	ImageUI* title = new ImageUI{ ASSET_TITLE_SPRITE, AEVec2{Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f + 6.5f}, 6, 5 };
 	title->SetSpriteDuration(2.f);
 	title->scale = { 25.f, 15.f };
 	title->SetInteractive(false);
@@ -94,9 +149,11 @@ void StartMenuScene::Init() {
 	});
 
 	for (int i = 0; i < 3; ++i) {
-		float w = Utils::GetWorldWidth() + 2.f + (i * 3.f);
-		ButtonUI* level_button = CreateButtonDisplay({ w, Utils::GetWorldHeight() * 0.5f }, std::string{ static_cast<char>('1' + i) }.c_str());
-		level_button->scale = { 2.f, 2.f };
+		float w = Utils::GetWorldWidth() + 5.f + (i * 7.f);
+		std::string s{ static_cast<char>('1' + i) };
+		s += "  ";
+		ButtonUI* level_button = CreateButtonDisplay({ w, Utils::GetWorldHeight() * 0.5f }, s.c_str());
+		level_button->scale = { 5.f, 5.f };
 		scene_entities.push_back(level_button);
 		level_button->AddClickListener([i](BaseUI::MouseButton b) {
 			const int l = i;
@@ -104,7 +161,7 @@ void StartMenuScene::Init() {
 				LevelManager::SetLevel(l);
 				SceneManager::GetInstance()->SetNextScene(Scenes::GAME);
 			}
-		});
+			});
 		level_button->AddUpdateListener(this, [level_button, w](const f32& dt) {
 			level_button->position.x = Utils::LerpCircle(w, w - Utils::GetWorldWidth(), level_panel);
 		});
@@ -117,6 +174,6 @@ void StartMenuScene::Init() {
 	scene_entities.push_back(title);
 	Game::SetBackgroundColor(Color{ 1.f, 0.3f, 0.3f, 0.3f });
 
-	/*AEAudio audio = AssetManager::GetAudio("Assets/bouken.mp3");
-	AEAudioPlay(audio, Game::GetMusicGroup(), 1.f, 1.f, 1);*/
+	AEAudio audio = AssetManager::GetAudio(ASSET_MAINMENUBGM_AUDIO);
+	AEAudioPlay(audio, Game::GetMusicGroup(), 1.f, 1.f, -1);
 }

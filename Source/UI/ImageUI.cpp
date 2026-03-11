@@ -5,8 +5,8 @@ ImageUI::ImageUI(const char* file_name, AEVec2 pos, int r, int c)
 : BaseUI{ pos },
   animationFrame{0}, animationTimer{0}, currentCol{0}, currentRow{0},
   sprite{ r == 0 ? nullptr : AssetManager::GetSpriteSheet(file_name, r, c) } {
-
-  image = r == 0 ? AssetManager::GetTexture(file_name) : nullptr;
+	text = "";
+	image = r == 0 ? AssetManager::GetTexture(file_name) : nullptr;
 }
 
 ImageUI::~ImageUI() {}

@@ -27,8 +27,8 @@ Particle::~Particle() {}
 
 ParticleSystem::ParticleSystem()
 : datatypes{ new ParticleData[ParticleType::LAST] {
-	{"Assets/sparkle_sheet.png", 3, 3}, // SPARKLE
-	{"Assets/star.png", 1, 1} // STAR
+	{ASSET_SPARKLE_SPRITE, 3, 3}, // SPARKLE
+	{ASSET_STAR_SPRITE, 1, 1} // STAR
 }} {}
 
 ParticleSystem::~ParticleSystem() {

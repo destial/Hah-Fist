@@ -16,6 +16,7 @@ public:
 	void OnCollide(GameObjectEntity* go) override;
 
 	// Virtual methods to Enemy Base class
+	void OnHit() override;
 	void OnIdle(const f32& dt) override;
 	void OnPatrol(const f32& dt) override;
 	void OnChase(const f32& dt) override;

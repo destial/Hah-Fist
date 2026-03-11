@@ -2,13 +2,14 @@
 #include "../../Utils/AEOverload.hpp"
 #include "../../UI/Debug.hpp"
 #include "../../Managers/AssetManager.hpp"
+#include "../Enemies/EnemyEntity.hpp"
 #include "../Projectiles/BaseProjectile.hpp"
 
 
 TurboFistWeapon::TurboFistWeapon(AEVec2 pos, GameObjectEntity* player) : Weapon(pos, player)
 {
 	weaponChannels = true;
-	image = AssetManager::GetTexture("Assets/fist1.png");
+	image = AssetManager::GetTexture(ASSET_TURBOFIST_IMAGE);
 	player_original_mass = player->pBody->mass;
 	max_channel_time = 1.0f;
 	cd_duration = 0.5f;
@@ -59,6 +60,7 @@ void TurboFistWeapon::OnCollide(GameObjectEntity* go)
 	{
 		if (go->entity_type == EntityType::ENEMY)
 		{
+			dynamic_cast<EnemyEntity*>(go)->OnHit();
 			go->health -= damage * AEVec2Length(&player_entity->velocity);
 			//go->velocity += player_entity->velocity * 1.25;
 			dash_timer = 0;
@@ -87,6 +89,8 @@ void TurboFistWeapon::Attack()
 	player_entity->velocity = attack_direction * 20 * attack_strength;
 	player_entity->pBody->mass = 10.0f * attack_strength;
 	player_entity->frictionMultiplier = 0.25;
+
+	AEAudioPlay(AssetManager::GetAudio(ASSET_TURBOFIST_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
 }
 
 float TurboFistWeapon::GetCurrentAttackStrength()
