@@ -1,5 +1,5 @@
 #include "BreakableStaticEntity.hpp"
-#include "../Managers/SceneManager.hpp"
+#include "../../Managers/SceneManager.hpp"
 
 BreakableStaticEntity::BreakableStaticEntity(STATIC_TYPE static_type, AEVec2 pos, f32 mass, CollisionShape shape, PhysicsType go_type) : StaticEntity(static_type, pos, mass, shape, go_type)
 {

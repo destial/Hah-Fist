@@ -1,7 +1,7 @@
 #pragma once
 #ifndef __BREAKABLE_STATIC_ENTITY_H
 #define __BREAKABLE_STATIC_ENTITY_H
-#include "StaticEntity.hpp"
+#include "../StaticEntity.hpp"
 
 class BreakableStaticEntity : StaticEntity {
 public:
