@@ -55,7 +55,6 @@ void BaseScene::Update(const f32& dt) {
 	if (physicsManager != nullptr) {
 		physicsManager->Update(dt);
 	}
-
 }
 
 void BaseScene::PostUpdate(const f32& dt) {
@@ -169,7 +168,7 @@ void BaseScene::DeleteEntityFromScene(BaseEntity* entity) {
 
 	// Remove from physics manager
 	GameObjectEntity* go;
-	if (physicsManager && (go = dynamic_cast<GameObjectEntity*>(entity))) {
+	if (deleted && physicsManager && (go = dynamic_cast<GameObjectEntity*>(entity))) {
 		for (std::vector<GameObjectEntity*>::iterator it = physicsManager->gameObjects.begin(); it != physicsManager->gameObjects.end(); it++) {
 			if (*it == go) {
 				physicsManager->gameObjects.erase(it);

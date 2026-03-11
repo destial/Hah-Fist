@@ -23,17 +23,21 @@ public:
 	f32 health;
 	f32 max_health;
 	f32 damage;
-	enum struct CollisionShape {
-		CIRCLE, AABB, TOTAL
+	enum struct CollisionShape : int {
+		CIRCLE = 0, AABB, TOTAL
 	} shape; // Collision shape for calculating collision checks
 
-	enum struct PhysicsType {
-		STATIC, DYNAMIC, TRIGGER, TOTAL
+	enum struct PhysicsType : int {
+		STATIC = 0, DYNAMIC, TRIGGER, TOTAL
 	} go_type; // Physics type for calculating collision responses
+
+	enum struct EntityType : int {
+		NONE = 0, PLAYER, ENEMY, PROJECTILE,
+	} entity_type = EntityType::NONE;
 
 	GameObjectEntity(); // Ctor
 	GameObjectEntity(AEVec2 pos = { 0.f, 0.f }, f32 mass = 1.0f, CollisionShape type = CollisionShape::AABB, PhysicsType go_type = PhysicsType::DYNAMIC); // Ctor
-	GameObjectEntity(GameObjectEntity& const) = delete; // Remove copy ctor
+	GameObjectEntity(GameObjectEntity const&) = delete; // Remove copy ctor
 	GameObjectEntity& operator=(GameObjectEntity const&) = delete; // Remove copy assignment
 	virtual ~GameObjectEntity(); // Dtor
 

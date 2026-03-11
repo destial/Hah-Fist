@@ -15,12 +15,22 @@
 namespace Game {
 	bool bGameRunning;
 	Color bgdColor;
+	AEAudioGroup music;
+	AEAudioGroup sfx;
 	void SetGameRunning(bool b) {
 		bGameRunning = b;
 	}
 
 	void SetBackgroundColor(Color c) {
 		bgdColor = c;
+	}
+
+	AEAudioGroup const& GetMusicGroup() {
+		return music;
+	}
+
+	AEAudioGroup const& GetSfxGroup() {
+		return sfx;
 	}
 }
 
@@ -56,6 +66,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		// dont need to call delete after, already handled in ~scene manager destructor
 		sceneManager.SetNextScene(Scenes::SPLASH_SCREEN);
 		
+		Game::music = AEAudioCreateGroup();
+		Game::sfx = AEAudioCreateGroup();
 		// Game Loop
 		while (Game::bGameRunning) {
 			// Informing the system about the loop's start
@@ -96,6 +108,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 		}
 
 		sceneManager.GetCurrentScene()->End();
+
+		AEAudioStopGroup(Game::music);
+		AEAudioStopGroup(Game::sfx);
 
 		MeshRenderer::Free();
 		InputHandler::Free();

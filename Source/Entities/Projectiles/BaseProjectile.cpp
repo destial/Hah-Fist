@@ -27,6 +27,8 @@ BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameO
     velocity.y = dir.y * speed;
     health = 1;
     owner = own;
+
+    entity_type = EntityType::PROJECTILE;
 }
 
 
@@ -94,4 +96,14 @@ void BaseProjectile::OnHit(GameObjectEntity* other)
 void BaseProjectile::OnExpire()
 {
     // Default: just disappear
+}
+
+bool BaseProjectile::TryChangeOwnership(GameObjectEntity* newOwner)
+{
+    if (this->owner == newOwner)
+    {
+        return false;
+    }
+    this->owner = newOwner;
+    return true;
 }

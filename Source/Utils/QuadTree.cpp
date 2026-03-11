@@ -88,10 +88,10 @@ namespace QuadTree
 	void Node::RenderDebug()
 	{
 		AEVec2 mid = bounds.min + (bounds.max - bounds.min) / 2;
-		DebugUtils::RenderLine(bounds.min, AEVec2{ bounds.min.x, bounds.max.y }, { 255, 255, 0, 0 });
-		DebugUtils::RenderLine(bounds.min, AEVec2{ bounds.max.x, bounds.min.y }, { 255, 0, 255, 0 });
-		DebugUtils::RenderLine(AEVec2{ bounds.min.x, bounds.max.y }, bounds.max, { 255, 0, 0, 255 });
-		DebugUtils::RenderLine(AEVec2{ bounds.max.x, bounds.min.y }, bounds.max, { 255, 255, 255, 0 });
+		DebugUtils::RenderLine(bounds.min, AEVec2{ bounds.min.x, bounds.max.y }, { 64, 255, 255, 255 });
+		DebugUtils::RenderLine(bounds.min, AEVec2{ bounds.max.x, bounds.min.y }, { 64, 255, 255, 255 });
+		DebugUtils::RenderLine(AEVec2{ bounds.min.x, bounds.max.y }, bounds.max, { 64, 255, 255, 255 });
+		DebugUtils::RenderLine(AEVec2{ bounds.max.x, bounds.min.y }, bounds.max, { 64, 255, 255, 255 });
 		if (!isLeaf)
 		{
 			for (Node* node : subdivisions)

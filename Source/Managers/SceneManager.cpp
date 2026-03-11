@@ -32,6 +32,9 @@ void SceneManager::PreUpdate(const f32& dt) {
 		if (current_scene != Scenes::INIT) {
 			if (all_scenes[current_scene])
 				all_scenes[current_scene]->End();
+
+			AEAudioStopGroup(Game::GetMusicGroup());
+			AEAudioStopGroup(Game::GetSfxGroup());
 		}
 
 		if (next_scene == Scenes::INIT) {
@@ -83,6 +86,42 @@ void SceneManager::Render() {
 	}
 
 	DebugUtils::_RenderAll();
+
+	if (DebugUtils::IsRendering()) {
+		static float fps_counter = 0.f;
+		static float cfps = 1.f / Utils::GetDeltaTime();
+		static float saved = 0.f;
+		if ((fps_counter += Utils::GetDeltaTime()) > 0.1f) {
+			cfps = 1.f / Utils::GetDeltaTime();
+			fps_counter = 0.f;
+		}
+		char fps[50];
+		sprintf_s(fps, "FPS:%.0f", cfps);
+		DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 0.25f }, std::string{ fps });
+
+		f32 cam_x, cam_y;
+		AEGfxGetCamPosition(&cam_x, &cam_y);
+		char cam[128];
+		sprintf_s(cam, "Cam:%.2f,%.2f", cam_x, cam_y);
+		DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 0.75f }, std::string{ cam });
+
+		AEVec2 mwp = Utils::GetMouseWorld(true);
+		char mos[128];
+		sprintf_s(mos, "Mouse:%.2f,%.2f", mwp.x, mwp.y);
+		DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 1.25f }, std::string{ mos });
+
+		s32 scroll;
+		AEInputMouseWheelDelta(&scroll);
+		char scr[32];
+		sprintf_s(scr, "Scroll:%d", scroll);
+		DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 1.75f }, std::string{ scr });
+
+		if (all_scenes[current_scene]) {
+			char amt[32];
+			sprintf_s(amt, "Entities:%d", static_cast<int>(all_scenes[current_scene]->Entities().size()));
+			DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 2.25f }, std::string{ amt });
+		}
+	}
 }
 
 void SceneManager::SetNextScene(Scenes::SceneState next) {

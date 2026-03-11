@@ -34,7 +34,7 @@ struct Asset {
 	union { // union for space saving since at most, each value is 8 bytes
 		Image* image;
 		s8 font;
-		AEAudio* audio;
+		AEAudio audio;
 		SpriteSheet* spritesheet;
 	};
 };
@@ -75,9 +75,9 @@ public:
 	/*!
 	* @brief Get the Audio source at this file location
 	* @param file_name - The file location
-	* @return The loaded audio pointer, or null if not found
+	* @return The loaded audio, or null if not found
 	*/
-	static AEAudio* GetAudio(std::string file_name);
+	static AEAudio GetAudio(std::string file_name);
 };
 
 #endif

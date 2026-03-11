@@ -30,6 +30,14 @@ SpriteSheet::~SpriteSheet() {
 	mesh = nullptr;
 }
 
+int SpriteSheet::Rows() const {
+	return rows;
+}
+
+int SpriteSheet::Columns() const {
+	return columns;
+}
+
 void SpriteSheet::Render(AEMtx33& t, Color color, int row, int column) {
 	AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 	if (image->data) { // if image data exists (file exists)

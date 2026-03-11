@@ -26,6 +26,16 @@ public:
 	~SpriteSheet(); // Dtor
 
 	/*!
+	* @brief Get the max rows of this spritesheet
+	*/
+	int Rows() const;
+
+	/*!
+	* @brief Get the max columns of this spritesheet
+	*/
+	int Columns() const;
+
+	/*!
 	* @brief Render the spritesheet
 	* @param t - The transformation matrix to apply
 	* @param color - The color to multiply with

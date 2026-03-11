@@ -1,5 +1,5 @@
 #include "SplashScreen.hpp"
-#include "../UI/ButtonUI.hpp"
+#include "../UI/ImageUI.hpp"
 #include "../Utils/Utils.hpp"
 #include "../Managers/AssetManager.hpp"
 #include "../Managers/SceneManager.hpp"
@@ -9,8 +9,7 @@ SplashScreen::SplashScreen() : BaseScene{} {}
 SplashScreen::~SplashScreen() {}
 
 void SplashScreen::Init() {
-	ButtonUI* screen = new ButtonUI{ { Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f } };
-	screen->image = AssetManager::GetTexture("Assets/splash_screen.png");
+	ImageUI* screen = new ImageUI{ "Assets/splash_screen.png", { Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f } };
 	screen->scale = { Utils::GetWorldWidth(), Utils::GetWorldHeight() };
 	screen->color.a = 0;
 	screen->SetInteractive(false);

@@ -27,6 +27,7 @@ public:
     virtual void PostUpdate(const f32& dt);
     virtual void Render();
     virtual void OnCollide(GameObjectEntity* other);
+    bool TryChangeOwnership(GameObjectEntity* newOwner);
 
 protected:
     virtual void OnHit(GameObjectEntity* other);   

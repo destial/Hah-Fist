@@ -51,6 +51,8 @@ std::ostream& operator<< (std::ostream& os, Color const& color);
 namespace Game {
 	void SetGameRunning(bool b);
 	void SetBackgroundColor(Color c);
+	AEAudioGroup const& GetMusicGroup();
+	AEAudioGroup const& GetSfxGroup();
 }
 
 namespace Utils {

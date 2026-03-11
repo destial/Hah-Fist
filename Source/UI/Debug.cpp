@@ -31,7 +31,7 @@ namespace DebugUtils {
 			for (DebugRender& r : renders) {
 				AEGfxTextureSet(nullptr, 0.f, 0.f);
 				AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-				AEGfxSetColorToMultiply(r.color.r / 255.f, r.color.b / 255.f, r.color.g / 255.f, r.color.a / 255.f);
+				AEGfxSetColorToMultiply(r.color.r / 255.f, r.color.g / 255.f, r.color.b / 255.f, r.color.a / 255.f);
 				AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
 				AEGfxSetBlendMode(AE_GFX_BM_BLEND);
 				AEGfxSetTransparency(1.0f);
@@ -42,13 +42,17 @@ namespace DebugUtils {
 		renders.clear();
 	}
 
-	void RenderText(AEVec2 world_pos, std::string text, Color color, f32 size) {
+	void RenderText(AEVec2 world_pos, std::string text, Color color, f32 size, bool cam) {
 		int font = AssetManager::GetFontId("Assets/buggy-font.ttf");
-		AEVec2 screen = Utils::GameToTextScreen(world_pos.x, world_pos.y);
+		AEVec2 screen = Utils::GameToTextScreen(world_pos.x, world_pos.y, cam);
 		const char* str = text.c_str();
 		f32 w, h;
 		AEGfxGetPrintSize(font, str, size, &w, &h); 
 		AEGfxPrint(font, str, screen.x, screen.y - ((h / 2.f) / size * 0.5f), h, color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
+	}
+
+	void RenderText(AEVec2 world_pos, std::string text, bool cam) {
+		RenderText(world_pos, text, { 255, 0, 255, 0 }, 2.5f, cam);
 	}
 
 	void RenderPoint(AEVec2 world_pos, Color color) {

@@ -4,7 +4,8 @@
 #include "../../Managers/SceneManager.hpp"
 #include "../../Utils/AEOverload.hpp"
 
-EnemyEntity::EnemyEntity(AEVec2 pos, AEVec2 dir, f32 speed) : state{ FSM::IDLE }, dir{ dir }, speed{ speed }, stateTimer{ 1.f }, GameObjectEntity(pos)
+EnemyEntity::EnemyEntity(AEVec2 pos, AEVec2 dir, f32 speed) 
+: GameObjectEntity{ pos }, state{ FSM::IDLE }, dir{ dir }, speed{ speed }, stateTimer{ 1.f }
 {
 	sprite = AssetManager::GetSpriteSheet("Assets/test_enemy.png", 3, 3);
 	mesh = nullptr;
@@ -13,6 +14,7 @@ EnemyEntity::EnemyEntity(AEVec2 pos, AEVec2 dir, f32 speed) : state{ FSM::IDLE }
 	currentRow = currentCol = 0;
 	scale = { 5.f * (static_cast<f32>(sprite->image->width) / sprite->image->height), 5.f };
 	layer = RenderLayer::ENTITY;
+	entity_type = EntityType::ENEMY;
 }
 
 EnemyEntity::~EnemyEntity()
@@ -27,6 +29,9 @@ void EnemyEntity::PreUpdate(const f32& dt)
 void EnemyEntity::Update(const f32& dt)
 {
 	GameObjectEntity::Update(dt);
+	if (health <= 0.f && state != FSM::DEAD) {
+		SwitchState(FSM::DEAD, 3.f);
+	}
 	stateTimer -= dt;
 	switch (state) {
 		case FSM::IDLE: 

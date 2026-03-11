@@ -18,7 +18,6 @@ BaseEntity::BaseEntity(AEVec2 position) :
 }
 
 BaseEntity::~BaseEntity() {
-	std::printf("Called BaseEntity deconstructor\n");
 	mesh = nullptr;
 	image = nullptr;
 	for (auto& entry : update_listeners) {

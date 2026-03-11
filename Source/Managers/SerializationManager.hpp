@@ -28,11 +28,14 @@ namespace Serialization {
 		f32 scale_x, scale_y, rotation;
 		f32 health, damage, mass, max_health;
 		EntityType type;
+		int go_type, shape_type;
 		// TODO: add more serialization options if needed
 
-		SerializedEntity();
+		SerializedEntity(); // Ctor
+		SerializedEntity(SerializedEntity const&) = default; // Synthesized copy ctor
+		~SerializedEntity() = default; // Synthesized dtor
+		SerializedEntity& operator=(SerializedEntity const&) = default; // Synthesized copy assignment
 
-		SerializedEntity& operator=(SerializedEntity const& rhs);
 		std::ostream& operator<< (std::ostream& rhs) const;
 		std::istream& operator>> (std::istream& rhs);
 	};

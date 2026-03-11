@@ -81,6 +81,7 @@ void GrappleFistWeapon::PostUpdate(const f32& dt)
 			{
 				position -= travel_direction * dt * grappleSpeedMult;
 				grappledObject->position = position;
+				grappledObject->health -= damage * dt;
 			}
 			else if (grappleState == HOOKING_PLAYER_TO_STATIC_OBJECT)
 			{
@@ -116,11 +117,11 @@ void GrappleFistWeapon::OnCollide(GameObjectEntity* go)
 		grappledObject = go;
 		if (go->go_type == PhysicsType::DYNAMIC)
 		{
-			if (BaseProjectile* bp = static_cast<BaseProjectile*>(go))
+			if (go->entity_type == EntityType::PROJECTILE)
 			{
 				grappleState = HOOKING_PLAYER_TO_DYNAMIC_OBJECT;
 			}
-			else
+			else if (go->entity_type == EntityType::ENEMY)
 			{
 				grappleState = HOOKING_OBJECT_TO_PLAYER;
 			}
