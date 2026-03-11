@@ -95,6 +95,7 @@ BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
 }
 
 void LevelEditor::Update(const f32& dt) {
+	static bool scaleX{ true };
 	f32 cam_x, cam_y;
 	AEGfxGetCamPosition(&cam_x, &cam_y);
 	
