@@ -17,27 +17,15 @@ namespace Serialization {
 	SerializedEntity::SerializedEntity()
 	: x{ 0 }, y{ 0 }, scale_x{ 0 }, scale_y{ 0 },
 	  rotation{ 0 }, health{ 0 }, damage{ 0 }, 
-	  mass{ 0 }, max_health{ 0 }, type { EntityType::PLATFORM } {}
-
-	SerializedEntity& SerializedEntity::operator=(SerializedEntity const& rhs) {
-		x = rhs.x;
-		y = rhs.y;
-		scale_x = rhs.scale_x;
-		scale_y = rhs.scale_y;
-		rotation = rhs.rotation;
-		type = rhs.type;
-		damage = rhs.damage;
-		health = rhs.health;
-		mass = rhs.mass;
-		max_health = rhs.max_health;
-
-		return *this;
+	  mass{ 0 }, max_health{ 0 }, type{ EntityType::PLATFORM },
+	  go_type{ -1 }, shape_type{ -1 } {
 	}
 
 	std::ostream& SerializedEntity::operator<< (std::ostream& rhs) const {
 		return rhs << x << ',' << y << ',' << scale_x << ','
 			<< scale_y << ',' << rotation << ',' << health
-			<< ',' << damage << ',' << mass << ',' << type << ',' << max_health << '|';
+			<< ',' << damage << ',' << mass << ',' << type << ',' << max_health 
+			<< ',' << go_type << ',' << shape_type << '|';
 	}
 
 	std::istream& SerializedEntity::operator>> (std::istream& rhs) {
@@ -49,9 +37,19 @@ namespace Serialization {
 			max_health = health;
 			return rhs;
 		}
-		else {
-			return rhs >> max_health >> c;
+		
+		rhs >> max_health >> c;
+		if (c == '|') {
+			return rhs;
 		}
+
+		rhs >> go_type >> c;
+		if (c == '|') {
+			return rhs;
+		}
+
+		rhs >> shape_type >> c;
+		return rhs;
 	}
 
 	SerializedEntity Serialize(BaseEntity* en) {
@@ -67,6 +65,8 @@ namespace Serialization {
 			s.damage = go->damage;
 			s.type = EntityType::PLATFORM;
 			s.mass = go->pBody->mass;
+			s.go_type = static_cast<int>(go->go_type);
+			s.shape_type = static_cast<int>(go->shape);
 			if (StaticEntity* se = dynamic_cast<StaticEntity*>(en)) {
 				s.type = (se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_WALL) ? EntityType::WALL : EntityType::PLATFORM;
 			}
@@ -129,6 +129,14 @@ namespace Serialization {
 				go->max_health = en.max_health;
 				go->damage = en.damage;
 				go->pBody->mass = en.mass;
+
+				if (en.go_type != -1) {
+					go->go_type = static_cast<GameObjectEntity::PhysicsType>(en.go_type);
+				}
+
+				if (en.shape_type != -1) {
+					go->shape = static_cast<GameObjectEntity::CollisionShape>(en.shape_type);
+				}
 			}
 		}
 		return entity;

@@ -23,16 +23,16 @@ public:
 	f32 health;
 	f32 max_health;
 	f32 damage;
-	enum struct CollisionShape {
-		CIRCLE, AABB, TOTAL
+	enum struct CollisionShape : int {
+		CIRCLE = 0, AABB, TOTAL
 	} shape; // Collision shape for calculating collision checks
 
-	enum struct PhysicsType {
-		STATIC, DYNAMIC, TRIGGER, TOTAL
+	enum struct PhysicsType : int {
+		STATIC = 0, DYNAMIC, TRIGGER, TOTAL
 	} go_type; // Physics type for calculating collision responses
 
-	enum struct EntityType {
-		NONE, PLAYER, ENEMY, PROJECTILE,
+	enum struct EntityType : int {
+		NONE = 0, PLAYER, ENEMY, PROJECTILE,
 	} entity_type = EntityType::NONE;
 
 	GameObjectEntity(); // Ctor

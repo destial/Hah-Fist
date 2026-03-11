@@ -37,6 +37,7 @@ void LevelEditor::SelectEntity(BaseEntity* entity) {
 		return;
 	}
 	currentSelection = entity;
+	currentOffset = Utils::GetMouseWorld(true) - entity->position;
 }
 
 void LevelEditor::RemoveSelectedEntity() {
@@ -103,7 +104,6 @@ void LevelEditor::Update(const f32& dt) {
 
 	for (BaseEntity* go : scene->Entities()) {
 		if (AEInputCheckTriggered(AEVK_LBUTTON) && Utils::OBBPoint(go, mwp)) {
-			currentOffset = mwp - go->position;
 			SelectEntity(go);
 		}
 	}
