@@ -154,7 +154,7 @@ void GameScene::End() {
 
 void GameScene::Win() {
 	LevelManager::SetLevelTime(LevelManager::GetLevel(), game_timer); // set this level time
-	LevelManager::SetLevelTime(LevelManager::GetLevel() + 1, 0); // unlock next level
+	LevelManager::UnlockLevel(LevelManager::GetLevel() + 1); // unlock next level
 	LevelManager::SavePlayerData(); // save data
 }
 

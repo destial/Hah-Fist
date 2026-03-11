@@ -24,6 +24,7 @@
 #define ASSET_TITLE_SPRITE "Assets/title.png"
 #define ASSET_SPARKLE_SPRITE "Assets/sparkle_sheet.png"
 #define ASSET_STAR_SPRITE "Assets/star.png"
+#define ASSET_CREDITS_SPRITE "Assets/credits_sprite.png"
 
 #define ASSET_PROJECTILE_IMAGE "Assets/projectile.png"
 #define ASSET_SPLASHSCREEN_IMAGE "Assets/splash_screen.png"
