@@ -61,8 +61,7 @@ void SpiderEntity::OnCollide(GameObjectEntity* go)
 		ground = (dynamic_cast<StaticEntity*>(go)->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_PLATFORM) ? go : nullptr; //go->go_type == PhysicsType::STATIC ? go : nullptr;
 	if (go->go_type == PhysicsType::DYNAMIC || se && se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_WALL) {
 		if (EnemyEntity* e = dynamic_cast<EnemyEntity*>(go)) {
-			if (e->GetCurrentState() == EnemyEntity::FSM::PATROL)
-				e->FlipDir();
+			e->FlipDir();
 			return; // Continue patrolling
 		}
 		SwitchState(FSM::IDLE, 2.f);
