@@ -44,28 +44,19 @@ void PhysicsManager::Update(const f32& dt)
 		ignoredObjects.push_back(trigger);
 
 		for (GameObjectEntity* trigger2 : qtGameObjects->head->GetPotentialCollisionTargets(trigger, ignoredObjects, GameObjectEntity::PhysicsType::TRIGGER)) {
-			//Checks if either go is inactive, if so, skip this check
-			if (!trigger2->isActive) { continue; }
-
 			if (Utils::OBB(trigger, trigger2)) {
 				trigger->OnCollide(trigger2);
 				trigger2->OnCollide(trigger);
 			}
 		}
 
-		for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(trigger, GameObjectEntity::PhysicsType::DYNAMIC)) {
-			//Checks if either go is inactive, if so, skip this check
-			if (!dynamic->isActive) { continue; }
-				
+		for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(trigger, GameObjectEntity::PhysicsType::DYNAMIC)) {	
 			if (Utils::OBB(trigger, dynamic)) {
 				trigger->OnCollide(dynamic);
 			}
 		}
 
 		for (GameObjectEntity* _static : qtGameObjects->head->GetPotentialCollisionTargets(trigger, GameObjectEntity::PhysicsType::STATIC)) {
-			//Checks if either go is inactive, if so, skip this check
-			if (!_static->isActive) { continue; }
-
 			if (Utils::OBB(trigger, _static)) {
 				trigger->OnCollide(_static);
 			}
@@ -83,9 +74,6 @@ void PhysicsManager::Update(const f32& dt)
 		if (dynamic1->go_type != GameObjectEntity::PhysicsType::DYNAMIC) { continue; }
 
 		for (GameObjectEntity* dynamic2 : qtGameObjects->head->GetPotentialCollisionTargets(dynamic1, ignoredObjects, GameObjectEntity::PhysicsType::DYNAMIC)) {
-			//Checks if either go is inactive, if so, skip this check
-			if (!dynamic1->isActive) { continue; }
-			
 			if (Utils::OBB(dynamic1, dynamic2)) {
 				dynamic1->OnCollide(dynamic2);
 				dynamic2->OnCollide(dynamic1);
@@ -134,8 +122,6 @@ void PhysicsManager::Update(const f32& dt)
 		if (_static->go_type != GameObjectEntity::PhysicsType::STATIC) { continue; }
 
 		for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(_static, GameObjectEntity::PhysicsType::DYNAMIC)) {
-			//Checks if either go is inactive, if so, skip this check
-			if (!dynamic->isActive) { continue; }
 			if (Utils::OBB(_static, dynamic)) {
 				_static->OnCollide(dynamic);
 				dynamic->OnCollide(_static);
