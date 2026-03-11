@@ -100,7 +100,6 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Entities\BaseEntity.cpp" />
-    <ClCompile Include="..\Source\Entities\BreakableStaticEntity.cpp" />
     <ClCompile Include="..\Source\Entities\DropEntities\CoinEntity.cpp" />
     <ClCompile Include="..\Source\Entities\DropEntity.cpp" />
     <ClCompile Include="..\Source\Entities\Enemies\EnemyEntity.cpp" />
@@ -113,6 +112,8 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="..\Source\Entities\PlayerEntity.cpp" />
     <ClCompile Include="..\Source\Entities\Projectiles\BaseProjectile.cpp" />
     <ClCompile Include="..\Source\Entities\Projectiles\MissileProjectile.cpp" />
+    <ClCompile Include="..\Source\Entities\StaticEntities\BreakableCrateEntity.cpp" />
+    <ClCompile Include="..\Source\Entities\StaticEntities\BreakableStaticEntity.cpp" />
     <ClCompile Include="..\Source\Entities\StaticEntity.cpp" />
     <ClCompile Include="..\Source\Entities\WeaponEntity.cpp" />
     <ClCompile Include="..\Source\Entities\Weapons\FingerGunEntity.cpp" />
@@ -151,7 +152,6 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Entities\BaseEntity.hpp" />
-    <ClInclude Include="..\Source\Entities\BreakableStaticEntity.hpp" />
     <ClInclude Include="..\Source\Entities\DropEntities\CoinEntity.hpp" />
     <ClInclude Include="..\Source\Entities\DropEntity.hpp" />
     <ClInclude Include="..\Source\Entities\Enemies\EnemyEntity.hpp" />
@@ -164,6 +164,8 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="..\Source\Entities\PlayerEntity.hpp" />
     <ClInclude Include="..\Source\Entities\Projectiles\BaseProjectile.hpp" />
     <ClInclude Include="..\Source\Entities\Projectiles\MissileProjectile.hpp" />
+    <ClInclude Include="..\Source\Entities\StaticEntities\BreakableCrateEntity.hpp" />
+    <ClInclude Include="..\Source\Entities\StaticEntities\BreakableStaticEntity.hpp" />
     <ClInclude Include="..\Source\Entities\StaticEntity.hpp" />
     <ClInclude Include="..\Source\Entities\WeaponEntity.hpp" />
     <ClInclude Include="..\Source\Entities\Weapons\FingerGunEntity.hpp" />

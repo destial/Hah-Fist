@@ -65,6 +65,12 @@ void TurboFistWeapon::OnCollide(GameObjectEntity* go)
 			//go->velocity += player_entity->velocity * 1.25;
 			dash_timer = 0;
 		}
+		else if (go->entity_type == EntityType::BREAKABLE_STATIC)
+		{
+			go->health -= damage * AEVec2Length(&player_entity->velocity);
+			//go->velocity += player_entity->velocity * 1.25;
+			dash_timer = 0;
+		}
 		else if (go->entity_type == EntityType::PROJECTILE)
 		{
 			BaseProjectile* e = dynamic_cast<BaseProjectile*>(go);

@@ -5,9 +5,9 @@
 #include "../Items/SpriteSheet.hpp"
 class DropEntity : public GameObjectEntity {
 protected:
-	f32 animationTimer, animationFrame; // Sprite animation data
-	int currentRow, currentCol, columns, rows; // Sprite animation data
-	SpriteSheet* sprite; // Sprite animation data
+	f32 animationTimer{0.f}, animationFrame{ 0.f }; // Sprite animation data
+	int currentRow{ 0 }, currentCol{ 0 }, columns{ 0 }, rows{ 0 }; // Sprite animation data
+	SpriteSheet* sprite{ nullptr }; // Sprite animation data
 public:
 	DropEntity(AEVec2 pos = { 0.f,0.f }, f32 mass = 1.f, CollisionShape shape = CollisionShape::AABB);
 	~DropEntity();

@@ -12,6 +12,7 @@
 #include "../Entities/Enemies/TitanEntity.hpp"
 #include "../Entities/WeaponEntity.hpp"
 #include "../Entities/DropEntities/CoinEntity.hpp"
+#include "../Entities/StaticEntities/BreakableCrateEntity.hpp"
 
 LevelEditor::LevelEditor(BaseScene* b_scene)
 : scene{ b_scene }, toggled{ false }, currentSelection{ nullptr } {
@@ -101,6 +102,11 @@ BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
 		scene->AddEntityToScene(coin);
 		return coin;
 	}
+	case Editor::CRATE: {
+		BreakableCrateEntity* b = new BreakableCrateEntity(Utils::GetMouseWorld(true));
+		scene->AddEntityToScene(b);
+		return b;
+	}
 	default: break;
 	}
 
@@ -143,6 +149,9 @@ void LevelEditor::Update(const f32& dt) {
 	}
 	if (AEInputCheckTriggered(AEVK_6)) {
 		SelectEntity(AddEntity(Editor::GameObjectType::COIN));
+	}
+	if (AEInputCheckTriggered(AEVK_7)) {
+		SelectEntity(AddEntity(Editor::GameObjectType::CRATE));
 	}
 	//BOSSES
 	if (AEInputCheckTriggered(AEVK_9)) {

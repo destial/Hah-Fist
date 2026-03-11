@@ -25,6 +25,7 @@ namespace Editor { // start namespace editor
 		ENEMY_1,
 		ENEMY_2,
 		COIN,
+		CRATE,
 		SPIDER,
 		TITAN,
 	};

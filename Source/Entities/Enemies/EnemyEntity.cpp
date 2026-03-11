@@ -120,7 +120,7 @@ void EnemyEntity::OnStun(const f32& dt)
 
 void EnemyEntity::OnDead(const f32& dt)
 {
-	CoinEntity* coin = new CoinEntity(Utils::GetMouseWorld(true));
+	CoinEntity* coin = new CoinEntity(position);
 	SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(coin);
 	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 }

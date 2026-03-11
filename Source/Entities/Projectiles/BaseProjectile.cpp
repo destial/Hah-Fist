@@ -73,24 +73,34 @@ void BaseProjectile::OnCollide(GameObjectEntity* other)
 
     if (!other->isActive)
         return;
-    if (other->entity_type != EntityType::PLAYER && other->entity_type != EntityType::ENEMY)
+    if (other->entity_type == EntityType::NONE)
+    {
         return;
+    }
 
 
-    std::cout << "HITTING!\n";
     OnHit(other);
 }
 void BaseProjectile::OnHit(GameObjectEntity* other)
 {
     // Apply direct damage
     other->health -= damage;
-    EnemyEntity* e = dynamic_cast<EnemyEntity*>(other);
-    if (e) {
-        e->OnHit();
-        if (e->health < 0) {
-            e->SwitchState(EnemyEntity::FSM::DEAD);
+    
+    if (other->entity_type == EntityType::ENEMY)
+    {
+        EnemyEntity* e = dynamic_cast<EnemyEntity*>(other);
+        if (e) {
+            e->OnHit();
+            if (e->health < 0) {
+                e->SwitchState(EnemyEntity::FSM::DEAD);
+            }
         }
     }
+    else if (other->entity_type == EntityType::BREAKABLE_STATIC)
+    {
+
+    }
+
 
     // Destroy projectile
     isActive = false;
