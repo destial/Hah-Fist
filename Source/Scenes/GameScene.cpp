@@ -152,11 +152,12 @@ void GameScene::End() {
 }
 
 void GameScene::Win() {
-	LevelManager::SetLevelTime(LevelManager::GetLevel(), game_timer);
-	LevelManager::SavePlayerData();
+	LevelManager::SetLevelTime(LevelManager::GetLevel(), game_timer); // set this level time
+	LevelManager::SetLevelTime(LevelManager::GetLevel() + 1, 0); // unlock next level
+	LevelManager::SavePlayerData(); // save data
 }
 
 void GameScene::Lose() {
-	SceneManager::GetInstance()->GetCurrentScene()->End();
-	SceneManager::GetInstance()->GetCurrentScene()->Init();
+	End(); // restart level (todo: lose screen)
+	Init();
 }
