@@ -32,6 +32,9 @@ void SceneManager::PreUpdate(const f32& dt) {
 		if (current_scene != Scenes::INIT) {
 			if (all_scenes[current_scene])
 				all_scenes[current_scene]->End();
+
+			AEAudioStopGroup(Game::GetMusicGroup());
+			AEAudioStopGroup(Game::GetSfxGroup());
 		}
 
 		if (next_scene == Scenes::INIT) {

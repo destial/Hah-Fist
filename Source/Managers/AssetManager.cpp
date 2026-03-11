@@ -11,8 +11,8 @@ AssetManager::~AssetManager() {
 			AEGfxDestroyFont(entry.second->font);
 		}
 		else if (entry.second->type == AssetType::AUDIO) {
-			AEAudioUnloadAudio(*entry.second->audio);
-			delete entry.second->audio;
+			AEAudioUnloadAudio(entry.second->audio);
+			//delete entry.second->audio;
 		}
 		else if (entry.second->type == AssetType::SPRITE) {
 			delete entry.second->spritesheet;
@@ -56,7 +56,7 @@ s8 AssetManager::GetFontId(std::string file_name) {
 	return instance->asset_map[file_name]->font;
 }
 
-AEAudio* AssetManager::GetAudio(std::string file_name) {
+AEAudio AssetManager::GetAudio(std::string file_name) {
 	GetInstance();
 	if (instance->asset_map.count(file_name)) {
 		return instance->asset_map[file_name]->audio;
@@ -64,9 +64,9 @@ AEAudio* AssetManager::GetAudio(std::string file_name) {
 	AEAudio audio = AEAudioLoadSound(file_name.c_str());
 	if (!AEAudioIsValidAudio(audio)) {
 		instance->asset_map[file_name] = new Asset;
-		instance->asset_map[file_name]->audio = new AEAudio{ audio };
+		instance->asset_map[file_name]->audio = audio;
 		instance->asset_map[file_name]->type = AssetType::AUDIO;
 		return instance->asset_map[file_name]->audio;
 	}
-	return nullptr;
+	return AEAudio();
 }

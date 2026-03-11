@@ -1,6 +1,7 @@
 #include "GameObjectEntity.hpp"
 #include "StaticEntity.hpp"
 #include "../Utils/AEOverload.hpp"
+#include "../Managers/SceneManager.hpp"
 #include "../UI/Debug.hpp"
 #include <cmath>
 
@@ -36,9 +37,10 @@ void GameObjectEntity::Update(const f32& dt) {
 
 void GameObjectEntity::PostUpdate(const f32& dt)  {
 	this->position += this->velocity * dt;
-	this->position.y = AEClamp(this->position.y, this->scale.y * 0.5f, Utils::GetWorldHeight() - (this->scale.y * 0.5f));
-	if (this->position.y <= this->scale.y * 0.5f) {
-		velocity.y = 0;
+	//this->position.y = AEClamp(this->position.y, this->scale.y * 0.5f, Utils::GetWorldHeight() - (this->scale.y * 0.5f));
+	if (this->position.y + this->scale.y * 0.5f <= this->scale.y * 0.5f) {
+		SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
+		return;
 	}
 	
 	if (velocity.y == 0) {
@@ -58,6 +60,12 @@ void GameObjectEntity::Render() {
 		DebugUtils::RenderLine(corners[1], corners[2], { 255, 0, 255, 0 });
 		DebugUtils::RenderLine(corners[2], corners[3], { 255, 0, 255, 0 });
 		DebugUtils::RenderLine(corners[3], corners[0], { 255, 0, 255, 0 });
+
+		if (DebugUtils::IsRendering()) {
+			char pos[64];
+			sprintf_s(pos, "(%0.2f,%0.2f)", this->position.x, this->position.y);
+			DebugUtils::RenderText(this->position, pos, true);
+		}
 	}
 }
 

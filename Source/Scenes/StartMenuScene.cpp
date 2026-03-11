@@ -116,4 +116,7 @@ void StartMenuScene::Init() {
 	scene_entities.push_back(credits);
 	scene_entities.push_back(title);
 	Game::SetBackgroundColor(Color{ 1.f, 0.3f, 0.3f, 0.3f });
+
+	/*AEAudio audio = AssetManager::GetAudio("Assets/bouken.mp3");
+	AEAudioPlay(audio, Game::GetMusicGroup(), 1.f, 1.f, 1);*/
 }

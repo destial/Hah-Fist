@@ -94,6 +94,9 @@ void Player::Update(const f32& dt) {
 
 void Player::PostUpdate(const f32& dt) {
 	GameObjectEntity::PostUpdate(dt);
+	if (isActive) {
+
+	}
 	currentRow = 1;
 	if (velocity.x != 0) {
 		currentRow = 0;
