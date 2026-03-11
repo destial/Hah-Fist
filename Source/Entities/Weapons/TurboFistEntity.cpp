@@ -8,6 +8,9 @@ TurboFistWeapon::TurboFistWeapon(AEVec2 pos, GameObjectEntity* player) : Weapon(
 	weaponChannels = true;
 	image = AssetManager::GetTexture("Assets/fist1.png");
 	player_original_mass = player->pBody->mass;
+	max_channel_time = 1.0f;
+	cd_duration = 0.5f;
+	damage = 0.01f;
 }
 
 TurboFistWeapon::~TurboFistWeapon()
@@ -52,7 +55,12 @@ void TurboFistWeapon::OnCollide(GameObjectEntity* go)
 	}
 	if (dash_timer > 0.0f)
 	{
-		go->color = { 255, 0, 0, 0 };
+		if (go->entity_type == EntityType::ENEMY)
+		{
+			go->health -= damage * AEVec2Length(&player_entity->velocity);
+			//go->velocity += player_entity->velocity * 1.25;
+			dash_timer = 0;
+		}
 	}
 }
 

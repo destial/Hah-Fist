@@ -13,6 +13,7 @@ EnemyEntity::EnemyEntity(AEVec2 pos, AEVec2 dir, f32 speed) : state{ FSM::IDLE }
 	currentRow = currentCol = 0;
 	scale = { 5.f * (static_cast<f32>(sprite->image->width) / sprite->image->height), 5.f };
 	layer = RenderLayer::ENTITY;
+	entity_type = EntityType::ENEMY;
 }
 
 EnemyEntity::~EnemyEntity()

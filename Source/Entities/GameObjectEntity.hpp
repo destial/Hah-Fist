@@ -31,6 +31,10 @@ public:
 		STATIC, DYNAMIC, TRIGGER, TOTAL
 	} go_type; // Physics type for calculating collision responses
 
+	enum struct EntityType {
+		NONE, PLAYER, ENEMY, PROJECTILE,
+	} entity_type = EntityType::NONE;
+
 	GameObjectEntity(); // Ctor
 	GameObjectEntity(AEVec2 pos = { 0.f, 0.f }, f32 mass = 1.0f, CollisionShape type = CollisionShape::AABB, PhysicsType go_type = PhysicsType::DYNAMIC); // Ctor
 	GameObjectEntity(GameObjectEntity const&) = delete; // Remove copy ctor

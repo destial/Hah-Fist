@@ -5,6 +5,7 @@
 #include "../Events/InputEvent.hpp"
 #include "../Managers/AssetManager.hpp"
 #include "../UI/Debug.hpp"
+#include "../Managers/CameraManager.hpp"
 
 Weapon::Weapon(AEVec2 pos, GameObjectEntity* player) : GameObjectEntity(pos) {
 	player_entity = player;
@@ -44,7 +45,7 @@ void Weapon::Update(const f32& dt) {
 	}
 	else
 	{
-		if (AEInputCheckTriggered(AEVK_W))
+		if (AEInputCheckTriggered(AEVK_LBUTTON))
 		{
 			if (!weaponChannels)
 			{
@@ -58,13 +59,14 @@ void Weapon::Update(const f32& dt) {
 		}
 		else if (channelling)
 		{
-			if (AEInputCheckReleased(AEVK_W)) {
+			if (AEInputCheckReleased(AEVK_LBUTTON)) {
 				channelling = false;
 				Attack();
 				cd_timer = cd_duration;
 			}
 			else {
 				channel_timer = AEClamp(channel_timer + dt, 0.0f, max_channel_time);
+				CameraManager::GetInstance()->Shake(0.1f, 1.5f * channel_timer / max_channel_time);
 			}
 		}
 	}

@@ -14,7 +14,7 @@ void MissileProjectile::PreUpdate(const f32& dt) {
     {
         return;
     }
-    if (slowStartTime > 0)
+    /*if (slowStartTime > 0)
     {
         slowStartTime -= dt;
         if (slowStartTime <= 0)
@@ -25,7 +25,7 @@ void MissileProjectile::PreUpdate(const f32& dt) {
     else
     {
         pBody->gravityScale = AEClamp(pBody->gravityScale + dt * 0.1, 0.2f, 0.98f);
-    }
+    }*/
 
     /*if (AEVec2Length(&velocity) < 20.0f)
     {

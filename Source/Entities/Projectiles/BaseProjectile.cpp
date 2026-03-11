@@ -27,6 +27,8 @@ BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameO
     velocity.y = dir.y * speed;
     health = 1;
     owner = own;
+
+    entity_type = EntityType::PROJECTILE;
 }
 
 
