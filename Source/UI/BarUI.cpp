@@ -11,7 +11,6 @@ BarUI::~BarUI() {}
 
 void BarUI::Update(const f32& dt) {
 	BaseUI::Update(dt);
-	value = AEClamp(value, 0.f, 1.f);
 	if (!interactive)
 		return;
 
@@ -45,6 +44,7 @@ void BarUI::Update(const f32& dt) {
 void BarUI::PostUpdate(const f32& dt) {
 	BaseUI::PostUpdate(dt);
 	AEVec2 pos{ this->position.x, this->position.y }, scl{ this->scale.x, this->scale.y };
+	value = AEClamp(value, 0.f, 1.f);
 	f32 w = scl.x;
 	scl.x *= value;
 	AEVec2 dir{ -1.f, 0.f };

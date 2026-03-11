@@ -94,37 +94,12 @@ BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
 }
 
 void LevelEditor::Update(const f32& dt) {
-	static float fps_counter = 0.f;
-	static float cfps = 1.f / Utils::GetDeltaTime();
-	static float saved = 0.f;
-	if ((fps_counter += Utils::GetDeltaTime()) > 0.1f) {
-		cfps = 1.f / Utils::GetDeltaTime();
-		fps_counter = 0.f;
-	}
-	char fps[50];
-	sprintf_s(fps, "FPS:%.0f", cfps);
-	DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 0.25f }, std::string{ fps });
-
 	f32 cam_x, cam_y;
 	AEGfxGetCamPosition(&cam_x, &cam_y);
-	char cam[128];
-	sprintf_s(cam, "Cam:%.2f,%.2f", cam_x, cam_y);
-	DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 0.75f }, std::string{ cam });
 	
 	AEVec2 mwp = Utils::GetMouseWorld(true);
-	char mos[128];
-	sprintf_s(mos, "Mouse:%.2f,%.2f", mwp.x, mwp.y);
-	DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 1.25f }, std::string{ mos });
-
 	s32 scroll;
 	AEInputMouseWheelDelta(&scroll);
-	char scr[32];
-	sprintf_s(scr, "Scroll:%d", scroll);
-	DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 1.75f }, std::string{ scr });
-
-	char amt[32];
-	sprintf_s(amt, "Entities:%d", static_cast<int>(scene->Entities().size()));
-	DebugUtils::RenderText({ 0, Utils::GetWorldHeight() - 2.25f }, std::string{ amt });
 
 	for (BaseEntity* go : scene->Entities()) {
 		if (AEInputCheckTriggered(AEVK_LBUTTON) && Utils::OBBPoint(go, mwp)) {
@@ -197,6 +172,7 @@ void LevelEditor::Update(const f32& dt) {
 		AEGfxSetCamPosition(cam_x, cam_y);
 	}
 
+	static float saved = 0.f;
 	if (AEInputCheckCurr(AEVK_LCTRL) && AEInputCheckTriggered(AEVK_S)) {
 		char filename[50];
 		sprintf_s(filename, 50, "Assets/level_%d.dat", LevelManager::GetLevel());

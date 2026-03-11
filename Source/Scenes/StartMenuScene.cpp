@@ -79,7 +79,7 @@ void StartMenuScene::Init() {
 	title->scale = { 25.f, 15.f };
 	title->SetInteractive(false);
 	title->AddUpdateListener(this, [title](const f32& dt) {
-		title->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f + 6.5f, level_panel);
+		title->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f, level_panel);
 	});
 
 	ButtonUI* back = CreateButtonDisplay({ Utils::GetWorldWidth() + 2.5f, Utils::GetWorldHeight() - 5.f }, "<");
