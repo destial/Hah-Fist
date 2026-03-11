@@ -38,7 +38,7 @@ static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, char ch) {
 	return CreateHotKeyDisplay(pos, std::string{ ch });
 }
 
-GameScene::GameScene() : BaseScene() {}
+GameScene::GameScene() : BaseScene(), game_timer{ 0 } {}
 
 GameScene::~GameScene() {}
 
@@ -110,6 +110,12 @@ void GameScene::Init() {
 
 	player->SwitchWeapon(0);
 
+	player->AddPostUpdateListener(this, [this, player](const f32& dt) {
+		if (!player->isActive) {
+			Lose();
+		}
+	});
+
 	BarUI* power = new BarUI{ AEVec2{ 0.f, 0.f } };
 	power->scale = { 2.f, .25f };
 	power->text = "";
@@ -135,7 +141,22 @@ void GameScene::Init() {
 	Game::SetBackgroundColor(Color{ 1.f, 0.3f, 0.3f, 0.3f });
 }
 
+void GameScene::Update(const f32& dt) {
+	BaseScene::Update(dt);
+	game_timer += dt;
+}
+
 void GameScene::End() {
 	BaseScene::End();
 	InputEvent::Listeners -= this;
+}
+
+void GameScene::Win() {
+	LevelManager::SetLevelTime(LevelManager::GetLevel(), game_timer);
+	LevelManager::SavePlayerData();
+}
+
+void GameScene::Lose() {
+	SceneManager::GetInstance()->GetCurrentScene()->End();
+	SceneManager::GetInstance()->GetCurrentScene()->Init();
 }

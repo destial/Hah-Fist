@@ -19,6 +19,8 @@
 * @brief Contains the level data, player, enemies, etc.
 */
 class GameScene : public BaseScene {
+protected:
+	f32 game_timer;
 public:
 	GameScene(); // Ctor
 	GameScene(GameScene const&) = delete; // Remove copy ctor
@@ -30,10 +32,16 @@ public:
 	*/
 	virtual void Init();
 
+	void Update(const f32& dt) override;
+
 	/*!
 	* @brief Inherited: Clear the entities from the scene.
 	*/
 	virtual void End();
+
+	void Win();
+
+	void Lose();
 };
 
 #endif
