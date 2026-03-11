@@ -1,9 +1,16 @@
 #include "TitanEntity.hpp"
 #include "../../Utils/Utils.hpp"
 #include "../../Managers/AssetManager.hpp"
+#include "../Projectiles/MissileProjectile.hpp"
+#include "../../Scenes/BaseScene.hpp"  
+#include "../../Managers/SceneManager.hpp"
+#include "../PlayerEntity.hpp"
+
 TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }) {
 	sprite = AssetManager::GetSpriteSheet("Assets/test_troop.png", 3, 3);
-	// Empty for now
+	this->health = 500;
+	this->max_health = 500;
+	shootTimer = 0.f;
 }
 
 TitanEntity::~TitanEntity() {
@@ -15,7 +22,34 @@ void TitanEntity::PreUpdate(const f32& dt) {
 }
 
 void TitanEntity::Update(const f32& dt) {
-	EnemyEntity::Update(dt);
+	//EnemyEntity::Update(dt);
+	GameObjectEntity::Update(dt);
+	stateTimer -= dt;
+	shootTimer -= dt;
+	switch (state) {
+	case FSM::IDLE:
+	{
+		OnIdle(dt);
+		break;
+	}
+	case FSM::CHASE:
+	{
+		OnChase(dt);
+		break;
+	}
+	case FSM::STUN:
+	{
+		OnStun(dt);
+		break;
+	}
+	case FSM::DEAD:
+	{
+		OnDead(dt);
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void TitanEntity::PostUpdate(const f32& dt) {
@@ -28,40 +62,68 @@ void TitanEntity::Render() {
 
 void TitanEntity::OnCollide(GameObjectEntity* go) {
 	EnemyEntity::OnCollide(go);
-	ground = go->go_type == PhysicsType::STATIC ? go : nullptr;
-	if (go->go_type == PhysicsType::DYNAMIC) {
-		SwitchState(FSM::IDLE, 3.f);
-	}
 }
 
 void TitanEntity::OnIdle(const f32& dt) {
 	// Trooper's idle behaviour
 	velocity.x = 0.f;
 	if (stateTimer < 0.f) {
-		dir.x *= -1.f; // Flip the direction it is travelling.
-		SwitchState(FSM::PATROL);
-		return;
+		SwitchState(FSM::CHASE);
 	}
 }
 
 void TitanEntity::OnPatrol(const f32& dt) {
 	// Trooper's patrol behaviour
-	AEVec2 contactPt, normal;
-	f32 timeCollide;
-	velocity.x = dir.x * 10.f;
-	// Checks if it is on the ledge.
-	if (ground != nullptr && !(Utils::RayAABB({ position.x + scale.x * dir.x * 0.5f, position.y }, AEVec2{ 0.f, -1.f }, ground, contactPt, normal, timeCollide)) ) {
-		velocity.x = 0.f;
-		SwitchState(FSM::IDLE, 3.f); // Switching of states
-	}
 }
 
 void TitanEntity::OnChase(const f32& dt) {
 	// Trooper's chase behaviour
+	Player* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<Player>();
+
+
+	if (!player) return;
+
+	dir.x = (player->position.x > position.x) ? 1.f : -1.f;
+
+	velocity.x = dir.x * 15.f;
+	velocity.y = 50.f;
+	position.y += 0.5f;
+	SwitchState(FSM::STUN, 3.f);
+
+
 }
 
 void TitanEntity::OnStun(const f32& dt) {
 	// Trooper's stun behaviour
+	//velocity.x = 0.f;
+	// Spawn falling projectiles periodically
+	AEVec2 contactPt, normal;
+	f32 timeCollide;
+	if (pBody->state == PhysicsBody::STATE::ON_GROUND && shootTimer < 0.f)
+	{
+		// Example spawn
+		// SpawnProjectile({ player->position.x, ceilingHeight });
+		//AEVec2 Pos{ Utils::RandRange(bossroommin.x,bossroommax.x), 100.f};
+		CameraManager::GetInstance()->Shake(3.f, 5.f);
+		for (int i = 0; i < 3; i++)
+		{
+			AEVec2 Pos{ Utils::RandRange(-90,-60),  25 };
+			AEVec2 shootDir{ 0.f, -1.f };
+			AEVec2Normalize(&shootDir, &shootDir);
+			f32 bulletSpeed = Utils::RandRange(5, 20);
+			MissileProjectile* bullet = new MissileProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
+			bullet->scale = { 1.f, 0.5f };
+			SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
+		}
+		//Put for loop to spawn a few
+
+		shootTimer = shootCooldown;
+	}
+
+
+	if (stateTimer < 0.f) {
+		SwitchState(FSM::IDLE, 2.f);
+	}
 }
 
 void TitanEntity::OnDead(const f32& dt) {

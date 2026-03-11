@@ -9,6 +9,7 @@
 #include "../Entities/Enemies/EnemyEntity.hpp"
 #include "../Entities/Enemies/TrooperEntity.hpp"
 #include "../Entities/Enemies/SpiderEntity.hpp"
+#include "../Entities/Enemies/TitanEntity.hpp"
 #include "../Entities/WeaponEntity.hpp"
 
 LevelEditor::LevelEditor(BaseScene* b_scene)
@@ -88,6 +89,12 @@ BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
 		scene->AddEntityToScene(enemy);
 		return enemy;
 	}
+	case Editor::TITAN: {
+		EnemyEntity* enemy = new TitanEntity(Utils::GetMouseWorld(true));
+		enemy->layer = BaseEntity::RenderLayer::ENTITY;
+		scene->AddEntityToScene(enemy);
+		return enemy;
+	}
 	default: break;
 	}
 
@@ -127,6 +134,10 @@ void LevelEditor::Update(const f32& dt) {
 
 	if (AEInputCheckTriggered(AEVK_5)) {
 		SelectEntity(AddEntity(Editor::GameObjectType::STATIC_WALL));
+	}
+	//BOSSES
+	if (AEInputCheckTriggered(AEVK_9)) {
+		SelectEntity(AddEntity(Editor::GameObjectType::TITAN));
 	}
 	// Toggling to switch from scaling the X axis to Y axis
 	if (AEInputCheckTriggered(AEVK_X)) {

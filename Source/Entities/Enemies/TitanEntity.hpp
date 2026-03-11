@@ -5,6 +5,8 @@
 class TitanEntity : public EnemyEntity {
 protected:
 	GameObjectEntity* ground;
+	float shootCooldown{3.f};
+	float shootTimer;
 public:
 	TitanEntity(AEVec2 pos);
 	~TitanEntity() override;

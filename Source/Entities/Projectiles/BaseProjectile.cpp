@@ -29,6 +29,7 @@ BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameO
     owner = own;
 
     entity_type = EntityType::PROJECTILE;
+    go_type = PhysicsType::TRIGGER;
 }
 
 
