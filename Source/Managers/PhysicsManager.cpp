@@ -31,6 +31,8 @@ void PhysicsManager::Update(const f32& dt)
 	//Reset collision state to false;
 	for (auto& go : gameObjects) { go->pBody->is_standing_above = false; }
 	float tCollide{};
+	std::vector<GameObjectEntity*> ignoredObjects{};
+
 	// Collision: DYNAMIC vs TRIGGER
 	for (GameObjectEntity* trigger : gameObjects) {
 		//If trigger inactive, continue
@@ -39,6 +41,18 @@ void PhysicsManager::Update(const f32& dt)
 		//If GameObject is not a trigger, continue
 		if (trigger->go_type != GameObjectEntity::PhysicsType::TRIGGER) { continue; }
 		
+		ignoredObjects.push_back(trigger);
+
+		for (GameObjectEntity* trigger2 : qtGameObjects->head->GetPotentialCollisionTargets(trigger, ignoredObjects, GameObjectEntity::PhysicsType::TRIGGER)) {
+			//Checks if either go is inactive, if so, skip this check
+			if (!trigger2->isActive) { continue; }
+
+			if (Utils::OBB(trigger, trigger2)) {
+				trigger->OnCollide(trigger2);
+				trigger2->OnCollide(trigger);
+			}
+		}
+
 		for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(trigger, GameObjectEntity::PhysicsType::DYNAMIC)) {
 			//Checks if either go is inactive, if so, skip this check
 			if (!dynamic->isActive) { continue; }
@@ -59,7 +73,7 @@ void PhysicsManager::Update(const f32& dt)
 	}
 
 	// Collision: DYNAMIC vs DYNAMIC
-	std::vector<GameObjectEntity*> ignoredObjects{};
+	ignoredObjects.clear();
 	for (GameObjectEntity* dynamic1 : gameObjects) {
 		ignoredObjects.push_back(dynamic1);
 		//If trigger inactive, continue

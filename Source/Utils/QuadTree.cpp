@@ -157,6 +157,8 @@ namespace QuadTree
 		{
 			for (QuadTreeEntry* entry : node->entries)
 			{
+				if (!entry->gameObject->isActive) { continue; }
+
 				if (type_filter != GameObjectEntity::PhysicsType::TOTAL)
 				{
 					if (entry->gameObject->go_type != type_filter)

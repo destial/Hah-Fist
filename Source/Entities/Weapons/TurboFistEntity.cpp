@@ -70,7 +70,7 @@ void TurboFistWeapon::OnCollide(GameObjectEntity* go)
 			//i think this is correct, not sure
 			if (e->TryChangeOwnership(player_entity))
 			{
-				go->velocity = player_entity->velocity * 1.25f;
+				go->velocity = player_entity->velocity * 1.5f;
 			}
 		}
 	}

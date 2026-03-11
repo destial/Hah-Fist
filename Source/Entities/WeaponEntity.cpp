@@ -13,7 +13,7 @@ Weapon::Weapon(AEVec2 pos, GameObjectEntity* player) : GameObjectEntity(pos) {
 	image = AssetManager::GetTexture("Assets/fist1.png");
 	scale = { 2.5f, 2.5f };
 	mesh = MeshRenderer::GetCenterRectMesh();
-	layer = RenderLayer::PLAYER;;
+	layer = RenderLayer::PLAYER;
 }
 
 Weapon::~Weapon() {

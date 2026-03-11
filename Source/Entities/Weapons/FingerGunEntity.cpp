@@ -17,6 +17,7 @@ FingerGunWeapon::~FingerGunWeapon()
 
 void FingerGunWeapon::PreUpdate(const f32& dt)
 {
+	std::cout << "gun is go_type " << static_cast<int>(go_type) << ", entity_type " << static_cast<int>(entity_type) << ", isActive " << isActive << "\n";
 	Weapon::PreUpdate(dt);
 }
 
@@ -26,6 +27,7 @@ void FingerGunWeapon::Update(const f32& dt)
 	{
 		return;
 	}
+	
 	Weapon::Update(dt);
 	
 }

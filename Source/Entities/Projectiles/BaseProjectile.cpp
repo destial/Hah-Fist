@@ -73,7 +73,11 @@ void BaseProjectile::OnCollide(GameObjectEntity* other)
 
     if (!other->isActive)
         return;
+    if (other->entity_type != EntityType::PLAYER && other->entity_type != EntityType::ENEMY)
+        return;
 
+
+    std::cout << "HITTING!\n";
     OnHit(other);
 }
 void BaseProjectile::OnHit(GameObjectEntity* other)
