@@ -7,6 +7,7 @@
 */
 #include "LevelManager.hpp"
 #include <fstream>
+#include <cstdio>
 
 namespace LevelManager {
 	static std::map<int, float> unlocked_levels;
@@ -36,6 +37,7 @@ namespace LevelManager {
 
 		for (std::pair<int, float> pair : unlocked_levels) {
 			os << pair.first << '=' << pair.second << '\n';
+			std::printf("saved level %d : %0.2f\n", pair.first, pair.second);
 		}
 		os.close();
 	}

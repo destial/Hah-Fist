@@ -50,6 +50,7 @@ static void OnGameExit(const InputEvent* ev) {
 
 void GameScene::Init() {
 	camManager->Init();
+	game_timer = 0.f;
 	InputEvent::Listeners += {this, OnGameExit};
 
 	ButtonUI* wk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 1.f }, "LB");
