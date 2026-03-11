@@ -24,6 +24,7 @@ namespace Editor { // start namespace editor
 		STATIC_WALL,
 		ENEMY_1,
 		ENEMY_2,
+		COIN,
 		SPIDER,
 		TITAN,
 	};

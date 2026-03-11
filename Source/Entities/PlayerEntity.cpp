@@ -24,6 +24,7 @@ Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 	jumpHeight = 8.5f;
 	jumpVelocity = sqrtf(jumpHeight * 2.f * abs(pBody->gravity.y));
 	speed = 10.f;
+	entity_type = EntityType::PLAYER;
 	layer = RenderLayer::PLAYER;
 	go_type = PhysicsType::DYNAMIC;
 }
@@ -173,4 +174,9 @@ Weapon* Player::CurrentWeapon() const {
 		}
 	}
 	return nullptr;
+}
+
+void Player::AddCoin()
+{
+	coinCount++;
 }

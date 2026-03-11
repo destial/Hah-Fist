@@ -11,6 +11,7 @@
 #include "../Entities/Enemies/SpiderEntity.hpp"
 #include "../Entities/Enemies/TitanEntity.hpp"
 #include "../Entities/WeaponEntity.hpp"
+#include "../Entities/DropEntities/CoinEntity.hpp"
 
 LevelEditor::LevelEditor(BaseScene* b_scene)
 : scene{ b_scene }, toggled{ false }, currentSelection{ nullptr } {
@@ -95,6 +96,11 @@ BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
 		scene->AddEntityToScene(enemy);
 		return enemy;
 	}
+	case Editor::COIN: {
+		CoinEntity* coin = new CoinEntity(Utils::GetMouseWorld(true));
+		scene->AddEntityToScene(coin);
+		return coin;
+	}
 	default: break;
 	}
 
@@ -134,6 +140,9 @@ void LevelEditor::Update(const f32& dt) {
 
 	if (AEInputCheckTriggered(AEVK_5)) {
 		SelectEntity(AddEntity(Editor::GameObjectType::STATIC_WALL));
+	}
+	if (AEInputCheckTriggered(AEVK_6)) {
+		SelectEntity(AddEntity(Editor::GameObjectType::COIN));
 	}
 	//BOSSES
 	if (AEInputCheckTriggered(AEVK_9)) {

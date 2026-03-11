@@ -32,7 +32,7 @@ public:
 	} go_type; // Physics type for calculating collision responses
 
 	enum struct EntityType : int {
-		NONE = 0, PLAYER, ENEMY, PROJECTILE,
+		NONE = 0, PLAYER, ENEMY, PROJECTILE, BREAKABLE_STATIC,
 	} entity_type = EntityType::NONE;
 
 	GameObjectEntity(); // Ctor

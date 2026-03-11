@@ -79,6 +79,15 @@
     <Filter Include="Source Files\Entities\Projectiles">
       <UniqueIdentifier>{c4bfee66-69be-46cf-977f-85472877d4ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Entities\StaticEntities">
+      <UniqueIdentifier>{b67e82d1-5938-404d-a8d6-ee9f0f2b5db3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\DropEntities">
+      <UniqueIdentifier>{69598322-1681-4fd9-a976-2f618a631055}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities\DropEntities">
+      <UniqueIdentifier>{746f7030-c7b4-4513-a9a4-589ccd489f35}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\main.cpp">
@@ -219,6 +228,15 @@
     <ClCompile Include="..\Source\UI\ImageUI.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Entities\BreakableStaticEntity.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Entities\DropEntity.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Entities\DropEntities\CoinEntity.cpp">
+      <Filter>Source Files\Entities\DropEntities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -358,6 +376,15 @@
     </ClInclude>
     <ClInclude Include="..\Source\UI\ImageUI.hpp">
       <Filter>Header Files\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\BreakableStaticEntity.hpp">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\DropEntity.hpp">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\DropEntities\CoinEntity.hpp">
+      <Filter>Header Files\Entities\DropEntities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

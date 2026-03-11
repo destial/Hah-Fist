@@ -27,6 +27,7 @@ protected:
 	f32 jumpVelocity;
 	f32 speed;
 	std::vector<Weapon*> weapons;
+	int coinCount{ 0 };
 public:
 	Player(AEVec2 pos = { 0.f, 0.f }); // Ctor
 	Player(Player const&) = delete; // Remove copy ctor
@@ -76,6 +77,11 @@ public:
 	* @return The current active weapon
 	*/
 	Weapon* CurrentWeapon() const;
+
+	/*!
+	* @brief Adds a coin to the player
+	*/
+	void AddCoin();
 };
 
 #endif
