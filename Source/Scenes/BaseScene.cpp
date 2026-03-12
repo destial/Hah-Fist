@@ -52,9 +52,6 @@ void BaseScene::Update(const f32& dt) {
 	}
 	particleSystem->Update(dt);
 	camManager->Update(dt);
-	if (physicsManager != nullptr) {
-		physicsManager->Update(dt);
-	}
 }
 
 void BaseScene::PostUpdate(const f32& dt) {
@@ -63,6 +60,10 @@ void BaseScene::PostUpdate(const f32& dt) {
 	// Using indices avoids iterator invalidation issues during modification.
 	for (int i = 0; i < scene_entities.size(); ++i) {
 		scene_entities[i]->PostUpdate(dt);
+	}
+
+	if (physicsManager != nullptr) {
+		physicsManager->PostUpdate(dt);
 	}
 
 	// Use a seperate loop when deleting to avoid concurrent modification errors

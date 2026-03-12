@@ -17,7 +17,7 @@ public:
 	std::vector<GameObjectEntity*> gameObjects;
 	void Init();
 	void PreUpdate(const f32& dt);
-	void Update(const f32& dt);
+	void PostUpdate(const f32& dt);
 	void Render();
 	void Clear();
 

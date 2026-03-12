@@ -31,7 +31,7 @@ void GameObjectEntity::Update(const f32& dt) {
 		pBody->UpdateStates(this->velocity, this->position, this->scale);
 		pBody->ApplyGravity(this->velocity, dt);
 
-		pBody->air_strength = AEClamp(pBody->air_strength - 2 * dt, 0.0, 1.0);
+		/*pBody->air_strength = AEClamp(pBody->air_strength - 2 * dt, 0.0, 1.0);*/
 	}
 }
 
@@ -43,7 +43,7 @@ void GameObjectEntity::PostUpdate(const f32& dt)  {
 		return;
 	}
 	
-	if (velocity.y == 0) {
+	if (pBody->is_standing_above) {
 		velocity.x -= velocity.x * (frictionMultiplier * 20.0f) * dt; // later change 5.0 to friction perhaps
 		if (std::abs(velocity.x) < 0.3) {
 			velocity.x = 0.0;
@@ -75,32 +75,64 @@ void GameObjectEntity::OnCollide(GameObjectEntity* go) {
 		if (se == nullptr)
 			return;
 		if (se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_PLATFORM) { // Collision with a platform
-			AEVec2 down = { 0, -1.f };
-			if (velocity * down > 1 && position.y >= go->position.y + go->scale.y * 0.5f + scale.y * 0.49f)
+			if (position.x <= go->position.x + go->scale.x && position.x >= go->position.x - go->scale.x)
 			{
-				position = prev_position;
-				velocity.y = 0.0f;
+				if (prev_position.y - scale.y * 0.5f > go->position.y + go->scale.y * 0.5f)
+				{
+					if (position.y - scale.y * 0.48f > go->position.y + go->scale.y * 0.48f)
+					{
+						f32 next_position = (scale.y + go->scale.y) * 0.5f - (position.y - go->position.y) + position.y;
+						position.y = next_position > prev_position.y ? next_position : prev_position.y;
+						velocity.y = fabsf(velocity.y) > 0.01f ? -velocity.y * 0.25f : 0.f;
+						pBody->is_standing_above = true;
+					}
+				}
 			}
 		}
 		else if(se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_WALL) { // Collision with a wall
-			AEVec2 down = { 0, -1.f };
-			position = prev_position;
-			if (position.y >= go->position.y + go->scale.y * 0.5f + scale.y * 0.49f)
+			if (position.x <= go->position.x + go->scale.x && position.x >= go->position.x - go->scale.x)
 			{
-				//@TODO Something is causing the Dynamic object to bypass the wall here
-				if (velocity * down >= 1) {
-					velocity.y = 0.0f;
+				if (prev_position.y - scale.y * 0.5f > go->position.y + go->scale.y * 0.5f)
+				{
+					if (position.y - scale.y * 0.48f > go->position.y + go->scale.y * 0.48f)
+					{
+						f32 next_position = position.y + (scale.y + go->scale.y) * 0.5f - (position.y - go->position.y);
+						position.y = next_position > prev_position.y ? next_position : prev_position.y;
+						velocity.y = fabsf(velocity.y) > 0.01f ? -velocity.y * 0.25f : 0.f;
+						pBody->is_standing_above = true;
+					}
+				}
+				else
+				if (prev_position.y + scale.y * 0.5f < go->position.y - go->scale.y * 0.5f)
+				{
+					if (position.y + scale.y * 0.48f < go->position.y - go->scale.y * 0.48f)
+					{
+						f32 next_position = position.y - (scale.y + go->scale.y) * 0.5f - (go->position.y - position.y);
+						position.y = next_position > prev_position.y ? next_position : prev_position.y;
+						velocity.y = fabsf(velocity.y) > 0.01f ? -velocity.y * 0.25f : 0.f;
+					}
 				}
 			}
-			else {
-				if (velocity.x < 0.f && position.x > go->position.x) {
-					velocity.x = 0.f;
+			if (position.y <= go->position.y + go->scale.y && position.y >= go->position.y - go->scale.y)
+			{
+				if (prev_position.x - scale.x * 0.5f > go->position.x + go->scale.x * 0.5f)
+				{
+					if (position.x - scale.x * 0.48f > go->position.x + go->scale.x * 0.48f)
+					{
+						f32 next_position = position.x + (scale.x + go->scale.x) * 0.5f - (position.x - go->position.x);
+						position.x = next_position > prev_position.x ? next_position : prev_position.x;
+						velocity.x = fabsf(velocity.x) > 0.01f ? -velocity.x * 0.25f : 0.f;
+					}
 				}
-				if (velocity.x > 0.f && position.x < go->position.x) {
-					velocity.x = 0.f;
-				}
-				if (velocity.y > 0.f && position.y < go->position.y) {
-					velocity.y = 0.f;
+				else
+				if (prev_position.x + scale.x * 0.5f < go->position.x - go->scale.x * 0.5f)
+				{
+					if (position.x + scale.x * 0.48f < go->position.x - go->scale.x * 0.48f)
+					{
+						f32 next_position = position.x - (scale.x + go->scale.x) * 0.5f - (go->position.x - position.x);
+						position.x = next_position > prev_position.x ? next_position : prev_position.x;
+						velocity.x = fabsf(velocity.x) > 0.01f ? -velocity.x * 0.25f : 0.f;
+					}
 				}
 			}
 		}

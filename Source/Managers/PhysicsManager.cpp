@@ -26,7 +26,7 @@ void PhysicsManager::PreUpdate(const f32& dt)
 	qtGameObjects = new QuadTree::Tree(worldBounds, gameObjects, maxEntriesPerNode);
 }
 
-void PhysicsManager::Update(const f32& dt)
+void PhysicsManager::PostUpdate(const f32& dt)
 {
 	//Reset collision state to false;
 	for (auto& go : gameObjects) { go->pBody->is_standing_above = false; }
@@ -59,6 +59,65 @@ void PhysicsManager::Update(const f32& dt)
 		for (GameObjectEntity* _static : qtGameObjects->head->GetPotentialCollisionTargets(trigger, GameObjectEntity::PhysicsType::STATIC)) {
 			if (Utils::OBB(trigger, _static)) {
 				trigger->OnCollide(_static);
+			}
+		}
+	}
+
+	// Collision: DYNAMIC vs STATIC
+	for (GameObjectEntity* _static : gameObjects) {
+		//If trigger inactive, continue
+		if (!_static->isActive) { continue; }
+
+		//If GameObject is not a trigger, continue
+		if (_static->go_type != GameObjectEntity::PhysicsType::STATIC) { continue; }
+
+		for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(_static, GameObjectEntity::PhysicsType::DYNAMIC)) {
+			bool has_collision{ false };
+			if (!Utils::OBB(_static, dynamic))
+			{
+				if (Utils::DynamicAABB(dynamic, _static, tCollide, dt))
+				{
+					dynamic->prev_position.x += dynamic->velocity.x * tCollide;
+					dynamic->prev_position.y += dynamic->velocity.y * tCollide;
+					has_collision = true;
+				}
+			}
+			else
+			{
+				has_collision = true;
+			}
+			
+			if (has_collision)
+			{
+				_static->OnCollide(dynamic);
+				dynamic->OnCollide(_static);
+			}
+
+			if (Utils::OBB(_static, dynamic)) {
+				_static->OnCollide(dynamic);
+				dynamic->OnCollide(_static);
+				/*float length = abs(dynamic->position.y - _static->position.y);
+				if (length <= dynamic->scale.y * 0.5f + _static->scale.y * 0.5f)
+				{
+					if (dynamic->position.y > _static->position.y)
+					{
+						dynamic->pBody->is_standing_above = true;
+					}
+				}*/
+			}
+			else if (Utils::DynamicAABB(dynamic, _static, tCollide, dt)) {
+				dynamic->prev_position.x += dynamic->velocity.x * tCollide;
+				dynamic->prev_position.y += dynamic->velocity.y * tCollide;
+				
+				/*float length = abs(dynamic->position.y - _static->position.y);
+				if (length <= dynamic->scale.y * 0.5f + _static->scale.y * 0.5f)
+				{
+					if (dynamic->position.y > _static->position.y)
+					{
+						dynamic->pBody->is_standing_above = true;
+					}
+				}*/
+
 			}
 		}
 	}
@@ -106,45 +165,6 @@ void PhysicsManager::Update(const f32& dt)
 					else
 					{
 						dynamic2->pBody->is_standing_above = true;
-					}
-				}
-
-			}
-		}
-	}
-
-	// Collision: DYNAMIC vs STATIC
-	for (GameObjectEntity* _static : gameObjects) {
-		//If trigger inactive, continue
-		if (!_static->isActive) { continue; }
-
-		//If GameObject is not a trigger, continue
-		if (_static->go_type != GameObjectEntity::PhysicsType::STATIC) { continue; }
-
-		for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(_static, GameObjectEntity::PhysicsType::DYNAMIC)) {
-			if (Utils::OBB(_static, dynamic)) {
-				_static->OnCollide(dynamic);
-				dynamic->OnCollide(_static);
-				float length = abs(dynamic->position.y - _static->position.y);
-				if (length <= dynamic->scale.y * 0.5f + _static->scale.y * 0.5f)
-				{
-					if (dynamic->position.y > _static->position.y)
-					{
-						dynamic->pBody->is_standing_above = true;
-					}
-				}
-			}
-			else if (Utils::DynamicAABB(dynamic, _static, tCollide, dt)) {
-				dynamic->position.x = dynamic->velocity.x * tCollide + dynamic->prev_position.x;
-				dynamic->position.y = dynamic->velocity.y * tCollide + dynamic->prev_position.y;
-				_static->OnCollide(dynamic);
-				dynamic->OnCollide(_static);
-				float length = abs(dynamic->position.y - _static->position.y);
-				if (length <= dynamic->scale.y * 0.5f + _static->scale.y * 0.5f)
-				{
-					if (dynamic->position.y > _static->position.y)
-					{
-						dynamic->pBody->is_standing_above = true;
 					}
 				}
 

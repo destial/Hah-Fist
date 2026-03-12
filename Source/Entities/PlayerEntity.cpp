@@ -57,10 +57,14 @@ void Player::Update(const f32& dt) {
 	}
 	if (dir.x)
 	{
-		f32 spd = velocity.y == 0 ? speed : speed * pBody->air_strength * 0.75f;
-		if (abs(velocity.x) < spd)
+		//f32 spd = velocity.y == 0 ? speed : speed * pBody->air_strength * 0.75f;
+		if (!(dir.x < 0 && velocity.x < 0 || dir.x > 0 && velocity.x > 0))
 		{
-			velocity.x += dir.x * spd;
+			velocity.x = 0.f;
+		}
+		if (abs(velocity.x) < speed)
+		{
+			velocity.x += dir.x * speed;
 		}
 	}
 	if (AEInputCheckCurr(AEVK_1)) {
@@ -74,7 +78,7 @@ void Player::Update(const f32& dt) {
 	}
 
 
-	if (AEInputCheckCurr(AEVK_SPACE) && abs(velocity.y) == 0) {
+	if (AEInputCheckCurr(AEVK_SPACE) && pBody->is_standing_above) {
 		velocity.y += jumpVelocity;
 	}
 	//Testing Camera Function
@@ -84,7 +88,7 @@ void Player::Update(const f32& dt) {
 	}
 	//Testing Shooting Function
 	if (AEInputCheckCurr(AEVK_T) && abs(velocity.y) == 0) {
-		velocity.y += jumpVelocity;
+		velocity.y += jumpVelocity * 4.0f;
 		//Have to offset so it does not instantly collide and delete its own projectile
 		AEVec2 playerPosOff{position.x + dir.x + 2.f,position.y};
 		AEVec2 shootDir{ dir.x, 0.f };
