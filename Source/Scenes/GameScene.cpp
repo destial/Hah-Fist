@@ -105,6 +105,7 @@ void GameScene::Init() {
 	AddEntityToScene(w2);
 	Weapon* w3= new FingerGunWeapon(AEVec2{ 0.f, 0.f }, player);
 	AddEntityToScene(w3);
+
 	player->AddWeapon(w);
 	player->AddWeapon(w2);
 	player->AddWeapon(w3);
@@ -127,6 +128,7 @@ void GameScene::Init() {
 	AddEntityToScene(power);
 	power->AddUpdateListener(this, [power, player](const f32& dt) {
 		Weapon* current = player->CurrentWeapon();
+		if (current == nullptr) return;
 		power->overlay_color = { 255, 255, 0, 0 };
 		if (current->GetCooldownTimer() > 0) {
 			power->SetValue(current->GetCooldownTimer() / current->GetCooldownDuration());

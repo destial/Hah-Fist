@@ -17,6 +17,8 @@
 * @brief then transitions into the main menu
 */
 class SplashScreen : public BaseScene {
+private:
+	f32 timer{ 0.f };
 public:
 	SplashScreen(); // Ctor
 	SplashScreen(SplashScreen const&) = delete; // Remove copy ctor
@@ -26,13 +28,13 @@ public:
 	/*!
 	* @brief Inherited: Initialize the scene with the splash screen image
 	*/
-	virtual void Init();
+	void Init() override;
 
 	/*!
 	* @brief Inherited: Update all entities in the scene
 	* @param dt - The delta time for this frame
 	*/
-	virtual void Update(const f32& dt);
+	void Update(const f32& dt) override;
 };
 
 #endif

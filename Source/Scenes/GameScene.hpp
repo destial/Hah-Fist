@@ -30,17 +30,27 @@ public:
 	/*!
 	* @brief Inherited: Initialize the scene with starting points, entities, level, etc.
 	*/
-	virtual void Init();
+	void Init() override;
 
+	/*!
+	* @brief Inherited: Update all entities in the scene
+	* @param dt - The delta time for this frame
+	*/
 	void Update(const f32& dt) override;
 
 	/*!
 	* @brief Inherited: Clear the entities from the scene.
 	*/
-	virtual void End();
+	void End() override;
 
+	/*!
+	* @brief Called when the current level has been won
+	*/
 	void Win();
 
+	/*!
+	* @brief Called when the current level has been lost
+	*/
 	void Lose();
 };
 

@@ -21,19 +21,27 @@
 #include "../Managers/CameraManager.hpp"
 
 /*!
+* @brief An enum of the scene frame state
+*/
+enum struct FrameState {
+	INIT, PRE, MIDDLE, POST, RENDER, END
+};
+
+/*!
 * @brief Base scene class
 * @brief Every scene should have its entities, particle system,
 * @brief physics manager and camera manager
 */
 class BaseScene {
 private:
-	std::vector<BaseEntity*> awaiting_deletion;
-	std::map<BaseEntity*, BaseEntity*> linked_entities;
+	FrameState current_state; // the current frame state of the code execution
+	std::vector<BaseEntity*> awaiting_deletion; // all the entities that are waiting to be removed
+	std::map<BaseEntity*, BaseEntity*> linked_entities; // entities that are linked to other entities
 protected:
 	std::vector<BaseEntity*> scene_entities; // vector of entity pointers
 	ParticleSystem* particleSystem; // pointer to its own particle system
 	PhysicsManager* physicsManager{ nullptr }; // pointer to its own physics manager
-	CameraManager* camManager; // pointer to its own camera manager
+	CameraManager* camManager; // pointer to the singleton camera manager
 	BaseScene(); // Ctor (protected here so cant be called outside of inherited classes)
 	BaseScene(BaseScene const&) = delete; // Delete copy ctor
 	BaseScene& operator=(BaseScene const&) = delete; // Delete copy assignment
@@ -97,6 +105,13 @@ public:
 	* @return A constant vector reference to the scene entities
 	*/
 	std::vector<BaseEntity*> const& Entities() const;
+
+	/*!
+	* @brief Get the current frame state (INIT, PRE_UPDATE, UPDATE, POST_UPDATE, RENDER, END)
+	* @brief of this scene at the point this code has been called.
+	* @return An enum of the current frame state
+	*/
+	FrameState GetFrameState() const;
 
 	/*!
 	* @brief Get the first entity of this class type

@@ -20,12 +20,18 @@ GameObjectEntity::~GameObjectEntity() {
 }
 
 void GameObjectEntity::PreUpdate(const f32& dt) {
+	if (!isActive)
+		return;
+
 	BaseEntity::PreUpdate(dt);
 	this->prev_position = this->position;
 	//this->velocity = { 0.f, velocity.y };
 }
 
 void GameObjectEntity::Update(const f32& dt) {
+	if (!isActive)
+		return;
+
 	BaseEntity::Update(dt);
 
 	invulnerabilityDuration -= dt;
@@ -40,6 +46,9 @@ void GameObjectEntity::Update(const f32& dt) {
 }
 
 void GameObjectEntity::PostUpdate(const f32& dt)  {
+	if (!isActive)
+		return;
+
 	this->position += this->velocity * dt;
 	//this->position.y = AEClamp(this->position.y, this->scale.y * 0.5f, Utils::GetWorldHeight() - (this->scale.y * 0.5f));
 	if (this->position.y + this->scale.y * 0.5f <= this->scale.y * 0.5f) {
@@ -57,19 +66,20 @@ void GameObjectEntity::PostUpdate(const f32& dt)  {
 }
 
 void GameObjectEntity::Render() {
-	if (isActive) {
-		BaseEntity::Render();
-		auto corners = Utils::GetCorners(this);
-		DebugUtils::RenderLine(corners[0], corners[1]);
-		DebugUtils::RenderLine(corners[1], corners[2]);
-		DebugUtils::RenderLine(corners[2], corners[3]);
-		DebugUtils::RenderLine(corners[3], corners[0]);
+	if (!isActive)
+		return;
+	
+	BaseEntity::Render();
+	auto corners = Utils::GetCorners(this);
+	DebugUtils::RenderLine(corners[0], corners[1]);
+	DebugUtils::RenderLine(corners[1], corners[2]);
+	DebugUtils::RenderLine(corners[2], corners[3]);
+	DebugUtils::RenderLine(corners[3], corners[0]);
 
-		if (DebugUtils::IsRendering()) {
-			char pos[64];
-			sprintf_s(pos, "(%0.2f,%0.2f)", this->position.x, this->position.y);
-			DebugUtils::RenderText(this->position, pos, true);
-		}
+	if (DebugUtils::IsRendering()) {
+		char pos[64];
+		sprintf_s(pos, "(%0.2f,%0.2f)", this->position.x, this->position.y);
+		DebugUtils::RenderText(this->position, pos, true);
 	}
 }
 
