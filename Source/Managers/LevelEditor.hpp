@@ -28,6 +28,8 @@ namespace Editor { // start namespace editor
 		CRATE,
 		SPIDER,
 		TITAN,
+		PAYLOAD,
+		IRONSIDE,
 	};
 }; // end namespace editor
 
