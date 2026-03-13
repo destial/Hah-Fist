@@ -5,6 +5,8 @@
 #include "../Projectiles/MissileProjectile.hpp"
 #include "../StaticEntity.hpp"
 #include "../../Utils/MeshRenderer.hpp"
+#include "../../Utils/Constant.hpp"
+
 #include "../../Scenes/BaseScene.hpp"  
 #include "../../Managers/SceneManager.hpp"
 
