@@ -12,6 +12,7 @@ public:
 
 	void PreUpdate(const f32& dt) override;
 	void Update(const f32& dt) override;
+	void OnCollide(GameObjectEntity* go) override;
 	void Render() override;
 	void Attack() override;
 	void ResetWeapon();
