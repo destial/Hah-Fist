@@ -31,6 +31,11 @@ void FingerGunWeapon::Update(const f32& dt)
 	
 }
 
+void FingerGunWeapon::OnCollide(GameObjectEntity* go)
+{
+
+}
+
 void FingerGunWeapon::Render()
 {
 	Weapon::Render();
