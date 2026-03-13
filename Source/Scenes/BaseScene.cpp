@@ -18,7 +18,8 @@
 #include <iostream>
 
 BaseScene::BaseScene() 
-: awaiting_deletion(0), scene_entities(0), particleSystem{ new ParticleSystem }, camManager{ CameraManager::GetInstance() } {}
+: awaiting_deletion(0), scene_entities(0), current_state{FrameState::INIT},
+  particleSystem{ new ParticleSystem }, camManager{ CameraManager::GetInstance() } {}
 
 BaseScene::~BaseScene() {
 	linked_entities.clear();
@@ -31,6 +32,7 @@ BaseScene::~BaseScene() {
 }
 
 void BaseScene::PreUpdate(const f32& dt) {
+	current_state = FrameState::PRE;
 	awaiting_deletion.clear();
 	// Need to use an index-based loop instead of an iterator because entities may be added to scene_entities. 
 	// Adding elements to a std::vector can trigger a reallocation, which invalidates all iterators and references. 
@@ -44,6 +46,7 @@ void BaseScene::PreUpdate(const f32& dt) {
 }
 
 void BaseScene::Update(const f32& dt) {
+	current_state = FrameState::MIDDLE;
 	// Need to use an index-based loop instead of an iterator because entities may be added to scene_entities. 
 	// Adding elements to a std::vector can trigger a reallocation, which invalidates all iterators and references. 
 	// Using indices avoids iterator invalidation issues during modification.
@@ -55,6 +58,7 @@ void BaseScene::Update(const f32& dt) {
 }
 
 void BaseScene::PostUpdate(const f32& dt) {
+	current_state = FrameState::POST;
 	// Need to use an index-based loop instead of an iterator because entities may be added to scene_entities. 
 	// Adding elements to a std::vector can trigger a reallocation, which invalidates all iterators and references. 
 	// Using indices avoids iterator invalidation issues during modification.
@@ -77,6 +81,7 @@ static bool compare(BaseEntity* a, BaseEntity* b) {
 }
 
 void BaseScene::Render() {
+	current_state = FrameState::RENDER;
 	// Sort each entity according to Render Layer, higher Render Layers will be rendered on top
 	std::stable_sort(scene_entities.begin(), scene_entities.end(), compare);
 
@@ -90,9 +95,12 @@ void BaseScene::Render() {
 }
 
 void BaseScene::End() {
+	current_state = FrameState::END;
 	for (auto& entity : scene_entities) {
 		delete entity;
 	}
+	awaiting_deletion.clear();
+	linked_entities.clear();
 	scene_entities.clear();
 	particleSystem->Clear();
 	if (physicsManager) {
@@ -190,4 +198,8 @@ void BaseScene::DeleteEntityFromScene(BaseEntity* entity) {
 
 std::vector<BaseEntity*> const& BaseScene::Entities() const {
 	return scene_entities;
+}
+
+FrameState BaseScene::GetFrameState() const {
+	return current_state;
 }

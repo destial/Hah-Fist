@@ -26,7 +26,7 @@ public:
 	/*!
 	* @brief Inherited: Initialize the scene with UI starting points
 	*/
-	virtual void Init();
+	void Init() override;
 };
 
 #endif
