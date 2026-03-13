@@ -10,6 +10,8 @@
 #include "../Entities/Enemies/TrooperEntity.hpp"
 #include "../Entities/Enemies/SpiderEntity.hpp"
 #include "../Entities/Enemies/TitanEntity.hpp"
+#include "../Entities/Enemies/PayloadEntity.hpp"
+#include "../Entities/Enemies/IronsideEntity.hpp"
 #include "../Entities/WeaponEntity.hpp"
 #include "../Entities/DropEntities/CoinEntity.hpp"
 #include "../Entities/StaticEntities/BreakableCrateEntity.hpp"
@@ -97,6 +99,18 @@ BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
 		scene->AddEntityToScene(enemy);
 		return enemy;
 	}
+	case Editor::PAYLOAD: {
+		EnemyEntity* enemy = new PayloadEntity(Utils::GetMouseWorld(true));
+		enemy->layer = BaseEntity::RenderLayer::ENTITY;
+		scene->AddEntityToScene(enemy);
+		return enemy;
+	}
+	case Editor::IRONSIDE: {
+		EnemyEntity* enemy = new IronsideEntity(Utils::GetMouseWorld(true));
+		enemy->layer = BaseEntity::RenderLayer::ENTITY;
+		scene->AddEntityToScene(enemy);
+		return enemy;
+	}
 	case Editor::COIN: {
 		CoinEntity* coin = new CoinEntity(Utils::GetMouseWorld(true));
 		scene->AddEntityToScene(coin);
@@ -154,8 +168,14 @@ void LevelEditor::Update(const f32& dt) {
 		SelectEntity(AddEntity(Editor::GameObjectType::CRATE));
 	}
 	//BOSSES
-	if (AEInputCheckTriggered(AEVK_9)) {
+	if (AEInputCheckTriggered(AEVK_B)) {
 		SelectEntity(AddEntity(Editor::GameObjectType::TITAN));
+	}
+	if (AEInputCheckTriggered(AEVK_N)) {
+		SelectEntity(AddEntity(Editor::GameObjectType::PAYLOAD));
+	}
+	if (AEInputCheckTriggered(AEVK_M)) {
+		SelectEntity(AddEntity(Editor::GameObjectType::IRONSIDE));
 	}
 	// Toggling to switch from scaling the X axis to Y axis
 	if (AEInputCheckTriggered(AEVK_X)) {

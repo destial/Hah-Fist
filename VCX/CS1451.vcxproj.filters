@@ -228,14 +228,23 @@
     <ClCompile Include="..\Source\UI\ImageUI.cpp">
       <Filter>Source Files\UI</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Entities\BreakableStaticEntity.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\Entities\DropEntity.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Entities\DropEntities\CoinEntity.cpp">
       <Filter>Source Files\Entities\DropEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Entities\StaticEntities\BreakableCrateEntity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Entities\StaticEntities\BreakableStaticEntity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Entities\Projectiles\SpikeProjectile.cpp">
+      <Filter>Source Files\Entities\Projectiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Entities\Projectiles\ExplosiveProjectile.cpp">
+      <Filter>Source Files\Entities\Projectiles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -377,14 +386,23 @@
     <ClInclude Include="..\Source\UI\ImageUI.hpp">
       <Filter>Header Files\UI</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Entities\BreakableStaticEntity.hpp">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\Entities\DropEntity.hpp">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Entities\DropEntities\CoinEntity.hpp">
       <Filter>Header Files\Entities\DropEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\StaticEntities\BreakableCrateEntity.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\StaticEntities\BreakableStaticEntity.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\Projectiles\SpikeProjectile.hpp">
+      <Filter>Header Files\Entities\Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\Projectiles\ExplosiveProjectile.hpp">
+      <Filter>Header Files\Entities\Projectiles</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
