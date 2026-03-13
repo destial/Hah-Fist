@@ -6,6 +6,7 @@
 #include "../Events/InputEvent.hpp"
 #include "../Utils/AEOverload.hpp"
 #include "../Utils/Utils.hpp"
+#include "../Utils/Constant.hpp"
 #include "../UI/ButtonUI.hpp"
 #include "../UI/ImageUI.hpp"
 #include "../UI/CircleButtonUI.hpp"
@@ -149,13 +150,16 @@ void StartMenuScene::Init() {
 	});
 
 	LevelManager::SetLevelTime(0, 0);
-	for (int i = 1; i < 3; ++i) {
+	for (int i = 1; i < TOTAL_LEVELS; ++i) {
 		LevelManager::SetLevelTime(i, -1);
 	}
 
 	LevelManager::LoadPlayerData();
 	std::map<int, float> lvls = LevelManager::GetUnlockedLvls();
-	for (int i = 0; i < 3; ++i) {
+#if _DEBUG
+	std::vector<ButtonUI*> buttons;
+#endif
+	for (int i = 0; i < TOTAL_LEVELS; ++i) {
 		float w = Utils::GetWorldWidth() + 5.f + (i * 7.f);
 		std::string s{ static_cast<char>('1' + i) };
 		s += "  ";
@@ -164,7 +168,7 @@ void StartMenuScene::Init() {
 		
 		if (lvls[i] != -1) {
 			level_button->AddClickListener([i](BaseUI::MouseButton b) {
-				const int l = i;
+				int l = i;
 				if (b & BaseUI::MouseButton::LEFT) {
 					LevelManager::SetLevel(l);
 					SceneManager::GetInstance()->SetNextScene(Scenes::GAME);
@@ -189,9 +193,11 @@ void StartMenuScene::Init() {
 			scene_entities.push_back(time);
 		}
 		else {
+#if _DEBUG
+			buttons.push_back(level_button);
+#endif
+			level_button->SetInteractive(false);
 			level_button->color = { 255, 255, 0, 0 };
-			level_button->overlay_color = { 255, 255, 0, 0 };
-			level_button->overlay_text_color = level_button->text_color;
 		}
 		level_button->AddUpdateListener(this, [level_button, w](const f32& dt) {
 			level_button->position.x = Utils::LerpCircle(w, w - Utils::GetWorldWidth(), level_panel);
@@ -199,6 +205,28 @@ void StartMenuScene::Init() {
 
 		scene_entities.push_back(level_button);
 	}
+
+#if _DEBUG
+	ButtonUI* unlock_all = CreateButtonDisplay({ 5.f, 5.f }, "Debug: Unlock All");
+	unlock_all->scale *= 0.5f;
+	unlock_all->text_size *= 0.5f;
+	unlock_all->AddClickListener([buttons, unlock_all](const BaseUI::MouseButton b) {
+		for (ButtonUI* level_button : buttons) {
+			int l = level_button->text[0] - '1';
+			LevelManager::SetLevelTime(l, 1);
+			level_button->SetInteractive(true);
+			level_button->AddClickListener([l, level_button](BaseUI::MouseButton b) {
+				if (b & BaseUI::MouseButton::LEFT) {
+					LevelManager::SetLevel(l);
+					SceneManager::GetInstance()->SetNextScene(Scenes::GAME);
+				}
+			});
+			level_button->color = { 255, 255, 255, 255 };
+		}
+		LevelManager::SavePlayerData();
+	});
+	scene_entities.push_back(unlock_all);
+#endif
 
 	scene_entities.push_back(start);
 	scene_entities.push_back(quit);

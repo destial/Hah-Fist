@@ -126,9 +126,7 @@ void GameScene::Init() {
 	power->text_size = 7.f;
 	AddEntityToScene(power);
 	power->AddUpdateListener(this, [power, player](const f32& dt) {
-		if (player == nullptr) { return; }
 		Weapon* current = player->CurrentWeapon();
-		if (current == nullptr) { return; }
 		power->overlay_color = { 255, 255, 0, 0 };
 		if (current->GetCooldownTimer() > 0) {
 			power->SetValue(current->GetCooldownTimer() / current->GetCooldownDuration());
@@ -139,6 +137,10 @@ void GameScene::Init() {
 		}
 		power->position = current->position;
 		power->position.y -= std::abs(current->scale.y) * 0.65f;
+	});
+
+	player->AddUpdateListener(AssetManager::GetInstance(), [this, player](const f32& dt) {
+		camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
 	});
 
 	Game::SetBackgroundColor(Color{ 1.f, 0.3f, 0.3f, 0.3f });
