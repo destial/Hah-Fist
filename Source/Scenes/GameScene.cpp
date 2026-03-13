@@ -14,6 +14,7 @@
 #include "../Utils/AEOverload.hpp"
 #include "../Utils/Utils.hpp"
 #include "../Utils/MeshRenderer.hpp"
+#include "../Utils/Constant.hpp"
 #include "../UI/ButtonUI.hpp"
 #include "../UI/BarUI.hpp"
 #include "../UI/CircleButtonUI.hpp"
@@ -99,16 +100,21 @@ void GameScene::Init() {
 		GameObjectEntity* trooper = new TrooperEntity{ {20.f, 12.f} };
 		AddEntityToScene(trooper);
 	}
+
+	// lock weapons based on level
 	Weapon* w = new TurboFistWeapon(AEVec2{ 0.f, 0.f }, player);
 	AddEntityToScene(w);
-	Weapon* w2 = new GrappleFistWeapon(AEVec2{ 0.f, 0.f }, player);
-	AddEntityToScene(w2);
-	Weapon* w3= new FingerGunWeapon(AEVec2{ 0.f, 0.f }, player);
-	AddEntityToScene(w3);
-
 	player->AddWeapon(w);
-	player->AddWeapon(w2);
-	player->AddWeapon(w3);
+	if (LevelManager::GetLevel() > 0) {
+		Weapon* w2 = new GrappleFistWeapon(AEVec2{ 0.f, 0.f }, player);
+		AddEntityToScene(w2);
+		player->AddWeapon(w2);
+	}
+	if (LevelManager::GetLevel() > 1) {
+		Weapon* w3 = new FingerGunWeapon(AEVec2{ 0.f, 0.f }, player);
+		AddEntityToScene(w3);
+		player->AddWeapon(w3);
+	}
 
 	player->SwitchWeapon(0);
 
@@ -160,7 +166,8 @@ void GameScene::End() {
 
 void GameScene::Win() {
 	LevelManager::SetLevelTime(LevelManager::GetLevel(), game_timer); // set this level time
-	LevelManager::UnlockLevel(LevelManager::GetLevel() + 1); // unlock next level
+	if (!LevelManager::GetUnlockedLvls().count(LevelManager::GetLevel() + 1)) // check if next level is not unlocked
+		LevelManager::UnlockLevel(LevelManager::GetLevel() + 1); // unlock next level
 	LevelManager::SavePlayerData(); // save data
 }
 
