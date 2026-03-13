@@ -1,9 +1,11 @@
 #include "ExplosiveProjectile.hpp"
 #include "../../Utils/AEOverload.hpp"
+#include "../../Managers/AssetManager.hpp"
 
 ExplosiveProjectile::ExplosiveProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameObjectEntity* own) : BaseProjectile(pos, dir, speed, dmg, own)
 {
-    this->frictionMultiplier = 5.f;
+    sprite = AssetManager::GetSpriteSheet(ASSET_PLAYER_SPRITE, 1, 1); // single-frame bullet
+    //this->frictionMultiplier = 5.f;
     lifetime = 3.0f;
 }
 

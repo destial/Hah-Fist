@@ -13,9 +13,9 @@ BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameO
     mesh = nullptr;
 
     //Might want to use when doing projectiles with animations
-    /*animationTimer = 0.f;
+    animationTimer = 0.f;
     animationFrame = 1.f / (1.f * 1.f);
-    currentRow = currentCol = 0;*/
+    currentRow = currentCol = 0;
 
     scale = { 2.f * (static_cast<f32>(sprite->image->width) / sprite->image->height), 2.f };
     layer = RenderLayer::ENTITY;

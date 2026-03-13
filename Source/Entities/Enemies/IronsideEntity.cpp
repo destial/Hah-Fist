@@ -1,9 +1,27 @@
 #include "IronsideEntity.hpp"
 #include "../../Utils/Utils.hpp"
 #include "../../Managers/AssetManager.hpp"
+#include "../Projectiles/ExplosiveProjectile.hpp"
+#include "../StaticEntity.hpp"
+#include "../../Utils/MeshRenderer.hpp"
+#include "../../Scenes/BaseScene.hpp"  
+#include "../../Managers/SceneManager.hpp"
+
 IronsideEntity::IronsideEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }) {
 	sprite = AssetManager::GetSpriteSheet(ASSET_TROOPER_SPRITE, 3, 3);
 	// Empty for now
+	health = 500.f;
+	max_health = 500.f;
+	attackRange = 20.f;
+	bossActivated = false;
+	shootTimer = 0.f;
+	jumpX = 15.f;
+	jumpY = 50.f;
+	bossRoomX = position.x;
+	bossRoomY = 25.f;
+	baseProjectiles = 3;
+	extraProjectiles = 10;
+	pBody->gravityScale = 0;
 }
 
 IronsideEntity::~IronsideEntity() {
@@ -28,32 +46,22 @@ void IronsideEntity::Render() {
 
 void IronsideEntity::OnCollide(GameObjectEntity* go) {
 	EnemyEntity::OnCollide(go);
-	ground = go->go_type == PhysicsType::STATIC ? go : nullptr;
-	if (go->go_type == PhysicsType::DYNAMIC) {
-		SwitchState(FSM::IDLE, 3.f);
-	}
 }
 
 void IronsideEntity::OnIdle(const f32& dt) {
 	// Trooper's idle behaviour
-	velocity.x = 0.f;
-	if (stateTimer < 0.f) {
-		dir.x *= -1.f; // Flip the direction it is travelling.
-		SwitchState(FSM::PATROL);
-		return;
+	if (bossActivated) {
+		velocity.x += 5 * dt;
+		if (position.x >= bossRoomX + 10.f)
+		{
+
+			SwitchState(FSM::CHASE);
+		}
 	}
 }
 
 void IronsideEntity::OnPatrol(const f32& dt) {
 	// Trooper's patrol behaviour
-	AEVec2 contactPt, normal;
-	f32 timeCollide;
-	velocity.x = dir.x * 10.f;
-	// Checks if it is on the ledge.
-	if (ground != nullptr && !(Utils::RayAABB({ position.x + scale.x * dir.x * 0.5f, position.y }, AEVec2{ 0.f, -1.f }, ground, contactPt, normal, timeCollide)) ) {
-		velocity.x = 0.f;
-		SwitchState(FSM::IDLE, 3.f); // Switching of states
-	}
 }
 
 void IronsideEntity::OnChase(const f32& dt) {
@@ -66,4 +74,6 @@ void IronsideEntity::OnStun(const f32& dt) {
 
 void IronsideEntity::OnDead(const f32& dt) {
 	// Trooper's death behaviour
+	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
+
 }

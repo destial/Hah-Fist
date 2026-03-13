@@ -2,6 +2,7 @@
 #include "../../Utils/Utils.hpp"
 #include "../../Managers/AssetManager.hpp"
 #include "../Projectiles/ExplosiveProjectile.hpp"
+#include "../Projectiles/MissileProjectile.hpp"
 #include "../StaticEntity.hpp"
 #include "../../Utils/MeshRenderer.hpp"
 #include "../../Scenes/BaseScene.hpp"  
@@ -10,15 +11,13 @@
 PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }) {
 	sprite = AssetManager::GetSpriteSheet(ASSET_TROOPER_SPRITE, 3, 3);
 	// Empty for now
-	this->health = 100.f;
-	this->max_health = 500.f;
+	health = 500.f;
+	max_health = 500.f;
 	attackRange = 10.f;
 	bossActivated = true;
 	landTimer = 0.f;
 	jumpX = 15.f;
 	jumpY = 30.f;
-	bossRoomX = position.x;
-	bossRoomY = 25.f;
 	baseProjectiles = 3;
 	extraProjectiles = 2;
 	innerState = INNERFSM::JUMP;
@@ -61,8 +60,6 @@ void PayloadEntity::OnPatrol(const f32& dt) {
 
 void PayloadEntity::OnChase(const f32& dt) {
 	// Trooper's chase behaviour
-
-
 	switch (innerState) {
 	case INNERFSM::JUMP:
 	{
@@ -101,10 +98,19 @@ void PayloadEntity::OnChase(const f32& dt) {
 			AEVec2 shootDir{ 0.f, -1.f };
 			AEVec2Normalize(&shootDir, &shootDir);
 			f32 bulletSpeed = Utils::RandRange(10, 20);
+			if (healthRatio > 0.5f)
+			{
+				MissileProjectile* bullet = new MissileProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
+				bullet->scale = { BULLETSCALEX ,BULLETSCALEY };
+				SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
+			}
+			else
+			{
+				ExplosiveProjectile* bullet = new ExplosiveProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
+				bullet->scale = { BULLETSCALEX ,BULLETSCALEY };
+				SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
+			}
 
-			ExplosiveProjectile* bullet = new ExplosiveProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
-			bullet->scale = { 1.f, 0.5f };
-			SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
 		}
 		innerState = INNERFSM::JUMP;
 		float stunTime = 2.f * (1.f - temp);
@@ -126,4 +132,6 @@ void PayloadEntity::OnStun(const f32& dt) {
 
 void PayloadEntity::OnDead(const f32& dt) {
 	// Trooper's death behaviour
+	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
+
 }

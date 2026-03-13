@@ -8,10 +8,10 @@
 
 TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }) {
 	sprite = AssetManager::GetSpriteSheet(ASSET_TROOPER_SPRITE, 3, 3);
-	this->health = 500.f;
-	this->max_health = 500.f;
+	health = 500.f;
+	max_health = 500.f;
 	attackRange = 20.f;
-	bossActivated = false;
+	bossActivated = true;
 	shootTimer = 0.f;
 	jumpX = 15.f;
 	jumpY = 50.f;
@@ -84,7 +84,7 @@ void TitanEntity::OnStun(const f32& dt) {
 	// Spawn falling projectiles periodically
 	AEVec2 contactPt, normal;
 	f32 timeCollide;
-	if (pBody->state == PhysicsBody::STATE::ON_GROUND && shootTimer < 0.f)
+	if (pBody->is_standing_above && shootTimer < 0.f)
 	{
 		// Example spawn
 		// SpawnProjectile({ player->position.x, ceilingHeight });
@@ -119,4 +119,6 @@ void TitanEntity::OnStun(const f32& dt) {
 
 void TitanEntity::OnDead(const f32& dt) {
 	// Trooper's death behaviour
+	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
+
 }

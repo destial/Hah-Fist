@@ -2,6 +2,7 @@
 #ifndef __PAYLOADENTITY_H
 #define __PAYLOADENTITY_H
 #include "EnemyEntity.hpp"
+
 class PayloadEntity : public EnemyEntity {
 public:
 	enum struct INNERFSM {
@@ -13,7 +14,7 @@ protected:
 	float landCooldown{ 0.5f };
 	float landTimer;
 	bool bossActivated;
-	float bossRoomX, bossRoomY, attackRange, jumpX, jumpY;
+	float attackRange, jumpX, jumpY;
 	int baseProjectiles, extraProjectiles;
 public:
 	PayloadEntity(AEVec2 pos);
