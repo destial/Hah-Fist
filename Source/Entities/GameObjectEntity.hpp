@@ -68,6 +68,8 @@ public:
 	* @param go - The collided GameObject entity
 	*/
 	virtual void OnCollide(GameObjectEntity* go);
-
 };
+
+void CollideDynamicWithStatic(GameObjectEntity* dynamic, GameObjectEntity* _static);
+
 #endif

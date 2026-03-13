@@ -78,6 +78,10 @@ void GameObjectEntity::OnCollide(GameObjectEntity* go) {
 		StaticEntity* se = dynamic_cast<StaticEntity*>(go);
 		if (se == nullptr)
 			return;
+		AEVec2 static_right_bound{ go->position.x + go->scale.x * 0.5f }, static_left_bound{ go->position.x - go->scale.x * 0.5f };
+		
+
+
 		if (se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_PLATFORM) { // Collision with a platform
 			if (position.x <= go->position.x + go->scale.x && position.x >= go->position.x - go->scale.x)
 			{
@@ -141,31 +145,68 @@ void GameObjectEntity::OnCollide(GameObjectEntity* go) {
 			}
 		}
 	}
-	else if (go->go_type == PhysicsType::DYNAMIC) {
+	else if (go->go_type == PhysicsType::DYNAMIC) 
+	{
 		position = prev_position;
-		
-		//AEVec2 thisToGO = go->position - position;
-		//if (AEVec2DotProduct(&velocity, &thisToGO) > 1) {
-		//	//Velocity Trading
-		//	
-		//	AEVec2 tmp{ velocity };
-		//	AEVec2 tmp2{ go->velocity };
-		//	f32 mass_total = pBody->mass + go->pBody->mass;
-
-
-		//	if (position.y >= go->position.y + go->scale.y * 0.5f + scale.y * 0.49f) {
-		//		position = prev_position;
-		//		velocity.y = 0.0f;
-		//		go->velocity.y = (go->velocity.y * (go->pBody->mass - pBody->mass) + tmp.y * 2 * pBody->mass) / mass_total;
-		//	}
-		//	else {
-		//		go->position = go->prev_position;
-		//		go->velocity.y = 0.0f;
-		//		velocity.y = (velocity.y * (pBody->mass - go->pBody->mass) + tmp2.y * 2 * go->pBody->mass) / mass_total;
-		//		velocity.x = (velocity.x * (pBody->mass - go->pBody->mass) + tmp2.x * 2 * go->pBody->mass) / mass_total;
-		//		go->velocity.x = (go->velocity.x * (go->pBody->mass - pBody->mass) + tmp.x * 2 * pBody->mass) / mass_total;
-
-		//	}
-		//}
 	}
+}
+
+void CollideDynamicWithStatic(GameObjectEntity* dynamic, GameObjectEntity* _static)
+{
+	StaticEntity* se = dynamic_cast<StaticEntity*>(_static);
+	if (se == nullptr)
+		return;
+
+	AEVec2 halfDynamicScale{ dynamic->scale * 0.5f }, halfStaticScale{ _static->scale * 0.5f };
+	if (dynamic->position.x <= _static->position.x + _static->scale.x && dynamic->position.x >= _static->position.x - _static->scale.x)
+	{
+		if (dynamic->prev_position.y - dynamic->scale.y * 0.5f > _static->position.y + _static->scale.y * 0.5f)
+		{
+			if (dynamic->position.y - dynamic->scale.y * 0.48f > _static->position.y + _static->scale.y * 0.48f)
+			{
+				f32 next_position = dynamic->position.y + (dynamic->scale.y + _static->scale.y) * 0.5f - (dynamic->position.y - _static->position.y);
+				dynamic->position.y = next_position > dynamic->prev_position.y ? next_position : dynamic->prev_position.y;
+				dynamic->velocity.y = fabsf(dynamic->velocity.y) > 0.01f ? -dynamic->velocity.y * 0.25f : 0.f;
+				dynamic->pBody->is_standing_above = true;
+			}
+		}
+		else
+		if (se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_PLATFORM)
+		{
+			return;
+		}
+		else
+		if (dynamic->prev_position.y + dynamic->scale.y * 0.5f < _static->position.y - _static->scale.y * 0.5f)
+		{
+			if (dynamic->position.y + dynamic->scale.y * 0.48f < _static->position.y - _static->scale.y * 0.48f)
+			{
+				f32 next_position = dynamic->position.y - (dynamic->scale.y + _static->scale.y) * 0.5f - (_static->position.y - dynamic->position.y);
+				dynamic->position.y = next_position > dynamic->prev_position.y ? next_position : dynamic->prev_position.y;
+				dynamic->velocity.y = fabsf(dynamic->velocity.y) > 0.01f ? -dynamic->velocity.y * 0.25f : 0.f;
+			}
+		}
+	}
+	if (dynamic->position.y <= _static->position.y + _static->scale.y && dynamic->position.y >= _static->position.y - _static->scale.y)
+	{
+		if (dynamic->prev_position.x - dynamic->scale.x * 0.5f > _static->position.x + _static->scale.x * 0.5f)
+		{
+			if (dynamic->position.x - dynamic->scale.x * 0.48f > _static->position.x + _static->scale.x * 0.48f)
+			{
+				f32 next_position = dynamic->position.x + (dynamic->scale.x + _static->scale.x) * 0.5f - (dynamic->position.x - _static->position.x);
+				dynamic->position.x = next_position > dynamic->prev_position.x ? next_position : dynamic->prev_position.x;
+				dynamic->velocity.x = fabsf(dynamic->velocity.x) > 0.01f ? -dynamic->velocity.x * 0.25f : 0.f;
+			}
+		}
+		else
+			if (dynamic->prev_position.x + dynamic->scale.x * 0.5f < _static->position.x - _static->scale.x * 0.5f)
+			{
+				if (dynamic->position.x + dynamic->scale.x * 0.48f < _static->position.x - _static->scale.x * 0.48f)
+				{
+					f32 next_position = dynamic->position.x - (dynamic->scale.x + _static->scale.x) * 0.5f - (_static->position.x - dynamic->position.x);
+					dynamic->position.x = next_position > dynamic->prev_position.x ? next_position : dynamic->prev_position.x;
+					dynamic->velocity.x = fabsf(dynamic->velocity.x) > 0.01f ? -dynamic->velocity.x * 0.25f : 0.f;
+				}
+			}
+	}
+
 }
