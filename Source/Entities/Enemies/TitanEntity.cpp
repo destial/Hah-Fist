@@ -1,9 +1,11 @@
 #include "TitanEntity.hpp"
 #include "../../Utils/Utils.hpp"
+#include "../../Utils/Constant.hpp"
 #include "../../Managers/AssetManager.hpp"
 #include "../Projectiles/SpikeProjectile.hpp"
 #include "../../Scenes/BaseScene.hpp"  
 #include "../../Managers/SceneManager.hpp"
+#include "../../Scenes/GameScene.hpp"
 #include "../PlayerEntity.hpp"
 
 TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }) {
@@ -103,7 +105,7 @@ void TitanEntity::OnStun(const f32& dt) {
 			f32 bulletSpeed = Utils::RandRange(10, 20);
 
 			SpikeProjectile* bullet = new SpikeProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
-			bullet->scale = { 1.f, 0.5f };
+			bullet->scale = { BULLETSCALEX, BULLETSCALEY };
 			SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
 		}
 		//Put for loop to spawn a few
@@ -119,6 +121,12 @@ void TitanEntity::OnStun(const f32& dt) {
 
 void TitanEntity::OnDead(const f32& dt) {
 	// Trooper's death behaviour
+	if (GameScene* game = dynamic_cast<GameScene*>(SceneManager::GetInstance()->GetCurrentScene()))
+	{
+		game->Win();
+	}
 	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
+	
+
 
 }

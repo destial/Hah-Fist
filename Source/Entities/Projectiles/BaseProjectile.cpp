@@ -48,9 +48,9 @@ void BaseProjectile::Update(const f32& dt) {
     age += dt;
     if (age >= lifetime)
     {
-        isActive = false;
+        
         OnExpire();
-        SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
+
     }
 
 }
@@ -99,16 +99,12 @@ void BaseProjectile::OnHit(GameObjectEntity* other)
     {
 
     }
-
-
-    // Destroy projectile
-    isActive = false;
     OnExpire();
-    SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 }
 void BaseProjectile::OnExpire()
 {
-    // Default: just disappear
+    isActive = false;
+    SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 }
 
 bool BaseProjectile::TryChangeOwnership(GameObjectEntity* newOwner)

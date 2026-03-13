@@ -1,5 +1,6 @@
 #include "PayloadEntity.hpp"
 #include "../../Utils/Utils.hpp"
+#include "../../Utils/Constant.hpp"
 #include "../../Managers/AssetManager.hpp"
 #include "../Projectiles/ExplosiveProjectile.hpp"
 #include "../Projectiles/MissileProjectile.hpp"
@@ -8,6 +9,7 @@
 #include "../../Utils/Constant.hpp"
 #include "../../Scenes/BaseScene.hpp"  
 #include "../../Managers/SceneManager.hpp"
+#include "../../Scenes/GameScene.hpp"
 
 PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }) {
 	sprite = AssetManager::GetSpriteSheet(ASSET_TROOPER_SPRITE, 3, 3);
@@ -77,7 +79,7 @@ void PayloadEntity::OnChase(const f32& dt) {
 		if (landTimer < 0.f)
 		{
 			std::cout << "amigoing here";
-			AEVec2 Pos{ position.x,  position.y - scale.y*0.7f };
+			AEVec2 Pos{ position.x,  position.y - scale.y * 0.7f };
 			StaticEntity* platform = new StaticEntity(StaticEntity::STATIC_TYPE::TYPE_PLATFORM, Pos);
 			platform->mesh = MeshRenderer::GetCenterRectMesh();
 			platform->scale = { 5.f, 0.5f };
@@ -133,6 +135,10 @@ void PayloadEntity::OnStun(const f32& dt) {
 
 void PayloadEntity::OnDead(const f32& dt) {
 	// Trooper's death behaviour
+	if (GameScene* game = dynamic_cast<GameScene*>(SceneManager::GetInstance()->GetCurrentScene()))
+	{
+		game->Win();
+	}
 	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 
 }

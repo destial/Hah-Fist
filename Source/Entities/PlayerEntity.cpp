@@ -5,7 +5,6 @@
 #include "../Utils/Utils.hpp"
 #include "../Managers/AssetManager.hpp"
 #include "../Managers/CameraManager.hpp"
-#include "Projectiles/BaseProjectile.hpp"
 #include "../Scenes/BaseScene.hpp"  
 #include "../Managers/SceneManager.hpp"
 #include <iostream>
