@@ -23,6 +23,8 @@ public:
 	f32 health;
 	f32 max_health;
 	f32 damage;
+	float timeElapsedSinceLastDamage = { 0.25f };
+	float invulnerabilityDuration = 0.f;
 	enum struct CollisionShape : int {
 		CIRCLE = 0, AABB, TOTAL
 	} shape; // Collision shape for calculating collision checks

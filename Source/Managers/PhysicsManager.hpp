@@ -22,6 +22,9 @@ public:
 	void Clear();
 
 	void PushGameObject(GameObjectEntity* gameObject);
+
+
+
 };
 
 #endif

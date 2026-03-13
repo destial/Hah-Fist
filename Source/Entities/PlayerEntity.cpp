@@ -24,6 +24,7 @@ Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 	jumpHeight = 8.5f;
 	jumpVelocity = sqrtf(jumpHeight * 2.f * abs(pBody->gravity.y));
 	speed = 10.f;
+	health = 100.f;
 	entity_type = EntityType::PLAYER;
 	layer = RenderLayer::PLAYER;
 	go_type = PhysicsType::DYNAMIC;
@@ -45,28 +46,33 @@ void Player::PreUpdate(const f32& dt) {
 void Player::Update(const f32& dt) {
 	GameObjectEntity::Update(dt);
 	// Out of bounds checking
-	AEVec2 dir{};
-	if (AEInputCheckCurr(AEVK_A)) {
-		dir += { -1.f, 0.f };
-	}
-	if (AEInputCheckCurr(AEVK_D)) {
-		dir += { 1.f, 0.f };
-	}
-	if (dir.x || dir.y) {
-		AEVec2Normalize(&dir, &dir);
-	}
-	if (dir.x)
+	if (timeElapsedSinceLastDamage > 0.25f)
 	{
-		//f32 spd = velocity.y == 0 ? speed : speed * pBody->air_strength * 0.75f;
-		if (!(dir.x < 0 && velocity.x < 0 || dir.x > 0 && velocity.x > 0))
-		{
-			velocity.x = 0.f;
+		AEVec2 dir{};
+		if (AEInputCheckCurr(AEVK_A)) {
+			dir += { -1.f, 0.f };
 		}
-		if (abs(velocity.x) < speed)
+		if (AEInputCheckCurr(AEVK_D)) {
+			dir += { 1.f, 0.f };
+		}
+		if (dir.x || dir.y) {
+			AEVec2Normalize(&dir, &dir);
+		}
+
+		if (dir.x)
 		{
-			velocity.x += dir.x * speed;
+			//f32 spd = velocity.y == 0 ? speed : speed * pBody->air_strength * 0.75f;
+			if (!(dir.x < 0 && velocity.x < 0 || dir.x > 0 && velocity.x > 0))
+			{
+				velocity.x = 0.f;
+			}
+			if (abs(velocity.x) < speed)
+			{
+				velocity.x += dir.x * speed;
+			}
 		}
 	}
+	
 	if (AEInputCheckCurr(AEVK_1)) {
 		SwitchWeapon(0);
 	}
@@ -86,19 +92,19 @@ void Player::Update(const f32& dt) {
 		CameraManager::GetInstance()->Shake(0.1f, 5.f);
 
 	}
-	//Testing Shooting Function
-	if (AEInputCheckCurr(AEVK_T) && abs(velocity.y) == 0) {
-		velocity.y += jumpVelocity * 4.0f;
-		//Have to offset so it does not instantly collide and delete its own projectile
-		AEVec2 playerPosOff{position.x + dir.x + 2.f,position.y};
-		AEVec2 shootDir{ dir.x, 0.f };
-		AEVec2Normalize(&shootDir, &shootDir);
-		f32 bulletSpeed = 50.f;
-		f32 bulletDamage = 25.f;
-		BaseProjectile* bullet = new BaseProjectile(playerPosOff, shootDir, bulletSpeed, bulletDamage, this);
-		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
+	////Testing Shooting Function
+	//if (AEInputCheckCurr(AEVK_T) && abs(velocity.y) == 0) {
+	//	velocity.y += jumpVelocity * 4.0f;
+	//	//Have to offset so it does not instantly collide and delete its own projectile
+	//	AEVec2 playerPosOff{position.x + dir.x + 2.f,position.y};
+	//	AEVec2 shootDir{ dir.x, 0.f };
+	//	AEVec2Normalize(&shootDir, &shootDir);
+	//	f32 bulletSpeed = 50.f;
+	//	f32 bulletDamage = 25.f;
+	//	BaseProjectile* bullet = new BaseProjectile(playerPosOff, shootDir, bulletSpeed, bulletDamage, this);
+	//	SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
 
-	}
+	//}
 }
 
 void Player::PostUpdate(const f32& dt) {
@@ -149,9 +155,18 @@ void Player::Render() {
 
 void Player::OnCollide(GameObjectEntity* go)
 {
-	f32 p_health = health;
+	//f32 p_health = health;
 	GameObjectEntity::OnCollide(go);
-	if (p_health < health) {
+	if (go->entity_type == EntityType::ENEMY)
+	{
+		if (invulnerabilityDuration > 0) { return; }
+		timeElapsedSinceLastDamage = 0.0f;
+		AEVec2 push_velocity = position - go->position;
+		AEVec2Normalize(&push_velocity, &push_velocity);
+		velocity.x += push_velocity.x * 25.f;
+		velocity.y += 10.f;
+		health -= go->damage;
+
 		AEAudioPlay(AssetManager::GetAudio(ASSET_PLAYERHURT_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
 	}
 }
