@@ -59,7 +59,7 @@ void Player::Update(const f32& dt) {
 			AEVec2Normalize(&dir, &dir);
 		}
 
-		if (dir.x)
+		if (dir.x && pBody->is_standing_above)
 		{
 			//f32 spd = velocity.y == 0 ? speed : speed * pBody->air_strength * 0.75f;
 			if (!(dir.x < 0 && velocity.x < 0 || dir.x > 0 && velocity.x > 0))
