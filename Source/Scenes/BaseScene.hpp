@@ -131,7 +131,7 @@ public:
 	* @brief Get all entities of this class type
 	* @return A vector of entity pointers of this class
 	*/
-	template<typename E> std::vector<E*> GetEntitesOfType() const {
+	template<typename E> std::vector<E*> GetEntitiesOfType() const {
 		static_assert(std::is_base_of<BaseEntity, E>::value, "E must derive from BaseEntity!");
 		std::vector<E*> vect;
 		for (BaseEntity* en : scene_entities) {
