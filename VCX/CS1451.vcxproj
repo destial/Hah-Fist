@@ -199,6 +199,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="..\Source\UI\Debug.hpp" />
     <ClInclude Include="..\Source\UI\ImageUI.hpp" />
     <ClInclude Include="..\Source\Utils\AEOverload.hpp" />
+    <ClInclude Include="..\Source\Utils\Constant.hpp" />
     <ClInclude Include="..\Source\Utils\MeshRenderer.hpp" />
     <ClInclude Include="..\Source\Utils\Physics.hpp" />
     <ClInclude Include="..\Source\Utils\PhysicsBody.hpp" />

@@ -404,5 +404,8 @@
     <ClInclude Include="..\Source\Entities\Projectiles\ExplosiveProjectile.hpp">
       <Filter>Header Files\Entities\Projectiles</Filter>
     </ClInclude>
+    <ClInclude Include="..\Source\Utils\Constant.hpp">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
