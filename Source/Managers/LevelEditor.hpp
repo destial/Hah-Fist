@@ -31,6 +31,7 @@ namespace Editor { // start namespace editor
 		TITAN,
 		PAYLOAD,
 		IRONSIDE,
+		MOVING_PLATFORM,
 	};
 }; // end namespace editor
 
