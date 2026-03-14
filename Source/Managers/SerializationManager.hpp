@@ -8,7 +8,7 @@
 
 namespace Serialization {
 	enum class EntityType : int {
-		PLATFORM = 0, PLAYER, ENEMY, TROOPER, SPIDER, WALL
+		PLATFORM = 0, PLAYER, ENEMY, TROOPER, SPIDER, WALL,PROJECTILE_ENTITY
 	};
 
 	inline std::istream& operator>> (std::istream& lhs, EntityType& et) {

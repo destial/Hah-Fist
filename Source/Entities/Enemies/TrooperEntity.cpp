@@ -3,7 +3,6 @@
 #include "../../Utils/Utils.hpp"
 #include "../../Managers/AssetManager.hpp"
 #include "../../Managers/SceneManager.hpp"
-#include "../../Scenes/GameScene.hpp"
 TrooperEntity::TrooperEntity(AEVec2 pos, f32 speed) : EnemyEntity(pos, { 1.f,0.f }, speed) {
 	sprite = AssetManager::GetSpriteSheet(ASSET_SLIMETROOP_SPRITE, 2, 3);
 	animationFrame = 1.f / (2.f * 3.f);

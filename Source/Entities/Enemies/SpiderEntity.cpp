@@ -3,7 +3,6 @@
 #include "../../Managers/AssetManager.hpp"
 #include "../../Managers/SceneManager.hpp"
 #include "../StaticEntity.hpp"
-#include "../../Scenes/GameScene.hpp"
 SpiderEntity::SpiderEntity(AEVec2 pos, f32 speed, bool spawnHatchlings) : bSpawnHatchlings{spawnHatchlings}, EnemyEntity(pos, {1.f,0.f}, speed)
 {
 	sprite = AssetManager::GetSpriteSheet(ASSET_SPIDER_SPRITE, 4, 6);
@@ -82,6 +81,9 @@ void SpiderEntity::OnIdle(const f32& dt)
 {
 	// Spider's idle behaviour
 	velocity.x = 0.f;
+
+
+
 	if (stateTimer < 0.f) {
 		dir.x *= -1.f; // Flip the direction it is travelling.
 		SwitchState(FSM::PATROL);

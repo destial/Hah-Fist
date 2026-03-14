@@ -20,6 +20,7 @@
 #define ASSET_TROOPER_SPRITE "Assets/test_troop.png"
 #define ASSET_BASEENEMY_SPRITE "Assets/test_enemy.png"
 #define ASSET_SLIMETROOP_SPRITE "Assets/slimetroop.png"
+#define ASSET_PROJECTILE_ENEMY_SPRITE "Assets/Projectile_Enemy.png"
 #define ASSET_SPIDER_SPRITE "Assets/spider_enemy.png"
 #define ASSET_TITLE_SPRITE "Assets/title.png"
 #define ASSET_SPARKLE_SPRITE "Assets/sparkle_sheet.png"
