@@ -14,6 +14,7 @@
 #include "../Entities/Enemies/IronsideEntity.hpp"
 #include "../Entities/WeaponEntity.hpp"
 #include "../Entities/DropEntities/CoinEntity.hpp"
+#include "../Entities/StaticEntities/MovingPlatformEntity.hpp"
 #include "../Entities/StaticEntities/BreakableCrateEntity.hpp"
 
 LevelEditor::LevelEditor(BaseScene* b_scene)
@@ -121,6 +122,11 @@ BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
 		scene->AddEntityToScene(b);
 		return b;
 	}
+	case Editor::MOVING_PLATFORM: {
+		MovingPlatformEntity* b = new MovingPlatformEntity(Utils::GetMouseWorld(true), AEVec2{1.f, 0.f});
+		scene->AddEntityToScene(b);
+		return b;
+	}
 	default: break;
 	}
 
@@ -165,7 +171,7 @@ void LevelEditor::Update(const f32& dt) {
 		SelectEntity(AddEntity(Editor::GameObjectType::COIN));
 	}
 	if (AEInputCheckTriggered(AEVK_7)) {
-		SelectEntity(AddEntity(Editor::GameObjectType::CRATE));
+		SelectEntity(AddEntity(Editor::GameObjectType::MOVING_PLATFORM));
 	}
 	//BOSSES
 	if (AEInputCheckTriggered(AEVK_B)) {
