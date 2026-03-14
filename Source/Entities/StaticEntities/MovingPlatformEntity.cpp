@@ -1,11 +1,12 @@
 #include "MovingPlatformEntity.hpp"
 #include "../../Utils/AEOverload.hpp"
 #include "../../Utils/MeshRenderer.hpp"
+#include "../../UI/Debug.hpp"
 
 MovingPlatformEntity::MovingPlatformEntity(AEVec2 pos, AEVec2 travelDir) : StaticEntity(STATIC_TYPE::TYPE_PLATFORM, pos, 1.0f, CollisionShape::AABB, PhysicsType::MOVING_STATIC)
 {
-	startPoint = pos;
-	endPoint = pos + travelDir * 10.f;
+	SetStartPoint(pos);
+	travelDirection = travelDir;
 	AEVec2 length = startPoint - endPoint;
 	normalDistance = AEVec2Length(&length);
 	mesh = MeshRenderer::GetCenterRectMesh();
@@ -41,6 +42,12 @@ void MovingPlatformEntity::Update(const f32& dt)
 	}
 }
 
+void MovingPlatformEntity::Render()
+{
+	StaticEntity::Render();
+	DebugUtils::RenderLine(startPoint, endPoint, { 64, 255, 255, 255 });
+}
+
 void MovingPlatformEntity::OnCollide(GameObjectEntity* go)
 {
 	StaticEntity::OnCollide(go);
@@ -48,4 +55,10 @@ void MovingPlatformEntity::OnCollide(GameObjectEntity* go)
 	{
 		go->position.x += position.x - prev_position.x;
 	}
+}
+
+void MovingPlatformEntity::SetStartPoint(AEVec2 _startPoint)
+{
+	startPoint = _startPoint;
+	endPoint = _startPoint + travelDirection * 10.f;
 }

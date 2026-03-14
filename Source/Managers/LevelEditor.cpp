@@ -193,6 +193,10 @@ void LevelEditor::Update(const f32& dt) {
 				currentSelection->position = mwp - currentOffset;
 				if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(currentSelection)) {
 					go->prev_position = mwp;
+					if (MovingPlatformEntity* mpe = dynamic_cast<MovingPlatformEntity*>(currentSelection))
+					{
+						mpe->SetStartPoint(go->position);
+					}
 				}
 			}
 			if (scroll != 0) {

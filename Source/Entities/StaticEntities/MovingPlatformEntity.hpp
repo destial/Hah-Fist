@@ -5,7 +5,7 @@
 class MovingPlatformEntity : public StaticEntity
 {
 protected:
-	AEVec2 startPoint, endPoint;
+	AEVec2 startPoint, endPoint, travelDirection;
 	bool normalDirection{ true };
 	bool loopingMovement{ true };
 	f32 normalDistance;
@@ -16,6 +16,9 @@ public:
 
 	void Update(const f32& dt) override;
 	void OnCollide(GameObjectEntity* go) override;
+	void Render() override;
+
+	void SetStartPoint(AEVec2 _startPoint);
 };
 
 #endif
