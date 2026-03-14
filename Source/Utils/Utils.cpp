@@ -313,6 +313,17 @@ namespace Utils {
 		return corners;
 	}
 
+	bool RayHitAny(const AEVec2& ray_origin, const AEVec2& ray_dir, std::vector<BaseEntity*> const& entities)
+	{
+		AEVec2 contact, normal;
+		float tCollide;
+		for (const BaseEntity* const& entity : entities) {
+			if (RayAABB(ray_origin, ray_dir, entity, contact, normal, tCollide))
+				return true; 
+		}
+		return false;
+	}
+
 	bool OBB(BaseEntity* const& go, BaseEntity* const& go2) {
 		// Initial broader phase collision check
 		if (!CircleCircleCollision(go, go2))

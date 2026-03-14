@@ -3,8 +3,6 @@
 #define __TROOPERENTITY_H
 #include "EnemyEntity.hpp"
 class TrooperEntity : public EnemyEntity {
-protected:
-	GameObjectEntity* ground;
 public:
 	TrooperEntity(AEVec2 pos, f32 speed = 10.f);
 	~TrooperEntity() override;
