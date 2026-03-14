@@ -7,7 +7,7 @@
 class EnemyEntity : public GameObjectEntity {
 public:
 	enum struct FSM {
-		IDLE, PATROL, CHASE, STUN, DEAD, TOTAL
+		IDLE, PATROL, CHASE,ATTACK, STUN, DEAD, TOTAL
 	};
 protected:
 	FSM state;
@@ -30,6 +30,7 @@ public:
 	virtual void OnIdle(const f32& dt);
 	virtual void OnPatrol(const f32& dt);
 	virtual void OnChase(const f32& dt);
+	virtual void OnAttack(const f32& dt);
 	virtual void OnStun(const f32& dt);
 	virtual void OnDead(const f32& dt);
 

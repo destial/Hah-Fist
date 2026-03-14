@@ -4,6 +4,8 @@
 #include "AEEngine.h"
 #include "../Entities/GameObjectEntity.hpp"
 #include "../Entities/StaticEntity.hpp"
+#include "../Entities/StaticEntities/BreakableCrateEntity.hpp"
+#include "../Entities/DropEntities/CoinEntity.hpp"
 #include "../Entities/PlayerEntity.hpp"
 #include "../Entities/WeaponEntity.hpp"
 #include "../Entities/Enemies/EnemyEntity.hpp"
@@ -68,8 +70,19 @@ namespace Serialization {
 			s.mass = go->pBody->mass;
 			s.go_type = static_cast<int>(go->go_type);
 			s.shape_type = static_cast<int>(go->shape);
-			if (StaticEntity* se = dynamic_cast<StaticEntity*>(en)) {
-				s.type = (se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_WALL) ? EntityType::WALL : EntityType::PLATFORM;
+			if (BreakableCrateEntity* be = dynamic_cast<BreakableCrateEntity*>(go)) {
+				s.type = EntityType::CRATE;
+			}
+			else if (CoinEntity* ce = dynamic_cast<CoinEntity*>(go)) {
+				s.type = EntityType::COIN;
+			}
+			else if (StaticEntity* se = dynamic_cast<StaticEntity*>(en)) {
+				if (se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_WALL) {
+					s.type = EntityType::WALL;
+				}
+				else if (se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_PLATFORM) {
+					s.type = EntityType::PLATFORM;
+				}
 			}
 			else if (Player* p = dynamic_cast<Player*>(en)) {
 				s.type = EntityType::PLAYER;
@@ -103,6 +116,14 @@ namespace Serialization {
 			case EntityType::WALL: {
 				entity = new StaticEntity(StaticEntity::STATIC_TYPE::TYPE_WALL,AEVec2{ en.x, en.y });
 				entity->mesh = MeshRenderer::GetCenterRectMesh();
+				break;
+			}
+			case EntityType::CRATE: {
+				entity = new BreakableCrateEntity(AEVec2{ en.x, en.y });
+				break;
+			}
+			case EntityType::COIN: {
+				entity = new CoinEntity(AEVec2{ en.x, en.y });
 				break;
 			}
 			case EntityType::PLAYER: {

@@ -84,6 +84,9 @@ namespace Utils {
 	// This method relies on RayAABB to check if It collides with any of the provided std::vector of entities.
 	// If it collides with just one entity in a list of entities, it will return true
 	bool RayHitAny(const AEVec2& ray_origin, const AEVec2& ray_dir, std::vector<BaseEntity*> const& entities); 
+
+	bool RayHit(const AEVec2& ray_origin, const AEVec2& ray_dir, const BaseEntity* const& target);
+
 	bool OBB(BaseEntity* const& go, BaseEntity* const& go2);
 	bool OBBPoint(BaseEntity* const& go, AEVec2 const& pos);
 	

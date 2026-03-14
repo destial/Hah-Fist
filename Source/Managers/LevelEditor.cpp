@@ -185,6 +185,10 @@ void LevelEditor::Update(const f32& dt) {
 	if (AEInputCheckTriggered(AEVK_8)) {
 		SelectEntity(AddEntity(Editor::GameObjectType::MOVING_PLATFORM));
 	}
+	
+	if (AEInputCheckTriggered(AEVK_9)) {
+		SelectEntity(AddEntity(Editor::GameObjectType::CRATE));
+	}
 	//BOSSES
 	if (AEInputCheckTriggered(AEVK_B)) {
 		SelectEntity(AddEntity(Editor::GameObjectType::TITAN));

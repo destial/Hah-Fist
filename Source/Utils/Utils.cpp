@@ -288,6 +288,24 @@ namespace Utils {
 		return true;
 	}
 
+	 bool RayHitAny(const AEVec2& ray_origin, const AEVec2& ray_dir, std::vector<BaseEntity*> const& entities)
+	 {
+		 AEVec2 contact, normal;
+		 float tCollide;
+		 for (const BaseEntity* const& entity : entities) {
+			 if (RayAABB(ray_origin, ray_dir, entity, contact, normal, tCollide) && tCollide < 1.f)
+				 return true;
+		 }
+		 return false;
+	 }
+
+	 bool RayHit(const AEVec2& ray_origin, const AEVec2& ray_dir, const BaseEntity* const& target)
+	 {
+		 AEVec2 contact, normal;
+		 float tCollide;
+		 return RayAABB(ray_origin, ray_dir, target, contact, normal, tCollide) && tCollide < 1.f;
+	 }
+
 	std::vector<AEVec2> GetCorners(const BaseEntity* go) {
 		std::vector<AEVec2> corners(4);
 		f32 cosA = AECos(go->rotation);
@@ -311,17 +329,6 @@ namespace Utils {
 		corners[3] = { go->position.x + dirX.x * (go->scale.x * 0.5f) - dirY.x * (go->scale.y * 0.5f), go->position.y + dirX.y * (go->scale.x * 0.5f) - dirY.y * (go->scale.y * 0.5f) };
 
 		return corners;
-	}
-
-	bool RayHitAny(const AEVec2& ray_origin, const AEVec2& ray_dir, std::vector<BaseEntity*> const& entities)
-	{
-		AEVec2 contact, normal;
-		float tCollide;
-		for (const BaseEntity* const& entity : entities) {
-			if (RayAABB(ray_origin, ray_dir, entity, contact, normal, tCollide))
-				return true; 
-		}
-		return false;
 	}
 
 	bool OBB(BaseEntity* const& go, BaseEntity* const& go2) {

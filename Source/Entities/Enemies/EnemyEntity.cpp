@@ -50,6 +50,11 @@ void EnemyEntity::Update(const f32& dt)
 			OnChase(dt);
 			break;
 		}
+		case FSM::ATTACK:
+		{
+			OnAttack(dt);
+			break;
+		}
 		case FSM::STUN:
 		{
 			OnStun(dt);
@@ -111,13 +116,18 @@ void EnemyEntity::OnPatrol(const f32& dt)
 		velocity.x += dir.x * speed;
 	}
 	// Checks if it is on the ledge.
-	if (!Utils::RayHitAny({ position.x + scale.x * dir.x * 0.5f, position.y - scale.x * 0.5f }, AEVec2{ 0.f, -1.f }, GameScene::GetStaticEntities())) {
+	if (!Utils::RayHitAny({ position.x + std::abs(scale.x) * dir.x * 0.5f, position.y - std::abs(scale.x) * 0.5f }, AEVec2{ 0.f, -1.f }, GameScene::GetStaticEntities())) {
 		velocity.x = 0.f;
 		SwitchState(FSM::IDLE, 3.f);
 	}
 }
 
 void EnemyEntity::OnChase(const f32& dt)
+{
+	// Empty for now
+}
+
+void EnemyEntity::OnAttack(const f32& dt)
 {
 	// Empty for now
 }

@@ -1,10 +1,13 @@
 #pragma once
 #ifndef __PROJECTILE_ENTITY_H
 #define __PROJECTILE_ENTITY_H
+
+#define INITIAL_SPEED 10.f
 #include "EnemyEntity.hpp"
 class ProjectileEntity : public EnemyEntity {
+private:
 public:
-	ProjectileEntity(AEVec2 pos, f32 speed = 10.f);
+	ProjectileEntity(AEVec2 pos, f32 speed = INITIAL_SPEED);
 	~ProjectileEntity() override;
 	void PreUpdate(const f32& dt) override;
 	void Update(const f32& dt) override;
@@ -17,6 +20,7 @@ public:
 	void OnIdle(const f32& dt) override;
 	void OnPatrol(const f32& dt) override;
 	void OnChase(const f32& dt) override;
+	void OnAttack(const f32& dt) override;
 	void OnStun(const f32& dt) override;
 	void OnDead(const f32& dt) override;
 };
