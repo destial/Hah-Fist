@@ -4,6 +4,7 @@
 #include "../Managers/SerializationManager.hpp"
 #include "../Managers/LevelManager.hpp"
 #include "../Entities/GameObjectEntity.hpp"
+#include "../Entities/StaticEntity.hpp"
 #include "../Entities/PlayerEntity.hpp"
 #include "../Entities/Enemies/EnemyEntity.hpp"
 #include "../Entities/Enemies/TrooperEntity.hpp"
@@ -22,6 +23,10 @@
 #include "AEMath.h"
 #include <cstdio>
 #include <string>
+constexpr int SIZE_TO_RESERVE{ 50 }; // Reserves this amt of space for vector arr
+
+
+std::vector<BaseEntity*> GameScene::staticEntities;
 
 static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, std::string str) {
 	ButtonUI* b = new ButtonUI(pos);
@@ -50,6 +55,7 @@ static void OnGameExit(const InputEvent* ev) {
 }
 
 void GameScene::Init() {
+	staticEntities.reserve(SIZE_TO_RESERVE); // Reserves 100 StaticEntities capacity for vector arr
 	camManager->Init();
 	game_timer = 0.f;
 	InputEvent::Listeners += {this, OnGameExit};
@@ -155,7 +161,9 @@ void GameScene::Init() {
 }
 
 void GameScene::Update(const f32& dt) {
+	staticEntities = SceneManager::GetInstance()->GetCurrentScene()->GetBaseEntitiesOfType<StaticEntity>();
 	BaseScene::Update(dt);
+	staticEntities.clear();
 	game_timer += dt;
 }
 
@@ -174,4 +182,9 @@ void GameScene::Win() {
 void GameScene::Lose() {
 	End(); // restart level (todo: lose screen)
 	Init();
+}
+
+std::vector<BaseEntity*>& GameScene::GetStaticEntities()
+{
+	return staticEntities;
 }

@@ -3,7 +3,8 @@
 #include "../../Utils/Utils.hpp"
 #include "../../Managers/AssetManager.hpp"
 #include "../../Managers/SceneManager.hpp"
-TrooperEntity::TrooperEntity(AEVec2 pos, f32 speed) : ground{ nullptr }, EnemyEntity(pos, { 1.f,0.f }, speed) {
+#include "../../Scenes/GameScene.hpp"
+TrooperEntity::TrooperEntity(AEVec2 pos, f32 speed) : EnemyEntity(pos, { 1.f,0.f }, speed) {
 	sprite = AssetManager::GetSpriteSheet(ASSET_SLIMETROOP_SPRITE, 2, 3);
 	animationFrame = 1.f / (2.f * 3.f);
 }
@@ -44,17 +45,21 @@ void TrooperEntity::Render() {
 
 void TrooperEntity::OnCollide(GameObjectEntity* go) {
 	EnemyEntity::OnCollide(go);
-	if (go == nullptr)
-			return;
-	StaticEntity* se = dynamic_cast<StaticEntity*>(go);
-	if(se != nullptr) // This sets the ground properly which are your platforms.
-		ground = (dynamic_cast<StaticEntity*>(go)->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_PLATFORM) ? go : nullptr; //go->go_type == PhysicsType::STATIC ? go : nullptr;
-	if (go->go_type == PhysicsType::DYNAMIC || se && se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_WALL) {
+	if (go->go_type == PhysicsType::DYNAMIC) {
 		if (EnemyEntity* e = dynamic_cast<EnemyEntity*>(go)) {
 			e->FlipDir();
-			return; // Continue patrolling
+			return;
 		}
 		SwitchState(FSM::IDLE, 2.f);
+	} 
+	else if (go->go_type == PhysicsType::STATIC) {
+		if (StaticEntity* se = dynamic_cast<StaticEntity*>(go)) {
+			if (se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_WALL) {
+				if (position.y - scale.y * 0.5f < go->position.y + go->scale.y * 0.5f) {
+					SwitchState(FSM::IDLE, 2.f);
+				}
+			}
+		}
 	}
 }
 
@@ -74,19 +79,7 @@ void TrooperEntity::OnIdle(const f32& dt) {
 }
 
 void TrooperEntity::OnPatrol(const f32& dt) {
-	// Trooper's patrol behaviour
-	AEVec2 contactPt, normal;
-	f32 timeCollide;
-	// Clamps the acceleration of object
-	if (abs(velocity.x) < speed)
-	{
-		velocity.x += dir.x * speed;
-	}
-	// Checks if it is on the ledge.
-	if (ground != nullptr && !(Utils::RayAABB({ position.x + scale.x * dir.x * 0.5f, position.y }, AEVec2{ 0.f, -1.f }, ground, contactPt, normal, timeCollide)) ) {
-		velocity.x = 0.f;
-		SwitchState(FSM::IDLE, 3.f); // Switching of states
-	}
+	EnemyEntity::OnPatrol(dt);
 }
 
 void TrooperEntity::OnChase(const f32& dt) {

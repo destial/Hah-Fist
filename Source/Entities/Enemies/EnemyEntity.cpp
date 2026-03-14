@@ -4,6 +4,7 @@
 #include "../../Managers/SceneManager.hpp"
 #include "../../Utils/AEOverload.hpp"
 #include "../DropEntities/CoinEntity.hpp"
+#include "../../Scenes/GameScene.hpp"
 EnemyEntity::EnemyEntity(AEVec2 pos, AEVec2 dir, f32 speed) 
 : GameObjectEntity{ pos }, state{ FSM::IDLE }, dir{ dir }, speed{ speed }, stateTimer{ 1.f }
 {
@@ -104,7 +105,16 @@ void EnemyEntity::OnIdle(const f32& dt)
 
 void EnemyEntity::OnPatrol(const f32& dt)
 {
-	// Empty for now
+	// Clamps the acceleration of object
+	if (abs(velocity.x) < speed)
+	{
+		velocity.x += dir.x * speed;
+	}
+	// Checks if it is on the ledge.
+	if (!Utils::RayHitAny({ position.x + scale.x * dir.x * 0.5f, position.y - scale.x * 0.5f }, AEVec2{ 0.f, -1.f }, GameScene::GetStaticEntities())) {
+		velocity.x = 0.f;
+		SwitchState(FSM::IDLE, 3.f);
+	}
 }
 
 void EnemyEntity::OnChase(const f32& dt)

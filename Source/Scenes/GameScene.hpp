@@ -13,7 +13,6 @@
 #ifndef __GAMESCENE_H
 #define __GAMESCENE_H
 #include "BaseScene.hpp"
-
 /*!
 * @brief Game scene class
 * @brief Contains the level data, player, enemies, etc.
@@ -21,6 +20,7 @@
 class GameScene : public BaseScene {
 protected:
 	f32 game_timer;
+	static std::vector<BaseEntity*> staticEntities;
 public:
 	GameScene(); // Ctor
 	GameScene(GameScene const&) = delete; // Remove copy ctor
@@ -52,6 +52,8 @@ public:
 	* @brief Called when the current level has been lost
 	*/
 	void Lose();
+
+	static std::vector<BaseEntity*>& GetStaticEntities();
 };
 
 #endif

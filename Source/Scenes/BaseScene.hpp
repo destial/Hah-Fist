@@ -141,6 +141,17 @@ public:
 		}
 		return vect;
 	}
+
+	template<typename E> std::vector<BaseEntity*> GetBaseEntitiesOfType() const {
+		static_assert(std::is_base_of<BaseEntity, E>::value, "E must derive from BaseEntity!");
+		std::vector<BaseEntity*> vect;
+		for (BaseEntity* en : scene_entities) {
+			if (E* type = dynamic_cast<E*>(en)) {
+				vect.push_back(type);
+			}
+		}
+		return vect;
+	}
 };
 
 #endif

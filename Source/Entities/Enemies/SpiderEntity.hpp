@@ -4,7 +4,6 @@
 #include "EnemyEntity.hpp"
 class SpiderEntity : public EnemyEntity {
 protected:
-	GameObjectEntity* ground;
 	bool bSpawnHatchlings;
 public:
 	SpiderEntity(AEVec2 pos, f32 speed = 10.f, bool spawnHatchlings = true);

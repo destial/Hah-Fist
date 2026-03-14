@@ -78,7 +78,12 @@ namespace Utils {
 	bool AABB(BaseEntity* const& go, BaseEntity* const& go2);
 	bool DynamicAABB(GameObjectEntity* const& go, GameObjectEntity* const& go2, float& tCollision, const float& dt);
 	//bool DynamicAABB(const BaseEntity* const& go, const BaseEntity* const& go2, AEVec2& contact, AEVec2& normal, float& tCollision, const f32& dt);
+	// Ray vs AABB
 	bool RayAABB(const AEVec2& ray_origin, const AEVec2& ray_dir, const BaseEntity* const& target, AEVec2& contact, AEVec2& normal, float& tCollision);
+	
+	// This method relies on RayAABB to check if It collides with any of the provided std::vector of entities.
+	// If it collides with just one entity in a list of entities, it will return true
+	bool RayHitAny(const AEVec2& ray_origin, const AEVec2& ray_dir, std::vector<BaseEntity*> const& entities); 
 	bool OBB(BaseEntity* const& go, BaseEntity* const& go2);
 	bool OBBPoint(BaseEntity* const& go, AEVec2 const& pos);
 	
