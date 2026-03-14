@@ -2,7 +2,7 @@
 #include "../../Utils/AEOverload.hpp"
 #include "../../Utils/MeshRenderer.hpp"
 
-MovingPlatformEntity::MovingPlatformEntity(AEVec2 pos, AEVec2 travelDir) : StaticEntity(STATIC_TYPE::TYPE_PLATFORM, pos, 1.0f)
+MovingPlatformEntity::MovingPlatformEntity(AEVec2 pos, AEVec2 travelDir) : StaticEntity(STATIC_TYPE::TYPE_PLATFORM, pos, 1.0f, CollisionShape::AABB, PhysicsType::MOVING_STATIC)
 {
 	startPoint = pos;
 	endPoint = pos + travelDir * 10.f;
