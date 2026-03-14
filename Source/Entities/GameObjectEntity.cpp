@@ -84,7 +84,7 @@ void GameObjectEntity::Render() {
 }
 
 void GameObjectEntity::OnCollide(GameObjectEntity* go) {
-	if (go->go_type == PhysicsType::STATIC){//StaticEntity* se = dynamic_cast<StaticEntity*>(go)) {
+	if (go->go_type == PhysicsType::STATIC || go->go_type == PhysicsType::MOVING_STATIC){//StaticEntity* se = dynamic_cast<StaticEntity*>(go)) {
 		StaticEntity* se = dynamic_cast<StaticEntity*>(go);
 		if (se == nullptr)
 			return;

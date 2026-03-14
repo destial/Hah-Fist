@@ -3,7 +3,7 @@
 #include "../../Managers/AssetManager.hpp"
 #include "../../Managers/SceneManager.hpp"
 #include "../StaticEntity.hpp"
-SpiderEntity::SpiderEntity(AEVec2 pos, f32 speed, bool spawnHatchlings) : ground{ nullptr }, bSpawnHatchlings{spawnHatchlings}, EnemyEntity(pos, {1.f,0.f}, speed)
+SpiderEntity::SpiderEntity(AEVec2 pos, f32 speed, bool spawnHatchlings) : bSpawnHatchlings{spawnHatchlings}, EnemyEntity(pos, {1.f,0.f}, speed)
 {
 	sprite = AssetManager::GetSpriteSheet(ASSET_SPIDER_SPRITE, 4, 6);
 	animationFrame = 1.f / (4.f * 6.f);
@@ -54,17 +54,21 @@ void SpiderEntity::Render()
 void SpiderEntity::OnCollide(GameObjectEntity* go)
 {
 	EnemyEntity::OnCollide(go);
-	if (go == nullptr)
-		return;
-	StaticEntity* se = dynamic_cast<StaticEntity*>(go);
-	if(se != nullptr) // This sets the ground properly which are your platforms.
-		ground = (dynamic_cast<StaticEntity*>(go)->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_PLATFORM) ? go : nullptr; //go->go_type == PhysicsType::STATIC ? go : nullptr;
-	if (go->go_type == PhysicsType::DYNAMIC || se && se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_WALL) {
+	if (go->go_type == PhysicsType::DYNAMIC) {
 		if (EnemyEntity* e = dynamic_cast<EnemyEntity*>(go)) {
 			e->FlipDir();
-			return; // Continue patrolling
+			return;
 		}
 		SwitchState(FSM::IDLE, 2.f);
+	}
+	else if (go->go_type == PhysicsType::STATIC) {
+		if (StaticEntity* se = dynamic_cast<StaticEntity*>(go)) {
+			if (se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_WALL) {
+				if (position.y - scale.y * 0.5f < go->position.y + go->scale.y * 0.5f) {
+					SwitchState(FSM::IDLE, 2.f);
+				}
+			}
+		}
 	}
 }
 
@@ -77,6 +81,9 @@ void SpiderEntity::OnIdle(const f32& dt)
 {
 	// Spider's idle behaviour
 	velocity.x = 0.f;
+
+
+
 	if (stateTimer < 0.f) {
 		dir.x *= -1.f; // Flip the direction it is travelling.
 		SwitchState(FSM::PATROL);
@@ -86,18 +93,7 @@ void SpiderEntity::OnIdle(const f32& dt)
 
 void SpiderEntity::OnPatrol(const f32& dt)
 {
-	AEVec2 contactPt, normal;
-	f32 timeCollide;
-	// Clamps the acceleration of object
-	if (abs(velocity.x) < speed)
-	{
-		velocity.x += dir.x * speed;
-	}
-	// Checks if it is on the ledge.
-	if (ground != nullptr && !(Utils::RayAABB({ position.x + scale.x * dir.x * 0.5f, position.y }, AEVec2{ 0.f, -1.f }, ground, contactPt, normal, timeCollide))) {
-		velocity.x = 0.f;
-		SwitchState(FSM::IDLE, 2.f); // Switching of states
-	}
+	EnemyEntity::OnPatrol(dt);
 }
 
 void SpiderEntity::OnChase(const f32& dt)

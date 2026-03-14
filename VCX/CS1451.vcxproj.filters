@@ -246,6 +246,12 @@
     <ClCompile Include="..\Source\Entities\Projectiles\ExplosiveProjectile.cpp">
       <Filter>Source Files\Entities\Projectiles</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Entities\StaticEntities\MovingPlatformEntity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Entities\Enemies\ProjectileEntity.cpp">
+      <Filter>Source Files\Entities\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -406,6 +412,12 @@
     </ClInclude>
     <ClInclude Include="..\Source\Utils\Constant.hpp">
       <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\StaticEntities\MovingPlatformEntity.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\Enemies\ProjectileEntity.hpp">
+      <Filter>Header Files\Entities\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

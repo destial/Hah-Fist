@@ -24,12 +24,14 @@ namespace Editor { // start namespace editor
 		STATIC_WALL,
 		ENEMY_1,
 		ENEMY_2,
+		PROJECTILE_ENEMY,
 		COIN,
 		CRATE,
 		SPIDER,
 		TITAN,
 		PAYLOAD,
 		IRONSIDE,
+		MOVING_PLATFORM,
 	};
 }; // end namespace editor
 

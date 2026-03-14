@@ -9,6 +9,7 @@
 #include "../Entities/Enemies/EnemyEntity.hpp"
 #include "../Entities/Enemies/TrooperEntity.hpp"
 #include "../Entities/Enemies/SpiderEntity.hpp"
+#include "../Entities/Enemies/ProjectileEntity.hpp"
 #include "../UI/BaseUI.hpp"
 #include "../Utils/MeshRenderer.hpp"
 
@@ -80,6 +81,9 @@ namespace Serialization {
 				else if (SpiderEntity* spider = dynamic_cast<SpiderEntity*>(enemy)) {
 					s.type = EntityType::SPIDER;
 				}
+				else if (ProjectileEntity* pEntity = dynamic_cast<ProjectileEntity*>(enemy)) {
+					s.type = EntityType::PROJECTILE_ENTITY;
+				}
 				else {
 					s.type = EntityType::ENEMY;
 				}
@@ -111,6 +115,10 @@ namespace Serialization {
 			}
 			case EntityType::SPIDER: {
 				entity = new SpiderEntity(AEVec2{ en.x, en.y });
+				break;
+			}
+			case EntityType::PROJECTILE_ENTITY: {
+				entity = new ProjectileEntity(AEVec2{ en.x,en.y });
 				break;
 			}
 			case EntityType::ENEMY: {

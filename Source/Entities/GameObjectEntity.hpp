@@ -30,7 +30,7 @@ public:
 	} shape; // Collision shape for calculating collision checks
 
 	enum struct PhysicsType : int {
-		STATIC = 0, DYNAMIC, TRIGGER, TOTAL
+		STATIC = 0, DYNAMIC, TRIGGER, MOVING_STATIC, TOTAL
 	} go_type; // Physics type for calculating collision responses
 
 	enum struct EntityType : int {
