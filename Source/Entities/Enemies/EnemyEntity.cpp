@@ -5,15 +5,14 @@
 #include "../../Utils/AEOverload.hpp"
 #include "../DropEntities/CoinEntity.hpp"
 #include "../../Scenes/GameScene.hpp"
-EnemyEntity::EnemyEntity(AEVec2 pos, AEVec2 dir, f32 speed) 
+EnemyEntity::EnemyEntity(AEVec2 pos, AEVec2 dir, f32 speed, bool inherited) 
 : GameObjectEntity{ pos }, state{ FSM::IDLE }, dir{ dir }, speed{ speed }, stateTimer{ 1.f }
 {
-	sprite = AssetManager::GetSpriteSheet(ASSET_BASEENEMY_SPRITE, 3, 3);
-	mesh = nullptr;
-	animationTimer = 0.f;
-	animationFrame = 1.f / (3.f * 3.f);
-	currentRow = currentCol = 0;
-	scale = { 5.f * (static_cast<f32>(sprite->image->width) / sprite->image->height), 5.f };
+	//Behaviour that would be called again by the inherited class, to prevent the extra load, this only runs in the base class
+	if (!inherited)
+	{
+		InitializeAnimatedSpriteData(ASSET_BASEENEMY_SPRITE, ASSET_BASEENEMY_SPRITE_ROWS, ASSET_BASEENEMY_SPRITE_COLUMNS, ASSET_BASEENEMY_SPRITE_SCALE);
+	}
 	layer = RenderLayer::ENTITY;
 	entity_type = EntityType::ENEMY;
 }
@@ -72,7 +71,6 @@ void EnemyEntity::Update(const f32& dt)
 
 void EnemyEntity::PostUpdate(const f32& dt)
 {
-	GameObjectEntity::PostUpdate(dt);
 	currentRow = 0;
 	if (velocity.x > 0) {
 		currentRow = 1;
@@ -80,17 +78,11 @@ void EnemyEntity::PostUpdate(const f32& dt)
 	if (velocity.x < 0) {
 		currentRow = 2;
 	}
-	if ((animationTimer += dt) > animationFrame) {
-		animationTimer = 0.f;
-		if (++currentCol >= 3) {
-			currentCol = 0;
-		}
-	}
+	GameObjectEntity::PostUpdate(dt);
 }
 
 void EnemyEntity::Render()
 {
-	sprite->Render(transform, color, currentRow, currentCol);
 	GameObjectEntity::Render();
 }
 

@@ -16,12 +16,7 @@ void DropEntity::OnCollide(GameObjectEntity* go)
 
 void DropEntity::Update(const f32& dt)
 {
-	if ((animationTimer += dt) > animationFrame) {
-		animationTimer = 0.f;
-		if (++currentCol >= columns) {
-			currentCol = 0;
-		}
-	}
+
 }
 
 void DropEntity::OnPickup(GameObjectEntity* pickupper)
@@ -31,6 +26,5 @@ void DropEntity::OnPickup(GameObjectEntity* pickupper)
 
 void DropEntity::Render()
 {
-	sprite->Render(transform, color, currentRow, currentCol);
 	GameObjectEntity::Render();
 }

@@ -3,9 +3,8 @@
 #include "../../Utils/Utils.hpp"
 #include "../../Managers/AssetManager.hpp"
 #include "../../Managers/SceneManager.hpp"
-TrooperEntity::TrooperEntity(AEVec2 pos, f32 speed) : EnemyEntity(pos, { 1.f,0.f }, speed) {
-	sprite = AssetManager::GetSpriteSheet(ASSET_SLIMETROOP_SPRITE, 2, 3);
-	animationFrame = 1.f / (2.f * 3.f);
+TrooperEntity::TrooperEntity(AEVec2 pos, f32 speed) : EnemyEntity(pos, { 1.f,0.f }, speed, true) {
+	InitializeAnimatedSpriteData(ASSET_SLIMETROOP_SPRITE, ASSET_SLIMETROOP_SPRITE_ROWS, ASSET_SLIMETROOP_SPRITE_COLUMNS, ASSET_TROOPER_SPRITE_SCALE);
 }
 
 TrooperEntity::~TrooperEntity() {
@@ -21,21 +20,22 @@ void TrooperEntity::Update(const f32& dt) {
 }
 
 void TrooperEntity::PostUpdate(const f32& dt) {
-	GameObjectEntity::PostUpdate(dt);
 	// Animation of Trooper Entity
-	if (velocity.x > 0) {
-		currentRow = 0;
-	}
-	if (velocity.x < 0) {
-		currentRow = 1;
-	}
-	if ((animationTimer += dt) > animationFrame) {
-		animationTimer = 0.f;
-		if (++currentCol >= 3) {
-			currentCol = 0;
+	if (velocity.x < 0)
+	{
+		if (this->scale.x < 0)
+		{
+			this->scale.x *= -1;
 		}
 	}
-	// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	else
+	{
+		if (this->scale.x > 0)
+		{
+			this->scale.x *= -1;
+		}
+	}
+	GameObjectEntity::PostUpdate(dt);
 }
 
 void TrooperEntity::Render() {

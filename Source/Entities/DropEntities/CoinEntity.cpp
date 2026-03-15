@@ -4,15 +4,7 @@
 
 CoinEntity::CoinEntity(AEVec2 pos) : DropEntity(pos)
 {
-	columns = 20;
-	rows = 1;
-
-	sprite = AssetManager::GetSpriteSheet("Assets/coin.png", rows, columns);
-	mesh = nullptr;
-	animationTimer = 0.f;
-	animationFrame = 1.f / static_cast<f32>(columns * rows);
-	currentRow = currentCol = 0;
-	scale = { 2.f * ((static_cast<f32>(sprite->image->width) / static_cast<f32>(columns)) / (sprite->image->height / static_cast<f32>(rows))) , 2.f };
+	InitializeAnimatedSpriteData(ASSET_COIN_SPRITE, ASSET_COIN_SPRITE_ROWS, ASSET_COIN_SPRITE_COLUMNS, ASSET_COIN_SPRITE_SCALE);
 }
 
 CoinEntity::~CoinEntity()

@@ -39,10 +39,9 @@ std::ostream& operator<<(std::ostream& os, const EnemyEntity::FSM& state)
 }
 
 
-ProjectileEntity::ProjectileEntity(AEVec2 pos, f32 speed) : EnemyEntity(pos, { 1.f,0.f }, speed)
+ProjectileEntity::ProjectileEntity(AEVec2 pos, f32 speed) : EnemyEntity(pos, { 1.f,0.f }, speed, true)
 {
-	sprite = AssetManager::GetSpriteSheet(ASSET_PROJECTILE_ENEMY_SPRITE, 7, 8);
-	animationFrame = 1.f / (7.f * 8.f - 2.f);
+	InitializeAnimatedSpriteData(ASSET_PROJECTILE_ENEMY_SPRITE, ASSET_PROJECTILE_ENEMY_SPRITE_ROWS, ASSET_PROJECTILE_ENEMY_SPRITE_COLUMNS, ASSET_PROJECTILE_ENEMY_SPRITE_SCALE);
 }
 
 ProjectileEntity::~ProjectileEntity()

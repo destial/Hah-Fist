@@ -57,11 +57,25 @@ void BaseEntity::PostUpdate(const f32& dt) {
 		}
 	}
 
+	//Generic Animation Functionality across all entities
+	if (maxColumns > 1) {
+		if ((animationTimer += dt) > animationFrame) {
+			animationTimer = 0.f;
+			if (++currentCol >= maxColumns) {
+				currentCol = 0;
+			}
+		}
+	}
+
 	transform = Utils::GetTransformMatrix(position, scale, rotation);
 }
 
 void BaseEntity::Render() {
 	transform = Utils::GetTransformMatrix(position, scale, rotation);
+	if (sprite != nullptr)
+	{
+		sprite->Render(transform, color, currentRow, currentCol);
+	}
 	if (!mesh)
 		return;
 
@@ -136,4 +150,21 @@ bool BaseEntity::RemovePostUpdateListener(void* owner) {
 		return true;
 	}
 	return false;
+}
+
+void BaseEntity::InitializeAnimatedSpriteData(std::string filepath, int rows, int columns, f32 _scale)
+{
+	maxRows = rows;
+	maxColumns = columns;
+	InitializeSpriteData(filepath, _scale);
+	animationTimer = 0.f;
+	animationFrame = 1.f / static_cast<f32>(maxColumns * maxRows);
+}
+
+void BaseEntity::InitializeSpriteData(std::string filepath, f32 _scale)
+{
+	sprite = AssetManager::GetSpriteSheet(filepath, maxRows, maxColumns);
+	mesh = nullptr;
+	currentRow = currentCol = 0;
+	scale = { _scale * ((static_cast<f32>(sprite->image->width) / static_cast<f32>(maxColumns)) / (sprite->image->height / static_cast<f32>(maxRows))) , _scale };
 }

@@ -13,11 +13,9 @@ protected:
 	FSM state;
 	AEVec2 dir;
 	f32 speed;
-	f32 animationTimer, animationFrame, stateTimer;
-	int currentRow, currentCol;
-	SpriteSheet* sprite;
+	f32 stateTimer;
 public:
-	EnemyEntity(AEVec2 pos, AEVec2 dir = { 0.0f,0.0f }, f32 speed = 10.f);
+	EnemyEntity(AEVec2 pos, AEVec2 dir = { 0.0f,0.0f }, f32 speed = 10.f, bool inherited = false);
 	virtual ~EnemyEntity();
 	virtual void PreUpdate(const f32& dt);
 	virtual void Update(const f32& dt);

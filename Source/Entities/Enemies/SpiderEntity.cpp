@@ -3,10 +3,9 @@
 #include "../../Managers/AssetManager.hpp"
 #include "../../Managers/SceneManager.hpp"
 #include "../StaticEntity.hpp"
-SpiderEntity::SpiderEntity(AEVec2 pos, f32 speed, bool spawnHatchlings) : bSpawnHatchlings{spawnHatchlings}, EnemyEntity(pos, {1.f,0.f}, speed)
+SpiderEntity::SpiderEntity(AEVec2 pos, f32 speed, bool spawnHatchlings) : bSpawnHatchlings{spawnHatchlings}, EnemyEntity(pos, {1.f,0.f}, speed, true)
 {
-	sprite = AssetManager::GetSpriteSheet(ASSET_SPIDER_SPRITE, 4, 6);
-	animationFrame = 1.f / (4.f * 6.f);
+	InitializeAnimatedSpriteData(ASSET_SPIDER_SPRITE, ASSET_SPIDER_SPRITE_ROWS, ASSET_SPIDER_SPRITE_COLUMNS, ASSET_SPIDER_SPRITE_SCALE);
 }
 
 SpiderEntity::~SpiderEntity()
@@ -26,7 +25,6 @@ void SpiderEntity::Update(const f32& dt)
 
 void SpiderEntity::PostUpdate(const f32& dt)
 {
-	GameObjectEntity::PostUpdate(dt);
 	// Animation
 	currentRow = 0;
 	if (velocity.x > 0) {
@@ -38,12 +36,7 @@ void SpiderEntity::PostUpdate(const f32& dt)
 	if (death) {
 		currentRow = 3
 	}*/
-	if ((animationTimer += dt) > animationFrame) {
-		animationTimer = 0.f;
-		if (++currentCol >= 6) {
-			currentCol = 0;
-		}
-	}
+	GameObjectEntity::PostUpdate(dt);
 }
 
 void SpiderEntity::Render()

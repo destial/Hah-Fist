@@ -18,14 +18,43 @@
 
 #define ASSET_PLAYER_SPRITE "Assets/player.png"
 #define ASSET_TROOPER_SPRITE "Assets/test_troop.png"
+#define ASSET_TROOPER_SPRITE_ROWS 3
+#define ASSET_TROOPER_SPRITE_COLUMNS 3
+#define ASSET_TROOPER_SPRITE_SCALE 5.f
+
 #define ASSET_BASEENEMY_SPRITE "Assets/test_enemy.png"
-#define ASSET_SLIMETROOP_SPRITE "Assets/slimetroop.png"
+#define ASSET_BASEENEMY_SPRITE_ROWS 3
+#define ASSET_BASEENEMY_SPRITE_COLUMNS 3
+#define ASSET_BASEENEMY_SPRITE_SCALE 5.f
+
+#define ASSET_SLIMETROOP_SPRITE "Assets/slime.png"
+#define ASSET_SLIMETROOP_SPRITE_ROWS 1
+#define ASSET_SLIMETROOP_SPRITE_COLUMNS 30
+#define ASSET_SLIMETROOP_SPRITE_SCALE 5.f
+
 #define ASSET_PROJECTILE_ENEMY_SPRITE "Assets/Projectile_Enemy.png"
+#define ASSET_PROJECTILE_ENEMY_SPRITE_ROWS 7
+#define ASSET_PROJECTILE_ENEMY_SPRITE_COLUMNS 8
+#define ASSET_PROJECTILE_ENEMY_SPRITE_SCALE 5.f
+
 #define ASSET_SPIDER_SPRITE "Assets/spider_enemy.png"
+#define ASSET_SPIDER_SPRITE_ROWS 4
+#define ASSET_SPIDER_SPRITE_COLUMNS 6
+#define ASSET_SPIDER_SPRITE_SCALE 5.f
+
 #define ASSET_TITLE_SPRITE "Assets/title.png"
 #define ASSET_SPARKLE_SPRITE "Assets/sparkle_sheet.png"
 #define ASSET_STAR_SPRITE "Assets/star.png"
 #define ASSET_CREDITS_SPRITE "Assets/credits_sprite.png"
+#define ASSET_TITAN_SPRITE "Assets/titan.png"
+#define ASSET_TITAN_SPRITE_ROWS 3
+#define ASSET_TITAN_SPRITE_COLUMNS 20
+#define ASSET_TITAN_SPRITE_SCALE 5.f
+
+#define ASSET_COIN_SPRITE "Assets/coin.png"
+#define ASSET_COIN_SPRITE_ROWS 1
+#define ASSET_COIN_SPRITE_COLUMNS 20
+#define ASSET_COIN_SPRITE_SCALE 2.f
 
 #define ASSET_PROJECTILE_IMAGE "Assets/projectile.png"
 #define ASSET_SPLASHSCREEN_IMAGE "Assets/splash_screen.png"

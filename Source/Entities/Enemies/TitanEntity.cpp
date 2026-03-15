@@ -8,8 +8,8 @@
 #include "../../Scenes/GameScene.hpp"
 #include "../PlayerEntity.hpp"
 
-TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }) {
-	sprite = AssetManager::GetSpriteSheet(ASSET_TROOPER_SPRITE, 3, 3);
+TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }, 10.f, true) {
+	InitializeAnimatedSpriteData(ASSET_TITAN_SPRITE, ASSET_TITAN_SPRITE_ROWS, ASSET_TITAN_SPRITE_COLUMNS, ASSET_TITAN_SPRITE_SCALE);
 	health = 500.f;
 	max_health = 500.f;
 	attackRange = 20.f;
@@ -37,6 +37,29 @@ void TitanEntity::Update(const f32& dt) {
 }
 
 void TitanEntity::PostUpdate(const f32& dt) {
+	currentRow = 1;
+	if (velocity.x != 0) {
+		currentRow = 0;
+		if (velocity.x < 0)
+		{
+			if (this->scale.x > 0)
+			{
+				this->scale.x *= -1;
+			}
+		}
+		else
+		{
+			if (this->scale.x < 0)
+			{
+				this->scale.x *= -1;
+			}
+		}
+	}
+	if (velocity.y != 0.f)
+	{
+		currentRow = 2;
+	}
+
 	EnemyEntity::PostUpdate(dt);
 }
 

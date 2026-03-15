@@ -15,6 +15,7 @@
 #include "AEEngine.h"
 #include "../Utils/Utils.hpp"
 #include "../Items/Image.hpp"
+#include "../Managers/AssetManager.hpp"
 
 /*!
 * @brief The base entity class that should be inherited by all other entities
@@ -38,6 +39,10 @@ protected:
 	// Functions to call in the entity PostUpdate
 	std::map<void*, std::vector<std::function<void(const f32&)>>> postupdate_listeners;
 
+	// Sprite animation data
+	f32 animationTimer{ 0.f }, animationFrame{ 0.f };
+	int currentRow{ 0 }, currentCol{ 0 }, maxRows{ 1 }, maxColumns{ 1 };
+	SpriteSheet* sprite{ nullptr };
 public:
 	virtual ~BaseEntity(); // Dtor
 	AEGfxVertexList* mesh; // Mesh data for rendering
@@ -109,6 +114,22 @@ public:
 	* @param owner - The owner of the functions
 	*/
 	bool RemovePostUpdateListener(void* owner);
+
+	/*!
+	* @brief Initializes animated sprite data for this entity, use InitializeSpriteData if
+	*		 you want to initialize a non animated sprite.
+	* @param filepath - Filepath to the sprite, be sure to use AssetManager macros for this.
+	* @param rows - number of rows in the spritesheet (Rows are used for different animations).
+	* @param columns - number of columns in the spritesheet (Columns are the number of frames).
+	*/
+	void InitializeAnimatedSpriteData(std::string filepath, int rows, int columns, f32 _scale = 5.f);
+
+	/*!
+	* @brief Initializes sprite data for this entity, use InitializeAnimatedSpriteData if
+	*		 you want to initialize an animated sprite.
+	* @param filepath - Filepath to the sprite, be sure to use AssetManager macros for this.
+	*/
+	void InitializeSpriteData(std::string filepath, f32 _scale = 5.f);
 };
 
 #endif
