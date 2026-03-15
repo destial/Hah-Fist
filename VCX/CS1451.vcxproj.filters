@@ -88,11 +88,11 @@
     <Filter Include="Header Files\Entities\DropEntities">
       <UniqueIdentifier>{746f7030-c7b4-4513-a9a4-589ccd489f35}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entities\StaticEntities">
+      <UniqueIdentifier>{7741cba1-1f73-4ad0-b69d-1ed6d84a324d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Source\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\Managers\SceneManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
@@ -234,23 +234,26 @@
     <ClCompile Include="..\Source\Entities\DropEntities\CoinEntity.cpp">
       <Filter>Source Files\Entities\DropEntities</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Entities\StaticEntities\BreakableCrateEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Entities\StaticEntities\BreakableStaticEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\Entities\Projectiles\SpikeProjectile.cpp">
       <Filter>Source Files\Entities\Projectiles</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Entities\Projectiles\ExplosiveProjectile.cpp">
       <Filter>Source Files\Entities\Projectiles</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Entities\StaticEntities\MovingPlatformEntity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\Entities\Enemies\ProjectileEntity.cpp">
       <Filter>Source Files\Entities\Enemies</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Entities\StaticEntities\BreakableCrateEntity.cpp">
+      <Filter>Source Files\Entities\StaticEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Entities\StaticEntities\BreakableStaticEntity.cpp">
+      <Filter>Source Files\Entities\StaticEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Entities\StaticEntities\MovingPlatformEntity.cpp">
+      <Filter>Source Files\Entities\StaticEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\main.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -398,12 +401,6 @@
     <ClInclude Include="..\Source\Entities\DropEntities\CoinEntity.hpp">
       <Filter>Header Files\Entities\DropEntities</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Entities\StaticEntities\BreakableCrateEntity.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Source\Entities\StaticEntities\BreakableStaticEntity.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\Entities\Projectiles\SpikeProjectile.hpp">
       <Filter>Header Files\Entities\Projectiles</Filter>
     </ClInclude>
@@ -413,11 +410,17 @@
     <ClInclude Include="..\Source\Utils\Constant.hpp">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Entities\StaticEntities\MovingPlatformEntity.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\Entities\Enemies\ProjectileEntity.hpp">
       <Filter>Header Files\Entities\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\StaticEntities\BreakableCrateEntity.hpp">
+      <Filter>Header Files\Entities\StaticEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\StaticEntities\MovingPlatformEntity.hpp">
+      <Filter>Header Files\Entities\StaticEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\StaticEntities\BreakableStaticEntity.hpp">
+      <Filter>Header Files\Entities\StaticEntities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
