@@ -1,5 +1,6 @@
 #include "FingerGunEntity.hpp"
 #include "../../Utils/AEOverload.hpp"
+#include "../../Utils/Constant.hpp"
 #include "../../Managers/AssetManager.hpp"
 #include "../Projectiles/MissileProjectile.hpp"
 #include "../Projectiles/ExplosiveProjectile.hpp"
@@ -45,7 +46,7 @@ void FingerGunWeapon::Render()
 
 void FingerGunWeapon::Attack()
 {
-	f32 bulletSpeed = 50.f;
+	f32 bulletSpeed = BULLETPLAYERSPEED;
 	ExplosiveProjectile* bullet = new ExplosiveProjectile(this->position, GetAttackDirection(), bulletSpeed, damage, this->player_entity);
 	bullet->scale = { 1.f, 0.5f };
 	SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);

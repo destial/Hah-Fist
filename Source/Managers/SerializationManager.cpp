@@ -192,7 +192,7 @@ namespace Serialization {
 			if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(entity)) {
 				/*go->health = en.health;
 				go->max_health = en.max_health;*/
-				go->damage = en.damage;
+				//go->damage = en.damage;
 				go->pBody->mass = en.mass;
 
 				if (en.go_type != -1) {

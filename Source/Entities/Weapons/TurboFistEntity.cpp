@@ -13,7 +13,7 @@ TurboFistWeapon::TurboFistWeapon(AEVec2 pos, GameObjectEntity* player) : Weapon(
 	player_original_mass = player->pBody->mass;
 	max_channel_time = 1.0f;
 	cd_duration = 0.5f;
-	damage = 0.01f;
+	damage = 1.0f;
 }
 
 TurboFistWeapon::~TurboFistWeapon()
@@ -102,7 +102,7 @@ void TurboFistWeapon::Attack()
 
 float TurboFistWeapon::GetCurrentAttackStrength()
 {
-	return 1.0f + (2.0f * (static_cast<f32>(std::trunc(channel_timer)) / max_channel_time));
+	return 1.f + (2.f * (static_cast<f32>(std::trunc(channel_timer)) / max_channel_time));
 }
 
 void TurboFistWeapon::ResetWeapon()

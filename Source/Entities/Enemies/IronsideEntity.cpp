@@ -12,27 +12,25 @@
 #include "../../Scenes/GameScene.hpp"
 #include "../PlayerEntity.hpp"
 
-IronsideEntity::IronsideEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }, 10.f, true) {
+IronsideEntity::IronsideEntity(AEVec2 pos) : EnemyEntity(pos, { 1.f,0.f }, 10.f, true) {
 	InitializeAnimatedSpriteData(ASSET_TROOPER_SPRITE, ASSET_TROOPER_SPRITE_ROWS, ASSET_TROOPER_SPRITE_COLUMNS, ASSET_TROOPER_SPRITE_SCALE);
 	// Empty for now
-	health = 500.f;
-	max_health = 500.f;
-	damage = 25.f;
-	attackRange = 20.f;
-	bossActivated = false;
-	shootTimer = 0.f;
-	jumpX = 15.f;
-	jumpY = 50.f;
-	bossRoomX = position.x;
-	bossRoomY = 25.f;
-	baseProjectiles = 3;
-	extraProjectiles = 10;
+	health = DEFAULTBOSSMAXHEALTH;
+	max_health = DEFAULTBOSSMAXHEALTH;
+	damage = DEFAULTBOSSDAMAGE;
+	bossActivated = DEFAULTBOSSACTIVATED;
+
 	pBody->gravityScale = 0;
-	velocity.x = 5;
-	currLane = LANE::LANE2;
+	velocity.x = BOSS3VELX;
+
 	innerState = INNERFSM::MOVE;
-	nextLanetospawn = 1;
 	go_type = PhysicsType::TRIGGER;
+	//Initialising values so no errors
+	currLane = LANE::LANE2;
+	lanetogoto = LANE::LANE1;
+	nextLanetospawn = 1;
+	dirtogo = 1;
+	targetY = 6.0f;
 	bossRoomCenter = position;
 }
 
@@ -64,7 +62,7 @@ void IronsideEntity::OnIdle(const f32& dt) {
 	// Trooper's idle behaviour
 	if (bossActivated) {
 
-		if (position.x >= bossRoomCenter.x + 15.f)
+		if (position.x >= bossRoomCenter.x + BOSS3OFFSETX)
 		{
 			velocity.x = 0;
 			SwitchState(FSM::CHASE);
@@ -85,7 +83,7 @@ void IronsideEntity::OnChase(const f32& dt) {
 		targetY = LaneY[lanetogoto];
 		float diff = targetY - position.y;
 		dirtogo = (diff > 0.f) ? 1.f : -1.f;
-		velocity.y = (GetLowHealthFactor()* 5.f + 5.f) * dirtogo;
+		velocity.y = (GetLowHealthFactor()* BOSS3VELY + BOSS3VELY) * dirtogo;
 		innerState = INNERFSM::MOVING;
 		break;
 	}
@@ -107,9 +105,9 @@ void IronsideEntity::OnChase(const f32& dt) {
 		nextLanetospawn = 3 - lanetospawn - currLane;
 		AEVec2 Pos{ position.x, LaneY[lanetospawn] };
 		AEVec2 platformDir{ -1.f, 0.f };
-		MovingPlatformEntity* platform = new MovingPlatformEntity(Pos, platformDir, false, 1.0f, 5.0f);
+		MovingPlatformEntity* platform = new MovingPlatformEntity(Pos, platformDir, false, BOSS3PLATFORMSPEED, BOSS3PLATFORMLIFETIME);
 		platform->mesh = MeshRenderer::GetCenterRectMesh();
-		platform->scale = { 7.f, 0.5f };
+		platform->scale = { BOSS3PLATFORMSCALEX, BOSS3PLATFORMSCALEY };
 		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(platform);
 		innerState = INNERFSM::SHOOTPROJECTILE;
 		StunTimerBasedOnHealth();
@@ -130,9 +128,9 @@ void IronsideEntity::OnChase(const f32& dt) {
 	{
 		AEVec2 Pos{ position.x, LaneY[nextLanetospawn] };
 		AEVec2 platformDir{ -1.f, 0.f };
-		MovingPlatformEntity* platform = new MovingPlatformEntity(Pos, platformDir, false, 1.0f, 5.0f);
+		MovingPlatformEntity* platform = new MovingPlatformEntity(Pos, platformDir, false, BOSS3PLATFORMSPEED, BOSS3PLATFORMLIFETIME);
 		platform->mesh = MeshRenderer::GetCenterRectMesh();
-		platform->scale = { 7.f, 0.5f };
+		platform->scale = { BOSS3PLATFORMSCALEX, BOSS3PLATFORMSCALEY };
 		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(platform);
 		innerState = INNERFSM::LASER;
 		StunTimerBasedOnHealth();
@@ -190,7 +188,7 @@ void IronsideEntity::ShootProjectile(float healthRatio,f32 posY)
 	AEVec2 Pos{ position.x, posY };
 	AEVec2 shootDir{ player->position.x - Pos.x,player->position.y - Pos.y };
 	AEVec2Normalize(&shootDir, &shootDir);
-	f32 bulletSpeed = Utils::RandRange(10, 20);
+	f32 bulletSpeed = Utils::RandRange(BULLETMINSPEED, BULLETMAXSPEED);
 	if (healthRatio > 0.5f)
 	{
 		MissileProjectile* bullet = new MissileProjectile(Pos, shootDir, bulletSpeed, this->damage, this);

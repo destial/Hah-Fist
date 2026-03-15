@@ -1,6 +1,5 @@
 #include "TitanEntity.hpp"
 #include "../../Utils/Utils.hpp"
-#include "../../Utils/Constant.hpp"
 #include "../../Managers/AssetManager.hpp"
 #include "../Projectiles/SpikeProjectile.hpp"
 #include "../Projectiles/MissileProjectile.hpp"
@@ -11,18 +10,16 @@
 
 TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }, 10.f, true) {
 	InitializeAnimatedSpriteData(ASSET_TITAN_SPRITE, ASSET_TITAN_SPRITE_ROWS, ASSET_TITAN_SPRITE_COLUMNS, ASSET_TITAN_SPRITE_SCALE);
-	health = 500.f;
-	max_health = 500.f;
-	attackRange = 20.f;
-	bossActivated = false;
+	health = DEFAULTBOSSMAXHEALTH;
+	max_health = DEFAULTBOSSMAXHEALTH;
+	attackRange = BOSS1ATTACKRANGE;
+	bossActivated = DEFAULTBOSSACTIVATED;
 	shootTimer = 0.f;
-	jumpX = 15.f;
-	jumpY = 50.f;
-	bossRoomX = position.x;
-	bossRoomY = 25.f;
-	baseProjectiles = 3;
-	extraProjectiles = 10;
-	damage = 250.f;
+	jumpX = BOSS1JUMPVELX;
+	jumpY = BOSS1JUMPVELY;
+	baseProjectiles = BOSS1BASEPROJECTILES;
+	extraProjectiles = BOSS1EXTRAPROJECTILES;
+	damage = DEFAULTBOSSDAMAGE;
 	bossRoomCenter = position;
 	
 }
@@ -126,8 +123,6 @@ void TitanEntity::OnStun(const f32& dt) {
 	// Trooper's stun behaviour
 	//velocity.x = 0.f;
 	// Spawn falling projectiles periodically
-	AEVec2 contactPt, normal;
-	f32 timeCollide;
 	if (pBody->is_standing_above && shootTimer < 0.f)
 	{
 		// Example spawn
@@ -141,10 +136,10 @@ void TitanEntity::OnStun(const f32& dt) {
 		int projectiles = baseProjectiles + static_cast<int>(temp * extraProjectiles);
 		for (int i = 0; i < projectiles; i++)
 		{
-			AEVec2 Pos{ Utils::RandRange(bossRoomX-attackRange,bossRoomX+attackRange),  bossRoomY };
+			AEVec2 Pos{ Utils::RandRange(bossRoomCenter.x-attackRange,bossRoomCenter.x +attackRange), BOSS1ROOMPOSY };
 			AEVec2 shootDir{ 0.f, -1.f };
 			AEVec2Normalize(&shootDir, &shootDir);
-			f32 bulletSpeed = Utils::RandRange(10, 20);
+			f32 bulletSpeed = Utils::RandRange(BULLETMINSPEED, BULLETMAXSPEED);
 
 			MissileProjectile* bullet = new MissileProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
 			bullet->scale = { BULLETSCALEX ,BULLETSCALEY };

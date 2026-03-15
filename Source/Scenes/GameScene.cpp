@@ -86,8 +86,7 @@ void GameScene::Init() {
 				AddEntityToScene(en);
 				if (Player* p = dynamic_cast<Player*>(en)) {
 					player = p;
-
-				}
+					}
 			}
 		}
 		std::printf("Loaded from file");
@@ -155,15 +154,23 @@ void GameScene::Init() {
 		
 		if (LevelManager::GetLevel() == 0)
 		{
-			TitanEntity* e = dynamic_cast<TitanEntity*>(GetFirstEntityOfType<TitanEntity>());
-			if (e->GetBossActivated())
+			if (dynamic_cast<TitanEntity*>(GetFirstEntityOfType<TitanEntity>()))
 			{
-				camManager->SetTarget(Utils::WorldToScreen(e->GetBossRoomCenter().x, e->GetBossRoomCenter().y).x,0);
+				TitanEntity* e = dynamic_cast<TitanEntity*>(GetFirstEntityOfType<TitanEntity>());
+				if (e->GetBossActivated())
+				{
+					camManager->SetTarget(Utils::WorldToScreen(e->GetBossRoomCenter().x, e->GetBossRoomCenter().y).x, 0);
+				}
+				else
+				{
+					camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
+				}
 			}
 			else
 			{
 				camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
 			}
+			
 		}
 		else if (LevelManager::GetLevel() == 1)
 		{

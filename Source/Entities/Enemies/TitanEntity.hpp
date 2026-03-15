@@ -2,13 +2,14 @@
 #ifndef __TITANENTITY_H
 #define __TITANENTITY_H
 #include "EnemyEntity.hpp"
+#include "../../Utils/Constant.hpp"
 class TitanEntity : public EnemyEntity {
 protected:
 	GameObjectEntity* ground;
-	float shootCooldown{3.f};
+	float shootCooldown{ BOSS1SHOOTCOOLDOWN };
 	float shootTimer;
 	bool bossActivated;
-	float bossRoomX, bossRoomY,attackRange,jumpX,jumpY;
+	float attackRange,jumpX,jumpY;
 	int baseProjectiles, extraProjectiles;
 	AEVec2 bossRoomCenter;
 public:

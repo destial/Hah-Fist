@@ -13,12 +13,7 @@ public:
 protected:
 	INNERFSM innerState;
 	LANE currLane;
-	GameObjectEntity* ground;
-	float shootCooldown{ 3.f };
-	float shootTimer;
 	bool bossActivated;
-	float bossRoomX, bossRoomY, attackRange, jumpX, jumpY;
-	int baseProjectiles, extraProjectiles;
 	int nextLanetospawn;
 	LANE lanetogoto;     
 	float dirtogo;

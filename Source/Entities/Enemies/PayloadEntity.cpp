@@ -1,6 +1,5 @@
 #include "PayloadEntity.hpp"
 #include "../../Utils/Utils.hpp"
-#include "../../Utils/Constant.hpp"
 #include "../../Managers/AssetManager.hpp"
 #include "../Projectiles/ExplosiveProjectile.hpp"
 #include "../Projectiles/MissileProjectile.hpp"
@@ -13,18 +12,18 @@
 PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }, 10.f, true) {
 	InitializeAnimatedSpriteData(ASSET_PAYLOAD_SPRITE, ASSET_PAYLOAD_SPRITE_ROWS, ASSET_PAYLOAD_SPRITE_COLUMNS, ASSET_PAYLOAD_SPRITE_SCALE);
 	// Empty for now
-	health = 500.f;
-	max_health = 500.f;
-	attackRange = 10.f;
-	bossActivated = false;
+	health = DEFAULTBOSSMAXHEALTH;
+	max_health = DEFAULTBOSSMAXHEALTH;
+	attackRange = BOSS2ATTACKRANGE;
+	bossActivated = DEFAULTBOSSACTIVATED;
 	landTimer = 0.f;
-	jumpX = 15.f;
-	jumpY = 35.f;
-	baseProjectiles = 3;
-	extraProjectiles = 2;
+	jumpX = BOSS2JUMPVELX;
+	jumpY = BOSS2JUMPVELY;
+	baseProjectiles = BOSS2EXTRAPROJECTILES;
+	extraProjectiles = BOSS2BASEPROJECTILES;
 	innerState = INNERFSM::JUMP;
-	frictionMultiplier = 100.f;
-	damage = 25;
+	frictionMultiplier = BOSS2FRICTION;
+	damage = DEFAULTBOSSDAMAGE;
 	bossRoomCenter = position;
 }
 
@@ -124,7 +123,7 @@ void PayloadEntity::OnChase(const f32& dt) {
 			AEVec2 Pos{ Utils::RandRange(position.x - attackRange,position.x + attackRange),  position.y };
 			AEVec2 shootDir{ 0.f, -1.f };
 			AEVec2Normalize(&shootDir, &shootDir);
-			f32 bulletSpeed = Utils::RandRange(10, 20);
+			f32 bulletSpeed = Utils::RandRange(BULLETMINSPEED, BULLETMAXSPEED);
 			if (healthRatio > 0.5f)
 			{
 				MissileProjectile* bullet = new MissileProjectile(Pos, shootDir, bulletSpeed, this->damage, this);

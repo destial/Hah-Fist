@@ -3,6 +3,7 @@
 #include "../../Managers/AssetManager.hpp"
 #include "../../Managers/SceneManager.hpp"
 #include "../../Utils/AEOverload.hpp"
+#include "../../Utils/Constant.hpp"
 #include "../DropEntities/CoinEntity.hpp"
 #include "../../Scenes/GameScene.hpp"
 EnemyEntity::EnemyEntity(AEVec2 pos, AEVec2 dir, f32 speed, bool inherited) 
@@ -15,6 +16,10 @@ EnemyEntity::EnemyEntity(AEVec2 pos, AEVec2 dir, f32 speed, bool inherited)
 	}
 	layer = RenderLayer::ENTITY;
 	entity_type = EntityType::ENEMY;
+	health = DEFAULTENEMYMAXHEALTH;
+	max_health = DEFAULTENEMYMAXHEALTH;
+	damage = DEFAULTENEMYDAMAGE;
+
 }
 
 EnemyEntity::~EnemyEntity()

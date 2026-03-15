@@ -2,6 +2,7 @@
 #ifndef __PAYLOADENTITY_H
 #define __PAYLOADENTITY_H
 #include "EnemyEntity.hpp"
+#include "../../Utils/Constant.hpp"
 
 class PayloadEntity : public EnemyEntity {
 public:
@@ -11,7 +12,7 @@ public:
 protected:
 	INNERFSM innerState;
 	GameObjectEntity* ground;
-	float landCooldown{ 0.5f };
+	float landCooldown{ BOSS2SHOOTCOOLDOWN };
 	float landTimer;
 	bool bossActivated;
 	float attackRange, jumpX, jumpY;
