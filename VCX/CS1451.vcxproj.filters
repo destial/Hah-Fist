@@ -255,6 +255,9 @@
     <ClCompile Include="..\Source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Entities\StaticEntities\BossSpawnTriggerEntity.cpp">
+      <Filter>Source Files\Entities\StaticEntities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -420,6 +423,9 @@
       <Filter>Header Files\Entities\StaticEntities</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Entities\StaticEntities\BreakableStaticEntity.hpp">
+      <Filter>Header Files\Entities\StaticEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\StaticEntities\BossSpawnTriggerEntity.hpp">
       <Filter>Header Files\Entities\StaticEntities</Filter>
     </ClInclude>
   </ItemGroup>

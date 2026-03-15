@@ -17,6 +17,7 @@
 #include "../Entities/DropEntities/CoinEntity.hpp"
 #include "../Entities/StaticEntities/MovingPlatformEntity.hpp"
 #include "../Entities/StaticEntities/BreakableCrateEntity.hpp"
+#include "../Entities/StaticEntities/BossSpawnTriggerEntity.hpp"
 
 LevelEditor::LevelEditor(BaseScene* b_scene)
 : scene{ b_scene }, toggled{ false }, currentSelection{ nullptr } {
@@ -134,6 +135,11 @@ BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
 		scene->AddEntityToScene(b);
 		return b;
 	}
+	case Editor::BOSS_SPAWN_WALL: {
+		BossSpawnTriggerEntity* b = new BossSpawnTriggerEntity(Utils::GetMouseWorld(true));
+		scene->AddEntityToScene(b);
+		return b;
+	}
 	default: break;
 	}
 
@@ -189,6 +195,11 @@ void LevelEditor::Update(const f32& dt) {
 	if (AEInputCheckTriggered(AEVK_9)) {
 		SelectEntity(AddEntity(Editor::GameObjectType::CRATE));
 	}
+
+	if (AEInputCheckTriggered(AEVK_Q)) {
+		SelectEntity(AddEntity(Editor::GameObjectType::BOSS_SPAWN_WALL));
+	}
+
 	//BOSSES
 	if (AEInputCheckTriggered(AEVK_B)) {
 		SelectEntity(AddEntity(Editor::GameObjectType::TITAN));

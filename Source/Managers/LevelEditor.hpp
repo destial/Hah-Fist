@@ -32,6 +32,7 @@ namespace Editor { // start namespace editor
 		PAYLOAD,
 		IRONSIDE,
 		MOVING_PLATFORM,
+		BOSS_SPAWN_WALL,
 	};
 }; // end namespace editor
 

@@ -5,6 +5,7 @@
 #include "../Entities/GameObjectEntity.hpp"
 #include "../Entities/StaticEntity.hpp"
 #include "../Entities/StaticEntities/BreakableCrateEntity.hpp"
+#include "../Entities/StaticEntities/BossSpawnTriggerEntity.hpp"
 #include "../Entities/DropEntities/CoinEntity.hpp"
 #include "../Entities/PlayerEntity.hpp"
 #include "../Entities/WeaponEntity.hpp"
@@ -76,6 +77,10 @@ namespace Serialization {
 			else if (CoinEntity* ce = dynamic_cast<CoinEntity*>(go)) {
 				s.type = EntityType::COIN;
 			}
+			else if (BossSpawnTriggerEntity* bste = dynamic_cast<BossSpawnTriggerEntity*>(go))
+			{
+				s.type = EntityType::BOSS_SPAWN_TRIGGER;
+			}
 			else if (StaticEntity* se = dynamic_cast<StaticEntity*>(en)) {
 				if (se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_WALL) {
 					s.type = EntityType::WALL;
@@ -144,6 +149,10 @@ namespace Serialization {
 			}
 			case EntityType::ENEMY: {
 				entity = new EnemyEntity(AEVec2{ en.x, en.y });
+				break;
+			}
+			case EntityType::BOSS_SPAWN_TRIGGER: {
+				entity = new BossSpawnTriggerEntity(AEVec2{ en.x, en.y });
 				break;
 			}
 			default: break;
