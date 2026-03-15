@@ -293,7 +293,7 @@ namespace Utils {
 		 AEVec2 contact, normal;
 		 float tCollide;
 		 for (const BaseEntity* const& entity : entities) {
-			 if (RayAABB(ray_origin, ray_dir, entity, contact, normal, tCollide))
+			 if (RayAABB(ray_origin, ray_dir, entity, contact, normal, tCollide) && tCollide <= 1.f)
 				 return true;
 		 }
 		 return false;

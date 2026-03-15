@@ -3,6 +3,10 @@
 #include "../../Utils/Utils.hpp"
 #include "../../Managers/AssetManager.hpp"
 #include "../../Managers/SceneManager.hpp"
+#define COLLISION_OFFSET 1.f
+
+
+
 TrooperEntity::TrooperEntity(AEVec2 pos, f32 speed) : EnemyEntity(pos, { 1.f,0.f }, speed, true) {
 	InitializeAnimatedSpriteData(ASSET_SLIMETROOP_SPRITE, ASSET_SLIMETROOP_SPRITE_ROWS, ASSET_SLIMETROOP_SPRITE_COLUMNS, ASSET_TROOPER_SPRITE_SCALE);
 }
@@ -54,7 +58,7 @@ void TrooperEntity::OnCollide(GameObjectEntity* go) {
 	else if (go->go_type == PhysicsType::STATIC) {
 		if (StaticEntity* se = dynamic_cast<StaticEntity*>(go)) {
 			if (se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_WALL) {
-				if (position.y - scale.y * 0.5f < go->position.y + go->scale.y * 0.5f) {
+				if (position.y - scale.y * 0.5f + COLLISION_OFFSET < go->position.y + go->scale.y * 0.5f) {
 					SwitchState(FSM::IDLE, 2.f);
 				}
 			}
