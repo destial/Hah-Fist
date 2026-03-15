@@ -124,12 +124,6 @@ void GameScene::Init() {
 
 	player->SwitchWeapon(0);
 
-	player->AddPostUpdateListener(this, [this, player](const f32& dt) {
-		if (!player->isActive) {
-			Lose();
-		}
-	});
-
 	BarUI* power = new BarUI{ AEVec2{ 0.f, 0.f } };
 	power->scale = { 2.f, .25f };
 	power->text = "";
@@ -157,6 +151,24 @@ void GameScene::Init() {
 		camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
 	});
 
+	BarUI* player_health = new BarUI({Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() - 1.f});
+	player_health->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
+	player_health->text_size = 5.f;
+	player_health->scale = { 20.f, 1.f };
+	player_health->overlay_color = { 255, 64, 255, 64 };
+	player_health->layer = BaseUI::RenderLayer::UI;
+	player_health->SetInteractive(false);
+	player_health->AddUpdateListener(this, [player, player_health](const f32& dt) {
+		if (player == nullptr) {
+			return;
+		}
+		player_health->SetValue(player->health / player->max_health);
+		char health[64];
+		sprintf_s(health, 64, "Health: %0.2f / %0.2f", player->health, player->max_health);
+		player_health->text = health;
+	});
+	AddEntityToScene(player_health);
+
 	Game::SetBackgroundColor(Color{ 1.f, 0.3f, 0.3f, 0.3f });
 }
 
@@ -165,6 +177,9 @@ void GameScene::Update(const f32& dt) {
 	BaseScene::Update(dt);
 	staticEntities.clear();
 	game_timer += dt;
+
+	if (GetFirstEntityOfType<Player>() == nullptr)
+		Lose();
 }
 
 void GameScene::End() {
