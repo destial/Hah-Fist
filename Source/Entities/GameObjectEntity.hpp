@@ -18,6 +18,7 @@ class GameObjectEntity : public BaseEntity {
 public:
 	PhysicsBody* pBody; // Physics body for this entity
 	AEVec2 prev_position; // The position at the previous frame
+	AEVec2 prev_dynamic_position{0.f, 0.f}; // The position at the previous frame
 	f32 frictionMultiplier{ 1.0 };
 	bool isActive;
 	f32 health;

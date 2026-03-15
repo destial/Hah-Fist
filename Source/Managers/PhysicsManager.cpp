@@ -30,7 +30,11 @@ void PhysicsManager::PreUpdate(const f32& dt)
 void PhysicsManager::PostUpdate(const f32& dt)
 {
 	//Reset collision state to false;
-	for (auto& go : gameObjects) { go->pBody->is_standing_above = false; }
+	for (auto& go : gameObjects) 
+	{ 
+		go->pBody->is_standing_above = false; 
+		go->prev_dynamic_position = AEVec2{ 0.f, 0.f };
+	}
 	float tCollide{};
 	std::vector<GameObjectEntity*> ignoredObjects{};
 
@@ -112,8 +116,7 @@ void PhysicsManager::PostUpdate(const f32& dt)
 			{
 				if (Utils::DynamicAABB(dynamic, _static, tCollide, dt))
 				{
-					dynamic->prev_position.x += dynamic->velocity.x * tCollide;
-					dynamic->prev_position.y += dynamic->velocity.y * tCollide;
+					dynamic->prev_dynamic_position = dynamic->velocity * tCollide + dynamic->prev_position;
 					has_collision = true;
 				}
 			}
@@ -150,8 +153,8 @@ void PhysicsManager::PostUpdate(const f32& dt)
 			if (!Utils::OBB(dynamic1, dynamic2)) {
 				if (Utils::DynamicAABB(dynamic1, dynamic2, tCollide, dt))
 				{
-					dynamic1->prev_position += dynamic1->velocity * tCollide;
-					dynamic2->prev_position += dynamic2->velocity * tCollide;
+					dynamic1->prev_dynamic_position = dynamic1->velocity * tCollide + dynamic1->prev_position;
+					dynamic2->prev_dynamic_position = dynamic2->velocity * tCollide + dynamic2->prev_position;
 					has_collision = true;
 				}
 			}
@@ -217,7 +220,7 @@ void PhysicsManager::HandleStaticDynamicCollisionResponse(GameObjectEntity* _sta
 	if (_dynamic->prev_position.y - _dynamic->GetHalfSize().y >= _static->position.y + _static->GetHalfSize().y)
 	{
 		//Snap position back to previous position
-		_dynamic->position.y = _dynamic->prev_position.y;
+		_dynamic->position.y = _dynamic->prev_dynamic_position.y == 0.f ? _dynamic->prev_position.y : _dynamic->prev_dynamic_position.y;
 
 		//If velocity is trying to move into static, instead flip it with dampening
 		_dynamic->velocity.y = _dynamic->velocity.y < 0.f ? _dynamic->velocity.y * -0.25f : _dynamic->velocity.y;
@@ -232,29 +235,26 @@ void PhysicsManager::HandleStaticDynamicCollisionResponse(GameObjectEntity* _sta
 	if (_dynamic->prev_position.y + _dynamic->GetHalfSize().y <= _static->position.y - _static->GetHalfSize().y)
 	{
 		//Snap position back to previous position
-		_dynamic->position.y = _dynamic->prev_position.y;
+		_dynamic->position.y = _dynamic->prev_dynamic_position.y == 0.f ? _dynamic->prev_position.y : _dynamic->prev_dynamic_position.y;
 
 		//If velocity is trying to move into static, instead flip it with dampening
 		_dynamic->velocity.y = _dynamic->velocity.y > 0.f ? _dynamic->velocity.y * -0.25f : _dynamic->velocity.y;
 	}
-	if (!is_standing_on_this_object)
+	if (_dynamic->prev_position.x - _dynamic->GetHalfSize().x >= _static->position.x + _static->GetHalfSize().x)
 	{
-		if (_dynamic->prev_position.x - _dynamic->GetHalfSize().x >= _static->position.x + _static->GetHalfSize().x)
-		{
-			//Snap position back to previous position
-			_dynamic->position.x = _dynamic->prev_position.x;
+		//Snap position back to previous position
+		_dynamic->position.x = _dynamic->prev_dynamic_position.x == 0.f ? _dynamic->prev_position.x : _dynamic->prev_dynamic_position.x;
 
-			//If velocity is trying to move into static, instead flip it with dampening
-			_dynamic->velocity.x = _dynamic->velocity.x < 0.f ? _dynamic->velocity.x * -0.25f : _dynamic->velocity.x;
-		}
-		else if (_dynamic->prev_position.x + _dynamic->GetHalfSize().x <= _static->position.x - _static->GetHalfSize().x)
-		{
-			//Snap position back to previous position
-			_dynamic->position.x = _dynamic->prev_position.x;
+		//If velocity is trying to move into static, instead flip it with dampening
+		_dynamic->velocity.x = _dynamic->velocity.x < 0.f ? _dynamic->velocity.x * -0.25f : _dynamic->velocity.x;
+	}
+	else if (_dynamic->prev_position.x + _dynamic->GetHalfSize().x <= _static->position.x - _static->GetHalfSize().x)
+	{
+		//Snap position back to previous position
+		_dynamic->position.x = _dynamic->prev_dynamic_position.x == 0.f ? _dynamic->prev_position.x : _dynamic->prev_dynamic_position.x;
 
-			//If velocity is trying to move into static, instead flip it with dampening
-			_dynamic->velocity.x = _dynamic->velocity.x > 0.f ? _dynamic->velocity.x * -0.25f : _dynamic->velocity.x;
-		}
+		//If velocity is trying to move into static, instead flip it with dampening
+		_dynamic->velocity.x = _dynamic->velocity.x > 0.f ? _dynamic->velocity.x * -0.25f : _dynamic->velocity.x;
 	}
 }
 
@@ -263,8 +263,8 @@ void PhysicsManager::HandleDynamicDynamicCollisionResponse(GameObjectEntity* fir
 	if (first->prev_position.y - first->GetHalfSize().y >= second->prev_position.y + second->GetHalfSize().y)
 	{
 		//Snap both positions back to previous position
-		first->position.y = first->prev_position.y;
-		second->position.y = second->prev_position.y;
+		first->position.y = first->prev_dynamic_position.y == 0 ? first->prev_position.y : first->prev_dynamic_position.y;
+		second->position.y = second->prev_dynamic_position.y == 0 ? second->prev_position.y : second->prev_dynamic_position.y;
 
 		//Trade velocities with each other
 		f32 tmp{ first->velocity.y };
@@ -277,8 +277,8 @@ void PhysicsManager::HandleDynamicDynamicCollisionResponse(GameObjectEntity* fir
 	else if (first->prev_position.y + first->GetHalfSize().y <= second->prev_position.y - second->GetHalfSize().y)
 	{
 		//Snap both positions back to previous position
-		first->position.y = first->prev_position.y;
-		second->position.y = second->prev_position.y;
+		first->position.y = first->prev_dynamic_position.y == 0 ? first->prev_position.y : first->prev_dynamic_position.y;
+		second->position.y = second->prev_dynamic_position.y == 0 ? second->prev_position.y : second->prev_dynamic_position.y;
 
 		//Trade velocities with each other
 		f32 tmp{ first->velocity.y };
@@ -292,8 +292,8 @@ void PhysicsManager::HandleDynamicDynamicCollisionResponse(GameObjectEntity* fir
 	if (first->prev_position.x - first->GetHalfSize().x >= second->prev_position.x + second->GetHalfSize().x)
 	{
 		//Snap both positions back to previous position
-		first->position.x = first->prev_position.x;
-		second->position.x = second->prev_position.x;
+		first->position.x = first->prev_dynamic_position.x == 0 ? first->prev_position.x : first->prev_dynamic_position.x;
+		second->position.x = second->prev_dynamic_position.x == 0 ? second->prev_position.x : second->prev_dynamic_position.x;
 
 		//Trade velocities with each other
 		f32 tmp{ first->velocity.x };
@@ -307,8 +307,8 @@ void PhysicsManager::HandleDynamicDynamicCollisionResponse(GameObjectEntity* fir
 	else if (first->prev_position.x + first->GetHalfSize().x <= second->prev_position.x - second->GetHalfSize().x)
 	{
 		//Snap both positions back to previous position
-		first->position.x = first->prev_position.x;
-		second->position.x = second->prev_position.x;
+		first->position.x = first->prev_dynamic_position.x == 0 ? first->prev_position.x : first->prev_dynamic_position.x;
+		second->position.x = second->prev_dynamic_position.x == 0 ? second->prev_position.x : second->prev_dynamic_position.x;
 
 		//Trade velocities with each other
 		f32 tmp{ first->velocity.x };
