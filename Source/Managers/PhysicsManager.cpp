@@ -234,21 +234,24 @@ void PhysicsManager::HandleStaticDynamicCollisionResponse(GameObjectEntity* _sta
 		//If velocity is trying to move into static, instead flip it with dampening
 		_dynamic->velocity.y = _dynamic->velocity.y > 0.f ? _dynamic->velocity.y * -0.25f : _dynamic->velocity.y;
 	}
-	if (_dynamic->prev_position.x - _dynamic->GetHalfSize().x >= _static->position.x + _static->GetHalfSize().x)
+	if (!_dynamic->pBody->is_standing_above)
 	{
-		//Snap position back to previous position
-		_dynamic->position.x = _dynamic->prev_position.x;
+		if (_dynamic->prev_position.x - _dynamic->GetHalfSize().x >= _static->position.x + _static->GetHalfSize().x)
+		{
+			//Snap position back to previous position
+			_dynamic->position.x = _dynamic->prev_position.x;
 
-		//If velocity is trying to move into static, instead flip it with dampening
-		_dynamic->velocity.x = _dynamic->velocity.x < 0.f ? _dynamic->velocity.x * -0.25f : _dynamic->velocity.x;
-	}
-	else if (_dynamic->prev_position.x + _dynamic->GetHalfSize().x <= _static->position.x - _static->GetHalfSize().x)
-	{
-		//Snap position back to previous position
-		_dynamic->position.x = _dynamic->prev_position.x;
+			//If velocity is trying to move into static, instead flip it with dampening
+			_dynamic->velocity.x = _dynamic->velocity.x < 0.f ? _dynamic->velocity.x * -0.25f : _dynamic->velocity.x;
+		}
+		else if (_dynamic->prev_position.x + _dynamic->GetHalfSize().x <= _static->position.x - _static->GetHalfSize().x)
+		{
+			//Snap position back to previous position
+			_dynamic->position.x = _dynamic->prev_position.x;
 
-		//If velocity is trying to move into static, instead flip it with dampening
-		_dynamic->velocity.x = _dynamic->velocity.x > 0.f ? _dynamic->velocity.x * -0.25f : _dynamic->velocity.x;
+			//If velocity is trying to move into static, instead flip it with dampening
+			_dynamic->velocity.x = _dynamic->velocity.x > 0.f ? _dynamic->velocity.x * -0.25f : _dynamic->velocity.x;
+		}
 	}
 }
 
