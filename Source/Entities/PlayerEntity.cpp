@@ -162,8 +162,7 @@ void Player::OnCollide(GameObjectEntity* go)
 		timeElapsedSinceLastDamage = 0.0f;
 		AEVec2 push_velocity = position - go->position;
 		AEVec2Normalize(&push_velocity, &push_velocity);
-		velocity.x += push_velocity.x * 25.f;
-		velocity.y += 10.f;
+		velocity += push_velocity * 25.f;
 		health -= go->damage;
 
 		AEAudioPlay(AssetManager::GetAudio(ASSET_PLAYERHURT_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);

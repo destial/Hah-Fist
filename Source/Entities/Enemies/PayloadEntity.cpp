@@ -12,7 +12,7 @@
 #include "../../Scenes/GameScene.hpp"
 
 PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }, 10.f, true) {
-	InitializeAnimatedSpriteData(ASSET_TROOPER_SPRITE, ASSET_TROOPER_SPRITE_ROWS, ASSET_TROOPER_SPRITE_COLUMNS, ASSET_TROOPER_SPRITE_SCALE);
+	InitializeAnimatedSpriteData(ASSET_PAYLOAD_SPRITE, ASSET_PAYLOAD_SPRITE_ROWS, ASSET_PAYLOAD_SPRITE_COLUMNS, ASSET_PAYLOAD_SPRITE_SCALE);
 	// Empty for now
 	health = 500.f;
 	max_health = 500.f;
@@ -39,6 +39,28 @@ void PayloadEntity::Update(const f32& dt) {
 }
 
 void PayloadEntity::PostUpdate(const f32& dt) {
+	currentRow = 1;
+	if (fabsf(velocity.x) > 0.1f) {
+		currentRow = 0;
+		if (velocity.x < 0)
+		{
+			if (this->scale.x > 0)
+			{
+				this->scale.x *= -1;
+			}
+		}
+		else
+		{
+			if (this->scale.x < 0)
+			{
+				this->scale.x *= -1;
+			}
+		}
+		if (AEVec2Length(&velocity) > 50.0f)
+		{
+			currentRow = 2;
+		}
+	}
 	EnemyEntity::PostUpdate(dt);
 }
 
