@@ -13,10 +13,10 @@
 PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }, 10.f, true) {
 	InitializeAnimatedSpriteData(ASSET_PAYLOAD_SPRITE, ASSET_PAYLOAD_SPRITE_ROWS, ASSET_PAYLOAD_SPRITE_COLUMNS, ASSET_PAYLOAD_SPRITE_SCALE);
 	// Empty for now
-	health = 100.f;
+	health = 500.f;
 	max_health = 500.f;
 	attackRange = 10.f;
-	bossActivated = true;
+	bossActivated = false;
 	landTimer = 0.f;
 	jumpX = 15.f;
 	jumpY = 35.f;

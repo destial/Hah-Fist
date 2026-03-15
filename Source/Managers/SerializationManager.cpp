@@ -14,7 +14,8 @@
 #include "../Entities/Enemies/SpiderEntity.hpp"
 #include "../Entities/Enemies/ProjectileEntity.hpp"
 #include "../Entities/Enemies/TitanEntity.hpp"
-
+#include "../Entities/Enemies/PayloadEntity.hpp"
+#include "../Entities/Enemies/IronsideEntity.hpp"
 #include "../UI/BaseUI.hpp"
 #include "../Utils/MeshRenderer.hpp"
 
@@ -108,6 +109,14 @@ namespace Serialization {
 				{
 					s.type = EntityType::TITAN_BOSS;
 				}
+				else if (PayloadEntity* pEnt = dynamic_cast<PayloadEntity*>(enemy))
+				{
+					s.type = EntityType::PAYLOAD_BOSS;
+				}
+				else if (IronsideEntity* iEnt = dynamic_cast<IronsideEntity*>(enemy))
+				{
+					s.type = EntityType::IRONSIDE_BOSS;
+				}
 				else {
 					s.type = EntityType::ENEMY;
 				}
@@ -165,6 +174,14 @@ namespace Serialization {
 				entity = new TitanEntity(AEVec2{ en.x, en.y });
 				break;
 			}
+			case EntityType::PAYLOAD_BOSS: {
+				entity = new PayloadEntity(AEVec2{ en.x, en.y });
+				break;
+			}
+			case EntityType::IRONSIDE_BOSS: {
+				entity = new IronsideEntity(AEVec2{ en.x, en.y });
+				break;
+			}
 			default: break;
 		}
 
@@ -173,8 +190,8 @@ namespace Serialization {
 			entity->rotation = en.rotation;
 
 			if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(entity)) {
-				go->health = en.health;
-				go->max_health = en.max_health;
+				/*go->health = en.health;
+				go->max_health = en.max_health;*/
 				go->damage = en.damage;
 				go->pBody->mass = en.mass;
 

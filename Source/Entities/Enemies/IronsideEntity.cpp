@@ -15,11 +15,11 @@
 IronsideEntity::IronsideEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }, 10.f, true) {
 	InitializeAnimatedSpriteData(ASSET_TROOPER_SPRITE, ASSET_TROOPER_SPRITE_ROWS, ASSET_TROOPER_SPRITE_COLUMNS, ASSET_TROOPER_SPRITE_SCALE);
 	// Empty for now
-	health = 100.f;
+	health = 500.f;
 	max_health = 500.f;
 	damage = 25.f;
 	attackRange = 20.f;
-	bossActivated = true;
+	bossActivated = false;
 	shootTimer = 0.f;
 	jumpX = 15.f;
 	jumpY = 50.f;
@@ -64,7 +64,7 @@ void IronsideEntity::OnIdle(const f32& dt) {
 	// Trooper's idle behaviour
 	if (bossActivated) {
 
-		if (position.x >= bossRoomX + 10.f)
+		if (position.x >= bossRoomCenter.x + 15.f)
 		{
 			velocity.x = 0;
 			SwitchState(FSM::CHASE);

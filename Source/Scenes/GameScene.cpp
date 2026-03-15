@@ -86,6 +86,7 @@ void GameScene::Init() {
 				AddEntityToScene(en);
 				if (Player* p = dynamic_cast<Player*>(en)) {
 					player = p;
+
 				}
 			}
 		}
@@ -166,10 +167,17 @@ void GameScene::Init() {
 		}
 		else if (LevelManager::GetLevel() == 1)
 		{
-			PayloadEntity* e = dynamic_cast<PayloadEntity*>(GetFirstEntityOfType<PayloadEntity>());
-			if (e->GetBossActivated())
+			if (dynamic_cast<PayloadEntity*>(GetFirstEntityOfType<PayloadEntity>()))
 			{
-				camManager->SetTarget(Utils::WorldToScreen(e->GetBossRoomCenter().x, e->GetBossRoomCenter().y).x, 0);
+				PayloadEntity* e = dynamic_cast<PayloadEntity*>(GetFirstEntityOfType<PayloadEntity>());
+				if (e->GetBossActivated())
+				{
+					camManager->SetTarget(Utils::WorldToScreen(e->GetBossRoomCenter().x, e->GetBossRoomCenter().y).x, 0);
+				}
+				else
+				{
+					camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
+				}
 			}
 			else
 			{
@@ -178,10 +186,17 @@ void GameScene::Init() {
 		}
 		else if (LevelManager::GetLevel() == 2)
 		{
-			IronsideEntity* e = dynamic_cast<IronsideEntity*>(GetFirstEntityOfType<IronsideEntity>());
-			if (e->GetBossActivated())
+			if (dynamic_cast<IronsideEntity*>(GetFirstEntityOfType<IronsideEntity>()))
 			{
-				camManager->SetTarget(Utils::WorldToScreen(e->GetBossRoomCenter().x, e->GetBossRoomCenter().y).x, 0);
+				IronsideEntity* e = dynamic_cast<IronsideEntity*>(GetFirstEntityOfType<IronsideEntity>());
+				if (e->GetBossActivated())
+				{
+					camManager->SetTarget(Utils::WorldToScreen(e->GetBossRoomCenter().x, e->GetBossRoomCenter().y).x, 0);
+				}
+				else
+				{
+					camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
+				}
 			}
 			else
 			{

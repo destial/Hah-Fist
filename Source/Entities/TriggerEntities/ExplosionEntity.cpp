@@ -22,7 +22,13 @@ void ExplosionEntity::Update(const f32& dt) {
     GameObjectEntity::Update(dt);
 }
 void ExplosionEntity::PostUpdate(const f32& dt) {
+    if (currentCol == ASSET_COIN_SPRITE_COLUMNS - 1)
+    {
+        isActive = false;
+        SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
+    }
     GameObjectEntity::PostUpdate(dt);
+
 }
 void ExplosionEntity::OnCollide(GameObjectEntity* other) {
     if (!other || other == this || other == owner)
@@ -57,10 +63,6 @@ void ExplosionEntity::OnCollide(GameObjectEntity* other) {
 
         }
     }
-    else if (currentCol == ASSET_COIN_SPRITE_COLUMNS - 1)
-    {
-        isActive = false;
-        SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
-    }
+
     
 }
