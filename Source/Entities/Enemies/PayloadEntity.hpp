@@ -16,6 +16,7 @@ protected:
 	bool bossActivated;
 	float attackRange, jumpX, jumpY;
 	int baseProjectiles, extraProjectiles;
+	AEVec2 bossRoomCenter;
 public:
 	PayloadEntity(AEVec2 pos);
 	~PayloadEntity() override;
@@ -24,7 +25,9 @@ public:
 	void PostUpdate(const f32& dt) override;
 	void Render() override;
 	void OnCollide(GameObjectEntity* go) override;
-
+	bool GetBossActivated();
+	void SetBossActivation(bool activated);
+	AEVec2 GetBossRoomCenter();
 	// Virtual methods to Enemy Base class
 	void OnIdle(const f32& dt) override;
 	void OnPatrol(const f32& dt) override;

@@ -33,7 +33,7 @@ void BossSpawnTriggerEntity::PreUpdate(const f32& dt)
 				player_entered = false;
 
 				TitanEntity* titan = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<TitanEntity>();
-				titan->bossActivated = true;
+				titan->SetBossActivation(true);
 			}
 		}
 		else

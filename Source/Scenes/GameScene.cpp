@@ -8,6 +8,9 @@
 #include "../Entities/PlayerEntity.hpp"
 #include "../Entities/Enemies/EnemyEntity.hpp"
 #include "../Entities/Enemies/TrooperEntity.hpp"
+#include "../Entities/Enemies/TitanEntity.hpp"
+#include "../Entities/Enemies/PayloadEntity.hpp"
+#include "../Entities/Enemies/IronsideEntity.hpp"
 #include "../Entities/Weapons/TurboFistEntity.hpp"
 #include "../Entities/Weapons/GrappleFistEntity.hpp"
 #include "../Entities/Weapons/FingerGunEntity.hpp"
@@ -148,9 +151,43 @@ void GameScene::Init() {
 	});
 
 	player->AddUpdateListener(AssetManager::GetInstance(), [this, player](const f32& dt) {
-		camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
-
-
+		
+		if (LevelManager::GetLevel() == 0)
+		{
+			TitanEntity* e = dynamic_cast<TitanEntity*>(GetFirstEntityOfType<TitanEntity>());
+			if (e->GetBossActivated())
+			{
+				camManager->SetTarget(Utils::WorldToScreen(e->GetBossRoomCenter().x, e->GetBossRoomCenter().y).x,0);
+			}
+			else
+			{
+				camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
+			}
+		}
+		else if (LevelManager::GetLevel() == 1)
+		{
+			PayloadEntity* e = dynamic_cast<PayloadEntity*>(GetFirstEntityOfType<PayloadEntity>());
+			if (e->GetBossActivated())
+			{
+				camManager->SetTarget(Utils::WorldToScreen(e->GetBossRoomCenter().x, e->GetBossRoomCenter().y).x, 0);
+			}
+			else
+			{
+				camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
+			}
+		}
+		else if (LevelManager::GetLevel() == 2)
+		{
+			IronsideEntity* e = dynamic_cast<IronsideEntity*>(GetFirstEntityOfType<IronsideEntity>());
+			if (e->GetBossActivated())
+			{
+				camManager->SetTarget(Utils::WorldToScreen(e->GetBossRoomCenter().x, e->GetBossRoomCenter().y).x, 0);
+			}
+			else
+			{
+				camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
+			}
+		}
 	});
 
 	BarUI* player_health = new BarUI({Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() - 1.f});

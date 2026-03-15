@@ -8,7 +8,7 @@ public:
 		MOVE,MOVING,SPAWNPLATFORM1, SPAWNPLATFORM2, SHOOTPROJECTILE, LASER, TOTAL
 	}; 
 	enum LANE {
-		LANE1 = 1, LANE2 = 2, LANE3 = 3, TOTAL
+		LANE1 = 0, LANE2 = 1, LANE3 = 2, TOTAL
 	};
 protected:
 	INNERFSM innerState;
@@ -23,6 +23,7 @@ protected:
 	LANE lanetogoto;     
 	float dirtogo;
 	float targetY;
+	AEVec2 bossRoomCenter;
 	
 public:
 	IronsideEntity(AEVec2 pos);
@@ -32,6 +33,13 @@ public:
 	void PostUpdate(const f32& dt) override;
 	void Render() override;
 	void OnCollide(GameObjectEntity* go) override;
+	bool GetBossActivated();
+	void SetBossActivation(bool activated);
+	AEVec2 GetBossRoomCenter();
+	//Helper Functions
+	void ShootProjectile(float healthRatio, f32 posY);
+	float GetLowHealthFactor();
+	void StunTimerBasedOnHealth();
 	LANE GetRandomSpawnLane(LANE bossLane);
 	// Virtual methods to Enemy Base class
 	void OnIdle(const f32& dt) override;
@@ -39,6 +47,8 @@ public:
 	void OnChase(const f32& dt) override;
 	void OnStun(const f32& dt) override;
 	void OnDead(const f32& dt) override;
+
+
 };
 
 

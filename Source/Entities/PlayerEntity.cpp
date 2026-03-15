@@ -24,6 +24,8 @@ Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 	jumpVelocity = sqrtf(jumpHeight * 2.f * abs(pBody->gravity.y));
 	speed = 10.f;
 	health = 100.f;
+	max_health = 100.f;
+
 	entity_type = EntityType::PLAYER;
 	layer = RenderLayer::PLAYER;
 	go_type = PhysicsType::DYNAMIC;

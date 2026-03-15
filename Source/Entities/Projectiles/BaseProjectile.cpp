@@ -5,8 +5,10 @@
 #include "../../Scenes/BaseScene.hpp"  
 #include "../../Managers/SceneManager.hpp"
 #include "../../Entities/Enemies/EnemyEntity.hpp"
+#include "../../Entities/TriggerEntities/ExplosionEntity.hpp"
 
-BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameObjectEntity* own)
+
+BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameObjectEntity* _owner)
 : GameObjectEntity{ pos, 1.f, CollisionShape::AABB }, direction{ dir }, speed{ speed } {
     damage = dmg;
     sprite = AssetManager::GetSpriteSheet(ASSET_PROJECTILE_IMAGE, 1, 1); // single-frame bullet
@@ -25,7 +27,7 @@ BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameO
     velocity.x = dir.x * speed;
     velocity.y = dir.y * speed;
     health = 1;
-    owner = own;
+    owner = _owner;
 
     entity_type = EntityType::PROJECTILE;
     go_type = PhysicsType::TRIGGER;
@@ -76,7 +78,10 @@ void BaseProjectile::OnCollide(GameObjectEntity* other)
     {
         return;
     }
-
+    if (dynamic_cast<ExplosionEntity*>(other))
+    {
+        return;
+    }
 
     OnHit(other);
 }

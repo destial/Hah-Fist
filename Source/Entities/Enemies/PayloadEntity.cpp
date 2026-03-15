@@ -4,9 +4,8 @@
 #include "../../Managers/AssetManager.hpp"
 #include "../Projectiles/ExplosiveProjectile.hpp"
 #include "../Projectiles/MissileProjectile.hpp"
-#include "../StaticEntity.hpp"
+#include "../StaticEntities/MovingPlatformEntity.hpp"
 #include "../../Utils/MeshRenderer.hpp"
-#include "../../Utils/Constant.hpp"
 #include "../../Scenes/BaseScene.hpp"  
 #include "../../Managers/SceneManager.hpp"
 #include "../../Scenes/GameScene.hpp"
@@ -14,17 +13,19 @@
 PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }, 10.f, true) {
 	InitializeAnimatedSpriteData(ASSET_PAYLOAD_SPRITE, ASSET_PAYLOAD_SPRITE_ROWS, ASSET_PAYLOAD_SPRITE_COLUMNS, ASSET_PAYLOAD_SPRITE_SCALE);
 	// Empty for now
-	health = 500.f;
+	health = 100.f;
 	max_health = 500.f;
 	attackRange = 10.f;
 	bossActivated = true;
 	landTimer = 0.f;
 	jumpX = 15.f;
-	jumpY = 30.f;
+	jumpY = 35.f;
 	baseProjectiles = 3;
 	extraProjectiles = 2;
 	innerState = INNERFSM::JUMP;
-	damage = 250.f;
+	frictionMultiplier = 100.f;
+	damage = 25;
+	bossRoomCenter = position;
 }
 
 PayloadEntity::~PayloadEntity() {
@@ -101,11 +102,11 @@ void PayloadEntity::OnChase(const f32& dt) {
 		landTimer -= dt;
 		if (landTimer < 0.f)
 		{
-			std::cout << "amigoing here";
 			AEVec2 Pos{ position.x,  position.y - scale.y * 0.7f };
-			StaticEntity* platform = new StaticEntity(StaticEntity::STATIC_TYPE::TYPE_PLATFORM, Pos);
+			AEVec2 platformDir{ 0.f, -1.f };
+			MovingPlatformEntity* platform = new MovingPlatformEntity(Pos, platformDir, false , 0.2f , 5.0f);
 			platform->mesh = MeshRenderer::GetCenterRectMesh();
-			platform->scale = { 5.f, 0.5f };
+			platform->scale = { 7.f, 0.5f };
 			SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(platform);
 			innerState = INNERFSM::ATTACK;
 		}
@@ -139,7 +140,7 @@ void PayloadEntity::OnChase(const f32& dt) {
 
 		}
 		innerState = INNERFSM::JUMP;
-		float stunTime = 2.f * (1.f - temp);
+		float stunTime = 2.f;
 		SwitchState(FSM::STUN, stunTime);
 		break;
 	}
@@ -164,4 +165,17 @@ void PayloadEntity::OnDead(const f32& dt) {
 	}
 	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 
+}
+bool PayloadEntity::GetBossActivated()
+{
+	return bossActivated;
+}
+
+void PayloadEntity::SetBossActivation(bool activated)
+{
+	bossActivated = activated;
+}
+AEVec2 PayloadEntity::GetBossRoomCenter()
+{
+	return bossRoomCenter;
 }

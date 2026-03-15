@@ -46,8 +46,7 @@ void FingerGunWeapon::Render()
 void FingerGunWeapon::Attack()
 {
 	f32 bulletSpeed = 50.f;
-	f32 bulletDamage = 25.f;
-	ExplosiveProjectile* bullet = new ExplosiveProjectile(this->position, GetAttackDirection(), bulletSpeed, bulletDamage, this->player_entity);
+	ExplosiveProjectile* bullet = new ExplosiveProjectile(this->position, GetAttackDirection(), bulletSpeed, damage, this->player_entity);
 	bullet->scale = { 1.f, 0.5f };
 	SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
 }

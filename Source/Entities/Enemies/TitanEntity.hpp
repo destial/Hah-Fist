@@ -7,11 +7,12 @@ protected:
 	GameObjectEntity* ground;
 	float shootCooldown{3.f};
 	float shootTimer;
-	
+	bool bossActivated;
 	float bossRoomX, bossRoomY,attackRange,jumpX,jumpY;
 	int baseProjectiles, extraProjectiles;
+	AEVec2 bossRoomCenter;
 public:
-	bool bossActivated;
+	
 	TitanEntity(AEVec2 pos);
 	~TitanEntity() override;
 	void PreUpdate(const f32& dt) override;
@@ -19,7 +20,9 @@ public:
 	void PostUpdate(const f32& dt) override;
 	void Render() override;
 	void OnCollide(GameObjectEntity* go) override;
-
+	bool GetBossActivated();
+	void SetBossActivation(bool activated);
+	AEVec2 GetBossRoomCenter();
 	// Virtual methods to Enemy Base class
 	void OnIdle(const f32& dt) override;
 	void OnPatrol(const f32& dt) override;

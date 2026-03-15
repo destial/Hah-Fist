@@ -91,6 +91,12 @@
     <Filter Include="Header Files\Entities\StaticEntities">
       <UniqueIdentifier>{7741cba1-1f73-4ad0-b69d-1ed6d84a324d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entities\TriggerEntities">
+      <UniqueIdentifier>{e14b67c2-2f92-451a-b694-5a1749201ecf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\TriggerEntities">
+      <UniqueIdentifier>{c6d94e7f-a09e-4004-ba4b-2a212f968eaa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Managers\SceneManager.cpp">
@@ -257,6 +263,12 @@
     </ClCompile>
     <ClCompile Include="..\Source\Entities\StaticEntities\BossSpawnTriggerEntity.cpp">
       <Filter>Source Files\Entities\StaticEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Entities\TriggerEntities\ExplosionEntity.cpp">
+      <Filter>Source Files\Entities\TriggerEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Entities\TriggerEntities\LaserEntity.cpp">
+      <Filter>Source Files\Entities\TriggerEntities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -427,6 +439,12 @@
     </ClInclude>
     <ClInclude Include="..\Source\Entities\StaticEntities\BossSpawnTriggerEntity.hpp">
       <Filter>Header Files\Entities\StaticEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\TriggerEntities\ExplosionEntity.hpp">
+      <Filter>Header Files\Entities\TriggerEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\TriggerEntities\LaserEntity.hpp">
+      <Filter>Header Files\Entities\TriggerEntities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

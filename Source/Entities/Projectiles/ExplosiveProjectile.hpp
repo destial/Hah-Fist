@@ -10,13 +10,7 @@ public:
 	void Update(const f32& dt) override;
 	void OnHit(GameObjectEntity* other) override;
 	void OnExpire() override;
-	void Explode();
-private:
-	f32 slowStartTime{ 0.5f };
-	f32 explosionRadius{ 5.f };   
-	f32 explosionDamage;          
-	bool exploded{ false };       
-	
+
 };
 
 

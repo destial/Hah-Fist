@@ -18,7 +18,7 @@ protected:
     GameObjectEntity* owner;
 public:
 
-    BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 damage, GameObjectEntity* own);
+    BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 damage, GameObjectEntity* _owner);
 
     virtual ~BaseProjectile() = default;
 

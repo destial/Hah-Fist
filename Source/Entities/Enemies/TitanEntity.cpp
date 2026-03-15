@@ -23,6 +23,8 @@ TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0
 	baseProjectiles = 3;
 	extraProjectiles = 10;
 	damage = 250.f;
+	bossRoomCenter = position;
+	
 }
 
 TitanEntity::~TitanEntity() {
@@ -71,6 +73,21 @@ void TitanEntity::Render() {
 
 void TitanEntity::OnCollide(GameObjectEntity* go) {
 	EnemyEntity::OnCollide(go);
+}
+
+bool TitanEntity::GetBossActivated()
+{
+	return bossActivated;
+}
+
+void TitanEntity::SetBossActivation(bool activated)
+{
+	bossActivated = activated;
+}
+
+AEVec2 TitanEntity::GetBossRoomCenter()
+{
+	return bossRoomCenter;
 }
 
 void TitanEntity::OnIdle(const f32& dt) {
@@ -133,7 +150,6 @@ void TitanEntity::OnStun(const f32& dt) {
 			bullet->scale = { BULLETSCALEX ,BULLETSCALEY };
 			SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
 		}
-		//Put for loop to spawn a few
 
 		shootTimer = shootCooldown;
 	}

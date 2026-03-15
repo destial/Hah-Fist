@@ -4,7 +4,8 @@
 #include "../../Managers/AssetManager.hpp"
 #include "../Projectiles/ExplosiveProjectile.hpp"
 #include "../Projectiles/MissileProjectile.hpp"
-#include "../StaticEntity.hpp"
+#include "../StaticEntities/MovingPlatformEntity.hpp"
+#include "../TriggerEntities/LaserEntity.hpp"
 #include "../../Utils/MeshRenderer.hpp"
 #include "../../Scenes/BaseScene.hpp"  
 #include "../../Managers/SceneManager.hpp"
@@ -14,8 +15,9 @@
 IronsideEntity::IronsideEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }, 10.f, true) {
 	InitializeAnimatedSpriteData(ASSET_TROOPER_SPRITE, ASSET_TROOPER_SPRITE_ROWS, ASSET_TROOPER_SPRITE_COLUMNS, ASSET_TROOPER_SPRITE_SCALE);
 	// Empty for now
-	health = 500.f;
+	health = 100.f;
 	max_health = 500.f;
+	damage = 25.f;
 	attackRange = 20.f;
 	bossActivated = true;
 	shootTimer = 0.f;
@@ -30,6 +32,8 @@ IronsideEntity::IronsideEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, {
 	currLane = LANE::LANE2;
 	innerState = INNERFSM::MOVE;
 	nextLanetospawn = 1;
+	go_type = PhysicsType::TRIGGER;
+	bossRoomCenter = position;
 }
 
 IronsideEntity::~IronsideEntity() {
@@ -81,17 +85,15 @@ void IronsideEntity::OnChase(const f32& dt) {
 		targetY = LaneY[lanetogoto];
 		float diff = targetY - position.y;
 		dirtogo = (diff > 0.f) ? 1.f : -1.f;
-		velocity.y = 5 * dirtogo;
+		velocity.y = (GetLowHealthFactor()* 5.f + 5.f) * dirtogo;
 		innerState = INNERFSM::MOVING;
 		break;
 	}
 	case INNERFSM::MOVING:
 	{
-
-		if ((dirtogo > 0 && position.y >= targetY - 0.1f) ||
-			(dirtogo < 0 && position.y <= targetY + 0.1f))
+		if ((dirtogo > 0 && position.y >= targetY) ||
+			(dirtogo < 0 && position.y <= targetY))
 		{
-			std::cout << "test";
 			velocity.y = 0;
 			innerState = INNERFSM::SPAWNPLATFORM1;
 			position.y = targetY;
@@ -102,67 +104,46 @@ void IronsideEntity::OnChase(const f32& dt) {
 	case INNERFSM::SPAWNPLATFORM1:
 	{
 		LANE lanetospawn = GetRandomSpawnLane(currLane);
-		nextLanetospawn = 6 - lanetospawn - currLane;
+		nextLanetospawn = 3 - lanetospawn - currLane;
 		AEVec2 Pos{ position.x, LaneY[lanetospawn] };
-		StaticEntity* platform = new StaticEntity(StaticEntity::STATIC_TYPE::TYPE_PLATFORM, Pos);
+		AEVec2 platformDir{ -1.f, 0.f };
+		MovingPlatformEntity* platform = new MovingPlatformEntity(Pos, platformDir, false, 1.0f, 5.0f);
 		platform->mesh = MeshRenderer::GetCenterRectMesh();
-		platform->scale = { 5.f, 0.5f };
+		platform->scale = { 7.f, 0.5f };
 		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(platform);
 		innerState = INNERFSM::SHOOTPROJECTILE;
+		StunTimerBasedOnHealth();
 		break;
 	}
 	case INNERFSM::SHOOTPROJECTILE:
 	{
-		float healthRatio = health / max_health;
-		float temp = (1.f - healthRatio) / 0.75f;
-		temp = AEClamp(temp, 0.f, 1.f);
 
-		int projectiles = baseProjectiles + static_cast<int>(temp * extraProjectiles);
-		Player* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<Player>();
-		if (!player) return;
-		AEVec2 Pos{ position.x,  position.y };
-		AEVec2 shootDir{ player->position.x - position.x,player->position.y - position.y };
-		AEVec2Normalize(&shootDir, &shootDir);
-		for (int i = 0; i < projectiles; i++)
-		{
-			f32 bulletSpeed = Utils::RandRange(10, 20);
-			if (healthRatio > 0.5f)
-			{
-				MissileProjectile* bullet = new MissileProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
-				bullet->scale = { BULLETSCALEX ,BULLETSCALEY };
-				SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
-			}
-			else
-			{
-				ExplosiveProjectile* bullet = new ExplosiveProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
-				bullet->scale = { BULLETSCALEX ,BULLETSCALEY };
-				SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
-			}
 
-		}
+		ShootProjectile(health / max_health, LaneY[nextLanetospawn]);
+		ShootProjectile(health / max_health, LaneY[3 - nextLanetospawn - currLane]);
+
 		innerState = INNERFSM::SPAWNPLATFORM2;
-
-
+		StunTimerBasedOnHealth();
 		break;
 	}
 	case INNERFSM::SPAWNPLATFORM2:
 	{
 		AEVec2 Pos{ position.x, LaneY[nextLanetospawn] };
-		StaticEntity* platform = new StaticEntity(StaticEntity::STATIC_TYPE::TYPE_PLATFORM, Pos);
+		AEVec2 platformDir{ -1.f, 0.f };
+		MovingPlatformEntity* platform = new MovingPlatformEntity(Pos, platformDir, false, 1.0f, 5.0f);
 		platform->mesh = MeshRenderer::GetCenterRectMesh();
-		platform->scale = { 5.f, 0.5f };
+		platform->scale = { 7.f, 0.5f };
 		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(platform);
 		innerState = INNERFSM::LASER;
-		float healthRatio = health / max_health;
-		float temp = (1.f - healthRatio) / 0.75f;
-		temp = AEClamp(temp, 0.f, 1.f);
-		float stunTime = 2.f * (1.f - temp);
-		SwitchState(FSM::STUN, stunTime);
+		StunTimerBasedOnHealth();
 		break;
 	}
 	case INNERFSM::LASER:
 	{
+		LaserEntity* laser = new LaserEntity(this->position, this, damage);
+		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(laser);
 		innerState = INNERFSM::MOVE;
+		StunTimerBasedOnHealth();
 		break;
 	}
 	default:
@@ -172,6 +153,7 @@ void IronsideEntity::OnChase(const f32& dt) {
 
 void IronsideEntity::OnStun(const f32& dt) {
 	// Trooper's stun behaviour
+	
 	if (stateTimer < 0.f) {
 		SwitchState(FSM::CHASE);
 	}
@@ -185,6 +167,54 @@ void IronsideEntity::OnDead(const f32& dt) {
 	}
 	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 
+}
+
+bool IronsideEntity::GetBossActivated()
+{
+	return bossActivated;
+}
+
+void IronsideEntity::SetBossActivation(bool activated)
+{
+	bossActivated = activated;
+}
+
+AEVec2 IronsideEntity::GetBossRoomCenter()
+{
+	return bossRoomCenter;
+}
+void IronsideEntity::ShootProjectile(float healthRatio,f32 posY)
+{
+	Player* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<Player>();
+	if (!player) return;
+	AEVec2 Pos{ position.x, posY };
+	AEVec2 shootDir{ player->position.x - Pos.x,player->position.y - Pos.y };
+	AEVec2Normalize(&shootDir, &shootDir);
+	f32 bulletSpeed = Utils::RandRange(10, 20);
+	if (healthRatio > 0.5f)
+	{
+		MissileProjectile* bullet = new MissileProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
+		bullet->scale = { BULLETSCALEX ,BULLETSCALEY };
+		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
+	}
+	else
+	{
+		ExplosiveProjectile* bullet = new ExplosiveProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
+		bullet->scale = { BULLETSCALEX ,BULLETSCALEY };
+		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
+	}
+}
+float IronsideEntity::GetLowHealthFactor()
+{
+	float healthRatio = health / max_health;
+	float temp = (1.f - healthRatio) / 0.75f;
+	temp = AEClamp(temp, 0.f, 1.f);
+	return temp;
+}
+void IronsideEntity::StunTimerBasedOnHealth()
+{
+	float stunTime = 1.f + (1.f - GetLowHealthFactor());
+	SwitchState(FSM::STUN, stunTime);
 }
 IronsideEntity::LANE IronsideEntity::GetRandomSpawnLane(IronsideEntity::LANE bossLane)
 {

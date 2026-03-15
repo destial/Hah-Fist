@@ -2,15 +2,20 @@
 #include "../../Utils/AEOverload.hpp"
 #include "../../Utils/MeshRenderer.hpp"
 #include "../../UI/Debug.hpp"
+#include "../../Managers/SceneManager.hpp"
 
-MovingPlatformEntity::MovingPlatformEntity(AEVec2 pos, AEVec2 travelDir) : StaticEntity(STATIC_TYPE::TYPE_PLATFORM, pos, 1.0f, CollisionShape::AABB, PhysicsType::MOVING_STATIC)
+MovingPlatformEntity::MovingPlatformEntity(AEVec2 pos, AEVec2 travelDir, bool loopMovement, f32 speed, f32 _lifetime) : StaticEntity(STATIC_TYPE::TYPE_PLATFORM, pos, 1.0f, CollisionShape::AABB, PhysicsType::MOVING_STATIC)
 {
-	SetStartPoint(pos);
+
 	travelDirection = travelDir;
 	AEVec2 length = startPoint - endPoint;
 	normalDistance = AEVec2Length(&length);
 	mesh = MeshRenderer::GetCenterRectMesh();
 	layer = BaseEntity::RenderLayer::WORLD;
+	loopingMovement = loopMovement;
+	travelSpeed = speed;
+	lifetime = _lifetime;
+	SetStartPoint(pos);
 }
 
 MovingPlatformEntity::~MovingPlatformEntity()
@@ -20,6 +25,14 @@ MovingPlatformEntity::~MovingPlatformEntity()
 
 void MovingPlatformEntity::Update(const f32& dt)
 {
+	if (lifetime > 0.f)
+	{
+		lifetime -= dt;
+		if (lifetime <= 0.f)
+		{
+			SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
+		}
+	}
 	prev_position = position;
 	if (normalDirection)
 	{

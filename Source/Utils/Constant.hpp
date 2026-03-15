@@ -10,6 +10,6 @@
 
 
 //Boss
-constexpr float LaneY[] = { 4.f, 14.f, 24.f };
+constexpr float LaneY[] = { 6.f, 14.f, 22.f };
 
 #endif
