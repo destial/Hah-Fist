@@ -16,5 +16,5 @@ void CoinEntity::OnPickup(GameObjectEntity* pickupper)
 {
 	Player* p = static_cast<Player*>(pickupper);
 	p->AddCoin();
-	AEAudioPlay(AssetManager::GetAudio(ASSET_TURBOFIST_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
+	AEAudioPlay(AssetManager::GetAudio(ASSET_COIN_PICKUP_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
 }

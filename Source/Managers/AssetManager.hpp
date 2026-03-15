@@ -60,6 +60,7 @@
 #define ASSET_COIN_SPRITE_ROWS 1
 #define ASSET_COIN_SPRITE_COLUMNS 20
 #define ASSET_COIN_SPRITE_SCALE 2.f
+#define ASSET_COIN_PICKUP_AUDIO "Assets/coin_pickup.wav"
 
 #define ASSET_PROJECTILE_IMAGE "Assets/projectile.png"
 #define ASSET_SPLASHSCREEN_IMAGE "Assets/splash_screen.png"
@@ -76,6 +77,8 @@
 #define ASSET_ENEMYHURT_AUDIO "Assets/enemy_hurt.mp3"
 #define ASSET_SPIDERHURT_AUDIO "Assets/spider_hurt.ogg"
 #define ASSET_PLAYERHURT_AUDIO "Assets/player_hurt.ogg"
+
+#define ASSET_BOSS_SPAWN_AUDIO "Assets/boss_trigger_close.wav"
 
 //Gameplay Macros
 #define PLAYER_INVULNERABILITY_ON_HIT 0.75f

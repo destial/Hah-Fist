@@ -4,6 +4,7 @@
 #include "../../UI/Debug.hpp"
 #include "../../Managers/SceneManager.hpp"
 #include "../PlayerEntity.hpp"
+#include "../../Managers/AssetManager.hpp"
 
 BossSpawnTriggerEntity::BossSpawnTriggerEntity(AEVec2 pos) : StaticEntity(STATIC_TYPE::TYPE_WALL, pos, 1.0f, CollisionShape::AABB, PhysicsType::TRIGGER)
 {
@@ -27,6 +28,8 @@ void BossSpawnTriggerEntity::PreUpdate(const f32& dt)
 			{
 				this->go_type = PhysicsType::STATIC;
 				this->color = Color{ 1.f, 0.5f, 0.f, 0.f };
+				AEAudioPlay(AssetManager::GetAudio(ASSET_BOSS_SPAWN_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
+				player_entered = false;
 			}
 		}
 		else
