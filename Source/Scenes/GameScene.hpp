@@ -39,6 +39,12 @@ public:
 	void Update(const f32& dt) override;
 
 	/*!
+	* @brief Inherited: PostUpdate all entities in the scene
+	* @param dt - The delta time for this frame
+	*/
+	void PostUpdate(const f32& dt) override;
+
+	/*!
 	* @brief Inherited: Clear the entities from the scene.
 	*/
 	void End() override;

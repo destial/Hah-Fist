@@ -149,6 +149,8 @@ void GameScene::Init() {
 
 	player->AddUpdateListener(AssetManager::GetInstance(), [this, player](const f32& dt) {
 		camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
+
+
 	});
 
 	BarUI* player_health = new BarUI({Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() - 1.f});
@@ -177,8 +179,13 @@ void GameScene::Update(const f32& dt) {
 	BaseScene::Update(dt);
 	staticEntities.clear();
 	game_timer += dt;
+}
 
-	if (GetFirstEntityOfType<Player>() == nullptr)
+void GameScene::PostUpdate(const f32& dt) {
+	BaseScene::PostUpdate(dt);
+
+	Player* player = GetFirstEntityOfType<Player>();
+	if (player == nullptr || player->health <= 0.f)
 		Lose();
 }
 
