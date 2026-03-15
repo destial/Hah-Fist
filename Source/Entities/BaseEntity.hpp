@@ -16,6 +16,7 @@
 #include "../Utils/Utils.hpp"
 #include "../Items/Image.hpp"
 #include "../Managers/AssetManager.hpp"
+#include "../Utils/AEOverload.hpp"
 
 /*!
 * @brief The base entity class that should be inherited by all other entities
@@ -130,6 +131,8 @@ public:
 	* @param filepath - Filepath to the sprite, be sure to use AssetManager macros for this.
 	*/
 	void InitializeSpriteData(std::string filepath, f32 _scale = 5.f);
+
+	inline AEVec2 GetHalfSize() { return scale * 0.5f; }
 };
 
 #endif

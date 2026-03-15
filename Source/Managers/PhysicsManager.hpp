@@ -23,8 +23,8 @@ public:
 
 	void PushGameObject(GameObjectEntity* gameObject);
 
-
-
+	void HandleStaticDynamicCollisionResponse(GameObjectEntity* _static, GameObjectEntity* _dynamic);
+	void HandleDynamicDynamicCollisionResponse(GameObjectEntity* first, GameObjectEntity* second);
 };
 
 #endif

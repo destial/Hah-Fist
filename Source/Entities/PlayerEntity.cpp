@@ -45,7 +45,7 @@ void Player::PreUpdate(const f32& dt) {
 void Player::Update(const f32& dt) {
 	GameObjectEntity::Update(dt);
 	// Out of bounds checking
-	if (timeElapsedSinceLastDamage > 0.25f)
+	if (timeElapsedSinceLastDamage > PLAYER_CONTROL_LOCK_AFTER_HIT)
 	{
 		AEVec2 dir{};
 		if (AEInputCheckCurr(AEVK_A)) {
@@ -155,18 +155,25 @@ void Player::Render() {
 void Player::OnCollide(GameObjectEntity* go)
 {
 	//f32 p_health = health;
-	GameObjectEntity::OnCollide(go);
+	
 	if (go->entity_type == EntityType::ENEMY)
 	{
 		if (invulnerabilityDuration > 0) { return; }
+		GameObjectEntity::OnCollide(go);
 		timeElapsedSinceLastDamage = 0.0f;
+		invulnerabilityDuration = 0.75f;
 		AEVec2 push_velocity = position - go->position;
 		AEVec2Normalize(&push_velocity, &push_velocity);
-		velocity += push_velocity * 25.f;
+		velocity.x += push_velocity.x * 25.f;
+		if (go->position.y <= position.y)
+		{
+			velocity.y += fabsf(push_velocity.y) * 25.f;
+		}
 		health -= go->damage;
-
+		CurrentWeapon()->ResetWeapon();
 		AEAudioPlay(AssetManager::GetAudio(ASSET_PLAYERHURT_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
 	}
+	GameObjectEntity::OnCollide(go);
 }
 
 void Player::AddWeapon(Weapon* weapon)

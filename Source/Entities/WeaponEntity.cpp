@@ -45,6 +45,11 @@ void Weapon::Update(const f32& dt) {
 	}
 	else
 	{
+		if (player_entity->timeElapsedSinceLastDamage < PLAYER_CONTROL_LOCK_AFTER_HIT)
+		{
+			return;
+		}
+
 		if (AEInputCheckTriggered(AEVK_LBUTTON))
 		{
 			if (!weaponChannels)
