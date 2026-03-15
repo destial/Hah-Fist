@@ -24,6 +24,7 @@ PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1
 	baseProjectiles = 3;
 	extraProjectiles = 2;
 	innerState = INNERFSM::JUMP;
+	damage = 250.f;
 }
 
 PayloadEntity::~PayloadEntity() {

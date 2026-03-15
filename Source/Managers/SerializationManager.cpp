@@ -13,6 +13,8 @@
 #include "../Entities/Enemies/TrooperEntity.hpp"
 #include "../Entities/Enemies/SpiderEntity.hpp"
 #include "../Entities/Enemies/ProjectileEntity.hpp"
+#include "../Entities/Enemies/TitanEntity.hpp"
+
 #include "../UI/BaseUI.hpp"
 #include "../Utils/MeshRenderer.hpp"
 
@@ -102,6 +104,10 @@ namespace Serialization {
 				else if (ProjectileEntity* pEntity = dynamic_cast<ProjectileEntity*>(enemy)) {
 					s.type = EntityType::PROJECTILE_ENTITY;
 				}
+				else if (TitanEntity* tEnt = dynamic_cast<TitanEntity*>(enemy))
+				{
+					s.type = EntityType::TITAN_BOSS;
+				}
 				else {
 					s.type = EntityType::ENEMY;
 				}
@@ -153,6 +159,10 @@ namespace Serialization {
 			}
 			case EntityType::BOSS_SPAWN_TRIGGER: {
 				entity = new BossSpawnTriggerEntity(AEVec2{ en.x, en.y });
+				break;
+			}
+			case EntityType::TITAN_BOSS: {
+				entity = new TitanEntity(AEVec2{ en.x, en.y });
 				break;
 			}
 			default: break;

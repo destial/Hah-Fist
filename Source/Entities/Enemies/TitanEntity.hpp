@@ -7,10 +7,11 @@ protected:
 	GameObjectEntity* ground;
 	float shootCooldown{3.f};
 	float shootTimer;
-	bool bossActivated;
+	
 	float bossRoomX, bossRoomY,attackRange,jumpX,jumpY;
 	int baseProjectiles, extraProjectiles;
 public:
+	bool bossActivated;
 	TitanEntity(AEVec2 pos);
 	~TitanEntity() override;
 	void PreUpdate(const f32& dt) override;

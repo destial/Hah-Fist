@@ -3,6 +3,7 @@
 #include "../../Utils/Constant.hpp"
 #include "../../Managers/AssetManager.hpp"
 #include "../Projectiles/SpikeProjectile.hpp"
+#include "../Projectiles/MissileProjectile.hpp"
 #include "../../Scenes/BaseScene.hpp"  
 #include "../../Managers/SceneManager.hpp"
 #include "../../Scenes/GameScene.hpp"
@@ -13,7 +14,7 @@ TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0
 	health = 500.f;
 	max_health = 500.f;
 	attackRange = 20.f;
-	bossActivated = true;
+	bossActivated = false;
 	shootTimer = 0.f;
 	jumpX = 15.f;
 	jumpY = 50.f;
@@ -21,6 +22,7 @@ TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0
 	bossRoomY = 25.f;
 	baseProjectiles = 3;
 	extraProjectiles = 10;
+	damage = 250.f;
 }
 
 TitanEntity::~TitanEntity() {
@@ -127,8 +129,8 @@ void TitanEntity::OnStun(const f32& dt) {
 			AEVec2Normalize(&shootDir, &shootDir);
 			f32 bulletSpeed = Utils::RandRange(10, 20);
 
-			SpikeProjectile* bullet = new SpikeProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
-			bullet->scale = { BULLETSCALEX, BULLETSCALEY };
+			MissileProjectile* bullet = new MissileProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
+			bullet->scale = { BULLETSCALEX ,BULLETSCALEY };
 			SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
 		}
 		//Put for loop to spawn a few
