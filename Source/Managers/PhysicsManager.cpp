@@ -145,6 +145,7 @@ void PhysicsManager::PostUpdate(const f32& dt)
 
 		for (GameObjectEntity* dynamic2 : qtGameObjects->head->GetPotentialCollisionTargets(dynamic1, ignoredObjects, GameObjectEntity::PhysicsType::DYNAMIC)) {
 			if (dynamic2->invulnerabilityDuration > 0.f) { continue; }
+			if (dynamic1->entity_type == GameObjectEntity::EntityType::ENEMY && dynamic2->entity_type == GameObjectEntity::EntityType::ENEMY) { continue; }
 			bool has_collision{ false };
 			if (!Utils::OBB(dynamic1, dynamic2)) {
 				if (Utils::DynamicAABB(dynamic1, dynamic2, tCollide, dt))
@@ -212,7 +213,7 @@ void PhysicsManager::HandleStaticDynamicCollisionResponse(GameObjectEntity* _sta
 	if (se == nullptr)
 		return;
 	
-	
+	bool is_standing_on_this_object = false;
 	if (_dynamic->prev_position.y - _dynamic->GetHalfSize().y >= _static->position.y + _static->GetHalfSize().y)
 	{
 		//Snap position back to previous position
@@ -223,6 +224,8 @@ void PhysicsManager::HandleStaticDynamicCollisionResponse(GameObjectEntity* _sta
 
 		//Set the dynamic to standing above something
 		_dynamic->pBody->is_standing_above = true;
+
+		is_standing_on_this_object = true;
 	}
 	//Exit collision for platforms as they only care for collisions from above.
 	if (se->GetStaticType() == StaticEntity::STATIC_TYPE::TYPE_PLATFORM) { return; }
@@ -234,7 +237,7 @@ void PhysicsManager::HandleStaticDynamicCollisionResponse(GameObjectEntity* _sta
 		//If velocity is trying to move into static, instead flip it with dampening
 		_dynamic->velocity.y = _dynamic->velocity.y > 0.f ? _dynamic->velocity.y * -0.25f : _dynamic->velocity.y;
 	}
-	if (!_dynamic->pBody->is_standing_above)
+	if (!is_standing_on_this_object)
 	{
 		if (_dynamic->prev_position.x - _dynamic->GetHalfSize().x >= _static->position.x + _static->GetHalfSize().x)
 		{
