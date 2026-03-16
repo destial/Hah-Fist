@@ -9,6 +9,8 @@
 #include "../Managers/SceneManager.hpp"
 #include <iostream>
 #include <cstdio>
+//For Debug Functions
+#include "../Entities/StaticEntities/BossSpawnTriggerEntity.hpp"
 
 Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 	int columns{ 18 };
@@ -94,18 +96,13 @@ void Player::Update(const f32& dt) {
 
 	}
 	////Testing Shooting Function
-	//if (AEInputCheckCurr(AEVK_T) && abs(velocity.y) == 0) {
-	//	velocity.y += jumpVelocity * 4.0f;
-	//	//Have to offset so it does not instantly collide and delete its own projectile
-	//	AEVec2 playerPosOff{position.x + dir.x + 2.f,position.y};
-	//	AEVec2 shootDir{ dir.x, 0.f };
-	//	AEVec2Normalize(&shootDir, &shootDir);
-	//	f32 bulletSpeed = 50.f;
-	//	f32 bulletDamage = 25.f;
-	//	BaseProjectile* bullet = new BaseProjectile(playerPosOff, shootDir, bulletSpeed, bulletDamage, this);
-	//	SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
-
-	//}
+	if (AEInputCheckCurr(AEVK_T)) {
+		health = 1000.f;
+		max_health = 1000.f;
+	}
+	if (AEInputCheckCurr(AEVK_Y)) {
+		position = dynamic_cast<BossSpawnTriggerEntity*>(SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<BossSpawnTriggerEntity>())->position;
+	}
 }
 
 void Player::PostUpdate(const f32& dt) {
