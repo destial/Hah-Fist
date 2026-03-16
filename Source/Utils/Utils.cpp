@@ -92,7 +92,7 @@ namespace Utils {
 			f32 cam_x, cam_y;
 			AEGfxGetCamPosition(&cam_x, &cam_y);
 			AEVec2 screen = WorldToScreen(x, y);
-			AEVec2 world = Utils::ScreenToWorld(screen.x - (cam ? cam_x : 0.f), screen.y + (cam ? -cam_y : 0.f));
+			AEVec2 world = Utils::ScreenToWorld(screen.x - (cam ? cam_x : 0.f), screen.y + (cam ? cam_y : 0.f));
 			x = world.x;
 			y = world.y;
 		}
@@ -100,6 +100,10 @@ namespace Utils {
 			((x / world_width) * 2.f) - 1.f,
 			((y / world_height) * 2.f) - 1.f
 		};
+	}
+
+	AEVec2 ScreenSizeMultiplier() {
+		return { AEGfxGetWindowWidth() / 1600.f, AEGfxGetWindowHeight() / 900.f };
 	}
 
 	AEVec2 ScaleToScreen(f32 x, f32 y) {

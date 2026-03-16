@@ -34,12 +34,16 @@ std::vector<BaseEntity*> GameScene::staticEntities;
 static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, std::string str) {
 	ButtonUI* b = new ButtonUI(pos);
 	b->image = AssetManager::GetTexture(ASSET_SMALLBUTTON_IMAGE);
+	b->SetInteractive(false);
 	b->color = { 255, 255, 255, 255 };
 	b->overlay_text_color = { 255, 255, 255, 255 };
 	b->overlay_color = b->color;
 	b->text = str;
 	b->text_size = 7.5f;
 	b->font = AssetManager::GetFontId(ASSET_DEFAULT_FONT);
+	b->AddPreUpdateListener(b, [b](const f32& dt) {
+		b->color = { 255, 255, 255, 255 };
+	});
 	return b;
 }
 
@@ -63,12 +67,32 @@ void GameScene::Init() {
 	game_timer = 0.f;
 	InputEvent::Listeners += {this, OnGameExit};
 
-	ButtonUI* wk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 1.f }, "LB");
+	ButtonUI* lb = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 1.f }, "LB");
+	lb->AddUpdateListener(lb, [lb](const f32& dt) {
+		if (AEInputCheckCurr(AEVK_LBUTTON)) {
+			lb->color = { 255, 128, 128, 128 };
+		}
+	});
 	ButtonUI* ak = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 3.f, Utils::GetWorldHeight() - 2.f }, 'A');
+	ak->AddUpdateListener(ak, [ak](const f32& dt) {
+		if (AEInputCheckCurr(AEVK_A)) {
+			ak->color = { 255, 128, 128, 128 };
+		}
+	});
 	ButtonUI* dk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 1.f, Utils::GetWorldHeight() - 2.f }, 'D');
+	dk->AddUpdateListener(dk, [dk](const f32& dt) {
+		if (AEInputCheckCurr(AEVK_D)) {
+			dk->color = { 255, 128, 128, 128 };
+		}
+	});
 	ButtonUI* sk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 2.f }, "Sp");
+	sk->AddUpdateListener(sk, [sk](const f32& dt) {
+		if (AEInputCheckCurr(AEVK_SPACE)) {
+			sk->color = { 255, 128, 128, 128 };
+		}
+	});
 
-	AddEntityToScene(wk);
+	AddEntityToScene(lb);
 	AddEntityToScene(ak);
 	AddEntityToScene(dk);
 	AddEntityToScene(sk);

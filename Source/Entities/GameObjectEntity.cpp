@@ -81,13 +81,15 @@ void GameObjectEntity::Render() {
 		return;
 	
 	BaseEntity::Render();
-	auto corners = Utils::GetCorners(this);
-	DebugUtils::RenderLine(corners[0], corners[1]);
-	DebugUtils::RenderLine(corners[1], corners[2]);
-	DebugUtils::RenderLine(corners[2], corners[3]);
-	DebugUtils::RenderLine(corners[3], corners[0]);
-
 	if (DebugUtils::IsRendering()) {
+		auto corners = Utils::GetCorners(this);
+
+		Color color = Utils::OBBPoint(this, Utils::GetMouseWorld(true)) ? Color{255, 255, 0, 0} : Color{255, 0, 255, 0};
+		DebugUtils::RenderLine(corners[0], corners[1], color);
+		DebugUtils::RenderLine(corners[1], corners[2], color);
+		DebugUtils::RenderLine(corners[2], corners[3], color);
+		DebugUtils::RenderLine(corners[3], corners[0], color);
+
 		char pos[64];
 		sprintf_s(pos, "(%0.2f,%0.2f)", this->position.x, this->position.y);
 		DebugUtils::RenderText(this->position, pos, true);
