@@ -20,6 +20,9 @@
 class GameScene : public BaseScene {
 protected:
 	f32 game_timer;
+	enum struct GameState : int {
+		INIT, PLAYING = 0, LOST, WON
+	} game_state;
 	static std::vector<BaseEntity*> staticEntities;
 public:
 	GameScene(); // Ctor

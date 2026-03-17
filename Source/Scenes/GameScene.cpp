@@ -51,7 +51,7 @@ static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, char ch) {
 	return CreateHotKeyDisplay(pos, std::string{ ch });
 }
 
-GameScene::GameScene() : BaseScene(), game_timer{ 0 } {}
+GameScene::GameScene() : BaseScene(), game_timer{ 0 }, game_state{ GameState::INIT } {}
 
 GameScene::~GameScene() {}
 
@@ -255,6 +255,7 @@ void GameScene::Init() {
 	AddEntityToScene(player_health);
 
 	Game::SetBackgroundColor(Color{ 1.f, 0.3f, 0.3f, 0.3f });
+	game_state = GameState::PLAYING;
 }
 
 void GameScene::Update(const f32& dt) {
@@ -278,6 +279,7 @@ void GameScene::End() {
 }
 
 void GameScene::Win() {
+	game_state = GameState::WON;
 	LevelManager::SetLevelTime(LevelManager::GetLevel(), game_timer); // set this level time
 	if (!LevelManager::GetUnlockedLvls().count(LevelManager::GetLevel() + 1)) // check if next level is not unlocked
 		LevelManager::UnlockLevel(LevelManager::GetLevel() + 1); // unlock next level
@@ -285,6 +287,7 @@ void GameScene::Win() {
 }
 
 void GameScene::Lose() {
+	game_state = GameState::LOST;
 	End(); // restart level (todo: lose screen)
 	Init();
 }
