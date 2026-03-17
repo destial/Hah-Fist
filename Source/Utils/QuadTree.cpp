@@ -144,7 +144,7 @@ namespace QuadTree
 
 	std::vector<GameObjectEntity*> Node::GetPotentialCollisionTargets(GameObjectEntity* gameObject, std::vector<GameObjectEntity*> ignoredObjects, GameObjectEntity::PhysicsType type_filter)
 	{
-		Physics::AABB bounds;
+		Physics::AABB bounds{};
 		bounds.min.x = gameObject->position.x - gameObject->scale.x * 0.5f;
 		bounds.min.y = gameObject->position.y - gameObject->scale.y * 0.5f;
 		bounds.max.x = gameObject->position.x + gameObject->scale.x * 0.5f;

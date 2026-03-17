@@ -20,11 +20,11 @@ PhysicsManager::~PhysicsManager()
 
 void PhysicsManager::PreUpdate(const f32& dt)
 {
-	if (qtGameObjects != nullptr)
+	/*if (qtGameObjects != nullptr)
 	{
 		delete qtGameObjects;
 	}
-	qtGameObjects = new QuadTree::Tree(worldBounds, gameObjects, maxEntriesPerNode);
+	qtGameObjects = new QuadTree::Tree(worldBounds, gameObjects, maxEntriesPerNode);*/
 }
 
 void PhysicsManager::PostUpdate(const f32& dt)
@@ -48,20 +48,23 @@ void PhysicsManager::PostUpdate(const f32& dt)
 		
 		ignoredObjects.push_back(trigger);
 
-		for (GameObjectEntity* trigger2 : qtGameObjects->head->GetPotentialCollisionTargets(trigger, ignoredObjects, GameObjectEntity::PhysicsType::TRIGGER)) {
+		//for (GameObjectEntity* trigger2 : qtGameObjects->head->GetPotentialCollisionTargets(trigger, ignoredObjects, GameObjectEntity::PhysicsType::TRIGGER)) {
+		for (GameObjectEntity* trigger2 : GetPotentialCollisionTargets(trigger, ignoredObjects, GameObjectEntity::PhysicsType::TRIGGER)) {
 			if (Utils::OBB(trigger, trigger2)) {
 				trigger->OnCollide(trigger2);
 				trigger2->OnCollide(trigger);
 			}
 		}
 
-		for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(trigger, GameObjectEntity::PhysicsType::DYNAMIC)) {	
+		//for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(trigger, GameObjectEntity::PhysicsType::DYNAMIC)) {	
+		for (GameObjectEntity* dynamic : GetPotentialCollisionTargets(trigger, {}, GameObjectEntity::PhysicsType::DYNAMIC)) {
 			if (Utils::OBB(trigger, dynamic)) {
 				trigger->OnCollide(dynamic);
 			}
 		}
 
-		for (GameObjectEntity* _static : qtGameObjects->head->GetPotentialCollisionTargets(trigger, GameObjectEntity::PhysicsType::STATIC)) {
+		//for (GameObjectEntity* _static : qtGameObjects->head->GetPotentialCollisionTargets(trigger, GameObjectEntity::PhysicsType::STATIC)) {
+		for (GameObjectEntity* _static : GetPotentialCollisionTargets(trigger, {}, GameObjectEntity::PhysicsType::STATIC)) {
 			if (Utils::OBB(trigger, _static)) {
 				trigger->OnCollide(_static);
 			}
@@ -77,7 +80,8 @@ void PhysicsManager::PostUpdate(const f32& dt)
 		//If GameObject is not a trigger, continue
 		if (_static->go_type != GameObjectEntity::PhysicsType::MOVING_STATIC) { continue; }
 
-		for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(_static, GameObjectEntity::PhysicsType::DYNAMIC)) {
+		//for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(_static, GameObjectEntity::PhysicsType::DYNAMIC)) {
+		for (GameObjectEntity* dynamic : GetPotentialCollisionTargets(_static, {}, GameObjectEntity::PhysicsType::DYNAMIC)) {
 			bool has_collision{ false };
 			if (!Utils::OBB(_static, dynamic))
 			{
@@ -110,7 +114,8 @@ void PhysicsManager::PostUpdate(const f32& dt)
 		//If GameObject is not a trigger, continue
 		if (_static->go_type != GameObjectEntity::PhysicsType::STATIC) { continue; }
 
-		for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(_static, GameObjectEntity::PhysicsType::DYNAMIC)) {
+		//for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(_static, GameObjectEntity::PhysicsType::DYNAMIC)) {
+		for (GameObjectEntity* dynamic : GetPotentialCollisionTargets(_static, {}, GameObjectEntity::PhysicsType::DYNAMIC)) {
 			bool has_collision{ false };
 			if (!Utils::OBB(_static, dynamic))
 			{
@@ -146,7 +151,8 @@ void PhysicsManager::PostUpdate(const f32& dt)
 
 		if (dynamic1->invulnerabilityDuration > 0.f) { continue; }
 
-		for (GameObjectEntity* dynamic2 : qtGameObjects->head->GetPotentialCollisionTargets(dynamic1, ignoredObjects, GameObjectEntity::PhysicsType::DYNAMIC)) {
+		//for (GameObjectEntity* dynamic2 : qtGameObjects->head->GetPotentialCollisionTargets(dynamic1, ignoredObjects, GameObjectEntity::PhysicsType::DYNAMIC)) {
+		for (GameObjectEntity* dynamic2 : GetPotentialCollisionTargets(dynamic1, ignoredObjects, GameObjectEntity::PhysicsType::DYNAMIC)) {
 			if (dynamic2->invulnerabilityDuration > 0.f) { continue; }
 			if (dynamic1->entity_type == GameObjectEntity::EntityType::ENEMY && dynamic2->entity_type == GameObjectEntity::EntityType::ENEMY) { continue; }
 			bool has_collision{ false };
@@ -319,4 +325,27 @@ void PhysicsManager::HandleDynamicDynamicCollisionResponse(GameObjectEntity* fir
 		first->velocity.x += 1.0f;
 		second->velocity.x -= 1.0f;
 	}
+}
+
+std::vector<GameObjectEntity*> PhysicsManager::GetPotentialCollisionTargets(GameObjectEntity* first, std::vector<GameObjectEntity*> ignored, GameObjectEntity::PhysicsType typefilter) const {
+	std::vector<GameObjectEntity*> potential;
+
+	for (GameObjectEntity* en : gameObjects) {
+		bool ignore = false;
+		for (GameObjectEntity* ig : ignored) {
+			if (en == ig) {
+				ignore = true;
+				break;
+			}
+		}
+		if (ignore) {
+			continue;
+		}
+		if (Utils::CircleCircleCollision(first, en)) {
+			if (en->go_type == typefilter || typefilter == GameObjectEntity::PhysicsType::TOTAL) {
+				potential.push_back(en);
+			}
+		}
+	}
+	return potential;
 }

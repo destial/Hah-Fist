@@ -96,8 +96,12 @@ void BaseScene::Render() {
 
 void BaseScene::End() {
 	current_state = FrameState::END;
-	for (auto& entity : scene_entities) {
-		delete entity;
+	for (size_t i{}; i < scene_entities.size(); ++i) {
+		BaseEntity* entity = scene_entities[i];
+		if (entity) {
+			delete entity;
+			scene_entities[i] = nullptr;
+		}
 	}
 	awaiting_deletion.clear();
 	linked_entities.clear();

@@ -25,6 +25,8 @@ public:
 
 	void HandleStaticDynamicCollisionResponse(GameObjectEntity* _static, GameObjectEntity* _dynamic);
 	void HandleDynamicDynamicCollisionResponse(GameObjectEntity* first, GameObjectEntity* second);
+
+	std::vector<GameObjectEntity*> GetPotentialCollisionTargets(GameObjectEntity* first, std::vector<GameObjectEntity*> ignored, GameObjectEntity::PhysicsType typefilter = GameObjectEntity::PhysicsType::TOTAL) const;
 };
 
 #endif

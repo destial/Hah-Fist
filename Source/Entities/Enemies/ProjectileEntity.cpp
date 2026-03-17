@@ -36,6 +36,7 @@ std::ostream& operator<<(std::ostream& os, const EnemyEntity::FSM& state)
 	default:
 		break;
 	}
+	return os << "UNKNOWN";
 }
 
 
