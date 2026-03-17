@@ -43,9 +43,8 @@ void LevelEditor::SetScene(BaseScene* b_scene) {
 void LevelEditor::SelectEntity(BaseEntity* entity) {
 	if (entity == nullptr)
 		return;
-	if (Weapon* w = dynamic_cast<Weapon*>(entity)) {
+	if (Weapon* w = dynamic_cast<Weapon*>(entity)) 
 		return;
-	}
 	std::pair<BaseEntity*, AEVec2> pair = { entity, Utils::GetMouseWorld(true) - entity->position };
 	currentSelections.push_back(pair);
 }
@@ -160,17 +159,55 @@ void LevelEditor::Update(const f32& dt) {
 	AEInputMouseWheelDelta(&scroll);
 
 	bool selected = false;
-	for (BaseEntity* const& go : scene->Entities()) {
+	for (BaseEntity* go : scene->Entities()) {
 		if (AEInputCheckTriggered(AEVK_LBUTTON) && Utils::OBBPoint(go, mwp)) {
-			currentSelections.clear();
-			SelectEntity(go);
-			selected = true;
+			bool s = true;
+			for (std::pair<BaseEntity*, AEVec2> pair : currentSelections) {
+				if (go == pair.first) {
+					s = false;
+					pair.second = Utils::GetMouseWorld(true) - go->position;
+				}
+			}
+			if (s) {
+				currentSelections.clear();
+				SelectEntity(go);
+				selected = true;
+			}
 		}
 	}
 
-	if (!selected && AEInputCheckTriggered(AEVK_LBUTTON)) {
+	static AEVec2 selectionBoxStart{};
+	static AEVec2 selectionBoxEnd{};
+
+	if (!selected && AEInputCheckTriggered(AEVK_MBUTTON)) {
+		selectionBoxStart = mwp;
+		selectionBoxEnd = mwp;
 		currentSelections.clear();
 	}
+
+	if (!selected && AEInputCheckPrev(AEVK_MBUTTON) && !AEInputCheckReleased(AEVK_MBUTTON)) {
+		selectionBoxEnd = mwp;
+	}
+
+	if (!selected && AEInputCheckPrev(AEVK_MBUTTON) && AEInputCheckReleased(AEVK_MBUTTON)) {
+		BaseEntity* temp = new GameObjectEntity(AEVec2{ selectionBoxStart.x + selectionBoxEnd.x, selectionBoxStart.y + selectionBoxEnd.y } *0.5f);
+		temp->scale.x = selectionBoxEnd.x - selectionBoxStart.x;
+		temp->scale.y = selectionBoxEnd.y - selectionBoxStart.y;
+		for (BaseEntity* en : scene->Entities()) {
+			if (Utils::OBB(en, temp)) {
+				SelectEntity(en);
+			}
+		}
+		delete temp;
+
+		selectionBoxStart = {};
+		selectionBoxEnd = {};
+	}
+
+	DebugUtils::RenderLine(selectionBoxStart, AEVec2{ selectionBoxStart.x, selectionBoxEnd.y }, {255, 255, 255, 0});
+	DebugUtils::RenderLine(selectionBoxEnd, AEVec2{ selectionBoxStart.x, selectionBoxEnd.y }, { 255, 255, 255, 0 });
+	DebugUtils::RenderLine(selectionBoxStart, AEVec2{ selectionBoxEnd.x, selectionBoxStart.y }, { 255, 255, 255, 0 });
+	DebugUtils::RenderLine(selectionBoxEnd, AEVec2{ selectionBoxEnd.x, selectionBoxStart.y }, { 255, 255, 255, 0 });
 
 	if (AEInputCheckTriggered(AEVK_1)) {
 		currentSelections.clear();
