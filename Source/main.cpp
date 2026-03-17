@@ -8,6 +8,7 @@
 #include "Managers/InputManager.hpp"
 
 #include "Managers/AssetManager.hpp"
+#include "Managers/CameraManager.hpp"
 #include "Events/InputEvent.hpp"
 #include "Scenes/GameScene.hpp"
 #include "UI/Debug.hpp"
@@ -45,10 +46,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
 	// Using custom window procedure
-	AESysInit(hInstance, nCmdShow, 1600, 900, 1, 60, false, NULL);
+	s32 console = 0;
+#if _DEBUG
+	console = 1;
+#endif
+	AESysInit(hInstance, nCmdShow, 1600, 900, console, 0, false, NULL);
 
-	// Changing the window title
+	// Changing the window title & icon
 	AESysSetWindowTitle("Hah Fist!");
+	AESysSetWindowIcon("Assets/icon.ico", 24, 24);
 
 	// Reset the system modules
 	AESysReset();
@@ -86,6 +92,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			// Set the delta time
 			f32 frame_time = static_cast<f32>(AEFrameRateControllerGetFrameTime());
 
+			// F11 fullscreen toggle
+			if (AEInputCheckTriggered(AEVK_F11)) {
+				if (AESysIsFullScreen())
+					AESysSetFullScreen(0);
+				else
+					AESysSetFullScreen(1);
+			}
+
+			// Set window resolution
+			Utils::SetScreenResolution(AEGfxGetWindowWidth(), AEGfxGetWindowHeight());
+
 			// -=-=-=-=-=-=-=- Update Logic Start -=-=-=-=-=-=-=-
 			float dt;
 			// run timestep for every lost frame if < 60fps
@@ -111,17 +128,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			AESysFrameEnd();
 
 			// Basic way to trigger exiting the application
-			// when ESCAPE is hit or when the window is closed
+			// when the window is closed
 			if (0 == AESysDoesWindowExist())
 				Game::bGameRunning = false;
 		}
 
+		// clean up the current scene's resources
 		sceneManager.GetCurrentScene()->End();
 	}
 
+	// unload audio groups
 	AEAudioUnloadAudioGroup(Game::music);
 	AEAudioUnloadAudioGroup(Game::sfx);
 
+	// clean up other resources
+	CameraManager::Free();
 	MeshRenderer::Free();
 	InputHandler::Free();
 	AssetManager::Free();

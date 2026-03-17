@@ -25,6 +25,7 @@ SceneManager::~SceneManager() {
 		}
 	}
 	delete editor;
+	instance = nullptr;
 }
 
 void SceneManager::PreUpdate(const f32& dt) {

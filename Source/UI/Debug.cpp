@@ -47,7 +47,7 @@ namespace DebugUtils {
 		AEVec2 screen = Utils::GameToTextScreen(world_pos.x, world_pos.y, cam);
 		const char* str = text.c_str();
 		f32 w, h;
-		AEGfxGetPrintSize(font, str, size, &w, &h); 
+		AEGfxGetPrintSize(font, str, size * Utils::ScreenSizeMultiplier().x, &w, &h);
 		AEGfxPrint(font, str, screen.x, screen.y - ((h / 2.f) / size * 0.5f), h, color.r / 255.f, color.g / 255.f, color.b / 255.f, color.a / 255.f);
 	}
 

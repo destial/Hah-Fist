@@ -74,7 +74,7 @@ void BaseUI::Render() {
 void BaseUI::RenderText() {
 	f32 w, h;
 	const char* str = text.c_str();
-	AEGfxGetPrintSize(font, str, text_size, &w, &h);
+	AEGfxGetPrintSize(font, str, text_size * Utils::ScreenSizeMultiplier().x, &w, &h);
 	f32 t_color[4] = {};
 	t_color[0] = (interactive && mouse_hovered ? overlay_text_color : text_color).r / 255.f;
 	t_color[1] = (interactive && mouse_hovered ? overlay_text_color : text_color).g / 255.f;

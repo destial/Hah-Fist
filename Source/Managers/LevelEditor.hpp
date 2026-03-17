@@ -12,6 +12,7 @@
 #define __LEVEL_EDITOR_H
 #include "AEEngine.h"
 #include "../Scenes/BaseScene.hpp"
+#include <vector>
 
 namespace Editor { // start namespace editor
 	/*!
@@ -44,8 +45,7 @@ class LevelEditor {
 private:
 	bool toggled; // Toggle flag
 	BaseScene* scene; // The current editing scene
-	BaseEntity* currentSelection; // The current entity selected
-	AEVec2 currentOffset{ 0.f,0.f }; // The mouse offset from the dragging entity
+	std::vector<std::pair<BaseEntity*, AEVec2>> currentSelections; // The current entity selected
 public:
 	LevelEditor(BaseScene* scene); // Ctor
 	LevelEditor(LevelEditor const&) = delete; // Remove copy ctor

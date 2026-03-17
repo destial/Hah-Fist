@@ -20,7 +20,7 @@
 #include "../Entities/StaticEntities/BossSpawnTriggerEntity.hpp"
 
 LevelEditor::LevelEditor(BaseScene* b_scene)
-: scene{ b_scene }, toggled{ false }, currentSelection{ nullptr } {
+: scene{ b_scene }, toggled{ false }, currentSelections(0) {
 }
 
 LevelEditor::~LevelEditor() {}
@@ -36,30 +36,33 @@ bool LevelEditor::IsToggled() const {
 
 void LevelEditor::SetScene(BaseScene* b_scene) {
 	scene = b_scene;
-	currentSelection = nullptr;
+	currentSelections.clear();
 	toggled = false;
 }
 
 void LevelEditor::SelectEntity(BaseEntity* entity) {
+	if (entity == nullptr)
+		return;
 	if (Weapon* w = dynamic_cast<Weapon*>(entity)) {
 		return;
 	}
-	currentSelection = entity;
-	if (entity == nullptr) return;
-	currentOffset = Utils::GetMouseWorld(true) - entity->position;
+	std::pair<BaseEntity*, AEVec2> pair = { entity, Utils::GetMouseWorld(true) - entity->position };
+	currentSelections.push_back(pair);
 }
 
 void LevelEditor::RemoveSelectedEntity() {
-	if (currentSelection == nullptr) {
+	if (currentSelections.empty()) {
 		return;
 	}
 
-	if (Weapon* w = dynamic_cast<Weapon*>(currentSelection)) {
-		return;
+	for (std::pair<BaseEntity*, AEVec2> const& pair : currentSelections) {
+		if (Weapon* w = dynamic_cast<Weapon*>(pair.first)) {
+			continue;
+		}
+		scene->RemoveEntityFromScene(pair.first);
 	}
-
-	scene->RemoveEntityFromScene(currentSelection);
-	currentSelection = nullptr;
+	
+	currentSelections.clear();
 }
 
 BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
@@ -156,90 +159,120 @@ void LevelEditor::Update(const f32& dt) {
 	s32 scroll;
 	AEInputMouseWheelDelta(&scroll);
 
-	for (BaseEntity* go : scene->Entities()) {
+	bool selected = false;
+	for (BaseEntity* const& go : scene->Entities()) {
 		if (AEInputCheckTriggered(AEVK_LBUTTON) && Utils::OBBPoint(go, mwp)) {
+			currentSelections.clear();
 			SelectEntity(go);
-			break;
+			selected = true;
 		}
 	}
 
+	if (!selected && AEInputCheckTriggered(AEVK_LBUTTON)) {
+		currentSelections.clear();
+	}
+
 	if (AEInputCheckTriggered(AEVK_1)) {
+		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::STATIC_PLATFORM));
 	}
 
 	if (AEInputCheckTriggered(AEVK_2)) {
+		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::STATIC_WALL));
 	}
 
 	if (AEInputCheckTriggered(AEVK_3)) {
+		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::ENEMY_1));
 	}
 
 	if (AEInputCheckTriggered(AEVK_4)) {
+		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::ENEMY_2));
 	}
 
 	if (AEInputCheckTriggered(AEVK_5)) {
+		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::SPIDER));
 	}
 
 	if (AEInputCheckTriggered(AEVK_6)) {
+		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::PROJECTILE_ENEMY));
 	}
 
 	if (AEInputCheckTriggered(AEVK_7)) {
+		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::COIN));
 	}
 	if (AEInputCheckTriggered(AEVK_8)) {
+		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::MOVING_PLATFORM));
 	}
 	
 	if (AEInputCheckTriggered(AEVK_9)) {
+		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::CRATE));
 	}
 
 	if (AEInputCheckTriggered(AEVK_Q)) {
+		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::BOSS_SPAWN_WALL));
 	}
 
 	//BOSSES
 	if (AEInputCheckTriggered(AEVK_B)) {
+		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::TITAN));
 	}
 	if (AEInputCheckTriggered(AEVK_N)) {
+		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::PAYLOAD));
 	}
 	if (AEInputCheckTriggered(AEVK_M)) {
+		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::IRONSIDE));
 	}
 	// Toggling to switch from scaling the X axis to Y axis
 	if (AEInputCheckTriggered(AEVK_X)) {
 		scaleX = !scaleX;
 	}
-	if (currentSelection) {
-		if (AEInputCheckCurr(AEVK_LBUTTON)) {
-			if (Utils::OBBPoint(currentSelection, mwp)) {
-				currentSelection->position = mwp - currentOffset;
-				if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(currentSelection)) {
-					go->prev_position = mwp;
-					if (MovingPlatformEntity* mpe = dynamic_cast<MovingPlatformEntity*>(currentSelection))
-					{
-						mpe->SetStartPoint(go->position);
+	if (!currentSelections.empty()) {
+		bool drag = false;
+		if (AEInputCheckCurr(AEVK_LBUTTON) && !AEInputCheckTriggered(AEVK_LBUTTON)) {
+			
+			for (std::pair<BaseEntity*, AEVec2> const& pair : currentSelections) {
+				if (Utils::OBBPoint(pair.first, mwp)) {
+					drag = true;
+				}
+			}
+
+			if (drag) {
+				for (std::pair<BaseEntity*, AEVec2> const& pair : currentSelections) {
+					pair.first->position = mwp - pair.second;
+					if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(pair.first)) {
+						go->prev_position = mwp;
+						if (MovingPlatformEntity* mpe = dynamic_cast<MovingPlatformEntity*>(pair.first))
+						{
+							mpe->SetStartPoint(go->position);
+						}
+					}
+					if (scroll != 0) {
+						(scaleX ? pair.first->scale.x : pair.first->scale.y) += scroll;
+						(scaleX ? pair.first->scale.x : pair.first->scale.y) = max(scaleX ? pair.first->scale.x : pair.first->scale.y, 1);
+					}
+
+					if (AEInputCheckCurr(AEVK_RBUTTON)) {
+						if (scroll != 0) {
+							pair.first->scale.y += scroll;
+							pair.first->scale.y = max(pair.first->scale.y, 1);
+						}
 					}
 				}
 			}
-			if (scroll != 0) {
-				(scaleX ? currentSelection->scale.x : currentSelection->scale.y) += scroll;
-				(scaleX ? currentSelection->scale.x : currentSelection->scale.y) = max(scaleX ? currentSelection->scale.x : currentSelection->scale.y,1);
-			}
 		}
 
-		if (AEInputCheckCurr(AEVK_RBUTTON)) {
-			if (scroll != 0) {
-				currentSelection->scale.y += scroll;
-				currentSelection->scale.y = max(currentSelection->scale.y, 1);
-			}
-		}
 
 		if (AEInputCheckTriggered(AEVK_DELETE)) {
 			RemoveSelectedEntity();
@@ -271,11 +304,14 @@ void LevelEditor::Update(const f32& dt) {
 }
 
 void LevelEditor::Render() {
-	if (currentSelection) {
-		AEVec2 normal = { currentSelection->position.x, currentSelection->position.y + currentSelection->scale.y * 0.5f };
-		AEVec2 right = { currentSelection->position.x + currentSelection->scale.x * 0.5f , currentSelection->position.y};
-		DebugUtils::RenderLine(currentSelection->position, normal, { 255, 255, 0, 0 });
-		DebugUtils::RenderLine(currentSelection->position, right, { 255, 0, 255, 0 });
+	if (currentSelections.empty()) {
+		return;
+	}
+	for (std::pair<BaseEntity*, AEVec2> const& pair : currentSelections) {
+		AEVec2 normal = { pair.first->position.x, pair.first->position.y + pair.first->scale.y * 0.5f };
+		AEVec2 right = { pair.first->position.x + pair.first->scale.x * 0.5f , pair.first->position.y};
+		DebugUtils::RenderLine(pair.first->position, normal, { 255, 255, 0, 0 });
+		DebugUtils::RenderLine(pair.first->position, right, { 255, 0, 0, 255 });
 	}
 }
 

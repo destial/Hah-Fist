@@ -91,8 +91,11 @@ void GameObjectEntity::Render() {
 		DebugUtils::RenderLine(corners[3], corners[0], color);
 
 		char pos[64];
-		sprintf_s(pos, "(%0.2f,%0.2f)", this->position.x, this->position.y);
+		sprintf_s(pos, "%d:(%0.2f,%0.2f)", GetId(), this->position.x, this->position.y);
+		char typ[64];
+		sprintf_s(typ, "type:%d|phys:%d", this->entity_type, this->go_type);
 		DebugUtils::RenderText(this->position, pos, true);
+		DebugUtils::RenderText(AEVec2{this->position.x, this->position.y - 0.5f}, typ, true);
 	}
 }
 

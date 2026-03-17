@@ -103,7 +103,7 @@ namespace Utils {
 	}
 
 	AEVec2 ScreenSizeMultiplier() {
-		return { AEGfxGetWindowWidth() / 1600.f, AEGfxGetWindowHeight() / 900.f };
+		return { screen_width / 1600.f, screen_height / 900.f };
 	}
 
 	AEVec2 ScaleToScreen(f32 x, f32 y) {
@@ -136,13 +136,13 @@ namespace Utils {
 
 		f32 cam_x, cam_y;
 		AEGfxGetCamPosition(&cam_x, &cam_y);
-		return Utils::ScreenToWorld(mouse.x + (cam ? cam_x : 0.f), mouse.y + (cam ? -cam_y : 0.f));
+		return Utils::ScreenToWorld(mouse.x + (cam ? cam_x : 0.f), mouse.y - (cam ? cam_y : 0.f));
 	}
 
 	void GetMinMaxAABB(GameObjectEntity* const& go, AEVec2& min, AEVec2& max)
 	{
-		min = { go->prev_position.x - go->scale.x * 0.5f, go->prev_position.y - go->scale.y * 0.5f };
-		max = { go->prev_position.x + go->scale.x * 0.5f, go->prev_position.y + go->scale.y * 0.5f };
+		min = { go->prev_position.x - std::abs(go->scale.x) * 0.5f, go->prev_position.y - std::abs(go->scale.y) * 0.5f };
+		max = { go->prev_position.x + std::abs(go->scale.x) * 0.5f, go->prev_position.y + std::abs(go->scale.y) * 0.5f };
 	}
 
 	const f32 GetWorldWidth(void) {
@@ -159,13 +159,13 @@ namespace Utils {
 
 	bool CircleCircleCollision(BaseEntity* const& go, BaseEntity* const& go2) {
 		f32 sqrDist = AEVec2SquareDistance(&go->position, &go2->position);
-		f32 combinedRadii = max(go->scale.x, go->scale.y) + max(go2->scale.x, go2->scale.y);
+		f32 combinedRadii = std::abs(max(go->scale.x, go->scale.y)) + std::abs(max(go2->scale.x, go2->scale.y));
 		return sqrDist <= combinedRadii * combinedRadii;
 	}
 
 	bool AABB(BaseEntity* const& go, BaseEntity* const& go2) {
-		return !(go->position.x + go->scale.x * 0.5f < go2->position.x - go2->scale.x * 0.5f || go->position.x - go->scale.x * 0.5f > go2->position.x + go2->scale.x * 0.5f ||
-			go->position.y + go->scale.y * 0.5f < go2->position.y - go2->scale.y * 0.5f || go->position.y - go->scale.y * 0.5f > go2->position.y + go2->scale.y * 0.5f);
+		return !(go->position.x + std::abs(go->scale.x) * 0.5f < go2->position.x - std::abs(go2->scale.x) * 0.5f || go->position.x - std::abs(go->scale.x) * 0.5f > go2->position.x + std::abs(go2->scale.x) * 0.5f ||
+			go->position.y + std::abs(go->scale.y) * 0.5f < go2->position.y - std::abs(go2->scale.y) * 0.5f || go->position.y - std::abs(go->scale.y) * 0.5f > go2->position.y + std::abs(go2->scale.y) * 0.5f);
 	}
 
 	bool DynamicAABB(GameObjectEntity* const& go, GameObjectEntity* const& go2, float& tCollision, const float& dt)
@@ -255,8 +255,8 @@ namespace Utils {
 
 	 bool RayAABB(const AEVec2& ray_origin, const AEVec2& ray_dir, const BaseEntity* const& target, AEVec2& contact, AEVec2& normal, float& tNear)
 	{
-		AEVec2 topLeft = { target->position.x - target->scale.x * 0.5f, target->position.y + target->scale.y * 0.5f };
-		AEVec2 bottomRight = { target->position.x + target->scale.x * 0.5f, target->position.y - target->scale.y * 0.5f };
+		AEVec2 topLeft = { target->position.x - std::abs(target->scale.x) * 0.5f, target->position.y + std::abs(target->scale.y) * 0.5f };
+		AEVec2 bottomRight = { target->position.x + std::abs(target->scale.x) * 0.5f, target->position.y - std::abs(target->scale.y) * 0.5f };
 		AEVec2 tFirst = (topLeft - ray_origin) / ray_dir; // Contains Near X & Near Y
 		AEVec2 tLast = (bottomRight - ray_origin) / ray_dir; // Contains Far X & Far Y
 
@@ -321,16 +321,16 @@ namespace Utils {
 
 		// Combine center with scaled axes
 		// top right
-		corners[0] = { go->position.x + dirX.x * (go->scale.x * 0.5f) + dirY.x * (go->scale.y * 0.5f), go->position.y + dirX.y * (go->scale.x * 0.5f) + dirY.y * (go->scale.y * 0.5f) };
+		corners[0] = { go->position.x + dirX.x * (std::abs(go->scale.x) * 0.5f) + dirY.x * (std::abs(go->scale.y) * 0.5f), go->position.y + dirX.y * (std::abs(go->scale.x) * 0.5f) + dirY.y * (std::abs(go->scale.y) * 0.5f) };
 
 		// bottom right
-		corners[1] = { go->position.x - dirX.x * (go->scale.x * 0.5f) + dirY.x * (go->scale.y * 0.5f), go->position.y - dirX.y * (go->scale.x * 0.5f) + dirY.y * (go->scale.y * 0.5f) };
+		corners[1] = { go->position.x - dirX.x * (std::abs(go->scale.x) * 0.5f) + dirY.x * (std::abs(go->scale.y) * 0.5f), go->position.y - dirX.y * (std::abs(go->scale.x) * 0.5f) + dirY.y * (std::abs(go->scale.y) * 0.5f) };
 
 		// bottom left
-		corners[2] = { go->position.x - dirX.x * (go->scale.x * 0.5f) - dirY.x * (go->scale.y * 0.5f), go->position.y - dirX.y * (go->scale.x * 0.5f) - dirY.y * (go->scale.y * 0.5f) };
+		corners[2] = { go->position.x - dirX.x * (std::abs(go->scale.x) * 0.5f) - dirY.x * (std::abs(go->scale.y) * 0.5f), go->position.y - dirX.y * (std::abs(go->scale.x) * 0.5f) - dirY.y * (std::abs(go->scale.y) * 0.5f) };
 
 		// top left
-		corners[3] = { go->position.x + dirX.x * (go->scale.x * 0.5f) - dirY.x * (go->scale.y * 0.5f), go->position.y + dirX.y * (go->scale.x * 0.5f) - dirY.y * (go->scale.y * 0.5f) };
+		corners[3] = { go->position.x + dirX.x * (std::abs(go->scale.x) * 0.5f) - dirY.x * (std::abs(go->scale.y) * 0.5f), go->position.y + dirX.y * (std::abs(go->scale.x) * 0.5f) - dirY.y * (std::abs(go->scale.y) * 0.5f) };
 
 		return corners;
 	}
@@ -381,10 +381,10 @@ namespace Utils {
 
 	bool OBBPoint(BaseEntity* const& go, AEVec2 const& pos) {
 		AEVec2 local_pos = pos - go->position;
-		AEVec2Rotate(&local_pos, &local_pos, go->rotation);
+		//AEVec2Rotate(&local_pos, &local_pos, go->rotation);
 
-		return (local_pos.x <= go->scale.x * 0.5f && local_pos.x >= -go->scale.x * 0.5f &&
-			local_pos.y <= go->scale.y * 0.5f && local_pos.y >= -go->scale.y * 0.5f);
+		return (local_pos.x <= std::abs(go->scale.x) * 0.5f && local_pos.x >= -std::abs(go->scale.x) * 0.5f &&
+			local_pos.y <= std::abs(go->scale.y) * 0.5f && local_pos.y >= -std::abs(go->scale.y) * 0.5f);
 	}
 
 	void SetDeltaTime(f32 dt) {

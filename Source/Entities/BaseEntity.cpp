@@ -4,6 +4,8 @@
 #include "../Utils/Utils.hpp"
 #include <cstdio>
 
+s32 BaseEntity::all_id{};
+
 BaseEntity::BaseEntity(AEVec2 position) :
 	position{ position },
 	velocity{ 0 },
@@ -13,7 +15,8 @@ BaseEntity::BaseEntity(AEVec2 position) :
 	layer{RenderLayer::WORLD},
 	mesh{ nullptr }, 
 	image{ nullptr }, 
-	color{ 255, 255, 255, 255 }
+	color{ 255, 255, 255, 255 },
+	en_id{all_id++}
 {
 }
 

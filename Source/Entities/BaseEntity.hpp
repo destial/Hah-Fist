@@ -24,6 +24,9 @@
 * @brief this class.
 */
 class BaseEntity {
+private:
+	static s32 all_id;
+	s32 en_id;
 protected:
 	// Only encourage the use of heap instantiation (pointers)
 	BaseEntity(AEVec2 position = { 0.f, 0.f }); // Ctor
@@ -132,7 +135,9 @@ public:
 	*/
 	void InitializeSpriteData(std::string filepath, f32 _scale = 5.f);
 
-	inline AEVec2 GetHalfSize() { return scale * 0.5f; }
+	inline AEVec2 GetHalfSize() const { return scale * 0.5f; }
+
+	inline s32 GetId() const { return en_id; }
 };
 
 #endif
