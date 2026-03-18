@@ -159,7 +159,8 @@ namespace Utils {
 
 	bool CircleCircleCollision(BaseEntity* const& go, BaseEntity* const& go2) {
 		f32 sqrDist = AEVec2SquareDistance(&go->position, &go2->position);
-		f32 combinedRadii = std::abs(max(go->scale.x, go->scale.y)) + std::abs(max(go2->scale.x, go2->scale.y));
+		f32 radii = max(std::abs(go->scale.x), std::abs(go->scale.y));
+		f32 combinedRadii = radii + radii;
 		return sqrDist <= combinedRadii * combinedRadii;
 	}
 

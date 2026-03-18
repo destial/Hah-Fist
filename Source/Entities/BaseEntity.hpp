@@ -12,6 +12,7 @@
 #include <vector>
 #include <map>
 #include <functional>
+#include <cmath>
 #include "AEEngine.h"
 #include "../Utils/Utils.hpp"
 #include "../Items/Image.hpp"
@@ -135,7 +136,7 @@ public:
 	*/
 	void InitializeSpriteData(std::string filepath, f32 _scale = 5.f);
 
-	inline AEVec2 GetHalfSize() const { return scale * 0.5f; }
+	inline AEVec2 GetHalfSize() const { return AEVec2{ std::abs(scale.x), std::abs(scale.y) } *0.5f; }
 
 	inline s32 GetId() const { return en_id; }
 };
