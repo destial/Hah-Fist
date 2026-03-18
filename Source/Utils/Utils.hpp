@@ -48,6 +48,14 @@ std::istream& operator>> (std::istream& is, Color& color);
 
 std::ostream& operator<< (std::ostream& os, Color const& color);
 
+Color operator- (Color const& lhs, Color const& rhs);
+
+Color operator+ (Color const& lhs, Color const& rhs);
+
+Color operator* (Color const& lhs, f32 scalar);
+
+Color operator* (f32 scalar, Color const& lhs);
+
 namespace Game {
 	void SetGameRunning(bool b);
 	void SetBackgroundColor(Color c);
@@ -76,6 +84,7 @@ namespace Utils {
 	void GetMinMaxAABB(GameObjectEntity* const& go, AEVec2& min,AEVec2& max);
 	std::vector<AEVec2> GetCorners(const BaseEntity* go);
 	bool CircleCircleCollision(BaseEntity* const& go, BaseEntity* const& go2);
+	bool CircleOBBCollision(BaseEntity* const& circle, BaseEntity* const& obb);
 	bool AABB(BaseEntity* const& go, BaseEntity* const& go2);
 	bool DynamicAABB(GameObjectEntity* const& go, GameObjectEntity* const& go2, float& tCollision, const float& dt);
 	//bool DynamicAABB(const BaseEntity* const& go, const BaseEntity* const& go2, AEVec2& contact, AEVec2& normal, float& tCollision, const f32& dt);
@@ -97,7 +106,7 @@ namespace Utils {
 
 	template<typename N>
 	N Lerp(N start, N end, f32 delta) {
-		return start + AEClamp(delta, 0.f, 1.f) * (end - start);
+		return start + (AEClamp(delta, 0.f, 1.f) * (end - start));
 	}
 
 	template<typename N>

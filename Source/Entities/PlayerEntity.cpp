@@ -23,10 +23,11 @@ Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 	currentRow = currentCol = 0;
 	scale = { 5.f * ((static_cast<f32>(sprite->image->width) / static_cast<f32>(columns)) / (sprite->image->height / static_cast<f32>(rows))) , 5.f };
 	jumpHeight = 8.5f;
-	jumpVelocity = sqrtf(jumpHeight * 2.f * abs(pBody->gravity.y));
+	jumpVelocity = std::sqrtf(jumpHeight * 2.f * std::abs(pBody->gravity.y));
 	speed = 10.f;
 	health = 100.f;
 	max_health = 100.f;
+	timeElapsedSinceLastDamage = PLAYER_CONTROL_LOCK_AFTER_HIT;
 
 	entity_type = EntityType::PLAYER;
 	layer = RenderLayer::PLAYER;
@@ -75,6 +76,8 @@ void Player::Update(const f32& dt) {
 			}
 		}
 	}
+
+	this->color = Utils::Lerp(Color{ 255, 255, 128, 128 }, Color{ 255, 255, 255, 255 }, timeElapsedSinceLastDamage / PLAYER_CONTROL_LOCK_AFTER_HIT);
 	
 	if (AEInputCheckCurr(AEVK_1)) {
 		SwitchWeapon(0);
@@ -85,7 +88,6 @@ void Player::Update(const f32& dt) {
 	else if (AEInputCheckCurr(AEVK_3)) {
 		SwitchWeapon(2);
 	}
-
 
 	if (AEInputCheckCurr(AEVK_SPACE) && pBody->is_standing_above) {
 		velocity.y += jumpVelocity;
@@ -158,7 +160,6 @@ void Player::OnCollide(GameObjectEntity* go)
 	if (go->entity_type == EntityType::ENEMY)
 	{
 		if (invulnerabilityDuration > 0) { return; }
-		GameObjectEntity::OnCollide(go);
 		timeElapsedSinceLastDamage = 0.0f;
 		invulnerabilityDuration = 0.75f;
 		AEVec2 push_velocity = position - go->position;
@@ -166,7 +167,7 @@ void Player::OnCollide(GameObjectEntity* go)
 		velocity.x += push_velocity.x * 25.f;
 		if (go->position.y <= position.y)
 		{
-			velocity.y += fabsf(push_velocity.y) * 25.f;
+			velocity.y += std::fabsf(push_velocity.y) * 25.f;
 		}
 		health -= go->damage;
 		CurrentWeapon()->ResetWeapon();

@@ -50,6 +50,22 @@ std::ostream& operator<< (std::ostream& os, Color const& color) {
 	return os << color.Pack();
 }
 
+Color operator-(Color const& lhs, Color const& rhs) {
+	return Color{ lhs.a - rhs.a, lhs.r - rhs.r, lhs.g - rhs.g, lhs.b - rhs.b };
+}
+
+Color operator+(Color const& lhs, Color const& rhs) {
+	return Color{ min(lhs.a + rhs.a, 255), min(lhs.r + rhs.r, 255), min(lhs.g + rhs.g, 255), min(lhs.b + rhs.b, 255) };
+}
+
+Color operator*(Color const& lhs, f32 scalar) {
+	return Color{ min(lhs.a * scalar, 255), min(lhs.r * scalar, 255), min(lhs.g * scalar, 255), min(lhs.b * scalar, 255) };
+}
+
+Color operator*(f32 scalar, Color const& lhs) {
+	return lhs * scalar;
+}
+
 namespace Utils {
 	static f32 world_width = 48.f;
 	static f32 world_height = 27.f;
@@ -162,6 +178,44 @@ namespace Utils {
 		f32 radii = max(std::abs(go->scale.x), std::abs(go->scale.y));
 		f32 combinedRadii = radii + radii;
 		return sqrDist <= combinedRadii * combinedRadii;
+	}
+
+	bool CircleOBBCollision(BaseEntity* const& circle, BaseEntity* const& aabb) {
+		// get the boundaries of the aabb
+		AEVec2 aabb_min = { -std::abs(aabb->scale.x) * 0.5f, -std::abs(aabb->scale.y) * 0.5f };
+		AEVec2 aabb_max = { std::abs(aabb->scale.x) * 0.5f, std::abs(aabb->scale.y) * 0.5f};
+
+		// circle location position in respect to the aabb
+		AEVec2 r = circle->position - aabb->position;
+
+		// rotate local position back to axis
+		AEVec2 local_circle_pos;
+		AEVec2Rotate(&local_circle_pos, &r, aabb->rotation);
+
+		// AABB collision testing
+		AEVec2 closest_point = AEVec2{ local_circle_pos };
+		if (closest_point.x < aabb_min.x) {
+			closest_point.x = aabb_min.x;
+		}
+		else if (closest_point.x > aabb_max.x) {
+			closest_point.x = aabb_max.x;
+		}
+
+		if (closest_point.y < aabb_min.y) {
+			closest_point.y = aabb_min.y;
+		}
+		else if (closest_point.y > aabb_max.y) {
+			closest_point.y = aabb_max.y;
+		}
+
+		// get back the distance between the circle pos and the closest point
+		// this is also the normal for collision response
+		AEVec2 aabb_to_circle = local_circle_pos - closest_point;
+
+		// now the actual collision checking, the distance between circle center 
+		// and closest point to aabb is less than circle radius
+		f32 radius = max(std::abs(circle->scale.x), std::abs(circle->scale.y)) * 0.5f;
+		return AEVec2SquareLength(&aabb_to_circle) <= std::powf(radius, 2);
 	}
 
 	bool AABB(BaseEntity* const& go, BaseEntity* const& go2) {
@@ -338,9 +392,6 @@ namespace Utils {
 
 	bool OBB(BaseEntity* const& go, BaseEntity* const& go2) {
 		// Initial broader phase collision check
-		if (!CircleCircleCollision(go, go2))
-			return false;
-
 		auto cornersA = GetCorners(go);
 		auto cornersB = GetCorners(go2);
 

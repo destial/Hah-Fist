@@ -241,6 +241,7 @@ void GameScene::Init() {
 	player_health->text_size = 5.f;
 	player_health->scale = { 20.f, 1.f };
 	player_health->overlay_color = { 255, 64, 255, 64 };
+	player_health->color = { 255, 255, 64, 64 };
 	player_health->layer = BaseUI::RenderLayer::UI;
 	player_health->SetInteractive(false);
 	player_health->AddUpdateListener(this, [player, player_health](const f32& dt) {

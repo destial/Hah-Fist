@@ -24,6 +24,13 @@ BaseScene::BaseScene()
 BaseScene::~BaseScene() {
 	linked_entities.clear();
 	awaiting_deletion.clear();
+	for (size_t i{}; i < scene_entities.size(); ++i) {
+		BaseEntity* entity = scene_entities[i];
+		if (entity) {
+			delete entity;
+			scene_entities[i] = nullptr;
+		}
+	}
 	scene_entities.clear();
 	delete particleSystem;
 	if (physicsManager)
@@ -127,8 +134,8 @@ void BaseScene::AddEntityToScene(BaseEntity* entity) {
 	if (EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(entity)) {
 		BarUI* healthbar = new BarUI{ AEVec2{ 0.f, 0.f } };
 		healthbar->scale = { 2.f, .25f };
-		healthbar->overlay_color = { 255, 0, 255, 0 };
-		healthbar->color = { 255, 128, 128, 128 };
+		healthbar->overlay_color = { 255, 64, 255, 64 };
+		healthbar->color = { 255, 255, 64, 64 };
 		healthbar->text = "";
 		healthbar->layer = BaseUI::RenderLayer::ENTITY;
 		healthbar->text_size = 7.f;

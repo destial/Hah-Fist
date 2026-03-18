@@ -92,7 +92,7 @@ void BarUI::Render() {
 	}
 	AEGfxSetColorToMultiply(overlay_color.r / 255.f, overlay_color.g / 255.f, overlay_color.b / 255.f, overlay_color.a / 255.f);
 	AEGfxSetColorToAdd(0.0f, 0.0f, 0.0f, 0.0f);
-	AEGfxSetBlendMode(AE_GFX_BM_MULTIPLY);
+	AEGfxSetBlendMode(AE_GFX_BM_NONE);
 	AEGfxSetTransparency(overlay_color.a / 255.f);
 	AEGfxSetTransform(overlay_transform.m);
 	AEGfxMeshDraw(mesh, MeshRenderer::RenderMode);

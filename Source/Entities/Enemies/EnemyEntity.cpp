@@ -72,6 +72,8 @@ void EnemyEntity::Update(const f32& dt)
 		default:
 			break;
 	}
+
+	this->color = Utils::Lerp(Color{ 255, 255, 128, 128 }, Color{ 255, 255, 255, 255 }, timeElapsedSinceLastDamage / PLAYER_CONTROL_LOCK_AFTER_HIT);
 }
 
 void EnemyEntity::PostUpdate(const f32& dt)
@@ -97,6 +99,8 @@ void EnemyEntity::OnCollide(GameObjectEntity* go) {
 
 void EnemyEntity::OnHit()
 {
+	timeElapsedSinceLastDamage = 0.0f;
+	//invulnerabilityDuration = 0.75f;
 	AEAudioPlay(AssetManager::GetAudio(ASSET_ENEMYHURT_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
 }
 
@@ -113,7 +117,7 @@ void EnemyEntity::OnPatrol(const f32& dt)
 		velocity.x += dir.x * speed;
 	}
 	// Checks if it is on the ledge.
-	if (!Utils::RayHitAny({ position.x + std::abs(scale.x) * dir.x * 0.5f, position.y - scale.y * 0.5f }, AEVec2{ 0.f, -1.f }, GameScene::GetStaticEntities())) {
+	if (!Utils::RayHitAny({ position.x + std::abs(scale.x) * dir.x * 0.5f, position.y - std::abs(scale.y) * 0.5f }, AEVec2{ 0.f, -1.f }, GameScene::GetStaticEntities())) {
 		velocity.x = 0.f;
 		SwitchState(FSM::IDLE, 3.f);
 	}

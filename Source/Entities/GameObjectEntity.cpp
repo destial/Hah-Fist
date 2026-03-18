@@ -51,7 +51,7 @@ void GameObjectEntity::PostUpdate(const f32& dt)  {
 
 	this->position += this->velocity * dt;
 	//this->position.y = AEClamp(this->position.y, this->scale.y * 0.5f, Utils::GetWorldHeight() - (this->scale.y * 0.5f));
-	if (this->position.y + this->scale.y * 0.5f <= this->scale.y * 0.5f) {
+	if (this->position.y + std::abs(this->scale.y) * 0.5f <= std::abs(this->scale.y) * 0.5f) {
 		SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 		return;
 	}
@@ -100,5 +100,4 @@ void GameObjectEntity::Render() {
 }
 
 void GameObjectEntity::OnCollide(GameObjectEntity* go) {
-	
 }
