@@ -68,6 +68,7 @@
 #define ASSET_GRAPPLEFIST_IMAGE "Assets/fist2.png"
 #define ASSET_FINGERGUN_IMAGE "Assets/fist3.png"
 #define ASSET_SMALLBUTTON_IMAGE "Assets/Icons/small_button_grey.png"
+#define ASSET_BACKGROUND_IMAGE "Assets/background.png"
 
 #define ASSET_DEFAULT_FONT "Assets/Jersey25-Regular.ttf"
 #define ASSET_DEBUG_FONT "Assets/buggy-font.ttf"

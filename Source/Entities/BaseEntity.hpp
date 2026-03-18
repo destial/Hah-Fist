@@ -58,7 +58,7 @@ public:
 	f32 rotation; // In radians
 	Color color; // Blend mesh color for rendering
 	enum struct RenderLayer : int {
-		WORLD = 0, ENTITY = 1, PLAYER = 2, WORLD_UI = 4, UI = 5
+		BACKGROUND = -5, WORLD = 0, ENTITY = 1, PLAYER = 2, WORLD_UI = 4, UI = 5
 	} layer; // Rendering layer for Z-layering
 
 	/*!

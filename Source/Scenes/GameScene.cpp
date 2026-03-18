@@ -21,6 +21,7 @@
 #include "../Utils/Constant.hpp"
 #include "../UI/ButtonUI.hpp"
 #include "../UI/BarUI.hpp"
+#include "../UI/ImageUI.hpp"
 #include "../UI/CircleButtonUI.hpp"
 #include "../UI/Debug.hpp"
 #include "AEMath.h"
@@ -62,10 +63,15 @@ static void OnGameExit(const InputEvent* ev) {
 }
 
 void GameScene::Init() {
-	staticEntities.reserve(SIZE_TO_RESERVE); // Reserves 100 StaticEntities capacity for vector arr
+	staticEntities.reserve(SIZE_TO_RESERVE); // Reserves StaticEntities capacity for vector arr
 	camManager->Init();
 	game_timer = 0.f;
 	InputEvent::Listeners += {this, OnGameExit};
+
+	ImageUI* bgd = new ImageUI{ ASSET_BACKGROUND_IMAGE, {Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f} };
+	bgd->layer = BaseEntity::RenderLayer::BACKGROUND;
+	bgd->scale = { Utils::GetWorldWidth(), Utils::GetWorldHeight() };
+	AddEntityToScene(bgd);
 
 	ButtonUI* lb = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 1.f }, "LB");
 	lb->AddUpdateListener(lb, [lb](const f32& dt) {

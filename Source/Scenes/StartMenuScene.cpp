@@ -104,7 +104,7 @@ void StartMenuScene::Init() {
 		else {
 			level_panel -= dt;
 		}
-		level_panel = min_max(level_panel, 0.f, 1.f);
+		level_panel = AEClamp(level_panel, 0.f, 1.f);
 	});
 	start->AddUpdateListener(this, [start](const f32& dt){
 		start->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f, level_panel);

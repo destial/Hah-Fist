@@ -31,7 +31,7 @@ BaseUI::~BaseUI() {
 void BaseUI::PostUpdate(const f32& dt) {
 	BaseEntity::PostUpdate(dt);
 
-	if (layer == RenderLayer::UI) {
+	if (layer == RenderLayer::UI || layer == RenderLayer::BACKGROUND) {
 		AEVec2 cam_pos{ 0.f };
 		AEGfxGetCamPosition(&cam_pos.x, &cam_pos.y);
 		cam_pos = Utils::ScreenToScale(cam_pos.x, cam_pos.y);
@@ -81,15 +81,15 @@ void BaseUI::RenderText() {
 	t_color[2] = (interactive && mouse_hovered ? overlay_text_color : text_color).b / 255.f;
 	t_color[3] = (interactive && mouse_hovered ? overlay_text_color : text_color).a / 255.f;
 	if (text_alignment == TEXT_ALIGNMENT::CENTER) {
-		AEVec2 screen = Utils::GameToTextScreen(this->position.x, this->position.y, layer != RenderLayer::UI);
+		AEVec2 screen = Utils::GameToTextScreen(this->position.x, this->position.y, (layer != RenderLayer::UI && layer != RenderLayer::BACKGROUND));
 		AEGfxPrint(font, str, screen.x - ((w / 2.f) / text_size * 0.5f), screen.y - ((h / 2.f) / text_size * 0.5f), h, t_color[0], t_color[1], t_color[2], t_color[3]);
 	}
 	else if (text_alignment == TEXT_ALIGNMENT::LEFT_CORNER) {
-		AEVec2 screen = Utils::GameToTextScreen(this->position.x - (this->scale.x * 0.5f), this->position.y, layer != RenderLayer::UI);
+		AEVec2 screen = Utils::GameToTextScreen(this->position.x - (this->scale.x * 0.5f), this->position.y, (layer != RenderLayer::UI && layer != RenderLayer::BACKGROUND));
 		AEGfxPrint(font, str, screen.x, screen.y - ((h / 2.f) / text_size * 0.5f), h, t_color[0], t_color[1], t_color[2], t_color[3]);
 	}
 	else if (text_alignment == TEXT_ALIGNMENT::RIGHT_CORNER) {
-		AEVec2 screen = Utils::GameToTextScreen(this->position.x + (this->scale.x * 0.5f), this->position.y, layer != RenderLayer::UI);
+		AEVec2 screen = Utils::GameToTextScreen(this->position.x + (this->scale.x * 0.5f), this->position.y, (layer != RenderLayer::UI && layer != RenderLayer::BACKGROUND));
 		AEGfxPrint(font, str, screen.x - ((w / 2.f) / text_size), screen.y - ((h / 2.f) / text_size * 0.5f), h, t_color[0], t_color[1], t_color[2], t_color[3]);
 	}
 }

@@ -219,7 +219,8 @@ namespace Serialization {
 	std::vector<SerializedEntity> SerializeAll(std::vector<BaseEntity*> const& scene_entities) {
 		std::vector<SerializedEntity> vect;
 		for (BaseEntity* en : scene_entities) {
-			if (en->layer == BaseEntity::RenderLayer::UI)
+			if (en->layer == BaseEntity::RenderLayer::UI || en->layer == BaseEntity::RenderLayer::BACKGROUND ||
+				en->layer == BaseEntity::RenderLayer::WORLD_UI)
 				continue;
 
 			if (dynamic_cast<BaseUI*>(en))

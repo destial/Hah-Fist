@@ -14,8 +14,6 @@
 #include <vector>
 #include <utility>
 
-#define min_max(v, mn, mx) min(mx, max(mn, v))
-
 class BaseEntity;
 class GameObjectEntity;
 struct Color {
