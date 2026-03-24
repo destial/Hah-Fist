@@ -21,7 +21,6 @@ IronsideEntity::IronsideEntity(AEVec2 pos) : EnemyEntity(pos, { 1.f,0.f }, 10.f,
 	bossActivated = DEFAULTBOSSACTIVATED;
 
 	pBody->gravityScale = 0;
-	velocity.x = BOSS3VELX;
 
 	innerState = INNERFSM::MOVE;
 	go_type = PhysicsType::TRIGGER;
@@ -32,6 +31,7 @@ IronsideEntity::IronsideEntity(AEVec2 pos) : EnemyEntity(pos, { 1.f,0.f }, 10.f,
 	dirtogo = 1;
 	targetY = 6.0f;
 	bossRoomCenter = position;
+
 }
 
 IronsideEntity::~IronsideEntity() {
@@ -61,7 +61,7 @@ void IronsideEntity::OnCollide(GameObjectEntity* go) {
 void IronsideEntity::OnIdle(const f32& dt) {
 	// Trooper's idle behaviour
 	if (bossActivated) {
-
+		velocity.x = BOSS3VELX;
 		if (position.x >= bossRoomCenter.x + BOSS3OFFSETX)
 		{
 			velocity.x = 0;
