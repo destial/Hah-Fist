@@ -15,10 +15,17 @@
 #include <cstdio>
 #include <string>
 
+constexpr float BUTTON_SCALE_X = 12.5f;
+constexpr float BUTTON_SCALE_Y = 4.f;
+constexpr float LEVEL_BUTTON_SCALE = 5.f;
+constexpr float LEVEL_BUTTON_GAP = 2.f;
+constexpr float BACKGROUND_FIST_SCALE = 5.f;
+constexpr float BACKGROUND_FIST_SPEED = 5.f;
+
 static ButtonUI* CreateButtonDisplay(AEVec2 pos, const char* ch) {
 	ButtonUI* b = new ButtonUI(pos);
 	b->image = AssetManager::GetTexture(ASSET_SMALLBUTTON_IMAGE);
-	b->scale = { 12.5f, 4.f };
+	b->scale = { BUTTON_SCALE_X, BUTTON_SCALE_Y };
 	b->color = { 255, 255, 255, 255 };
 	b->overlay_color = { 255, 128, 128, 128 };
 	b->overlay_text_color = { 255, 255, 255, 255 };
@@ -39,53 +46,53 @@ void StartMenuScene::Init() {
 	ImageUI* fist = new ImageUI{ ASSET_TURBOFIST_IMAGE, { 0, Utils::GetWorldHeight() * 0.5f } };
 	fist->AddUpdateListener(this, [fist](const f32& dt) {
 		if (fist->scale.x > 0) {
-			fist->position.x += dt * 5.f;
+			fist->position.x += dt * BACKGROUND_FIST_SPEED;
 			if (fist->position.x + fist->scale.x * 0.5f > Utils::GetWorldWidth()) {
 				fist->scale.x *= -1;
 			}
 		}
 		else {
-			fist->position.x -= dt * 5.f;
+			fist->position.x -= dt * BACKGROUND_FIST_SPEED;
 			if (fist->position.x + fist->scale.x * 0.5f < 0) {
 				fist->scale.x *= -1;
 			}
 		}
 	});
-	fist->scale = { 5.f, 5.f };
+	fist->scale = { BACKGROUND_FIST_SCALE, BACKGROUND_FIST_SCALE };
 
 	ImageUI* fist2 = new ImageUI{ ASSET_GRAPPLEFIST_IMAGE, { 10.f, Utils::GetWorldHeight() * 0.25f } };
 	fist2->AddUpdateListener(this, [fist2](const f32& dt) {
 		if (fist2->scale.x > 0) {
-			fist2->position.x += dt * 5.f;
+			fist2->position.x += dt * BACKGROUND_FIST_SPEED;
 			if (fist2->position.x + fist2->scale.x * 0.5f > Utils::GetWorldWidth()) {
 				fist2->scale.x *= -1;
 			}
 		}
 		else {
-			fist2->position.x -= dt * 5.f;
+			fist2->position.x -= dt * BACKGROUND_FIST_SPEED;
 			if (fist2->position.x + fist2->scale.x * 0.5f < 0) {
 				fist2->scale.x *= -1;
 			}
 		}
 	});
-	fist2->scale = { 5.f, 5.f };
+	fist2->scale = { BACKGROUND_FIST_SCALE, BACKGROUND_FIST_SCALE };
 
 	ImageUI* fist3 = new ImageUI{ ASSET_FINGERGUN_IMAGE, { -10.f, Utils::GetWorldHeight() * 0.75f } };
 	fist3->AddUpdateListener(this, [fist3](const f32& dt) {
 		if (fist3->scale.x > 0) {
-			fist3->position.x += dt * 5.f;
+			fist3->position.x += dt * BACKGROUND_FIST_SPEED;
 			if (fist3->position.x + fist3->scale.x * 0.5f > Utils::GetWorldWidth()) {
 				fist3->scale.x *= -1;
 			}
 		}
 		else {
-			fist3->position.x -= dt * 5.f;
+			fist3->position.x -= dt * BACKGROUND_FIST_SPEED;
 			if (fist3->position.x + fist3->scale.x * 0.5f < 0) {
 				fist3->scale.x *= -1;
 			}
 		}
 	});
-	fist3->scale = { 5.f, 5.f };
+	fist3->scale = { BACKGROUND_FIST_SCALE, BACKGROUND_FIST_SCALE };
 
 	scene_entities.push_back(fist);
 	scene_entities.push_back(fist2);
@@ -160,11 +167,11 @@ void StartMenuScene::Init() {
 	std::vector<ButtonUI*> buttons;
 #endif
 	for (int i = 0; i < TOTAL_LEVELS; ++i) {
-		float w = Utils::GetWorldWidth() + 5.f + (i * 7.f);
+		float w = Utils::GetWorldWidth() + LEVEL_BUTTON_SCALE + (i * (LEVEL_BUTTON_SCALE + LEVEL_BUTTON_GAP));
 		std::string s{ static_cast<char>('1' + i) };
 		s += "  ";
 		ButtonUI* level_button = CreateButtonDisplay({ w, Utils::GetWorldHeight() * 0.5f }, s.c_str());
-		level_button->scale = { 5.f, 5.f };
+		level_button->scale = { LEVEL_BUTTON_SCALE, LEVEL_BUTTON_SCALE };
 		
 		if (lvls[i] != -1) {
 			level_button->AddClickListener([i](BaseUI::MouseButton b) {

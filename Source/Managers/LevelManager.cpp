@@ -13,6 +13,7 @@
 namespace LevelManager {
 	static std::map<int, float> unlocked_levels;
 	static int level; // the currently played level
+	static bool in_tutorial;
 
 	/*!
 	* @brief Set a level's fastest time
@@ -54,6 +55,18 @@ namespace LevelManager {
 			SetLevelTime(i, f);
 		}
 		is.close();
+	}
+
+	void LoadTutorial(GameScene* scene) {
+		in_tutorial = false;
+		if (level > 2) {
+			return;
+		}
+		in_tutorial = true;
+	}
+
+	bool IsInTutorial() {
+		return in_tutorial;
 	}
 
 	/*!

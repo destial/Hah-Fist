@@ -9,6 +9,7 @@
 #pragma once
 #ifndef __LEVEL_MANAGER_H
 #define __LEVEL_MANAGER_H
+#include "../Scenes/GameScene.hpp"
 #include <map>
 
 namespace LevelManager { // start namespace
@@ -48,6 +49,10 @@ namespace LevelManager { // start namespace
 	void SavePlayerData();
 
 	void LoadPlayerData();
+
+	void LoadTutorial(GameScene* scene);
+
+	bool IsInTutorial();
 } // end namespace
 
 #endif

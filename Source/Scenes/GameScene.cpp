@@ -261,6 +261,8 @@ void GameScene::Init() {
 	});
 	AddEntityToScene(player_health);
 
+	LevelManager::LoadTutorial(this);
+
 	Game::SetBackgroundColor(Color{ 1.f, 0.3f, 0.3f, 0.3f });
 	game_state = GameState::PLAYING;
 }
@@ -269,7 +271,8 @@ void GameScene::Update(const f32& dt) {
 	staticEntities = SceneManager::GetInstance()->GetCurrentScene()->GetBaseEntitiesOfType<StaticEntity>();
 	BaseScene::Update(dt);
 	staticEntities.clear();
-	game_timer += dt;
+	if (!LevelManager::IsInTutorial())
+		game_timer += dt;
 }
 
 void GameScene::PostUpdate(const f32& dt) {
