@@ -8,6 +8,7 @@
 #include "../Utils/Utils.hpp"
 #include "../Utils/Constant.hpp"
 #include "../UI/ButtonUI.hpp"
+#include "../UI/BarUI.hpp"
 #include "../UI/ImageUI.hpp"
 #include "../UI/CircleButtonUI.hpp"
 #include "../Managers/SceneManager.hpp"
@@ -60,7 +61,7 @@ void StartMenuScene::Init() {
 	});
 	fist->scale = { BACKGROUND_FIST_SCALE, BACKGROUND_FIST_SCALE };
 
-	ImageUI* fist2 = new ImageUI{ ASSET_GRAPPLEFIST_IMAGE, { 10.f, Utils::GetWorldHeight() * 0.25f } };
+	ImageUI* fist2 = new ImageUI{ ASSET_GRAPPLEFIST_IMAGE, { BACKGROUND_FIST_SCALE * 2.f, Utils::GetWorldHeight() * 0.25f } };
 	fist2->AddUpdateListener(this, [fist2](const f32& dt) {
 		if (fist2->scale.x > 0) {
 			fist2->position.x += dt * BACKGROUND_FIST_SPEED;
@@ -77,7 +78,7 @@ void StartMenuScene::Init() {
 	});
 	fist2->scale = { BACKGROUND_FIST_SCALE, BACKGROUND_FIST_SCALE };
 
-	ImageUI* fist3 = new ImageUI{ ASSET_FINGERGUN_IMAGE, { -10.f, Utils::GetWorldHeight() * 0.75f } };
+	ImageUI* fist3 = new ImageUI{ ASSET_FINGERGUN_IMAGE, { -BACKGROUND_FIST_SCALE * 2.f, Utils::GetWorldHeight() * 0.75f } };
 	fist3->AddUpdateListener(this, [fist3](const f32& dt) {
 		if (fist3->scale.x > 0) {
 			fist3->position.x += dt * BACKGROUND_FIST_SPEED;
@@ -234,6 +235,40 @@ void StartMenuScene::Init() {
 	});
 	scene_entities.push_back(unlock_all);
 #endif
+
+	BarUI* master_vol = new BarUI({ Utils::GetWorldWidth() - 7.5f, 5.f });
+	master_vol->text = "";
+	master_vol->SetValue(1.f);
+	master_vol->overlay_color = {255, 64, 128, 64};
+	master_vol->scale = { BUTTON_SCALE_X * 0.75f, BUTTON_SCALE_Y * 0.35f };
+	master_vol->text_size = 7.5f;
+	master_vol->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
+	master_vol->AddUpdateListener(this, [master_vol](const f32 &dt) {
+		AEAudioSetGroupVolume(Game::GetMusicGroup(), AEClamp(master_vol->GetValue(), 0.f, 1.f));
+		char vol[64];
+		sprintf_s(vol, 64, "Master Volume: %0.2f", master_vol->GetValue() * 100.f);
+		master_vol->text = vol;
+
+		master_vol->position.x = Utils::LerpCircle(Utils::GetWorldWidth() - 7.5f, -7.5f, level_panel);
+	});
+	scene_entities.push_back(master_vol);
+
+	BarUI* sfx_vol = new BarUI({ Utils::GetWorldWidth() - 7.5f, 3.f });
+	sfx_vol->text = "";
+	sfx_vol->SetValue(1.f);
+	sfx_vol->overlay_color = { 255, 64, 128, 64 };
+	sfx_vol->scale = { BUTTON_SCALE_X * 0.75f, BUTTON_SCALE_Y * 0.35f };
+	sfx_vol->text_size = 7.5f;
+	sfx_vol->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
+	sfx_vol->AddUpdateListener(this, [sfx_vol](const f32& dt) {
+		AEAudioSetGroupVolume(Game::GetSfxGroup(), AEClamp(sfx_vol->GetValue(), 0.f, 1.f));
+		char vol[64];
+		sprintf_s(vol, 64, "SFX Volume: %0.2f", sfx_vol->GetValue() * 100.f);
+		sfx_vol->text = vol;
+
+		sfx_vol->position.x = Utils::LerpCircle(Utils::GetWorldWidth() - 7.5f, -7.5f, level_panel);
+	});
+	scene_entities.push_back(sfx_vol);
 
 	scene_entities.push_back(start);
 	scene_entities.push_back(quit);
