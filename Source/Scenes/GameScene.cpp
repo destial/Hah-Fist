@@ -73,36 +73,6 @@ void GameScene::Init() {
 	bgd->scale = { Utils::GetWorldWidth(), Utils::GetWorldHeight() };
 	AddEntityToScene(bgd);
 
-	ButtonUI* lb = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 1.f }, "LB");
-	lb->AddUpdateListener(lb, [lb](const f32& dt) {
-		if (AEInputCheckCurr(AEVK_LBUTTON)) {
-			lb->color = { 255, 128, 128, 128 };
-		}
-	});
-	ButtonUI* ak = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 3.f, Utils::GetWorldHeight() - 2.f }, 'A');
-	ak->AddUpdateListener(ak, [ak](const f32& dt) {
-		if (AEInputCheckCurr(AEVK_A)) {
-			ak->color = { 255, 128, 128, 128 };
-		}
-	});
-	ButtonUI* dk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 1.f, Utils::GetWorldHeight() - 2.f }, 'D');
-	dk->AddUpdateListener(dk, [dk](const f32& dt) {
-		if (AEInputCheckCurr(AEVK_D)) {
-			dk->color = { 255, 128, 128, 128 };
-		}
-	});
-	ButtonUI* sk = CreateHotKeyDisplay(AEVec2{ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 2.f }, "Sp");
-	sk->AddUpdateListener(sk, [sk](const f32& dt) {
-		if (AEInputCheckCurr(AEVK_SPACE)) {
-			sk->color = { 255, 128, 128, 128 };
-		}
-	});
-
-	AddEntityToScene(lb);
-	AddEntityToScene(ak);
-	AddEntityToScene(dk);
-	AddEntityToScene(sk);
-
 	std::string filename = "Assets/level_";
 	filename += std::string{ static_cast<char>('0' + LevelManager::GetLevel()) };
 	filename += ".dat";
@@ -242,10 +212,45 @@ void GameScene::Init() {
 		}
 	});
 
-	BarUI* player_health = new BarUI({Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() - 1.f});
+	ImageUI* hud = new ImageUI{ ASSET_HUD_IMAGE, {Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() - 1.5f} };
+	hud->scale = { Utils::GetWorldWidth(), 3.f };
+	hud->SetInteractive(false);
+	AddEntityToScene(hud);
+
+	ButtonUI* lb = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 1.f }, "LB");
+	lb->AddUpdateListener(lb, [lb](const f32& dt) {
+		if (AEInputCheckCurr(AEVK_LBUTTON)) {
+			lb->color = { 255, 128, 128, 128 };
+		}
+		});
+	ButtonUI* ak = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 3.f, Utils::GetWorldHeight() - 2.f }, 'A');
+	ak->AddUpdateListener(ak, [ak](const f32& dt) {
+		if (AEInputCheckCurr(AEVK_A)) {
+			ak->color = { 255, 128, 128, 128 };
+		}
+		});
+	ButtonUI* dk = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 1.f, Utils::GetWorldHeight() - 2.f }, 'D');
+	dk->AddUpdateListener(dk, [dk](const f32& dt) {
+		if (AEInputCheckCurr(AEVK_D)) {
+			dk->color = { 255, 128, 128, 128 };
+		}
+		});
+	ButtonUI* sk = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 2.f }, "Sp");
+	sk->AddUpdateListener(sk, [sk](const f32& dt) {
+		if (AEInputCheckCurr(AEVK_SPACE)) {
+			sk->color = { 255, 128, 128, 128 };
+		}
+		});
+
+	AddEntityToScene(lb);
+	AddEntityToScene(ak);
+	AddEntityToScene(dk);
+	AddEntityToScene(sk);
+
+	BarUI* player_health = new BarUI( {Utils::GetWorldWidth() * 0.25f, Utils::GetWorldHeight() - 1.5f} );
 	player_health->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
 	player_health->text_size = 5.f;
-	player_health->scale = { 20.f, 1.f };
+	player_health->scale = { 15.f, 1.5f };
 	player_health->overlay_color = { 255, 64, 255, 64 };
 	player_health->color = { 255, 255, 64, 64 };
 	player_health->layer = BaseUI::RenderLayer::UI;
@@ -261,9 +266,39 @@ void GameScene::Init() {
 	});
 	AddEntityToScene(player_health);
 
+	BarUI* weaponhud = new BarUI{ {Utils::GetWorldWidth() * 0.65f, Utils::GetWorldHeight() - 1.5f} };
+	weaponhud->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
+	weaponhud->text_size = 5.f;
+	weaponhud->scale = { 15.f, 1.5f };
+	weaponhud->text = "";
+	weaponhud->SetInteractive(false);
+	weaponhud->layer = BaseUI::RenderLayer::UI;
+	AddEntityToScene(weaponhud);
+	weaponhud->AddUpdateListener(this, [weaponhud, player](const f32& dt) {
+		Weapon* current = player->CurrentWeapon();
+		if (current == nullptr) {
+			weaponhud->text = "";
+			return;
+		}
+		weaponhud->overlay_color = { 255, 255, 0, 0 };
+		if (current->GetCooldownTimer() > 0) {
+			weaponhud->SetValue(current->GetCooldownTimer() / current->GetCooldownDuration());
+			weaponhud->overlay_color = { 255, 128, 128, 128 };
+			char cooldown[64];
+			sprintf_s(cooldown, 64, "Cooldown: %0.2f%%", (current->GetCooldownTimer() / current->GetCooldownDuration()) * 100.f);
+			weaponhud->text = cooldown;
+		}
+		else {
+			weaponhud->SetValue(current->GetChannelTimer() / current->GetMaxChannelTime());
+			char charge[64];
+			sprintf_s(charge, 64, "Charge: %0.2f%%", (current->GetChannelTimer() / current->GetMaxChannelTime()) * 100.f);
+			weaponhud->text = charge;
+		}
+	});
+
 	LevelManager::LoadTutorial(this);
 
-	Game::SetBackgroundColor(Color{ 1.f, 0.3f, 0.3f, 0.3f });
+	Game::SetBackgroundColor({ 1.f, 0.3f, 0.3f, 0.3f });
 	game_state = GameState::PLAYING;
 }
 

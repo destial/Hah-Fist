@@ -63,6 +63,7 @@ namespace LevelManager {
 			return;
 		}
 		in_tutorial = true;
+		// TODO: load tutorial
 	}
 
 	bool IsInTutorial() {

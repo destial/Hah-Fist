@@ -4,7 +4,7 @@
 BreakableStaticEntity::BreakableStaticEntity(AEVec2 pos, std::string file_name, int _columns, int _rows) : StaticEntity(STATIC_TYPE::TYPE_WALL, pos, 1.f, CollisionShape::AABB, PhysicsType::STATIC)
 {
 	entity_type = EntityType::BREAKABLE_STATIC;
-	breaking_sprite = AssetManager::GetSpriteSheet("Assets/breaking_frames.png", 1, 4);
+	breaking_sprite = AssetManager::GetSpriteSheet(ASSET_BREAKING_FRAME_SPRITE, 1, 4);
 	
 	columns = _columns;
 	rows = _rows;

@@ -16,70 +16,74 @@
 #include <map>
 #include <string>
 
-#define ASSET_PLAYER_SPRITE "Assets/player.png"
-#define ASSET_TROOPER_SPRITE "Assets/test_troop.png"
+#define ASSET_PLAYER_SPRITE "Assets/Entities/player.png"
+#define ASSET_TROOPER_SPRITE "Assets/Entities/test_troop.png"
 #define ASSET_TROOPER_SPRITE_ROWS 3
 #define ASSET_TROOPER_SPRITE_COLUMNS 3
 #define ASSET_TROOPER_SPRITE_SCALE 5.f
 
-#define ASSET_BASEENEMY_SPRITE "Assets/test_enemy.png"
+#define ASSET_BASEENEMY_SPRITE "Assets/Entities/test_enemy.png"
 #define ASSET_BASEENEMY_SPRITE_ROWS 3
 #define ASSET_BASEENEMY_SPRITE_COLUMNS 3
 #define ASSET_BASEENEMY_SPRITE_SCALE 5.f
 
-#define ASSET_SLIMETROOP_SPRITE "Assets/slime.png"
+#define ASSET_SLIMETROOP_SPRITE "Assets/Entities/slime.png"
 #define ASSET_SLIMETROOP_SPRITE_ROWS 1
 #define ASSET_SLIMETROOP_SPRITE_COLUMNS 30
 #define ASSET_SLIMETROOP_SPRITE_SCALE 5.f
 
-#define ASSET_PROJECTILE_ENEMY_SPRITE "Assets/Projectile_Enemy.png"
+#define ASSET_PROJECTILE_ENEMY_SPRITE "Assets/Entities/Projectile_Enemy.png"
 #define ASSET_PROJECTILE_ENEMY_SPRITE_ROWS 7
 #define ASSET_PROJECTILE_ENEMY_SPRITE_COLUMNS 8
 #define ASSET_PROJECTILE_ENEMY_SPRITE_SCALE 5.f
 
-#define ASSET_SPIDER_SPRITE "Assets/spider_enemy.png"
+#define ASSET_SPIDER_SPRITE "Assets/Entities/spider_enemy.png"
 #define ASSET_SPIDER_SPRITE_ROWS 4
 #define ASSET_SPIDER_SPRITE_COLUMNS 6
 #define ASSET_SPIDER_SPRITE_SCALE 5.f
 
-#define ASSET_TITLE_SPRITE "Assets/title.png"
-#define ASSET_SPARKLE_SPRITE "Assets/sparkle_sheet.png"
-#define ASSET_STAR_SPRITE "Assets/star.png"
-#define ASSET_CREDITS_SPRITE "Assets/credits_sprite.png"
-#define ASSET_TITAN_SPRITE "Assets/titan.png"
+#define ASSET_TITLE_SPRITE "Assets/Icons/title.png"
+#define ASSET_SPARKLE_SPRITE "Assets/Icons/sparkle_sheet.png"
+#define ASSET_STAR_SPRITE "Assets/Icons/star.png"
+#define ASSET_CREDITS_SPRITE "Assets/Icons/credits_sprite.png"
+#define ASSET_TITAN_SPRITE "Assets/Entities/titan.png"
 #define ASSET_TITAN_SPRITE_ROWS 3
 #define ASSET_TITAN_SPRITE_COLUMNS 20
 #define ASSET_TITAN_SPRITE_SCALE 5.f
 
-#define ASSET_PAYLOAD_SPRITE "Assets/payload.png"
+#define ASSET_PAYLOAD_SPRITE "Assets/Entities/payload.png"
 #define ASSET_PAYLOAD_SPRITE_ROWS 3
 #define ASSET_PAYLOAD_SPRITE_COLUMNS 18
 #define ASSET_PAYLOAD_SPRITE_SCALE 5.f
 
-#define ASSET_COIN_SPRITE "Assets/coin.png"
+#define ASSET_COIN_SPRITE "Assets/Entities/coin.png"
 #define ASSET_COIN_SPRITE_ROWS 1
 #define ASSET_COIN_SPRITE_COLUMNS 20
 #define ASSET_COIN_SPRITE_SCALE 2.f
-#define ASSET_COIN_PICKUP_AUDIO "Assets/coin_pickup.wav"
+#define ASSET_COIN_PICKUP_AUDIO "Assets/Audio/coin_pickup.wav"
 
-#define ASSET_PROJECTILE_IMAGE "Assets/projectile.png"
-#define ASSET_SPLASHSCREEN_IMAGE "Assets/splash_screen.png"
-#define ASSET_TURBOFIST_IMAGE "Assets/fist1.png"
-#define ASSET_GRAPPLEFIST_IMAGE "Assets/fist2.png"
-#define ASSET_FINGERGUN_IMAGE "Assets/fist3.png"
+#define ASSET_BREAKABLE_CRATE_IMAGE "Assets/Entities/crate.png"
+#define ASSET_BREAKING_FRAME_SPRITE "Assets/Entities/breaking_frames.png"
+
+#define ASSET_PROJECTILE_IMAGE "Assets/Entities/projectile.png"
+#define ASSET_SPLASHSCREEN_IMAGE "Assets/Icons/splash_screen.png"
+#define ASSET_TURBOFIST_IMAGE "Assets/Entities/fist1.png"
+#define ASSET_GRAPPLEFIST_IMAGE "Assets/Entities/fist2.png"
+#define ASSET_FINGERGUN_IMAGE "Assets/Entities/fist3.png"
 #define ASSET_SMALLBUTTON_IMAGE "Assets/Icons/small_button_grey.png"
-#define ASSET_BACKGROUND_IMAGE "Assets/background.png"
+#define ASSET_BACKGROUND_IMAGE "Assets/Icons/background.png"
+#define ASSET_HUD_IMAGE "Assets/Icons/panel_brown.png"
 
-#define ASSET_DEFAULT_FONT "Assets/Jersey25-Regular.ttf"
-#define ASSET_DEBUG_FONT "Assets/buggy-font.ttf"
+#define ASSET_DEFAULT_FONT "Assets/Fonts/Jersey25-Regular.ttf"
+#define ASSET_DEBUG_FONT "Assets/Fonts/buggy-font.ttf"
 
-#define ASSET_MAINMENUBGM_AUDIO "Assets/bgm.mp3"
-#define ASSET_TURBOFIST_AUDIO "Assets/turbofist.ogg"
-#define ASSET_ENEMYHURT_AUDIO "Assets/enemy_hurt.mp3"
-#define ASSET_SPIDERHURT_AUDIO "Assets/spider_hurt.ogg"
-#define ASSET_PLAYERHURT_AUDIO "Assets/player_hurt.ogg"
+#define ASSET_MAINMENUBGM_AUDIO "Assets/Audio/bgm.mp3"
+#define ASSET_TURBOFIST_AUDIO "Assets/Audio/turbofist.ogg"
+#define ASSET_ENEMYHURT_AUDIO "Assets/Audio/enemy_hurt.mp3"
+#define ASSET_SPIDERHURT_AUDIO "Assets/Audio/spider_hurt.ogg"
+#define ASSET_PLAYERHURT_AUDIO "Assets/Audio/player_hurt.ogg"
 
-#define ASSET_BOSS_SPAWN_AUDIO "Assets/boss_trigger_close.wav"
+#define ASSET_BOSS_SPAWN_AUDIO "Assets/Audio/boss_trigger_close.wav"
 
 //Gameplay Macros
 #define PLAYER_INVULNERABILITY_ON_HIT 0.75f

@@ -27,13 +27,14 @@ void ImageUI::Update(const f32& dt) {
 }
 
 void ImageUI::Render() {
-	if (image && image->data) {
-		BaseUI::Render();
+	if (sprite) {
+		sprite->Render(transform, color, currentRow, currentCol);
 		return;
 	}
 
-	if (sprite) {
-		sprite->Render(transform, color, currentRow, currentCol);
+	if (image && image->data) {
+		BaseUI::Render();
+		return;
 	}
 }
 
