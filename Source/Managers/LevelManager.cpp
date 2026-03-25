@@ -14,7 +14,6 @@
 namespace LevelManager {
 	static std::map<int, float> unlocked_levels;
 	static int level; // the currently played level
-	static bool in_tutorial;
 
 	/*!
 	* @brief Set a level's fastest time
@@ -25,14 +24,26 @@ namespace LevelManager {
 		unlocked_levels[level] = time;
 	}
 
+	/*!
+	* @brief Get the current level
+	* @return The current level
+	*/
 	int GetLevel() {
 		return level;
 	}
 
+	/*!
+	* @brief Set the current level
+	* @brief Call this before setting the next scene
+	* @param l - The next level
+	*/
 	void SetLevel(int l) {
 		level = l;
 	}
 
+	/*!
+	* @brief Save the player data (Unlocked levels & score)
+	*/
 	void SavePlayerData() {
 		std::ofstream os{ "user.data" };
 		if (os.fail())
@@ -40,11 +51,13 @@ namespace LevelManager {
 
 		for (std::pair<int, float> pair : unlocked_levels) {
 			os << pair.first << '=' << pair.second << '\n';
-			std::printf("saved level %d : %0.2f\n", pair.first, pair.second);
 		}
 		os.close();
 	}
 
+	/*!
+	* @brief Load the player data (Unlocked levels & score)
+	*/
 	void LoadPlayerData() {
 		std::ifstream is{ "user.data" };
 		if (is.fail())
@@ -52,36 +65,29 @@ namespace LevelManager {
 
 		int i; float f; char c;
 		while (is >> i >> c >> f >> std::noskipws >> c) {
-			std::printf("loaded level %d : %0.2f\n", i, f);
 			SetLevelTime(i, f);
 		}
 		is.close();
 	}
 
+	/*!
+	* @brief Load the tutorial UI objects based on level
+	* @param scene - The game scene pointer
+	*/
 	void LoadTutorial(GameScene* scene) {
-		in_tutorial = false;
 		if (level > 2) {
 			return;
 		}
-		in_tutorial = true;
-		// TODO: load tutorial
 
 		if (level == 0) {
 			ImageUI* hold = new ImageUI{ ASSET_HUD_IMAGE, {-80.f, 16.f} };
 			hold->layer = BaseEntity::RenderLayer::WORLD;
 			hold->scale = { 15.f, 2.5f };
 			hold->text_size = 8.f;
-			hold->text = "Hold left mouse button to charge your fist!";
+			hold->text = "Hold left mouse button to charge your fist!\nRelease to use your attack!";
 			scene->AddEntityToScene(hold);
 
-			ImageUI* release = new ImageUI{ ASSET_HUD_IMAGE, {-80.f, 13.f} };
-			release->layer = BaseEntity::RenderLayer::WORLD;
-			release->scale = { 15.f, 2.5f };
-			release->text_size = 8.f;
-			release->text = "Release the mouse to use your attack!";
-			scene->AddEntityToScene(release);
-
-			ImageUI* turbo = new ImageUI{ ASSET_HUD_IMAGE, {-80.f, 10.f} };
+			ImageUI* turbo = new ImageUI{ ASSET_HUD_IMAGE, {-80.f, 13.f} };
 			turbo->layer = BaseEntity::RenderLayer::WORLD;
 			turbo->scale = { 15.f, 2.5f };
 			turbo->text_size = 8.f;
@@ -109,19 +115,12 @@ namespace LevelManager {
 			slime->text = "Kill the slimes to get more coins!";
 			scene->AddEntityToScene(slime);
 
-			ImageUI* boss = new ImageUI{ ASSET_HUD_IMAGE, {168.f, 23.f} };
+			ImageUI* boss = new ImageUI{ ASSET_HUD_IMAGE, {160.f, 22.f} };
 			boss->layer = BaseEntity::RenderLayer::WORLD;
 			boss->scale = { 15.f, 2.f };
 			boss->text_size = 8.f;
-			boss->text = "Next is the boss room!";
+			boss->text = "Next is the boss room!\nKill the boss to advance!";
 			scene->AddEntityToScene(boss);
-
-			ImageUI* next = new ImageUI{ ASSET_HUD_IMAGE, {168.f, 20.f} };
-			next->layer = BaseEntity::RenderLayer::WORLD;
-			next->scale = { 15.f, 2.f };
-			next->text_size = 8.f;
-			next->text = "Kill the boss to advance!";
-			scene->AddEntityToScene(next);
 		}
 
 		if (level == 1) {
@@ -136,19 +135,12 @@ namespace LevelManager {
 			grapple->layer = BaseEntity::RenderLayer::WORLD;
 			grapple->scale = { 15.f, 2.5f };
 			grapple->text_size = 8.f;
-			grapple->text = "The grapple fist pulls enemies to you!";
+			grapple->text = "The grapple fist pulls enemies to you!\nTry combo-ing your grapple and turbo fist!";
 			scene->AddEntityToScene(grapple);
-
-			ImageUI* combo = new ImageUI{ ASSET_HUD_IMAGE, {16.f, 10.f} };
-			combo->layer = BaseEntity::RenderLayer::WORLD;
-			combo->scale = { 15.f, 2.5f };
-			combo->text_size = 8.f;
-			combo->text = "Try combo-ing your grapple and turbo fist!";
-			scene->AddEntityToScene(combo);
 
 			ImageUI* fall = new ImageUI{ ASSET_HUD_IMAGE, {112.f, 10.f} };
 			fall->layer = BaseEntity::RenderLayer::WORLD;
-			fall->scale = { 15.f, 2.5f };
+			fall->scale = { 10.f, 1.5f };
 			fall->text_size = 8.f;
 			fall->text = "Don't fall in the void!";
 			scene->AddEntityToScene(fall);
@@ -176,10 +168,6 @@ namespace LevelManager {
 			archer->text = "This is an archer! Ranged enemy!";
 			scene->AddEntityToScene(archer);
 		}
-	}
-
-	bool IsInTutorial() {
-		return in_tutorial;
 	}
 
 	/*!

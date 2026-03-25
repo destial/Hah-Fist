@@ -14,6 +14,7 @@
 #include "../Entities/Weapons/TurboFistEntity.hpp"
 #include "../Entities/Weapons/GrappleFistEntity.hpp"
 #include "../Entities/Weapons/FingerGunEntity.hpp"
+#include "../Entities/DropEntities/CoinEntity.hpp"
 #include "../Events/InputEvent.hpp"
 #include "../Utils/AEOverload.hpp"
 #include "../Utils/Utils.hpp"
@@ -212,30 +213,31 @@ void GameScene::Init() {
 		}
 	});
 
-	ImageUI* hud = new ImageUI{ ASSET_HUD_IMAGE, {Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() - 1.5f} };
-	hud->scale = { Utils::GetWorldWidth(), 3.f };
+	ImageUI* hud = new ImageUI{ ASSET_HUD_IMAGE, {Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() - 1.7f} };
+	hud->scale = { Utils::GetWorldWidth() - 5.f, 3.f };
+	hud->color.a = 210;
 	hud->SetInteractive(false);
 	AddEntityToScene(hud);
 
-	ButtonUI* lb = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 1.f }, "LB");
+	ButtonUI* lb = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 4.5f, Utils::GetWorldHeight() - 1.f }, "LB");
 	lb->AddUpdateListener(lb, [lb](const f32& dt) {
 		if (AEInputCheckCurr(AEVK_LBUTTON)) {
 			lb->color = { 255, 128, 128, 128 };
 		}
 		});
-	ButtonUI* ak = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 3.f, Utils::GetWorldHeight() - 2.f }, 'A');
+	ButtonUI* ak = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 5.5f, Utils::GetWorldHeight() - 2.f }, 'A');
 	ak->AddUpdateListener(ak, [ak](const f32& dt) {
 		if (AEInputCheckCurr(AEVK_A)) {
 			ak->color = { 255, 128, 128, 128 };
 		}
 		});
-	ButtonUI* dk = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 1.f, Utils::GetWorldHeight() - 2.f }, 'D');
+	ButtonUI* dk = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 3.5f, Utils::GetWorldHeight() - 2.f }, 'D');
 	dk->AddUpdateListener(dk, [dk](const f32& dt) {
 		if (AEInputCheckCurr(AEVK_D)) {
 			dk->color = { 255, 128, 128, 128 };
 		}
 		});
-	ButtonUI* sk = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 2.f, Utils::GetWorldHeight() - 2.f }, "Sp");
+	ButtonUI* sk = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 4.5f, Utils::GetWorldHeight() - 2.f }, "Sp");
 	sk->AddUpdateListener(sk, [sk](const f32& dt) {
 		if (AEInputCheckCurr(AEVK_SPACE)) {
 			sk->color = { 255, 128, 128, 128 };
@@ -247,10 +249,10 @@ void GameScene::Init() {
 	AddEntityToScene(dk);
 	AddEntityToScene(sk);
 
-	BarUI* player_health = new BarUI( {Utils::GetWorldWidth() * 0.25f, Utils::GetWorldHeight() - 1.5f} );
+	BarUI* player_health = new BarUI( {Utils::GetWorldWidth() * 0.2f, Utils::GetWorldHeight() - 1.5f} );
 	player_health->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
 	player_health->text_size = 5.f;
-	player_health->scale = { 15.f, 1.5f };
+	player_health->scale = { 12.f, 1.5f };
 	player_health->overlay_color = { 255, 64, 255, 64 };
 	player_health->color = { 255, 255, 64, 64 };
 	player_health->layer = BaseUI::RenderLayer::UI;
@@ -266,10 +268,10 @@ void GameScene::Init() {
 	});
 	AddEntityToScene(player_health);
 
-	BarUI* weaponhud = new BarUI{ {Utils::GetWorldWidth() * 0.65f, Utils::GetWorldHeight() - 1.5f} };
+	BarUI* weaponhud = new BarUI{ {Utils::GetWorldWidth() * 0.49f, Utils::GetWorldHeight() - 1.5f} };
 	weaponhud->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
 	weaponhud->text_size = 5.f;
-	weaponhud->scale = { 15.f, 1.5f };
+	weaponhud->scale = { 12.f, 1.5f };
 	weaponhud->text = "";
 	weaponhud->SetInteractive(false);
 	weaponhud->layer = BaseUI::RenderLayer::UI;
@@ -296,6 +298,27 @@ void GameScene::Init() {
 		}
 	});
 
+	size_t total_coins = GetEntitiesOfType<CoinEntity>().size();
+	ImageUI* coins = new ImageUI{ ASSET_SMALLBUTTON_IMAGE, {Utils::GetWorldWidth() * 0.69f, Utils::GetWorldHeight() - 1.5f} };
+	coins->text_size = 7.5f;
+	coins->scale = {5.f, 2.f};
+	coins->AddUpdateListener(this, [coins, total_coins, this](const f32& dt) {
+		char collected[64];
+		sprintf_s(collected, 64, "Coins: %llu", total_coins - GetEntitiesOfType<CoinEntity>().size());
+		coins->text = collected;
+	});
+	AddEntityToScene(coins);
+
+	ImageUI* time = new ImageUI{ ASSET_SMALLBUTTON_IMAGE, {Utils::GetWorldWidth() * 0.81f, Utils::GetWorldHeight() - 1.5f} };
+	time->text_size = 7.5f;
+	time->scale = { 5.f, 2.f };
+	time->AddUpdateListener(this, [time, this](const f32& dt) {
+		char timer[64];
+		sprintf_s(timer, 64, "Timer: %0.2f", game_timer);
+		time->text = timer;
+		});
+	AddEntityToScene(time);
+
 	LevelManager::LoadTutorial(this);
 
 	Game::SetBackgroundColor({ 1.f, 0.3f, 0.3f, 0.3f });
@@ -306,8 +329,7 @@ void GameScene::Update(const f32& dt) {
 	staticEntities = SceneManager::GetInstance()->GetCurrentScene()->GetBaseEntitiesOfType<StaticEntity>();
 	BaseScene::Update(dt);
 	staticEntities.clear();
-	if (!LevelManager::IsInTutorial())
-		game_timer += dt;
+	game_timer += dt;
 }
 
 void GameScene::PostUpdate(const f32& dt) {

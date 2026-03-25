@@ -102,6 +102,8 @@ void EnemyEntity::OnHit()
 	timeElapsedSinceLastDamage = 0.0f;
 	//invulnerabilityDuration = 0.75f;
 	AEAudioPlay(AssetManager::GetAudio(ASSET_ENEMYHURT_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
+
+	SceneManager::GetInstance()->GetCurrentScene()->GetParticleSystem()->SpawnParticles(ParticleType::SPARKLE, this->position, 3, 1.f, 1.f, 0.5f);
 }
 
 void EnemyEntity::OnIdle(const f32& dt)

@@ -12,6 +12,7 @@
 #include "BaseScene.hpp"
 #include "../Managers/SceneManager.hpp"
 #include "../Entities/Enemies/EnemyEntity.hpp"
+#include "../Entities/WeaponEntity.hpp"
 #include "../UI/BarUI.hpp"
 #include <algorithm>
 #include <cmath>
@@ -153,6 +154,9 @@ void BaseScene::AddEntityToScene(BaseEntity* entity) {
 }
 
 void BaseScene::RemoveEntityFromScene(BaseEntity* entity) {
+	if (dynamic_cast<Weapon*>(entity)) {
+		return;
+	}
 	if (SceneManager::GetInstance()->GetEditor()->IsToggled()) {
 		// Level editor is toggled, so BaseScene update functions will not get called
 		// so it is safe to immediately delete
@@ -212,4 +216,8 @@ std::vector<BaseEntity*> const& BaseScene::Entities() const {
 
 FrameState BaseScene::GetFrameState() const {
 	return current_state;
+}
+
+ParticleSystem* BaseScene::GetParticleSystem() const {
+	return particleSystem;
 }

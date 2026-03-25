@@ -113,6 +113,8 @@ public:
 	*/
 	FrameState GetFrameState() const;
 
+	ParticleSystem* GetParticleSystem() const;
+
 	/*!
 	* @brief Get the first entity of this class type
 	* @return The first entity pointer of this class, else nullptr

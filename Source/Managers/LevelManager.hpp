@@ -46,13 +46,22 @@ namespace LevelManager { // start namespace
 	*/
 	void SetLevel(int l);
 
+	/*!
+	* @brief Save the player data (Unlocked levels & score)
+	*/
 	void SavePlayerData();
 
+	/*!
+	* @brief Load the player data (Unlocked levels & score)
+	*/
 	void LoadPlayerData();
 
+	/*!
+	* @brief Load the tutorial UI objects based on level
+	* @param scene - The game scene pointer
+	*/
 	void LoadTutorial(GameScene* scene);
 
-	bool IsInTutorial();
 } // end namespace
 
 #endif
