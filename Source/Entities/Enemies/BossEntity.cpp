@@ -25,13 +25,6 @@ void BossEntity::Update(const f32& dt)
 
 void BossEntity::PostUpdate(const f32& dt)
 {
-	currentRow = 0;
-	if (velocity.x > 0) {
-		currentRow = 1;
-	}
-	if (velocity.x < 0) {
-		currentRow = 2;
-	}
 	EnemyEntity::PostUpdate(dt);
 }
 
