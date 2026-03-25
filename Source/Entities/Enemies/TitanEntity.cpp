@@ -2,25 +2,18 @@
 #include "../../Utils/Utils.hpp"
 #include "../../Managers/AssetManager.hpp"
 #include "../Projectiles/SpikeProjectile.hpp"
-#include "../Projectiles/MissileProjectile.hpp"
-#include "../../Scenes/BaseScene.hpp"  
 #include "../../Managers/SceneManager.hpp"
 #include "../../Scenes/GameScene.hpp"
 #include "../PlayerEntity.hpp"
 
-TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }, 10.f, true) {
+TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, BossEntity(pos) {
 	InitializeAnimatedSpriteData(ASSET_TITAN_SPRITE, ASSET_TITAN_SPRITE_ROWS, ASSET_TITAN_SPRITE_COLUMNS, ASSET_TITAN_SPRITE_SCALE);
-	health = DEFAULTBOSSMAXHEALTH;
-	max_health = DEFAULTBOSSMAXHEALTH;
 	attackRange = BOSS1ATTACKRANGE;
-	bossActivated = DEFAULTBOSSACTIVATED;
 	shootTimer = 0.f;
 	jumpX = BOSS1JUMPVELX;
 	jumpY = BOSS1JUMPVELY;
 	baseProjectiles = BOSS1BASEPROJECTILES;
 	extraProjectiles = BOSS1EXTRAPROJECTILES;
-	damage = DEFAULTBOSSDAMAGE;
-	bossRoomCenter = position;
 	
 }
 
@@ -29,12 +22,12 @@ TitanEntity::~TitanEntity() {
 }
 
 void TitanEntity::PreUpdate(const f32& dt) {
-	EnemyEntity::PreUpdate(dt);
+	BossEntity::PreUpdate(dt);
 }
 
 void TitanEntity::Update(const f32& dt) {
 	shootTimer -= dt;
-	EnemyEntity::Update(dt);
+	BossEntity::Update(dt);
 }
 
 void TitanEntity::PostUpdate(const f32& dt) {
@@ -61,30 +54,15 @@ void TitanEntity::PostUpdate(const f32& dt) {
 		currentRow = 2;
 	}
 
-	EnemyEntity::PostUpdate(dt);
+	BossEntity::PostUpdate(dt);
 }
 
 void TitanEntity::Render() {
-	EnemyEntity::Render();
+	BossEntity::Render();
 }
 
 void TitanEntity::OnCollide(GameObjectEntity* go) {
-	EnemyEntity::OnCollide(go);
-}
-
-bool TitanEntity::GetBossActivated()
-{
-	return bossActivated;
-}
-
-void TitanEntity::SetBossActivation(bool activated)
-{
-	bossActivated = activated;
-}
-
-AEVec2 TitanEntity::GetBossRoomCenter()
-{
-	return bossRoomCenter;
+	BossEntity::OnCollide(go);
 }
 
 void TitanEntity::OnIdle(const f32& dt) {
@@ -141,9 +119,9 @@ void TitanEntity::OnStun(const f32& dt) {
 			AEVec2Normalize(&shootDir, &shootDir);
 			f32 bulletSpeed = Utils::RandRange(BULLETMINSPEED, BULLETMAXSPEED);
 
-			MissileProjectile* bullet = new MissileProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
-			bullet->scale = { BULLETSCALEX ,BULLETSCALEY };
-			SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
+			SpikeProjectile* spike = new SpikeProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
+			spike->scale = { BULLETSCALEX ,BULLETSCALEY };
+			SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(spike);
 		}
 
 		shootTimer = shootCooldown;
@@ -162,7 +140,4 @@ void TitanEntity::OnDead(const f32& dt) {
 		game->Win();
 	}
 	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
-	
-
-
 }

@@ -152,64 +152,22 @@ void GameScene::Init() {
 	});
 
 	player->AddUpdateListener(AssetManager::GetInstance(), [this, player](const f32& dt) {
-		
-		if (LevelManager::GetLevel() == 0)
+
+		if (dynamic_cast<BossEntity*>(GetFirstEntityOfType<BossEntity>()))
 		{
-			if (dynamic_cast<TitanEntity*>(GetFirstEntityOfType<TitanEntity>()))
+			BossEntity* e = dynamic_cast<BossEntity*>(GetFirstEntityOfType<BossEntity>());
+			if (e->GetBossActivated())
 			{
-				TitanEntity* e = dynamic_cast<TitanEntity*>(GetFirstEntityOfType<TitanEntity>());
-				if (e->GetBossActivated())
-				{
-					camManager->SetTarget(Utils::WorldToScreen(e->GetBossRoomCenter().x, e->GetBossRoomCenter().y).x, 0);
-				}
-				else
-				{
-					camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
-				}
-			}
-			else
-			{
-				camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
-			}
-			
-		}
-		else if (LevelManager::GetLevel() == 1)
-		{
-			if (dynamic_cast<PayloadEntity*>(GetFirstEntityOfType<PayloadEntity>()))
-			{
-				PayloadEntity* e = dynamic_cast<PayloadEntity*>(GetFirstEntityOfType<PayloadEntity>());
-				if (e->GetBossActivated())
-				{
-					camManager->SetTarget(Utils::WorldToScreen(e->GetBossRoomCenter().x, e->GetBossRoomCenter().y).x, 0);
-				}
-				else
-				{
-					camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
-				}
+				camManager->SetTarget(Utils::WorldToScreen(e->GetBossRoomCenter().x, e->GetBossRoomCenter().y).x, 0);
 			}
 			else
 			{
 				camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
 			}
 		}
-		else if (LevelManager::GetLevel() == 2)
+		else
 		{
-			if (dynamic_cast<IronsideEntity*>(GetFirstEntityOfType<IronsideEntity>()))
-			{
-				IronsideEntity* e = dynamic_cast<IronsideEntity*>(GetFirstEntityOfType<IronsideEntity>());
-				if (e->GetBossActivated())
-				{
-					camManager->SetTarget(Utils::WorldToScreen(e->GetBossRoomCenter().x, e->GetBossRoomCenter().y).x, 0);
-				}
-				else
-				{
-					camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
-				}
-			}
-			else
-			{
-				camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
-			}
+			camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
 		}
 	});
 

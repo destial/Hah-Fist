@@ -1,8 +1,8 @@
 #pragma once
 #ifndef __IRONSIDEENTITY_H
 #define __IRONSIDEENTITY_H
-#include "EnemyEntity.hpp"
-class IronsideEntity : public EnemyEntity {
+#include "BossEntity.hpp"
+class IronsideEntity : public BossEntity {
 public:
 	enum struct INNERFSM {
 		MOVE,MOVING,SPAWNPLATFORM1, SPAWNPLATFORM2, SHOOTPROJECTILE, LASER, TOTAL
@@ -13,12 +13,10 @@ public:
 protected:
 	INNERFSM innerState;
 	LANE currLane;
-	bool bossActivated;
 	int nextLanetospawn;
 	LANE lanetogoto;     
 	float dirtogo;
 	float targetY;
-	AEVec2 bossRoomCenter;
 	
 public:
 	IronsideEntity(AEVec2 pos);
@@ -28,12 +26,7 @@ public:
 	void PostUpdate(const f32& dt) override;
 	void Render() override;
 	void OnCollide(GameObjectEntity* go) override;
-	bool GetBossActivated();
-	void SetBossActivation(bool activated);
-	AEVec2 GetBossRoomCenter();
 	//Helper Functions
-	void ShootProjectile(float healthRatio, f32 posY);
-	float GetLowHealthFactor();
 	void StunTimerBasedOnHealth();
 	LANE GetRandomSpawnLane(LANE bossLane);
 	// Virtual methods to Enemy Base class

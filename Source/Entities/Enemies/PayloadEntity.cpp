@@ -5,26 +5,18 @@
 #include "../Projectiles/MissileProjectile.hpp"
 #include "../StaticEntities/MovingPlatformEntity.hpp"
 #include "../../Utils/MeshRenderer.hpp"
-#include "../../Scenes/BaseScene.hpp"  
 #include "../../Managers/SceneManager.hpp"
 #include "../../Scenes/GameScene.hpp"
 
-PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, EnemyEntity(pos, { 1.f,0.f }, 10.f, true) {
+PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, BossEntity(pos) {
 	InitializeAnimatedSpriteData(ASSET_PAYLOAD_SPRITE, ASSET_PAYLOAD_SPRITE_ROWS, ASSET_PAYLOAD_SPRITE_COLUMNS, ASSET_PAYLOAD_SPRITE_SCALE);
 	// Empty for now
-	health = DEFAULTBOSSMAXHEALTH;
-	max_health = DEFAULTBOSSMAXHEALTH;
 	attackRange = BOSS2ATTACKRANGE;
-	bossActivated = DEFAULTBOSSACTIVATED;
 	landTimer = 0.f;
-	jumpX = BOSS2JUMPVELX;
-	jumpY = BOSS2JUMPVELY;
 	baseProjectiles = BOSS2EXTRAPROJECTILES;
 	extraProjectiles = BOSS2BASEPROJECTILES;
 	innerState = INNERFSM::JUMP;
 	frictionMultiplier = BOSS2FRICTION;
-	damage = DEFAULTBOSSDAMAGE;
-	bossRoomCenter = position;
 }
 
 PayloadEntity::~PayloadEntity() {
@@ -32,11 +24,11 @@ PayloadEntity::~PayloadEntity() {
 }
 
 void PayloadEntity::PreUpdate(const f32& dt) {
-	EnemyEntity::PreUpdate(dt);
+	BossEntity::PreUpdate(dt);
 }
 
 void PayloadEntity::Update(const f32& dt) {
-	EnemyEntity::Update(dt);
+	BossEntity::Update(dt);
 }
 
 void PayloadEntity::PostUpdate(const f32& dt) {
@@ -62,15 +54,15 @@ void PayloadEntity::PostUpdate(const f32& dt) {
 			currentRow = 2;
 		}
 	}
-	EnemyEntity::PostUpdate(dt);
+	BossEntity::PostUpdate(dt);
 }
 
 void PayloadEntity::Render() {
-	EnemyEntity::Render();
+	BossEntity::Render();
 }
 
 void PayloadEntity::OnCollide(GameObjectEntity* go) {
-	EnemyEntity::OnCollide(go);
+	BossEntity::OnCollide(go);
 }
 
 void PayloadEntity::OnIdle(const f32& dt) {
@@ -90,8 +82,9 @@ void PayloadEntity::OnChase(const f32& dt) {
 	case INNERFSM::JUMP:
 	{
 		dir.x = (Utils::RandRange(0.f, 1.f) < 0.5f) ? -1.f : 1.f;
-		velocity.x = dir.x * jumpX;
-		velocity.y = jumpY;
+		velocity.x = dir.x * BOSS2JUMPVELX;
+		float t = AEClamp(position.y / BOSS2ROOMMAXHEIGHT, 0.f, 1.f);
+		velocity.y = BOSS2JUMPVELY * (1.f - t * t);
 		innerState = INNERFSM::LAND;
 		landTimer = landCooldown;
 		break;
@@ -113,33 +106,15 @@ void PayloadEntity::OnChase(const f32& dt) {
 	}
 	case INNERFSM::ATTACK:
 	{
-		float healthRatio = health / max_health;
-		float temp = (1.f - healthRatio) / 0.75f;
-		temp = AEClamp(temp, 0.f, 1.f);
-
-		int projectiles = baseProjectiles + static_cast<int>(temp * extraProjectiles);
+		int projectiles = baseProjectiles + static_cast<int>(GetLowHealthFactor() * extraProjectiles);
 		for (int i = 0; i < projectiles; i++)
 		{
 			AEVec2 Pos{ Utils::RandRange(position.x - attackRange,position.x + attackRange),  position.y };
 			AEVec2 shootDir{ 0.f, -1.f };
-			AEVec2Normalize(&shootDir, &shootDir);
-			f32 bulletSpeed = Utils::RandRange(BULLETMINSPEED, BULLETMAXSPEED);
-			if (healthRatio > 0.5f)
-			{
-				MissileProjectile* bullet = new MissileProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
-				bullet->scale = { BULLETSCALEX ,BULLETSCALEY };
-				SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
-			}
-			else
-			{
-				ExplosiveProjectile* bullet = new ExplosiveProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
-				bullet->scale = { BULLETSCALEX ,BULLETSCALEY };
-				SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
-			}
-
+			ShootProjectile(health / max_health, Pos, shootDir);
 		}
 		innerState = INNERFSM::JUMP;
-		float stunTime = 2.f;
+		float stunTime = 1.f + (1.f * GetLowHealthFactor());
 		SwitchState(FSM::STUN, stunTime);
 		break;
 	}
@@ -164,17 +139,4 @@ void PayloadEntity::OnDead(const f32& dt) {
 	}
 	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 
-}
-bool PayloadEntity::GetBossActivated()
-{
-	return bossActivated;
-}
-
-void PayloadEntity::SetBossActivation(bool activated)
-{
-	bossActivated = activated;
-}
-AEVec2 PayloadEntity::GetBossRoomCenter()
-{
-	return bossRoomCenter;
 }

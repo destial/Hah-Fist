@@ -2,24 +2,15 @@
 #include "../../Utils/Utils.hpp"
 #include "../../Utils/Constant.hpp"
 #include "../../Managers/AssetManager.hpp"
-#include "../Projectiles/ExplosiveProjectile.hpp"
-#include "../Projectiles/MissileProjectile.hpp"
 #include "../StaticEntities/MovingPlatformEntity.hpp"
 #include "../TriggerEntities/LaserEntity.hpp"
 #include "../../Utils/MeshRenderer.hpp"
-#include "../../Scenes/BaseScene.hpp"  
 #include "../../Managers/SceneManager.hpp"
 #include "../../Scenes/GameScene.hpp"
 #include "../PlayerEntity.hpp"
 
-IronsideEntity::IronsideEntity(AEVec2 pos) : EnemyEntity(pos, { 1.f,0.f }, 10.f, true) {
+IronsideEntity::IronsideEntity(AEVec2 pos) : BossEntity(pos) {
 	InitializeAnimatedSpriteData(ASSET_TROOPER_SPRITE, ASSET_TROOPER_SPRITE_ROWS, ASSET_TROOPER_SPRITE_COLUMNS, ASSET_TROOPER_SPRITE_SCALE);
-	// Empty for now
-	health = DEFAULTBOSSMAXHEALTH;
-	max_health = DEFAULTBOSSMAXHEALTH;
-	damage = DEFAULTBOSSDAMAGE;
-	bossActivated = DEFAULTBOSSACTIVATED;
-
 	pBody->gravityScale = 0;
 
 	innerState = INNERFSM::MOVE;
@@ -30,8 +21,6 @@ IronsideEntity::IronsideEntity(AEVec2 pos) : EnemyEntity(pos, { 1.f,0.f }, 10.f,
 	nextLanetospawn = 1;
 	dirtogo = 1;
 	targetY = 6.0f;
-	bossRoomCenter = position;
-
 }
 
 IronsideEntity::~IronsideEntity() {
@@ -39,23 +28,23 @@ IronsideEntity::~IronsideEntity() {
 }
 
 void IronsideEntity::PreUpdate(const f32& dt) {
-	EnemyEntity::PreUpdate(dt);
+	BossEntity::PreUpdate(dt);
 }
 
 void IronsideEntity::Update(const f32& dt) {
-	EnemyEntity::Update(dt);
+	BossEntity::Update(dt);
 }
 
 void IronsideEntity::PostUpdate(const f32& dt) {
-	EnemyEntity::PostUpdate(dt);
+	BossEntity::PostUpdate(dt);
 }
 
 void IronsideEntity::Render() {
-	EnemyEntity::Render();
+	BossEntity::Render();
 }
 
 void IronsideEntity::OnCollide(GameObjectEntity* go) {
-	EnemyEntity::OnCollide(go);
+	BossEntity::OnCollide(go);
 }
 
 void IronsideEntity::OnIdle(const f32& dt) {
@@ -115,10 +104,13 @@ void IronsideEntity::OnChase(const f32& dt) {
 	}
 	case INNERFSM::SHOOTPROJECTILE:
 	{
-
-
-		ShootProjectile(health / max_health, LaneY[nextLanetospawn]);
-		ShootProjectile(health / max_health, LaneY[3 - nextLanetospawn - currLane]);
+		Player* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<Player>();
+		if (!player) return;
+		AEVec2 Pos{ position.x, LaneY[nextLanetospawn] };
+		AEVec2 shootDir{ player->position.x - Pos.x,player->position.y - Pos.y };
+		ShootProjectile(health / max_health, Pos, shootDir);
+		Pos = AEVec2{ position.x, LaneY[3 - nextLanetospawn - currLane] };
+		ShootProjectile(health / max_health, Pos, shootDir);
 
 		innerState = INNERFSM::SPAWNPLATFORM2;
 		StunTimerBasedOnHealth();
@@ -167,48 +159,7 @@ void IronsideEntity::OnDead(const f32& dt) {
 
 }
 
-bool IronsideEntity::GetBossActivated()
-{
-	return bossActivated;
-}
 
-void IronsideEntity::SetBossActivation(bool activated)
-{
-	bossActivated = activated;
-}
-
-AEVec2 IronsideEntity::GetBossRoomCenter()
-{
-	return bossRoomCenter;
-}
-void IronsideEntity::ShootProjectile(float healthRatio,f32 posY)
-{
-	Player* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<Player>();
-	if (!player) return;
-	AEVec2 Pos{ position.x, posY };
-	AEVec2 shootDir{ player->position.x - Pos.x,player->position.y - Pos.y };
-	AEVec2Normalize(&shootDir, &shootDir);
-	f32 bulletSpeed = Utils::RandRange(BULLETMINSPEED, BULLETMAXSPEED);
-	if (healthRatio > 0.5f)
-	{
-		MissileProjectile* bullet = new MissileProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
-		bullet->scale = { BULLETSCALEX ,BULLETSCALEY };
-		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
-	}
-	else
-	{
-		ExplosiveProjectile* bullet = new ExplosiveProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
-		bullet->scale = { BULLETSCALEX ,BULLETSCALEY };
-		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
-	}
-}
-float IronsideEntity::GetLowHealthFactor()
-{
-	float healthRatio = health / max_health;
-	float temp = (1.f - healthRatio) / 0.75f;
-	temp = AEClamp(temp, 0.f, 1.f);
-	return temp;
-}
 void IronsideEntity::StunTimerBasedOnHealth()
 {
 	float stunTime = 1.f + (1.f - GetLowHealthFactor());

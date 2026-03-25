@@ -1,17 +1,15 @@
 #pragma once
 #ifndef __TITANENTITY_H
 #define __TITANENTITY_H
-#include "EnemyEntity.hpp"
+#include "BossEntity.hpp"
 #include "../../Utils/Constant.hpp"
-class TitanEntity : public EnemyEntity {
+class TitanEntity : public BossEntity {
 protected:
 	GameObjectEntity* ground;
 	float shootCooldown{ BOSS1SHOOTCOOLDOWN };
 	float shootTimer;
-	bool bossActivated;
 	float attackRange,jumpX,jumpY;
 	int baseProjectiles, extraProjectiles;
-	AEVec2 bossRoomCenter;
 public:
 	
 	TitanEntity(AEVec2 pos);
@@ -21,9 +19,6 @@ public:
 	void PostUpdate(const f32& dt) override;
 	void Render() override;
 	void OnCollide(GameObjectEntity* go) override;
-	bool GetBossActivated();
-	void SetBossActivation(bool activated);
-	AEVec2 GetBossRoomCenter();
 	// Virtual methods to Enemy Base class
 	void OnIdle(const f32& dt) override;
 	void OnPatrol(const f32& dt) override;

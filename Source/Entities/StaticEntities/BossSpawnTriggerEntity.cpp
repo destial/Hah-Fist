@@ -5,9 +5,7 @@
 #include "../../Managers/SceneManager.hpp"
 #include "../PlayerEntity.hpp"
 #include "../../Managers/AssetManager.hpp"
-#include "../Enemies/TitanEntity.hpp"
-#include "../Enemies/PayloadEntity.hpp"
-#include "../Enemies/IronsideEntity.hpp"
+#include "../Enemies/BossEntity.hpp"
 #include "../../Managers/LevelManager.hpp"
 
 BossSpawnTriggerEntity::BossSpawnTriggerEntity(AEVec2 pos) : StaticEntity(STATIC_TYPE::TYPE_WALL, pos, 1.0f, CollisionShape::AABB, PhysicsType::TRIGGER)
@@ -35,21 +33,8 @@ void BossSpawnTriggerEntity::PreUpdate(const f32& dt)
 				AEAudioPlay(AssetManager::GetAudio(ASSET_BOSS_SPAWN_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
 				player_entered = false;
 
-				if (LevelManager::GetLevel() == 0)
-				{
-					TitanEntity* titan = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<TitanEntity>();
-					titan->SetBossActivation(true);
-				}
-				else if (LevelManager::GetLevel() == 1)
-				{
-					PayloadEntity* titan = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<PayloadEntity>();
-					titan->SetBossActivation(true);
-				}
-				else if (LevelManager::GetLevel() == 2)
-				{
-					IronsideEntity* titan = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<IronsideEntity>();
-					titan->SetBossActivation(true);
-				}
+				BossEntity* boss = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<BossEntity>();
+				boss->SetBossActivation(true);
 
 			}
 		}

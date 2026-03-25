@@ -1,10 +1,10 @@
 #pragma once
 #ifndef __PAYLOADENTITY_H
 #define __PAYLOADENTITY_H
-#include "EnemyEntity.hpp"
+#include "BossEntity.hpp"
 #include "../../Utils/Constant.hpp"
 
-class PayloadEntity : public EnemyEntity {
+class PayloadEntity : public BossEntity {
 public:
 	enum struct INNERFSM {
 		JUMP,LAND,ATTACK, TOTAL
@@ -14,10 +14,8 @@ protected:
 	GameObjectEntity* ground;
 	float landCooldown{ BOSS2SHOOTCOOLDOWN };
 	float landTimer;
-	bool bossActivated;
 	float attackRange, jumpX, jumpY;
 	int baseProjectiles, extraProjectiles;
-	AEVec2 bossRoomCenter;
 public:
 	PayloadEntity(AEVec2 pos);
 	~PayloadEntity() override;
@@ -26,9 +24,6 @@ public:
 	void PostUpdate(const f32& dt) override;
 	void Render() override;
 	void OnCollide(GameObjectEntity* go) override;
-	bool GetBossActivated();
-	void SetBossActivation(bool activated);
-	AEVec2 GetBossRoomCenter();
 	// Virtual methods to Enemy Base class
 	void OnIdle(const f32& dt) override;
 	void OnPatrol(const f32& dt) override;

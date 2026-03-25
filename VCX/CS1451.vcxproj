@@ -102,6 +102,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="..\Source\Entities\BaseEntity.cpp" />
     <ClCompile Include="..\Source\Entities\DropEntities\CoinEntity.cpp" />
     <ClCompile Include="..\Source\Entities\DropEntity.cpp" />
+    <ClCompile Include="..\Source\Entities\Enemies\BossEntity.cpp" />
     <ClCompile Include="..\Source\Entities\Enemies\EnemyEntity.cpp" />
     <ClCompile Include="..\Source\Entities\Enemies\IronsideEntity.cpp" />
     <ClCompile Include="..\Source\Entities\Enemies\PayloadEntity.cpp" />
@@ -161,6 +162,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="..\Source\Entities\BaseEntity.hpp" />
     <ClInclude Include="..\Source\Entities\DropEntities\CoinEntity.hpp" />
     <ClInclude Include="..\Source\Entities\DropEntity.hpp" />
+    <ClInclude Include="..\Source\Entities\Enemies\BossEntity.hpp" />
     <ClInclude Include="..\Source\Entities\Enemies\EnemyEntity.hpp" />
     <ClInclude Include="..\Source\Entities\Enemies\IronsideEntity.hpp" />
     <ClInclude Include="..\Source\Entities\Enemies\PayloadEntity.hpp" />

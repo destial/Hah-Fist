@@ -270,6 +270,9 @@
     <ClCompile Include="..\Source\Entities\TriggerEntities\LaserEntity.cpp">
       <Filter>Source Files\Entities\TriggerEntities</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Entities\Enemies\BossEntity.cpp">
+      <Filter>Source Files\Entities\Enemies</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Utils\AEOverload.hpp">
@@ -445,6 +448,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Entities\TriggerEntities\LaserEntity.hpp">
       <Filter>Header Files\Entities\TriggerEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Entities\Enemies\BossEntity.hpp">
+      <Filter>Header Files\Entities\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
