@@ -85,10 +85,6 @@
 
 #define ASSET_BOSS_SPAWN_AUDIO "Assets/Audio/boss_trigger_close.wav"
 
-//Gameplay Macros
-#define PLAYER_INVULNERABILITY_ON_HIT 0.75f
-#define PLAYER_CONTROL_LOCK_AFTER_HIT 0.5f
-
 /*!
 * @brief Declare asset type
 */

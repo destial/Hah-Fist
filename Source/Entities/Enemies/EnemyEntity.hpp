@@ -35,7 +35,7 @@ public:
 	// Helper function for switching the state.
 	void SwitchState(FSM newState, f32 timeInNewState = 0.0f);
 	// Fetches the current state of the enemy
-	FSM GetCurrentState();
+	FSM GetCurrentState() const;
 	// Helper function for flipping direction of travel of enemy
 	void FlipDir();
 	

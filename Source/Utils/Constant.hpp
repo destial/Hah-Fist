@@ -3,7 +3,16 @@
 #ifndef __CONSTANT_H
 #define __CONSTANT_H
 
+#ifdef _DEBUG
 #define TOTAL_LEVELS 4
+#endif
+#ifndef _DEBUG
+#define TOTAL_LEVELS 3
+#endif
+
+//Gameplay Macros
+#define PLAYER_INVULNERABILITY_ON_HIT 0.75f
+#define PLAYER_CONTROL_LOCK_AFTER_HIT 0.5f
 
 //Bullets
 #define BULLETSCALEY 0.5f

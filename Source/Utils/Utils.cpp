@@ -28,16 +28,16 @@ Color::Color(u32 packed)
 Color::Color(Color const& copy) 
 : a{ copy.a }, r{ copy.r }, g{ copy.g }, b{ copy.b } {}
 
-u32 Color::Pack() const {
-	u32 color = (alpha << 24) + (red << 16) + (green << 8) + (blue);
-	return color;
-}
-
 Color::Color(f32 a, f32 r, f32 g, f32 b)
 : a{ static_cast<unsigned char>(255 * a) },
   r{ static_cast<unsigned char>(255 * r) },
   g{ static_cast<unsigned char>(255 * g) },
   b{ static_cast<unsigned char>(255 * b) } {}
+
+u32 Color::Pack() const {
+	u32 color = (alpha << 24) + (red << 16) + (green << 8) + (blue);
+	return color;
+}
 
 std::istream& operator>> (std::istream& is, Color& color) {
 	u32 packed;

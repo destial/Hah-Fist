@@ -1,3 +1,14 @@
+/*!
+* @file GameScene.cpp
+* @author Rance Andres (andresrancerowell.g@digipen.edu)
+* @author Brandon Koh (brandonshaohui.koh@digipen.edu)
+* @author Mohammad Hafiz (mohammadhafiz.b@digipen.edu)
+* @author Ryan Lau (r.lau@digipen.edu)
+* @date 7 January 2026
+* @course CSD1451
+* @brief Definition file for a base scene that will be inherited for all scenes
+*/
+
 #include "GameScene.hpp"
 #include "../Managers/SceneManager.hpp"
 #include "../Managers/AssetManager.hpp"
@@ -28,8 +39,8 @@
 #include "AEMath.h"
 #include <cstdio>
 #include <string>
-constexpr int SIZE_TO_RESERVE{ 50 }; // Reserves this amt of space for vector arr
 
+constexpr int SIZE_TO_RESERVE{ 50 }; // Reserves this amt of space for vector arr
 
 std::vector<BaseEntity*> GameScene::staticEntities;
 
@@ -53,65 +64,61 @@ static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, char ch) {
 	return CreateHotKeyDisplay(pos, std::string{ ch });
 }
 
-GameScene::GameScene() : BaseScene(), game_timer{ 0 }, game_state{ GameState::INIT } {}
-
-GameScene::~GameScene() {}
-
 static void OnGameExit(const InputEvent* ev) {
 	if (ev->IsKeyTriggered(AEVK_ESCAPE)) {
 		SceneManager::GetInstance()->SetNextScene(Scenes::MAIN_MENU);
 	}
 }
 
+GameScene::GameScene() : BaseScene(), game_timer{ 0 }, game_state{ GameState::INIT } {} // Empty ctor body
+
+GameScene::~GameScene() {} // Empty dtor
+
 void GameScene::Init() {
 	staticEntities.reserve(SIZE_TO_RESERVE); // Reserves StaticEntities capacity for vector arr
 	camManager->Init();
 	game_timer = 0.f;
+
+	// Add input listener when ESC to pressed to exit back to main menu
 	InputEvent::Listeners += {this, OnGameExit};
 
+	// Initialize background image
 	ImageUI* bgd = new ImageUI{ ASSET_BACKGROUND_IMAGE, {Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f} };
 	bgd->layer = BaseEntity::RenderLayer::BACKGROUND;
 	bgd->scale = { Utils::GetWorldWidth(), Utils::GetWorldHeight() };
 	AddEntityToScene(bgd);
 
+	// Load level based on level file
 	std::string filename = "Assets/level_";
 	filename += std::string{ static_cast<char>('0' + LevelManager::GetLevel()) };
 	filename += ".dat";
 	std::vector<Serialization::SerializedEntity> ens = Serialization::LoadFromFile(filename.c_str());
 
+	// Unserialize all entity data from level file
 	Player* player = nullptr;
 	if (!ens.empty()) {
 		for (Serialization::SerializedEntity const& sen : ens) {
 			BaseEntity* en = Serialization::Unserialize(sen);
-			if (en) {
+			if (en) { // If it's a valid entity
 				AddEntityToScene(en);
 				if (Player* p = dynamic_cast<Player*>(en)) {
-					player = p;
-					}
+					player = p; // Set the player pointer when loaded (only 1 should exist) 
+				}
 			}
 		}
 		std::printf("Loaded from file");
 	}
-	else {
-		player = new Player({ 1.f, 1.f });
-		std::printf("Player mass :%f\n", player->pBody->mass);
-		GameObjectEntity* wall = new GameObjectEntity({ 20.f, 7.f });
+	else { // No level file, create generic base level
+		player = new Player({ 1.f, 5.f });
+		GameObjectEntity* wall = new GameObjectEntity({ 1.f, 1.f });
 		wall->go_type = GameObjectEntity::PhysicsType::STATIC;
 		wall->mesh = MeshRenderer::GetCenterRectMesh();
 		wall->scale = { 30.f, 1.f };
 		AddEntityToScene(wall);
 		AddEntityToScene(player);
-		for (int i{}; i < 2; i++)
-		{
-			GameObjectEntity* e = new EnemyEntity({ 9.f + float(i) * 5.0f, 2.5f });
-			e->pBody->mass = 1.0f;
-			AddEntityToScene(e);
-		}
-		GameObjectEntity* trooper = new TrooperEntity{ {20.f, 12.f} };
-		AddEntityToScene(trooper);
 	}
 
-	// lock weapons based on level
+	// Lock weapons based on level
 	Weapon* w = new TurboFistWeapon(AEVec2{ 0.f, 0.f }, player);
 	AddEntityToScene(w);
 	player->AddWeapon(w);
@@ -125,9 +132,9 @@ void GameScene::Init() {
 		AddEntityToScene(w3);
 		player->AddWeapon(w3);
 	}
-
 	player->SwitchWeapon(0);
 
+	// Initialize weapon UI elements, the current charge / cooldown of the weapon
 	BarUI* power = new BarUI{ AEVec2{ 0.f, 0.f } };
 	power->scale = { 2.f, .25f };
 	power->text = "";
@@ -137,22 +144,26 @@ void GameScene::Init() {
 	power->text_size = 7.f;
 	AddEntityToScene(power);
 	power->AddUpdateListener(this, [power, player](const f32& dt) {
+		// Update UI based on current weapon position and value
 		Weapon* current = player->CurrentWeapon();
 		if (current == nullptr) return;
-		power->overlay_color = { 255, 255, 0, 0 };
+
+		// Use cooldown timer as priority
 		if (current->GetCooldownTimer() > 0) {
 			power->SetValue(current->GetCooldownTimer() / current->GetCooldownDuration());
 			power->overlay_color = { 255, 128, 128, 128 };
 		}
 		else {
 			power->SetValue(current->GetChannelTimer() / current->GetMaxChannelTime());
+			power->overlay_color = { 255, 255, 0, 0 };
 		}
+
+		// Always render below the weapon
 		power->position = current->position;
 		power->position.y -= std::abs(current->scale.y) * 0.65f;
 	});
 
 	player->AddUpdateListener(AssetManager::GetInstance(), [this, player](const f32& dt) {
-
 		if (dynamic_cast<BossEntity*>(GetFirstEntityOfType<BossEntity>()))
 		{
 			BossEntity* e = dynamic_cast<BossEntity*>(GetFirstEntityOfType<BossEntity>());

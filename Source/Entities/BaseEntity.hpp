@@ -1,6 +1,7 @@
 /*!
 * @file BaseEntity.hpp
 * @author Rance Andres (andresrancerowell.g@digipen.edu)
+* @author Mohammad Hafiz (mohammadhafiz.b@digipen.edu)
 * @date 9 January 2026
 * @course CSD1451
 * @brief Declaration file for a base entity that will be inherited for all entities
@@ -26,8 +27,8 @@
 */
 class BaseEntity {
 private:
-	static s32 all_id;
-	s32 en_id;
+	static s32 all_id; // Current static id when assigning
+	s32 en_id; // This entity's unique id
 protected:
 	// Only encourage the use of heap instantiation (pointers)
 	BaseEntity(AEVec2 position = { 0.f, 0.f }); // Ctor
@@ -105,24 +106,27 @@ public:
 	/*!
 	* @brief Remove all owned functions from this entity's Update
 	* @param owner - The owner of the functions
+	* @return If there were listeners removed
 	*/
 	bool RemoveUpdateListener(void* owner);
 
 	/*!
 	* @brief Remove all owned functions from this entity's PreUpdate
 	* @param owner - The owner of the functions
+	* @return If there were listeners removed
 	*/
 	bool RemovePreUpdateListener(void* owner);
 
 	/*!
 	* @brief Remove all owned functions from this entity's PostUpdate
 	* @param owner - The owner of the functions
+	* @return If there were listeners removed
 	*/
 	bool RemovePostUpdateListener(void* owner);
 
 	/*!
 	* @brief Initializes animated sprite data for this entity, use InitializeSpriteData if
-	*		 you want to initialize a non animated sprite.
+	* @brief you want to initialize a non animated sprite.
 	* @param filepath - Filepath to the sprite, be sure to use AssetManager macros for this.
 	* @param rows - number of rows in the spritesheet (Rows are used for different animations).
 	* @param columns - number of columns in the spritesheet (Columns are the number of frames).
@@ -131,13 +135,21 @@ public:
 
 	/*!
 	* @brief Initializes sprite data for this entity, use InitializeAnimatedSpriteData if
-	*		 you want to initialize an animated sprite.
+	* @brief you want to initialize an animated sprite.
 	* @param filepath - Filepath to the sprite, be sure to use AssetManager macros for this.
 	*/
 	void InitializeSpriteData(std::string filepath, f32 _scale = 5.f);
 
+	/*!
+	* @brief Get the half-size of this entity
+	* @return The absolute scale * 0.5
+	*/
 	inline AEVec2 GetHalfSize() const { return AEVec2{ std::abs(scale.x), std::abs(scale.y) } *0.5f; }
 
+	/*!
+	* @brief Get the unique id of this entity
+	* @return The unique id
+	*/
 	inline s32 GetId() const { return en_id; }
 };
 

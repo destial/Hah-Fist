@@ -153,7 +153,7 @@ void EnemyEntity::SwitchState(FSM newState, f32 timeInNewState)
 	stateTimer = timeInNewState;
 }
 
-EnemyEntity::FSM EnemyEntity::GetCurrentState()
+EnemyEntity::FSM EnemyEntity::GetCurrentState() const
 {
 	return state;
 }

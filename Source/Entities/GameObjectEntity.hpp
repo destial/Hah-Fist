@@ -13,19 +13,23 @@
 #define __GAMEOBJECTENTITY_H
 #include "BaseEntity.hpp"
 #include "../Utils/PhysicsBody.hpp"
+#include "../Utils/Constant.hpp"
 
+/*!
+* @brief The base class for all game objects (player, enemy, boss, collectables, weapons, platforms, etc.)
+*/
 class GameObjectEntity : public BaseEntity {
 public:
 	PhysicsBody* pBody; // Physics body for this entity
 	AEVec2 prev_position; // The position at the previous frame
 	AEVec2 prev_dynamic_position{0.f, 0.f}; // The position at the previous frame
-	f32 frictionMultiplier{ 1.0 };
-	bool isActive;
-	f32 health;
-	f32 max_health;
-	f32 damage;
-	float timeElapsedSinceLastDamage = { PLAYER_CONTROL_LOCK_AFTER_HIT };
-	float invulnerabilityDuration = 0.f;
+	f32 frictionMultiplier{ 1.0f }; // The friction multiplier against the ground
+	bool isActive; // Active update status of this object
+	f32 health; // Current health
+	f32 max_health; // Maximum health
+	f32 damage; // Damage output
+	float timeElapsedSinceLastDamage = { PLAYER_CONTROL_LOCK_AFTER_HIT }; // How much time has passed since last damage
+	float invulnerabilityDuration = 0.f; // How long this object is invulnerable
 	enum struct CollisionShape : int {
 		CIRCLE = 0, AABB, TOTAL
 	} shape; // Collision shape for calculating collision checks
@@ -69,6 +73,6 @@ public:
 	* @param go - The collided GameObject entity
 	*/
 	virtual void OnCollide(GameObjectEntity* go);
-
 };
+
 #endif
