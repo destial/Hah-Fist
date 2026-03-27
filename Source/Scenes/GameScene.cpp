@@ -51,10 +51,11 @@ std::vector<BaseEntity*> GameScene::staticEntities;
 * @brief Generic function to create a display for real-time interactive hotkeys
 * @param pos - The position on the screen
 * @param str - The text to display
+* @param listener - The input to listen to
 * @return The ButtonUI instance created
 */
-static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, std::string str) {
-	ButtonUI* b = new ButtonUI(pos);
+static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, std::string str, u8 listener) {
+	ButtonUI* b = new ButtonUI{ pos };
 	b->image = AssetManager::GetTexture(ASSET_SMALLBUTTON_IMAGE);
 	b->SetInteractive(false);
 	b->color = { 255, 255, 255, 255 };
@@ -68,6 +69,11 @@ static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, std::string str) {
 	b->AddPreUpdateListener(b, [b](const f32& dt) {
 		b->color = { 255, 255, 255, 255 };
 	});
+	b->AddUpdateListener(b, [b, listener](const f32& dt) {
+		if (AEInputCheckCurr(listener)) {
+			b->color = { 255, 128, 128, 128 };
+		}
+	});
 	return b;
 }
 
@@ -77,8 +83,8 @@ static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, std::string str) {
 * @param str - The character to display
 * @return The ButtonUI instance created
 */
-static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, char ch) {
-	return CreateHotKeyDisplay(pos, std::string{ ch });
+static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, char ch, int listener) {
+	return CreateHotKeyDisplay(pos, std::string{ ch }, listener);
 }
 
 /*!
@@ -160,7 +166,7 @@ void GameScene::Init() {
 	}
 	player->SwitchWeapon(0);
 
-	// Initialize weapon UI elements, the current charge / cooldown of the weapon
+	// Initialize in world weapon UI elements, the current charge / cooldown of the weapon
 	BarUI* power = new BarUI{ AEVec2{ 0.f, 0.f } };
 	power->scale = { 2.f, .25f };
 	power->text = "";
@@ -169,6 +175,8 @@ void GameScene::Init() {
 	power->layer = BaseUI::RenderLayer::PLAYER;
 	power->text_size = 7.f;
 	AddEntityToScene(power);
+
+	// Listen to current weapon charge to update slider value
 	power->AddUpdateListener(this, [power, player](const f32& dt) {
 		// Update UI based on current weapon position and value
 		Weapon* current = player->CurrentWeapon();
@@ -246,35 +254,11 @@ void GameScene::Init() {
 	hud->SetInteractive(false);
 	AddEntityToScene(hud);
 
-	// Initialize Space, ASD & Mouse hotkey displays
-	ButtonUI* lb = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 4.5f, Utils::GetWorldHeight() - 1.f }, "LB");
-	lb->AddUpdateListener(lb, [lb](const f32& dt) {
-		if (AEInputCheckCurr(AEVK_LBUTTON)) {
-			lb->color = { 255, 128, 128, 128 };
-		}
-	});
-	ButtonUI* ak = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 5.5f, Utils::GetWorldHeight() - 2.f }, 'A');
-	ak->AddUpdateListener(ak, [ak](const f32& dt) {
-		if (AEInputCheckCurr(AEVK_A)) {
-			ak->color = { 255, 128, 128, 128 };
-		}
-	});
-	ButtonUI* dk = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 3.5f, Utils::GetWorldHeight() - 2.f }, 'D');
-	dk->AddUpdateListener(dk, [dk](const f32& dt) {
-		if (AEInputCheckCurr(AEVK_D)) {
-			dk->color = { 255, 128, 128, 128 };
-		}
-	});
-	ButtonUI* sk = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 4.5f, Utils::GetWorldHeight() - 2.f }, "Sp");
-	sk->AddUpdateListener(sk, [sk](const f32& dt) {
-		if (AEInputCheckCurr(AEVK_SPACE)) {
-			sk->color = { 255, 128, 128, 128 };
-		}
-	});
-	AddEntityToScene(lb);
-	AddEntityToScene(ak);
-	AddEntityToScene(dk);
-	AddEntityToScene(sk);
+	// Initialize Space, A, D & Mouse hotkey displays
+	AddEntityToScene(CreateHotKeyDisplay({ Utils::GetWorldWidth() - 4.5f, Utils::GetWorldHeight() - 1.f }, "LB", AEVK_LBUTTON));
+	AddEntityToScene(CreateHotKeyDisplay({ Utils::GetWorldWidth() - 5.5f, Utils::GetWorldHeight() - 2.f }, 'A', AEVK_A));
+	AddEntityToScene(CreateHotKeyDisplay({ Utils::GetWorldWidth() - 3.5f, Utils::GetWorldHeight() - 2.f }, 'D', AEVK_D));
+	AddEntityToScene(CreateHotKeyDisplay({ Utils::GetWorldWidth() - 4.5f, Utils::GetWorldHeight() - 2.f }, "Sp", AEVK_SPACE));
 
 	// Initialize player health HUD element
 	BarUI* player_health = new BarUI( {Utils::GetWorldWidth() * 0.2f, Utils::GetWorldHeight() - 1.5f} );
@@ -434,8 +418,7 @@ void GameScene::Win() {
 	toptext->color.a = 0;
 	int score = static_cast<int>((p->Coins() / game_timer) * 100.f);
 	std::ostringstream oss;
-	oss.precision(2);
-	oss << "You beat this level!   \nScore: " << score << "  \nGame Time: " << game_timer << "s   ";
+	oss << "You beat this level!     \nScore: " << score << "     ";
 	toptext->text = oss.str();
 	toptext->SetInteractive(false);
 	AddEntityToScene(toptext);

@@ -1,7 +1,9 @@
 #include "StaticEntity.hpp"
 
 StaticEntity::StaticEntity(STATIC_TYPE static_type, AEVec2 pos, f32 mass, CollisionShape shape, PhysicsType go_type) 
-	: GameObjectEntity{ pos, mass, shape, go_type }, static_type{ static_type } {}
+	: GameObjectEntity{ pos, mass, shape, go_type }, static_type{ static_type } {
+	image = AssetManager::GetTexture(ASSET_STATIC_PLATFORM_IMAGE);
+}
 
 StaticEntity::~StaticEntity() {}
 

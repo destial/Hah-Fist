@@ -1,3 +1,11 @@
+/*!
+* @file ImageUI.cpp
+* @author Rance Andres (andresrancerowell.g@digipen.edu)
+* @date 10 March 2026
+* @course CSD1451
+* @brief Definition file for an image UI element
+*/
+
 #include "ImageUI.hpp"
 #include "../Managers/AssetManager.hpp"
 
@@ -7,29 +15,38 @@ ImageUI::ImageUI(const char* file_name, AEVec2 pos, int r, int c)
   sprite{ r == 0 ? nullptr : AssetManager::GetSpriteSheet(file_name, r, c) } {
 	text = "";
 	image = r == 0 ? AssetManager::GetTexture(file_name) : nullptr;
-}
+} // Ctor
 
-ImageUI::~ImageUI() {}
+ImageUI::~ImageUI() {} // Empty dtor
 
+/*!
+* @brief Update the current image animation (if it's a sprite)
+* @param dt - The delta time
+*/
 void ImageUI::Update(const f32& dt) {
 	BaseUI::Update(dt);
-	if (sprite) {
-		if ((animationTimer += dt) > (animationFrame / (sprite->Columns() * sprite->Rows()))) {
-			animationTimer = 0.f;
-			if (++currentCol > sprite->Columns()) {
-				currentCol = 0;
-				if (++currentRow > sprite->Rows()) {
-					currentRow = 0;
-				}
+	if (!sprite) 
+		return;
+
+	// Update sprite animation
+	if ((animationTimer += dt) > (animationFrame / (sprite->Columns() * sprite->Rows()))) {
+		animationTimer = 0.f;
+		if (++currentCol > sprite->Columns()) {
+			currentCol = 0;
+			if (++currentRow > sprite->Rows()) {
+				currentRow = 0;
 			}
 		}
 	}
 }
 
+/*!
+* @brief Render the image to the screen
+*/
 void ImageUI::Render() {
+	// Prioritize sprite rendering
 	if (sprite) {
 		sprite->Render(transform, color, currentRow, currentCol);
-		return;
 	}
 
 	if (image && image->data) {
@@ -38,10 +55,18 @@ void ImageUI::Render() {
 	}
 }
 
+/*!
+* @brief Get the sprite duration
+* @return The sprite duration (in seconds)
+*/
 f32 ImageUI::GetSpriteDuration() const {
 	return animationFrame;
 }
 
+/*!
+* @brief Set the sprite duration
+* @param dur - The sprite duration (in seconds)
+*/
 void ImageUI::SetSpriteDuration(f32 dur) {
 	animationFrame = dur;
 }

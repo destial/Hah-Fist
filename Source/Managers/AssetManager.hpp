@@ -16,6 +16,8 @@
 #include <map>
 #include <string>
 
+#define ASSET_STATIC_PLATFORM_IMAGE "Assets/Entities/wall.png"
+
 #define ASSET_PLAYER_SPRITE "Assets/Entities/player.png"
 #define ASSET_TROOPER_SPRITE "Assets/Entities/test_troop.png"
 #define ASSET_TROOPER_SPRITE_ROWS 3

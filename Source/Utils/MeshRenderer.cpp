@@ -1,12 +1,24 @@
+/*!
+* @file MeshRenderer.cpp
+* @author Rance Andres (andresrancerowell.g@digipen.edu)
+* @date 12 January 2026
+* @course CSD1451
+* @brief Declaration file for creating meshes which are used globally, to save memory
+*/
+
 #include "MeshRenderer.hpp"
 #include <map>
 
 namespace MeshRenderer {
 
 	static AEGfxVertexList* centerRectMesh{ nullptr };
-	static AEGfxVertexList* cornerRectMesh{ nullptr };
 	static std::map<int, AEGfxVertexList*> circleMeshes;
 
+	/*!
+	* @brief Create a circle mesh
+	* @param slices - The number of slices the circle has
+	* @return The AE mesh created
+	*/
 	AEGfxVertexList* GetCircleMesh(int slices) {
 		if (circleMeshes[slices]) {
 			return circleMeshes[slices];
@@ -29,6 +41,10 @@ namespace MeshRenderer {
 		return circleMeshes[slices] = AEGfxMeshEnd();
 	}
 
+	/*!
+	* @brief Create a rectangle mesh centered at the center
+	* @return The AE mesh created
+	*/
 	AEGfxVertexList* GetCenterRectMesh() {
 		if (centerRectMesh) {
 			return centerRectMesh;
@@ -38,7 +54,6 @@ namespace MeshRenderer {
 			-0.5f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
 			0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
 			-0.5f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
-
 		AEGfxTriAdd(
 			0.5f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
 			0.5f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
@@ -46,31 +61,13 @@ namespace MeshRenderer {
 		return centerRectMesh = AEGfxMeshEnd();
 	}
 
-	AEGfxVertexList* GetCornerRectMesh()
-	{
-		if (cornerRectMesh)
-			return cornerRectMesh;
-		AEGfxMeshStart();
-		AEGfxTriAdd(
-			0.f, -0.5f, 0xFFFFFFFF, 0.0f, 1.0f,
-			1.f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-			0.f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
-
-		AEGfxTriAdd(
-			1.f, -0.5f, 0xFFFFFFFF, 1.0f, 1.0f,
-			1.f, 0.5f, 0xFFFFFFFF, 1.0f, 0.0f,
-			0.f, 0.5f, 0xFFFFFFFF, 0.0f, 0.0f);
-		return cornerRectMesh = AEGfxMeshEnd();
-	}
-
+	/*!
+	* @brief Free all the created AE mesh
+	*/
 	void Free() {
 		if (centerRectMesh) {
 			AEGfxMeshFree(centerRectMesh);
 			centerRectMesh = nullptr;
-		}
-		if (cornerRectMesh) {
-			AEGfxMeshFree(cornerRectMesh);
-			cornerRectMesh = nullptr;
 		}
 		for (auto& entry : circleMeshes) {
 			AEGfxMeshFree(entry.second);

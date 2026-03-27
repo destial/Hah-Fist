@@ -12,30 +12,42 @@
 
 ParticleData::ParticleData(std::string const& filepath, u8 rows, u8 cols)
 : rows{ rows }, cols{ cols }, 
-  sprite{ AssetManager::GetSpriteSheet(filepath, rows, cols) } {}
+  sprite{ AssetManager::GetSpriteSheet(filepath, rows, cols) } {} // Ctor
 
-ParticleData::~ParticleData() {}
+ParticleData::~ParticleData() {} // Empty Dtor
 
 Particle::Particle(ParticleData* data, AEVec2 pos) 
 : pos{ pos }, vel({ 0.f,0.f }), 
   curr_col{ 0 }, curr_row{ 0 }, 
   elapsed_dur{ 0.f }, dur{ 0.f }, 
   scale{ 1.f }, min_scale{ 1.f }, 
-  data{ data }, fade{ false } {}
+  data{ data }, fade{ false } {} // Ctor
 
-Particle::~Particle() {}
+Particle::~Particle() {} // Empty Dtor
 
 ParticleSystem::ParticleSystem()
 : datatypes{ new ParticleData[ParticleType::LAST] {
 	{ASSET_SPARKLE_SPRITE, 3, 3}, // SPARKLE
 	{ASSET_STAR_SPRITE, 1, 1} // STAR
-}} {}
+}} {} // Ctor
 
-ParticleSystem::~ParticleSystem() {
+ParticleSystem::~ParticleSystem() { // Dtor
 	Clear();
 	delete[] datatypes;
 }
 
+/*!
+* @brief Spawn a particle in the scene
+* @param type - The particle enum type to spawn
+* @param center - The center location in world coordinates
+* @param amt - The amount of particles to spawn
+* @param radius - The spawning radius around the center
+* @param speed - The speed of the particles spawning
+* @param duration - The particles lifetime
+* @param minSize - The minimum size of the particles
+* @param maxSize - The maximum size of the particles
+* @param fade - Whether the particle will fade overtime before death
+*/
 void ParticleSystem::SpawnParticles(ParticleType::Type type, AEVec2 center, int amt, float radius, float speed, float duration, float minSize, float maxSize, bool fade) {
 	if (amt <= 0) // amount boundary check
 		return;
@@ -70,10 +82,17 @@ void ParticleSystem::SpawnParticles(ParticleType::Type type, AEVec2 center, int 
 	SpawnParticles(type, center, amt - 1, radius, speed, duration, minSize, maxSize, fade);
 }
 
+/*!
+* @brief Clears all active particles
+*/
 void ParticleSystem::Clear() {
 	particles.clear();
 }
 
+/*!
+* @brief Update all active particles
+* @param dt - The delta time
+*/
 void ParticleSystem::Update(const f32& dt) {
 	for (auto& ref : particles) {
 		if (ref->elapsed_dur < 0.f) {
@@ -102,6 +121,9 @@ void ParticleSystem::Update(const f32& dt) {
 	}
 }
 
+/*!
+* @brief Render all active particles
+*/
 void ParticleSystem::Render() {
 	for (auto& ref : particles) {
 		if (ref->elapsed_dur < 0.f) {

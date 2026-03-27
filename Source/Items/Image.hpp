@@ -13,12 +13,12 @@
 
 /*!
 * @brief Wrapper class for AEGfxTexture to include
-*		 the image's width and height
+* @brief the image's width and height
 */
 class Image {
 public:
-	unsigned int width, height;
-	AEGfxTexture* data;
+	unsigned int width, height; // Image width and height in pixels
+	AEGfxTexture* data; // AE pointer wrapper
 
 	Image(const char* file); // Ctor
 	Image(Image const&) = delete; // Remove copy ctor

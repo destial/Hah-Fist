@@ -1,3 +1,12 @@
+/*!
+* @file LevelEditor.cpp
+* @author Rance Andres (andresrancerowell.g@digipen.edu)
+* @date 23 February 2026
+* @course CSD1451
+* @brief Definition file for a level editor that the user
+* @brief can actively modify and save the entities inside a level
+*/
+
 #include "LevelEditor.hpp"
 #include "../UI/Debug.hpp"
 #include "../Managers/SerializationManager.hpp"
@@ -20,56 +29,75 @@
 #include "../Entities/StaticEntities/BossSpawnTriggerEntity.hpp"
 
 LevelEditor::LevelEditor(BaseScene* b_scene)
-: scene{ b_scene }, toggled{ false }, currentSelections(0) {
-}
+: scene{ b_scene }, toggled{ false }, currentSelections(0) {} // Ctor
 
-LevelEditor::~LevelEditor() {}
+LevelEditor::~LevelEditor() {} // Empty dtor
 
+/*!
+* @brief Toggle the level editor state
+*/
 void LevelEditor::Toggle() {
 	toggled = !toggled;
 	DebugUtils::ToggleRender(toggled);
 }
 
+/*!
+* @brief Get the current state of the level editor
+*/
 bool LevelEditor::IsToggled() const {
 	return toggled;
 }
 
+/*!
+* @brief Set the current scene to edit
+* @param scene - The scene to edit, called when transitioning
+*/
 void LevelEditor::SetScene(BaseScene* b_scene) {
 	scene = b_scene;
 	currentSelections.clear();
 	toggled = false;
 }
 
+/*!
+* @brief Set the current entity selection
+* @param entity - The entity to select
+*/
 void LevelEditor::SelectEntity(BaseEntity* entity) {
-	if (entity == nullptr)
+	if (entity == nullptr) // Non-null
 		return;
-	if (Weapon* w = dynamic_cast<Weapon*>(entity)) 
+	if (Weapon* w = dynamic_cast<Weapon*>(entity)) // Skip weapon entity
 		return;
 	std::pair<BaseEntity*, AEVec2> pair = { entity, Utils::GetMouseWorld(true) - entity->position };
 	currentSelections.push_back(pair);
 }
 
+/*!
+* @brief Remove the current entity selection from the scene
+* @brief This is safe from concurrent modification
+*/
 void LevelEditor::RemoveSelectedEntity() {
-	if (currentSelections.empty()) {
-		return;
-	}
+	if (currentSelections.empty())
+		return; // Removing nothing
 
 	for (std::pair<BaseEntity*, AEVec2> const& pair : currentSelections) {
-		if (Weapon* w = dynamic_cast<Weapon*>(pair.first)) {
-			continue;
-		}
+		if (Weapon* w = dynamic_cast<Weapon*>(pair.first)) 
+			continue; // Skip weapon entity
+
 		scene->RemoveEntityFromScene(pair.first);
 	}
 	
+	// Clear selections
 	currentSelections.clear();
 }
 
+/*!
+* @brief Add an entity to the scene based on the GameObject type
+*/
 BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
 	switch (type) {
 	case Editor::GameObjectType::STATIC_PLATFORM: {
 		StaticEntity* go = new StaticEntity(StaticEntity::STATIC_TYPE::TYPE_PLATFORM,Utils::GetMouseWorld(true));
 		go->mesh = MeshRenderer::GetCenterRectMesh();
-		//go->go_type = GameObjectEntity::PhysicsType::STATIC;
 		go->layer = BaseEntity::RenderLayer::WORLD;
 		scene->AddEntityToScene(go);
 		return go;
@@ -149,15 +177,21 @@ BaseEntity* LevelEditor::AddEntity(Editor::GameObjectType type) {
 	return nullptr;
 }
 
+/*!
+* @brief Update the level editor per frame, to manipulate
+* @brief the currently selected entity
+*/
 void LevelEditor::Update(const f32& dt) {
 	static bool scaleX{ true };
 	f32 cam_x, cam_y;
 	AEGfxGetCamPosition(&cam_x, &cam_y);
 	
+	// Get mouse position based on screen & camera position
 	AEVec2 mwp = Utils::GetMouseWorld(true);
 	s32 scroll;
 	AEInputMouseWheelDelta(&scroll);
 
+	// Select entities by clicking on them
 	bool selected = false;
 	for (BaseEntity* go : scene->Entities()) {
 		if (AEInputCheckTriggered(AEVK_LBUTTON) && Utils::OBBPoint(go, mwp)) {
@@ -176,6 +210,7 @@ void LevelEditor::Update(const f32& dt) {
 		}
 	}
 
+	// Select entities using selection box
 	static AEVec2 selectionBoxStart{};
 	static AEVec2 selectionBoxEnd{};
 
@@ -190,7 +225,7 @@ void LevelEditor::Update(const f32& dt) {
 	}
 
 	if (!selected && AEInputCheckPrev(AEVK_MBUTTON) && AEInputCheckReleased(AEVK_MBUTTON)) {
-		BaseEntity* temp = new GameObjectEntity(AEVec2{ selectionBoxStart.x + selectionBoxEnd.x, selectionBoxStart.y + selectionBoxEnd.y } *0.5f);
+		BaseEntity* temp = new GameObjectEntity{ AEVec2{ selectionBoxStart.x + selectionBoxEnd.x, selectionBoxStart.y + selectionBoxEnd.y } * 0.5f };
 		temp->scale.x = selectionBoxEnd.x - selectionBoxStart.x;
 		temp->scale.y = selectionBoxEnd.y - selectionBoxStart.y;
 		for (BaseEntity* en : scene->Entities()) {
@@ -204,41 +239,37 @@ void LevelEditor::Update(const f32& dt) {
 		selectionBoxEnd = {};
 	}
 
-	DebugUtils::RenderLine(selectionBoxStart, AEVec2{ selectionBoxStart.x, selectionBoxEnd.y }, {255, 255, 255, 0});
-	DebugUtils::RenderLine(selectionBoxEnd, AEVec2{ selectionBoxStart.x, selectionBoxEnd.y }, { 255, 255, 255, 0 });
-	DebugUtils::RenderLine(selectionBoxStart, AEVec2{ selectionBoxEnd.x, selectionBoxStart.y }, { 255, 255, 255, 0 });
-	DebugUtils::RenderLine(selectionBoxEnd, AEVec2{ selectionBoxEnd.x, selectionBoxStart.y }, { 255, 255, 255, 0 });
+	// Render selection box
+	DebugUtils::RenderLine(selectionBoxStart, { selectionBoxStart.x, selectionBoxEnd.y }, {255, 255, 255, 0});
+	DebugUtils::RenderLine(selectionBoxEnd, { selectionBoxStart.x, selectionBoxEnd.y }, { 255, 255, 255, 0 });
+	DebugUtils::RenderLine(selectionBoxStart, { selectionBoxEnd.x, selectionBoxStart.y }, { 255, 255, 255, 0 });
+	DebugUtils::RenderLine(selectionBoxEnd, { selectionBoxEnd.x, selectionBoxStart.y }, { 255, 255, 255, 0 });
 
+	// Hotkey to add entities
 	if (AEInputCheckTriggered(AEVK_1)) {
 		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::STATIC_PLATFORM));
 	}
-
 	if (AEInputCheckTriggered(AEVK_2)) {
 		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::STATIC_WALL));
 	}
-
 	if (AEInputCheckTriggered(AEVK_3)) {
 		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::ENEMY_1));
 	}
-
 	if (AEInputCheckTriggered(AEVK_4)) {
 		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::ENEMY_2));
 	}
-
 	if (AEInputCheckTriggered(AEVK_5)) {
 		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::SPIDER));
 	}
-
 	if (AEInputCheckTriggered(AEVK_6)) {
 		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::PROJECTILE_ENEMY));
 	}
-
 	if (AEInputCheckTriggered(AEVK_7)) {
 		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::COIN));
@@ -247,18 +278,16 @@ void LevelEditor::Update(const f32& dt) {
 		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::MOVING_PLATFORM));
 	}
-	
 	if (AEInputCheckTriggered(AEVK_9)) {
 		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::CRATE));
 	}
-
 	if (AEInputCheckTriggered(AEVK_Q)) {
 		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::BOSS_SPAWN_WALL));
 	}
 
-	//BOSSES
+	// Hotkey to add bossess
 	if (AEInputCheckTriggered(AEVK_B)) {
 		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::TITAN));
@@ -271,14 +300,18 @@ void LevelEditor::Update(const f32& dt) {
 		currentSelections.clear();
 		SelectEntity(AddEntity(Editor::GameObjectType::IRONSIDE));
 	}
+
 	// Toggling to switch from scaling the X axis to Y axis
 	if (AEInputCheckTriggered(AEVK_X)) {
 		scaleX = !scaleX;
 	}
+
+	// Translate & scale selections based on mouse input
 	if (!currentSelections.empty()) {
 		bool drag = false;
 		if (AEInputCheckCurr(AEVK_LBUTTON) && !AEInputCheckTriggered(AEVK_LBUTTON)) {
 			
+			// Translate & drag selections
 			for (std::pair<BaseEntity*, AEVec2> const& pair : currentSelections) {
 				if (Utils::OBBPoint(pair.first, mwp)) {
 					drag = true;
@@ -290,11 +323,12 @@ void LevelEditor::Update(const f32& dt) {
 					pair.first->position = mwp - pair.second;
 					if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(pair.first)) {
 						go->prev_position = mwp;
-						if (MovingPlatformEntity* mpe = dynamic_cast<MovingPlatformEntity*>(pair.first))
-						{
+						if (MovingPlatformEntity* mpe = dynamic_cast<MovingPlatformEntity*>(pair.first)) {
 							mpe->SetStartPoint(go->position);
 						}
 					}
+					
+					// Scale selections
 					if (scroll != 0) {
 						(scaleX ? pair.first->scale.x : pair.first->scale.y) += scroll;
 						(scaleX ? pair.first->scale.x : pair.first->scale.y) = max(scaleX ? pair.first->scale.x : pair.first->scale.y, 1);
@@ -310,12 +344,13 @@ void LevelEditor::Update(const f32& dt) {
 			}
 		}
 
-
+		// Remove selection
 		if (AEInputCheckTriggered(AEVK_DELETE)) {
 			RemoveSelectedEntity();
 		}
 	}
 
+	// Move camera position
 	if (AEInputCheckCurr(AEVK_RBUTTON)) {
 		s32 del_x, del_y;
 		AEInputGetCursorPositionDelta(&del_x, &del_y);
@@ -326,6 +361,7 @@ void LevelEditor::Update(const f32& dt) {
 		AEGfxSetCamPosition(cam_x, cam_y);
 	}
 
+	// Save level
 	static float saved = 0.f;
 	if (AEInputCheckCurr(AEVK_LCTRL) && AEInputCheckTriggered(AEVK_S)) {
 		char filename[50];
@@ -334,16 +370,23 @@ void LevelEditor::Update(const f32& dt) {
 		saved = 1.f;
 	}
 
+	// Render save text
 	if (saved > 0.f) {
 		saved -= dt;
 		DebugUtils::RenderText({ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f }, "Saved!");
 	}
 }
 
+/*!
+* @brief Render data about the level, as well as if the level
+* @brief has been saved or not
+*/
 void LevelEditor::Render() {
 	if (currentSelections.empty()) {
 		return;
 	}
+
+	// Render current selection highlight
 	for (std::pair<BaseEntity*, AEVec2> const& pair : currentSelections) {
 		AEVec2 normal = { pair.first->position.x, pair.first->position.y + pair.first->scale.y * 0.5f };
 		AEVec2 right = { pair.first->position.x + pair.first->scale.x * 0.5f , pair.first->position.y};
