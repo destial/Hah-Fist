@@ -29,7 +29,7 @@ namespace LevelManager { // start namespace
 	/*!
 	* @brief Set a level's fastest time
 	* @param level - The level to unlock
-	* @param time - The time (in seconds) to complete the level
+	* @param time - The time (in seconds) to complete the level (or -1 to lock it, 0 to unlock it)
 	*/
 	void SetLevelTime(int level, float time);
 

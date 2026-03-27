@@ -11,6 +11,24 @@
 #include <fstream>
 #include <cstdio>
 
+namespace Tutorial {
+	/*!
+	* @brief Add a tutorial text to the game scene
+	* @param pos - The position of the text in world space
+	* @param text - The text to display
+	* @return The instance of the BaseUI
+	*/
+	static BaseUI* AddTutorialText(GameScene* scene, AEVec2 const& pos, std::string text) {
+		ImageUI* tut = new ImageUI{ ASSET_HUD_IMAGE, pos };
+		tut->layer = BaseEntity::RenderLayer::WORLD;
+		tut->scale = { 15.f, 2.5f };
+		tut->text_size = 8.f;
+		tut->text = text;
+		scene->AddEntityToScene(tut);
+		return tut;
+	}
+}
+
 namespace LevelManager {
 	static std::map<int, float> unlocked_levels;
 	static int level; // the currently played level
@@ -18,10 +36,12 @@ namespace LevelManager {
 	/*!
 	* @brief Set a level's fastest time
 	* @param level - The level to unlock
-	* @param time - The time (in seconds) to complete the level
+	* @param time - The time (in seconds) to complete the level (or -1 to lock it, 0 to unlock it)
 	*/
 	void SetLevelTime(int level, float time) {
-		unlocked_levels[level] = time;
+		if (unlocked_levels[level] <= 0 || time < unlocked_levels[level]) {
+			unlocked_levels[level] = time;
+		}
 	}
 
 	/*!
@@ -79,94 +99,26 @@ namespace LevelManager {
 			return;
 		}
 
+		// Hard coded tutorial text
 		if (level == 0) {
-			ImageUI* hold = new ImageUI{ ASSET_HUD_IMAGE, {-80.f, 16.f} };
-			hold->layer = BaseEntity::RenderLayer::WORLD;
-			hold->scale = { 15.f, 2.5f };
-			hold->text_size = 8.f;
-			hold->text = "Hold left mouse button to charge your fist!\nRelease to use your attack!";
-			scene->AddEntityToScene(hold);
-
-			ImageUI* turbo = new ImageUI{ ASSET_HUD_IMAGE, {-80.f, 13.f} };
-			turbo->layer = BaseEntity::RenderLayer::WORLD;
-			turbo->scale = { 15.f, 2.5f };
-			turbo->text_size = 8.f;
-			turbo->text = "This is your turbo fist!";
-			scene->AddEntityToScene(turbo);
-
-			ImageUI* jump = new ImageUI{ ASSET_HUD_IMAGE, {5.f, 21.f} };
-			jump->layer = BaseEntity::RenderLayer::WORLD;
-			jump->scale = { 15.f, 2.5f };
-			jump->text_size = 8.f;
-			jump->text = "Charge your first to get past!";
-			scene->AddEntityToScene(jump);
-
-			ImageUI* crate = new ImageUI{ ASSET_HUD_IMAGE, {47.f, 8.f} };
-			crate->layer = BaseEntity::RenderLayer::WORLD;
-			crate->scale = { 15.f, 2.5f };
-			crate->text_size = 8.f;
-			crate->text = "This is a breakable crate with loot!";
-			scene->AddEntityToScene(crate);
-
-			ImageUI* slime = new ImageUI{ ASSET_HUD_IMAGE, {106.f, 20.f} };
-			slime->layer = BaseEntity::RenderLayer::WORLD;
-			slime->scale = { 15.f, 2.5f };
-			slime->text_size = 8.f;
-			slime->text = "Kill the slimes to get more coins!";
-			scene->AddEntityToScene(slime);
-
-			ImageUI* boss = new ImageUI{ ASSET_HUD_IMAGE, {160.f, 22.f} };
-			boss->layer = BaseEntity::RenderLayer::WORLD;
-			boss->scale = { 15.f, 2.f };
-			boss->text_size = 8.f;
-			boss->text = "Next is the boss room!\nKill the boss to advance!";
-			scene->AddEntityToScene(boss);
+			Tutorial::AddTutorialText(scene, { -80.f, 16.f }, "Hold left mouse button to charge your fist!\nRelease to use your attack!");
+			Tutorial::AddTutorialText(scene, { -80.f, 13.f }, "This is your turbo fist!");
+			Tutorial::AddTutorialText(scene, { 5.f, 21.f }, "Charge your first to get past!");
+			Tutorial::AddTutorialText(scene, { 47.f, 8.f }, "This is a breakable crate with loot!");
+			Tutorial::AddTutorialText(scene, { 106.f, 20.f }, "Kill the slimes to get more coins!");
+			Tutorial::AddTutorialText(scene, { 160.f, 22.f }, "Next is the boss room!\nKill the boss to advance!");
 		}
 
 		if (level == 1) {
-			ImageUI* cycle = new ImageUI{ ASSET_HUD_IMAGE, {16.f, 16.f} };
-			cycle->layer = BaseEntity::RenderLayer::WORLD;
-			cycle->scale = { 15.f, 2.5f };
-			cycle->text_size = 8.f;
-			cycle->text = "Cycle between '1', '2' to switch your fists!";
-			scene->AddEntityToScene(cycle);
-
-			ImageUI* grapple = new ImageUI{ ASSET_HUD_IMAGE, {16.f, 13.f} };
-			grapple->layer = BaseEntity::RenderLayer::WORLD;
-			grapple->scale = { 15.f, 2.5f };
-			grapple->text_size = 8.f;
-			grapple->text = "The grapple fist pulls enemies to you!\nTry combo-ing your grapple and turbo fist!";
-			scene->AddEntityToScene(grapple);
-
-			ImageUI* fall = new ImageUI{ ASSET_HUD_IMAGE, {112.f, 10.f} };
-			fall->layer = BaseEntity::RenderLayer::WORLD;
-			fall->scale = { 10.f, 1.5f };
-			fall->text_size = 8.f;
-			fall->text = "Don't fall in the void!";
-			scene->AddEntityToScene(fall);
-
-			ImageUI* spider = new ImageUI{ ASSET_HUD_IMAGE, {194.f, 13.f} };
-			spider->layer = BaseEntity::RenderLayer::WORLD;
-			spider->scale = { 15.f, 2.5f };
-			spider->text_size = 8.f;
-			spider->text = "Spiders spawn babies when killed!";
-			scene->AddEntityToScene(spider);
+			Tutorial::AddTutorialText(scene, { 16.f, 16.f }, "Cycle between '1', '2' to switch your fists!");
+			Tutorial::AddTutorialText(scene, { 16.f, 13.f }, "The grapple fist pulls enemies to you!\nTry combo-ing your grapple and turbo fist!");
+			Tutorial::AddTutorialText(scene, { 112.f, 10.f }, "Don't fall in the void!")->scale = { 10.f, 1.5f };
+			Tutorial::AddTutorialText(scene, { 194.f, 13.f }, "Spiders spawn babies when killed!");
 		}
 
 		if (level == 2) {
-			ImageUI* finger = new ImageUI{ ASSET_HUD_IMAGE, {8.f, 7.f} };
-			finger->layer = BaseEntity::RenderLayer::WORLD;
-			finger->scale = { 15.f, 2.5f };
-			finger->text_size = 8.f;
-			finger->text = "Hotkey '3' is your finger gun!";
-			scene->AddEntityToScene(finger);
-
-			ImageUI* archer = new ImageUI{ ASSET_HUD_IMAGE, {51.f, 18.f} };
-			archer->layer = BaseEntity::RenderLayer::WORLD;
-			archer->scale = { 15.f, 2.5f };
-			archer->text_size = 8.f;
-			archer->text = "This is an archer! Ranged enemy!";
-			scene->AddEntityToScene(archer);
+			Tutorial::AddTutorialText(scene, { 8.f, 7.f }, "Hotkey '3' is your finger gun!");
+			Tutorial::AddTutorialText(scene, { 51.f, 18.f }, "This is an archer! Ranged enemy!");
 		}
 	}
 

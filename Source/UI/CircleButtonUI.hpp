@@ -1,31 +1,42 @@
+/*!
+* @file CircleButtonUI.hpp
+* @author Rance Andres (andresrancerowell.g@digipen.edu)
+* @date 13 January 2026
+* @course CSD1451
+* @brief Declaration file for a circular button UI element
+*/
+
 #pragma once
 #ifndef __CIRCLEBUTTONUI_H
 #define __CIRCLEBUTTONUI_H
-#include "BaseUI.hpp"
-#include <functional>
-#include <vector>
+#include "ButtonUI.hpp"
 
-class CircleButtonUI : public BaseUI {
+/*!
+* @brief A class for a circular button UI element
+*/
+class CircleButtonUI : public ButtonUI {
 protected:
-	std::vector<std::function<void(MouseButton)>> click_listeners;
-	std::vector<std::function<void()>> hover_listeners;
-	std::vector<std::function<void()>> unhover_listeners;
+	// Only encourage the use of heap instantiation (pointers)
+	CircleButtonUI(CircleButtonUI const&) = delete; // Remove copy ctor
+	CircleButtonUI& operator=(CircleButtonUI const&) = delete; // Remove copy assignment
 public:
-	f32 radius;
-	CircleButtonUI(AEVec2 pos = { 0.f, 0.f });
-	virtual ~CircleButtonUI();
+	f32 radius; // The radius of this button
+	CircleButtonUI(AEVec2 pos = { 0.f, 0.f }); // Ctor
+	virtual ~CircleButtonUI(); // Dtor
 
-	void AddClickListener(std::function<void(MouseButton)> func);
-	void AddHoverListener(std::function<void()> func);
-	void AddStopHoverListener(std::function<void()> func);
-
-	virtual void OnMouseClick(AEVec2 mousePos, MouseButton button);
-	virtual void OnMouseHover(AEVec2 pos);
-	virtual void OnMouseStopHover();
-
+	/*!
+	* @brief Inherited: Post-update the UI after everything has been processed
+	* @brief Update's the scale based on radius
+	*/
 	virtual void PostUpdate(const f32& dt);
-	virtual void Update(const f32& dt);
-	virtual void Render();
+
+	/*!
+	* @brief Inherited: Function to check if mouse is on this button
+	* @brief Differs between Circle and Rectangle
+	* @param mouse - The mouse world position
+	* @return If the mouse is on this button
+	*/
+	virtual bool IsOn(AEVec2 const& mouse);
 };
 
 #endif

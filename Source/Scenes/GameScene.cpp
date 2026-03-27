@@ -47,6 +47,12 @@ constexpr int SIZE_TO_RESERVE{ 50 }; // Reserves this amt of space for vector ar
 
 std::vector<BaseEntity*> GameScene::staticEntities;
 
+/*!
+* @brief Generic function to create a display for real-time interactive hotkeys
+* @param pos - The position on the screen
+* @param str - The text to display
+* @return The ButtonUI instance created
+*/
 static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, std::string str) {
 	ButtonUI* b = new ButtonUI(pos);
 	b->image = AssetManager::GetTexture(ASSET_SMALLBUTTON_IMAGE);
@@ -57,16 +63,28 @@ static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, std::string str) {
 	b->text = str;
 	b->text_size = 7.5f;
 	b->font = AssetManager::GetFontId(ASSET_DEFAULT_FONT);
+
+	// Always set color multiplier to white when not hovered
 	b->AddPreUpdateListener(b, [b](const f32& dt) {
 		b->color = { 255, 255, 255, 255 };
 	});
 	return b;
 }
 
+/*!
+* @brief Generic function to create a display for real-time interactive hotkeys
+* @param pos - The position on the screen
+* @param str - The character to display
+* @return The ButtonUI instance created
+*/
 static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, char ch) {
 	return CreateHotKeyDisplay(pos, std::string{ ch });
 }
 
+/*!
+* @brief Function to listen when escaping from the level
+* @param ev - The input event
+*/
 static void OnGameExit(const InputEvent* ev) {
 	if (ev->IsKeyTriggered(AEVK_ESCAPE)) {
 		SceneManager::GetInstance()->SetNextScene(Scenes::MAIN_MENU);
@@ -77,6 +95,9 @@ GameScene::GameScene() : BaseScene(), game_timer{ 0 }, game_state{ GameState::IN
 
 GameScene::~GameScene() {} // Empty dtor
 
+/*!
+* @brief Inherited: Initialize the scene with starting points, entities, level, etc.
+*/
 void GameScene::Init() {
 	staticEntities.reserve(SIZE_TO_RESERVE); // Reserves StaticEntities capacity for vector arr
 	camManager->Init();
@@ -169,6 +190,8 @@ void GameScene::Init() {
 		power->position.y -= std::abs(current->scale.y) * 0.65f;
 	});
 
+	// Initialize player movement interaction
+	// Uses a listener so that when the level is finished, we can remove the player interaction
 	player->AddUpdateListener(this, [player](const f32& dt) {
 		if (player->timeElapsedSinceLastDamage > PLAYER_CONTROL_LOCK_AFTER_HIT) {
 			AEVec2 dir{};
@@ -187,6 +210,7 @@ void GameScene::Init() {
 			}
 		}
 
+		// Swap weapon
 		if (AEInputCheckCurr(AEVK_1)) {
 			player->SwitchWeapon(0);
 		}
@@ -202,6 +226,8 @@ void GameScene::Init() {
 		}
 	});
 
+	// Player listener for camera tracking
+	// Uses the AssetManager instance as owner as it's perpetual lifetime
 	player->AddUpdateListener(AssetManager::GetInstance(), [this, player](const f32& dt) {
 		if (BossEntity * e = dynamic_cast<BossEntity*>(GetFirstEntityOfType<BossEntity>())) {
 			if (e->GetBossActivated()) {
@@ -213,12 +239,14 @@ void GameScene::Init() {
 			camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
 	});
 
+	// Initialize HUD background
 	ImageUI* hud = new ImageUI{ ASSET_HUD_IMAGE, {Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() - 1.7f} };
 	hud->scale = { Utils::GetWorldWidth() - 5.f, 3.f };
 	hud->color.a = 210;
 	hud->SetInteractive(false);
 	AddEntityToScene(hud);
 
+	// Initialize Space, ASD & Mouse hotkey displays
 	ButtonUI* lb = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 4.5f, Utils::GetWorldHeight() - 1.f }, "LB");
 	lb->AddUpdateListener(lb, [lb](const f32& dt) {
 		if (AEInputCheckCurr(AEVK_LBUTTON)) {
@@ -243,20 +271,22 @@ void GameScene::Init() {
 			sk->color = { 255, 128, 128, 128 };
 		}
 	});
-
 	AddEntityToScene(lb);
 	AddEntityToScene(ak);
 	AddEntityToScene(dk);
 	AddEntityToScene(sk);
 
+	// Initialize player health HUD element
 	BarUI* player_health = new BarUI( {Utils::GetWorldWidth() * 0.2f, Utils::GetWorldHeight() - 1.5f} );
-	player_health->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
+	player_health->text_alignment = BaseUI::TextAlignment::LEFT_CORNER;
 	player_health->text_size = 5.f;
 	player_health->scale = { 12.f, 1.5f };
 	player_health->overlay_color = { 255, 64, 255, 64 };
 	player_health->color = { 255, 255, 64, 64 };
 	player_health->layer = BaseUI::RenderLayer::UI;
 	player_health->SetInteractive(false);
+
+	// Listen to player health to update slider value
 	player_health->AddUpdateListener(this, [player, player_health](const f32& dt) {
 		if (player == nullptr) {
 			return;
@@ -268,14 +298,17 @@ void GameScene::Init() {
 	});
 	AddEntityToScene(player_health);
 
+	// Initialize weapon charge HUD element
 	BarUI* weaponhud = new BarUI{ {Utils::GetWorldWidth() * 0.49f, Utils::GetWorldHeight() - 1.5f} };
-	weaponhud->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
+	weaponhud->text_alignment = BaseUI::TextAlignment::LEFT_CORNER;
 	weaponhud->text_size = 5.f;
 	weaponhud->scale = { 12.f, 1.5f };
 	weaponhud->text = "";
 	weaponhud->SetInteractive(false);
 	weaponhud->layer = BaseUI::RenderLayer::UI;
 	AddEntityToScene(weaponhud);
+
+	// Listen to current weapon charge to update slider value
 	weaponhud->AddUpdateListener(this, [weaponhud, player](const f32& dt) {
 		Weapon* current = player->CurrentWeapon();
 		if (current == nullptr) {
@@ -298,9 +331,12 @@ void GameScene::Init() {
 		}
 	});
 
+	// Initialize coins HUD element
 	ImageUI* coins = new ImageUI{ ASSET_SMALLBUTTON_IMAGE, {Utils::GetWorldWidth() * 0.69f, Utils::GetWorldHeight() - 1.5f} };
 	coins->text_size = 7.5f;
 	coins->scale = {5.f, 2.f};
+
+	// Listen to how many coins were collected to update text display
 	coins->AddUpdateListener(this, [coins, player](const f32& dt) {
 		char collected[64];
 		sprintf_s(collected, 64, "Coins: %d", player->Coins());
@@ -308,9 +344,12 @@ void GameScene::Init() {
 	});
 	AddEntityToScene(coins);
 
+	// Initialize game time HUD element
 	ImageUI* time = new ImageUI{ ASSET_SMALLBUTTON_IMAGE, {Utils::GetWorldWidth() * 0.81f, Utils::GetWorldHeight() - 1.5f} };
 	time->text_size = 7.5f;
 	time->scale = { 5.f, 2.f };
+
+	// Listen to current game time to update text display
 	time->AddUpdateListener(this, [time, this](const f32& dt) {
 		char timer[64];
 		sprintf_s(timer, 64, "Timer: %0.2f", game_timer);
@@ -318,57 +357,77 @@ void GameScene::Init() {
 	});
 	AddEntityToScene(time);
 
+	// Load any tutorial UI elements based on the current level
 	LevelManager::LoadTutorial(this);
 
+	// Everything has finished initializing, we can start
 	Game::SetBackgroundColor({ 1.f, 0.3f, 0.3f, 0.3f });
 	game_state = GameState::PLAYING;
 }
 
+/*!
+* @brief Inherited: Update all entities in the scene
+* @param dt - The delta time for this frame
+*/
 void GameScene::Update(const f32& dt) {
+	// Update current static entities
 	staticEntities = SceneManager::GetInstance()->GetCurrentScene()->GetBaseEntitiesOfType<StaticEntity>();
-	BaseScene::Update(dt);
+	BaseScene::Update(dt); // Base update all entities
 	staticEntities.clear();
+
+	// Update game time if not lost or won
 	if (game_state == GameState::PLAYING)
 		game_timer += dt;
-
-	if (AEInputCheckTriggered(AEVK_J)) {
-		Win();
-	}
 }
 
+/*!
+* @brief Inherited: PostUpdate all entities in the scene
+* @param dt - The delta time for this frame
+*/
 void GameScene::PostUpdate(const f32& dt) {
-	BaseScene::PostUpdate(dt);
+	BaseScene::PostUpdate(dt); // Base post update all entities
 
+	// Previous game state was lost, we reset the level
 	if (game_state == GameState::LOST) {
-		End(); // restart level (todo: lose screen)
+		End();
 		Init();
+		return;
 	}
 
+	// Lose when player dies
 	Player* player = GetFirstEntityOfType<Player>();
 	if (player == nullptr || player->health <= 0.f)
 		Lose();
 }
 
+/*!
+* @brief Inherited: Clear the entities from the scene.
+*/
 void GameScene::End() {
 	BaseScene::End();
 	InputEvent::Listeners -= this;
 }
 
+/*!
+* @brief Called when the current level has been won
+*/
 void GameScene::Win() {
 	game_state = GameState::WON;
 	LevelManager::SetLevelTime(LevelManager::GetLevel(), game_timer); // set this level time
 	LevelManager::UnlockLevel(LevelManager::GetLevel() + 1); // unlock next level
-
 	LevelManager::SavePlayerData(); // save data
 
+	// If this game scene has a player, show the win screen
 	Player* p = GetFirstEntityOfType<Player>();
 	if (!p)
 		return;
 
+	// Initialize win screen background
 	ImageUI* bgd = new ImageUI{ ASSET_HUD_IMAGE, {Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f} };
 	bgd->scale = { Utils::GetWorldWidth() * 0.3f, Utils::GetWorldHeight() * 0.9f };
 	AddEntityToScene(bgd);
 
+	// Initialize win screen text
 	ButtonUI* toptext = new ButtonUI{ { Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.7f } };
 	toptext->scale = { Utils::GetWorldWidth() * 0.21f, Utils::GetWorldHeight() * 0.1f };
 	toptext->text_size = 10.f;
@@ -381,24 +440,30 @@ void GameScene::Win() {
 	toptext->SetInteractive(false);
 	AddEntityToScene(toptext);
 
+	// Initialize next level button
 	ButtonUI* advance = new ButtonUI{{ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f }};
 	advance->scale = { Utils::GetWorldWidth() * 0.21f, Utils::GetWorldHeight() * 0.1f };
 	advance->text_size = 10.f;
 	advance->image = AssetManager::GetTexture(ASSET_SMALLBUTTON_IMAGE);
 	advance->text = "Next Level  ";
+
+	// Listen to button click to advance to the next level
 	advance->AddClickListener([this](BaseUI::MouseButton b) {
 		if (b & BaseUI::MouseButton::LEFT) {
 			LevelManager::SetLevel(LevelManager::GetLevel() + 1);
-			Lose();
+			Lose(); // Basically reset the current state with the new level
 		}
 	});
 	AddEntityToScene(advance);
 
+	// Initialize the return to main menu button
 	ButtonUI* back = new ButtonUI{ { Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.35f } };
 	back->scale = { Utils::GetWorldWidth() * 0.21f, Utils::GetWorldHeight() * 0.1f };
 	back->text_size = 10.f;
 	back->image = AssetManager::GetTexture(ASSET_SMALLBUTTON_IMAGE);
 	back->text = "Back to Menu   ";
+
+	// Listen to button click to go back to main menu scene
 	back->AddClickListener([this](BaseUI::MouseButton b) {
 		if (b & BaseUI::MouseButton::LEFT) {
 			SceneManager::GetInstance()->SetNextScene(Scenes::MAIN_MENU);
@@ -406,13 +471,21 @@ void GameScene::Win() {
 	});
 	AddEntityToScene(back);
 
+	// Remove player input listener
 	p->RemoveUpdateListener(this);
 }
 
+/*!
+* @brief Called when the current level is ready to reset
+*/
 void GameScene::Lose() {
 	game_state = GameState::LOST;
 }
 
+/*!
+* @brief Get the vector of all static entities in the scene
+* @return A vector of static entity pointers
+*/
 std::vector<BaseEntity*>& GameScene::GetStaticEntities() {
 	return staticEntities;
 }

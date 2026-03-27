@@ -1,50 +1,70 @@
+/*!
+* @file BarUI.hpp
+* @author Rance Andres (andresrancerowell.g@digipen.edu)
+* @date 9 March 2026
+* @course CSD1451
+* @brief Definition file for a slider bar UI element
+*/
+
 #include "BarUI.hpp"
 #include "../Utils/MeshRenderer.hpp"
 #include "../Utils/AEOverload.hpp"
 #include "../Managers/SceneManager.hpp"
 
-BarUI::BarUI(AEVec2 pos) 
-	: BaseUI{ pos }, value{ 0.f }, overlay_transform{ 1.f } {
+BarUI::BarUI(AEVec2 pos) : BaseUI{ pos }, value{ 0.f }, overlay_transform{ 1.f } {
+	// Empty ctor body
 }
 
-BarUI::~BarUI() {}
+BarUI::~BarUI() {} // Empty dtor
 
+/*!
+* @brief Inherited: Update the UI after input has been processed
+*/
 void BarUI::Update(const f32& dt) {
 	BaseUI::Update(dt);
+	// Only process if interactive
 	if (!interactive)
 		return;
-
+	
+	// Get mouse position
 	s32 mouse_x, mouse_y;
 	AEInputGetCursorPosition(&mouse_x, &mouse_y);
 	AEVec2 mouse{ static_cast<f32>(mouse_x), static_cast<f32>(mouse_y) };
 	AEVec2 mouse_world = Utils::ScreenToWorld(mouse.x, mouse.y);
 
+	// If mouse is hovered on this UI
 	if (Utils::OBBPoint(this, mouse_world)) {
-		this->mouse_hovered = true;
+		mouse_hovered = true;
 
-		if (AEInputCheckTriggered(AEVK_LBUTTON)) {
-			this->clicked_this_frame = true;
-		}
-		else {
-			this->clicked_this_frame = false;
-		}
+		// If mouse was clicked on this UI
+		clicked_this_frame = AEInputCheckTriggered(AEVK_LBUTTON);
 
+		// If mouse was dragged on this UI, update slider
 		if (AEInputCheckCurr(AEVK_LBUTTON)) {
-			AEVec2 local_mouse = mouse_world - (this->position - (this->scale * 0.5f));
-			AEVec2Rotate(&local_mouse, &local_mouse, -this->rotation);
-			value = local_mouse.x / this->scale.x;
+			AEVec2 local_mouse = mouse_world - (position - (scale * 0.5f));
+			AEVec2Rotate(&local_mouse, &local_mouse, -rotation);
+			value = local_mouse.x / scale.x;
 		}
 	}
-	else if (this->mouse_hovered) {
-		this->mouse_hovered = false;
-		this->clicked_this_frame = false;
+	else if (mouse_hovered) { // Mouse no longer hovered this frame
+		mouse_hovered = false;
+		clicked_this_frame = false;
 	}
 }
 
+/*!
+* @brief Inherited: Post-update the UI after everything else has been processed
+*/
 void BarUI::PostUpdate(const f32& dt) {
 	BaseUI::PostUpdate(dt);
+
+	// Initialize position & scale of overlay value
 	AEVec2 pos{ this->position.x, this->position.y }, scl{ this->scale.x, this->scale.y };
+
+	// Clamp value between 0-1
 	value = AEClamp(value, 0.f, 1.f);
+
+	// Calculate position & scale of overlay value
 	f32 w = scl.x;
 	scl.x *= value;
 	AEVec2 dir{ -1.f, 0.f };
@@ -53,21 +73,28 @@ void BarUI::PostUpdate(const f32& dt) {
 	dir.y *= w * (1.f - value) * 0.5f;
 	pos += dir;
 
-	if (layer == RenderLayer::UI) {
+	// Update overlay transform
+	if (layer == RenderLayer::UI) { // On screen, so negate camera position
 		AEVec2 cam_pos{ 0.f };
 		AEGfxGetCamPosition(&cam_pos.x, &cam_pos.y);
 		cam_pos = Utils::ScreenToScale(cam_pos.x, cam_pos.y);
 		overlay_transform = Utils::GetTransformMatrix(pos + cam_pos, scl, this->rotation);
 	}
-	else {
+	else { // In world, so use camera position
 		overlay_transform = Utils::GetTransformMatrix(pos, scl, this->rotation);
 	}
 }
 
+/*!
+* @brief Inherited: Render the UI to the screen
+*/
 void BarUI::Render() {
+	// If level editor is toggled, PostUpdate was not called so we force call it here
 	if (SceneManager::GetInstance()->GetEditor()->IsToggled()) {
 		PostUpdate(Utils::GetDeltaTime());
 	}
+
+	// Render background image/mesh
 	if (image && image->data) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxTextureSet(image->data, 0.f, 0.f);
@@ -83,6 +110,7 @@ void BarUI::Render() {
 	AEGfxMeshDraw(mesh, MeshRenderer::RenderMode);
 	AEGfxTextureSet(nullptr, 0.f, 0.f);
 
+	// Render overlay image/mesh
 	if (overlay_texture && overlay_texture->data) {
 		AEGfxSetRenderMode(AE_GFX_RM_TEXTURE);
 		AEGfxTextureSet(overlay_texture->data, 0.f, 0.f);
@@ -98,13 +126,22 @@ void BarUI::Render() {
 	AEGfxMeshDraw(mesh, MeshRenderer::RenderMode);
 	AEGfxTextureSet(nullptr, 0.f, 0.f);
 
+	// Render overlay text
 	RenderText();
 }
 
+/*!
+* @brief Get the value of the slider
+* @return A value between 0-1
+*/
 f32 BarUI::GetValue() const {
 	return value;
 }
 
+/*!
+* @brief Set the value of the slider
+* @param v - A value between 0-1
+*/
 void BarUI::SetValue(f32 v) {
 	value = v;
 }

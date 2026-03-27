@@ -62,6 +62,10 @@ public:
 	*/
 	void Lose();
 
+	/*!
+	* @brief Get the vector of all static entities in the scene
+	* @return A vector of static entity pointers
+	*/
 	static std::vector<BaseEntity*>& GetStaticEntities();
 };
 

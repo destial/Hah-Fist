@@ -40,7 +40,7 @@ static ButtonUI* CreateButtonDisplay(AEVec2 pos, const char* ch) {
 	b->overlay_text_color = { 255, 255, 255, 255 };
 	b->text = ch;
 	b->text_size = 15.f;
-	b->text_alignment = BaseUI::TEXT_ALIGNMENT::CENTER;
+	b->text_alignment = BaseUI::TextAlignment::CENTER;
 	return b;
 }
 
@@ -193,7 +193,7 @@ void StartMenuScene::Init() {
 			ButtonUI* time = new ButtonUI{ {w, level_button->position.y - level_button->scale.y * 0.65f} };
 			char buffer[256];
 			if (lvls[i]) { // If level has been played before
-				sprintf_s(buffer, 256, "Fastest: %0.2f", lvls[i]);
+				sprintf_s(buffer, 256, "Fastest: %0.2fs", lvls[i]);
 			}
 			else { // If level has no played data
 				sprintf_s(buffer, 256, "Unlocked");
@@ -232,7 +232,7 @@ void StartMenuScene::Init() {
 	ButtonUI* unlock_all = CreateButtonDisplay({ 5.f, 5.f }, "Debug: Unlock All");
 	unlock_all->scale *= 0.5f;
 	unlock_all->text_size *= 0.5f;
-	unlock_all->AddClickListener([buttons, unlock_all](const BaseUI::MouseButton b) {
+	unlock_all->AddClickListener([buttons, unlock_all](BaseUI::MouseButton b) {
 		for (ButtonUI* level_button : buttons) { // Change behaviour of level buttons to be interactable
 			int l = level_button->text[0] - '1';
 			LevelManager::SetLevelTime(l, 1);
@@ -259,7 +259,7 @@ void StartMenuScene::Init() {
 	master_vol->overlay_color = {255, 64, 128, 64};
 	master_vol->scale = { BUTTON_SCALE_X * 0.75f, BUTTON_SCALE_Y * 0.35f };
 	master_vol->text_size = 7.5f;
-	master_vol->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
+	master_vol->text_alignment = BaseUI::TextAlignment::LEFT_CORNER;
 	master_vol->AddUpdateListener(this, [master_vol](const f32 &dt) {
 		// Update group volume based on slider value when interacted with
 		AEAudioSetGroupVolume(Game::GetMusicGroup(), AEClamp(master_vol->GetValue(), 0.f, 1.f));
@@ -281,7 +281,7 @@ void StartMenuScene::Init() {
 	sfx_vol->overlay_color = { 255, 64, 128, 64 };
 	sfx_vol->scale = { BUTTON_SCALE_X * 0.75f, BUTTON_SCALE_Y * 0.35f };
 	sfx_vol->text_size = 7.5f;
-	sfx_vol->text_alignment = BaseUI::TEXT_ALIGNMENT::LEFT_CORNER;
+	sfx_vol->text_alignment = BaseUI::TextAlignment::LEFT_CORNER;
 	sfx_vol->AddUpdateListener(this, [sfx_vol](const f32& dt) {
 		// Update group volume based on slider value when interacted with
 		AEAudioSetGroupVolume(Game::GetSfxGroup(), AEClamp(sfx_vol->GetValue(), 0.f, 1.f));
