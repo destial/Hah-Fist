@@ -9,6 +9,8 @@
 #include "../Managers/SceneManager.hpp"
 #include <iostream>
 #include <cstdio>
+#include <cmath>
+
 //For Debug Functions
 #include "../Entities/StaticEntities/BossSpawnTriggerEntity.hpp"
 
@@ -49,54 +51,9 @@ void Player::PreUpdate(const f32& dt) {
 
 void Player::Update(const f32& dt) {
 	GameObjectEntity::Update(dt);
-	// Out of bounds checking
-	if (timeElapsedSinceLastDamage > PLAYER_CONTROL_LOCK_AFTER_HIT)
-	{
-		AEVec2 dir{};
-		if (AEInputCheckCurr(AEVK_A)) {
-			dir += { -1.f, 0.f };
-		}
-		if (AEInputCheckCurr(AEVK_D)) {
-			dir += { 1.f, 0.f };
-		}
-		if (dir.x || dir.y) {
-			AEVec2Normalize(&dir, &dir);
-		}
-
-		if (dir.x && pBody->is_standing_above)
-		{
-			//f32 spd = velocity.y == 0 ? speed : speed * pBody->air_strength * 0.75f;
-			if (!(dir.x < 0 && velocity.x < 0 || dir.x > 0 && velocity.x > 0))
-			{
-				velocity.x = 0.f;
-			}
-			if (abs(velocity.x) < speed)
-			{
-				velocity.x += dir.x * speed;
-			}
-		}
-	}
 
 	this->color = Utils::Lerp(Color{ 255, 255, 128, 128 }, Color{ 255, 255, 255, 255 }, timeElapsedSinceLastDamage / PLAYER_CONTROL_LOCK_AFTER_HIT);
-	
-	if (AEInputCheckCurr(AEVK_1)) {
-		SwitchWeapon(0);
-	}
-	else if (AEInputCheckCurr(AEVK_2)) {
-		SwitchWeapon(1);
-	}
-	else if (AEInputCheckCurr(AEVK_3)) {
-		SwitchWeapon(2);
-	}
 
-	if (AEInputCheckCurr(AEVK_SPACE) && pBody->is_standing_above) {
-		velocity.y += jumpVelocity;
-	}
-	//Testing Camera Function
-	if (AEInputCheckCurr(AEVK_R)) {
-		CameraManager::GetInstance()->Shake(0.1f, 5.f);
-
-	}
 	////Testing Shooting Function
 	if (AEInputCheckCurr(AEVK_T)) {
 		health = 1000.f;
@@ -109,43 +66,30 @@ void Player::Update(const f32& dt) {
 
 void Player::PostUpdate(const f32& dt) {
 	GameObjectEntity::PostUpdate(dt);
-	if (isActive) {
-
-	}
 	currentRow = 1;
 	if (velocity.x != 0) {
 		currentRow = 0;
-		if (velocity.x < 0)
-		{
-			if (this->scale.x > 0)
-			{
+		if (velocity.x < 0) {
+			if (this->scale.x > 0) {
 				this->scale.x *= -1;
 			}
 		}
-		else
-		{
-			if (this->scale.x < 0)
-			{
+		else {
+			if (this->scale.x < 0) {
 				this->scale.x *= -1;
 			}
 		}
-		if (AEVec2Length(&velocity) > 50.0f)
-		{
+		if (AEVec2Length(&velocity) > 50.0f) {
 			currentRow = 2;
 		}
 	}
 	
-
 	if ((animationTimer += dt) > animationFrame) {
 		animationTimer = 0.f;
 		if (++currentCol >= 32) {
 			currentCol = 0;
 		}
 	}
-	/*f32 x, y;
-	AEGfxGetCamPosition(&x, &y);
-	AEGfxSetCamPosition(Utils::WorldToScreen(position.x, position.y).x - Utils::GetScreenResolution().first / 2.f, 0.f);*/
-	//CameraManager::GetInstance()->SetPosition(Utils::WorldToScreen(position.x, position.y).x,0);
 }
 
 void Player::Render() {
@@ -153,20 +97,17 @@ void Player::Render() {
 	GameObjectEntity::Render();
 }
 
-void Player::OnCollide(GameObjectEntity* go)
-{
+void Player::OnCollide(GameObjectEntity* go) {
 	//f32 p_health = health;
 	
-	if (go->entity_type == EntityType::ENEMY)
-	{
+	if (go->entity_type == EntityType::ENEMY) {
 		if (invulnerabilityDuration > 0) { return; }
 		timeElapsedSinceLastDamage = 0.0f;
 		invulnerabilityDuration = 0.75f;
 		AEVec2 push_velocity = position - go->position;
 		AEVec2Normalize(&push_velocity, &push_velocity);
 		velocity.x += push_velocity.x * 25.f;
-		if (go->position.y <= position.y)
-		{
+		if (go->position.y <= position.y) {
 			velocity.y += std::fabsf(push_velocity.y) * 25.f;
 		}
 		health -= go->damage;
@@ -176,19 +117,16 @@ void Player::OnCollide(GameObjectEntity* go)
 	GameObjectEntity::OnCollide(go);
 }
 
-void Player::AddWeapon(Weapon* weapon)
-{
+void Player::AddWeapon(Weapon* weapon) {
 	weapons.push_back(weapon);
 }
 
-void Player::SwitchWeapon(int index)
-{
-	if (weapons.size() <= index) { return; }
+void Player::SwitchWeapon(int index) {
+	if (weapons.size() <= index) 
+		return;
 
-	for (int i{ 0 }; i < weapons.size(); ++i)
-	{
-		if (i != index)
-		{
+	for (int i{ 0 }; i < weapons.size(); ++i) {
+		if (i != index) {
 			weapons[i]->ResetWeapon();
 		}
 		weapons[i]->isActive = i == index;
@@ -204,7 +142,29 @@ Weapon* Player::CurrentWeapon() const {
 	return nullptr;
 }
 
-void Player::AddCoin()
-{
+void Player::AddCoin() {
 	coinCount++;
+}
+
+int Player::Coins() const {
+	return coinCount;
+}
+
+f32 Player::GetSpeed() const {
+	return speed;
+}
+
+void Player::Jump() {
+	velocity.y += jumpVelocity;
+}
+
+void Player::Move(AEVec2 const& dir) {
+	//f32 spd = velocity.y == 0 ? speed : speed * pBody->air_strength * 0.75f;
+	if (!(dir.x < 0 && velocity.x < 0 || dir.x > 0 && velocity.x > 0)) {
+		velocity.x = 0.f;
+	}
+
+	if (std::fabs(velocity.x) < speed) {
+		velocity.x += dir.x * speed;
+	}
 }

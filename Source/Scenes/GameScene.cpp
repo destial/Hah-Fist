@@ -38,6 +38,9 @@
 #include "../UI/Debug.hpp"
 #include "AEMath.h"
 #include <cstdio>
+#include <iostream>
+#include <sstream>
+#include <cmath>
 #include <string>
 
 constexpr int SIZE_TO_RESERVE{ 50 }; // Reserves this amt of space for vector arr
@@ -109,26 +112,28 @@ void GameScene::Init() {
 		std::printf("Loaded from file");
 	}
 	else { // No level file, create generic base level
-		player = new Player({ 1.f, 5.f });
-		GameObjectEntity* wall = new GameObjectEntity({ 1.f, 1.f });
-		wall->go_type = GameObjectEntity::PhysicsType::STATIC;
+		GameObjectEntity* wall = new StaticEntity(StaticEntity::STATIC_TYPE::TYPE_WALL, AEVec2{ 1.f, 1.f });
 		wall->mesh = MeshRenderer::GetCenterRectMesh();
 		wall->scale = { 30.f, 1.f };
-		AddEntityToScene(wall);
+		AddEntityToScene(wall);	
+	}
+
+	if (player == nullptr) {
+		player = new Player({ 1.f, 5.f });
 		AddEntityToScene(player);
 	}
 
 	// Lock weapons based on level
-	Weapon* w = new TurboFistWeapon(AEVec2{ 0.f, 0.f }, player);
+	Weapon* w = new TurboFistWeapon(AEVec2{ 0.f, 0.f }, player->pBody->mass);
 	AddEntityToScene(w);
 	player->AddWeapon(w);
 	if (LevelManager::GetLevel() > 0) {
-		Weapon* w2 = new GrappleFistWeapon(AEVec2{ 0.f, 0.f }, player);
+		Weapon* w2 = new GrappleFistWeapon(AEVec2{ 0.f, 0.f });
 		AddEntityToScene(w2);
 		player->AddWeapon(w2);
 	}
 	if (LevelManager::GetLevel() > 1) {
-		Weapon* w3 = new FingerGunWeapon(AEVec2{ 0.f, 0.f }, player);
+		Weapon* w3 = new FingerGunWeapon(AEVec2{ 0.f, 0.f });
 		AddEntityToScene(w3);
 		player->AddWeapon(w3);
 	}
@@ -146,7 +151,8 @@ void GameScene::Init() {
 	power->AddUpdateListener(this, [power, player](const f32& dt) {
 		// Update UI based on current weapon position and value
 		Weapon* current = player->CurrentWeapon();
-		if (current == nullptr) return;
+		if (current == nullptr) 
+			return;
 
 		// Use cooldown timer as priority
 		if (current->GetCooldownTimer() > 0) {
@@ -163,23 +169,48 @@ void GameScene::Init() {
 		power->position.y -= std::abs(current->scale.y) * 0.65f;
 	});
 
+	player->AddUpdateListener(this, [player](const f32& dt) {
+		if (player->timeElapsedSinceLastDamage > PLAYER_CONTROL_LOCK_AFTER_HIT) {
+			AEVec2 dir{};
+			if (AEInputCheckCurr(AEVK_A)) {
+				dir += { -1.f, 0.f };
+			}
+			if (AEInputCheckCurr(AEVK_D)) {
+				dir += { 1.f, 0.f };
+			}
+			if (dir.x || dir.y) {
+				AEVec2Normalize(&dir, &dir);
+			}
+
+			if (dir.x && player->pBody->is_standing_above) {
+				player->Move(dir);
+			}
+		}
+
+		if (AEInputCheckCurr(AEVK_1)) {
+			player->SwitchWeapon(0);
+		}
+		else if (AEInputCheckCurr(AEVK_2)) {
+			player->SwitchWeapon(1);
+		}
+		else if (AEInputCheckCurr(AEVK_3)) {
+			player->SwitchWeapon(2);
+		}
+
+		if (AEInputCheckCurr(AEVK_SPACE) && player->pBody->is_standing_above) {
+			player->Jump();
+		}
+	});
+
 	player->AddUpdateListener(AssetManager::GetInstance(), [this, player](const f32& dt) {
-		if (dynamic_cast<BossEntity*>(GetFirstEntityOfType<BossEntity>()))
-		{
-			BossEntity* e = dynamic_cast<BossEntity*>(GetFirstEntityOfType<BossEntity>());
-			if (e->GetBossActivated())
-			{
+		if (BossEntity * e = dynamic_cast<BossEntity*>(GetFirstEntityOfType<BossEntity>())) {
+			if (e->GetBossActivated()) {
 				camManager->SetTarget(Utils::WorldToScreen(e->GetBossRoomCenter().x, e->GetBossRoomCenter().y).x, 0);
-			}
-			else
-			{
-				camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
+				return;
 			}
 		}
-		else
-		{
+		if (game_state == GameState::PLAYING)
 			camManager->SetPosition(Utils::WorldToScreen(player->position.x, player->position.y).x, 0);
-		}
 	});
 
 	ImageUI* hud = new ImageUI{ ASSET_HUD_IMAGE, {Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() - 1.7f} };
@@ -193,25 +224,25 @@ void GameScene::Init() {
 		if (AEInputCheckCurr(AEVK_LBUTTON)) {
 			lb->color = { 255, 128, 128, 128 };
 		}
-		});
+	});
 	ButtonUI* ak = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 5.5f, Utils::GetWorldHeight() - 2.f }, 'A');
 	ak->AddUpdateListener(ak, [ak](const f32& dt) {
 		if (AEInputCheckCurr(AEVK_A)) {
 			ak->color = { 255, 128, 128, 128 };
 		}
-		});
+	});
 	ButtonUI* dk = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 3.5f, Utils::GetWorldHeight() - 2.f }, 'D');
 	dk->AddUpdateListener(dk, [dk](const f32& dt) {
 		if (AEInputCheckCurr(AEVK_D)) {
 			dk->color = { 255, 128, 128, 128 };
 		}
-		});
+	});
 	ButtonUI* sk = CreateHotKeyDisplay({ Utils::GetWorldWidth() - 4.5f, Utils::GetWorldHeight() - 2.f }, "Sp");
 	sk->AddUpdateListener(sk, [sk](const f32& dt) {
 		if (AEInputCheckCurr(AEVK_SPACE)) {
 			sk->color = { 255, 128, 128, 128 };
 		}
-		});
+	});
 
 	AddEntityToScene(lb);
 	AddEntityToScene(ak);
@@ -267,13 +298,12 @@ void GameScene::Init() {
 		}
 	});
 
-	size_t total_coins = GetEntitiesOfType<CoinEntity>().size();
 	ImageUI* coins = new ImageUI{ ASSET_SMALLBUTTON_IMAGE, {Utils::GetWorldWidth() * 0.69f, Utils::GetWorldHeight() - 1.5f} };
 	coins->text_size = 7.5f;
 	coins->scale = {5.f, 2.f};
-	coins->AddUpdateListener(this, [coins, total_coins, this](const f32& dt) {
+	coins->AddUpdateListener(this, [coins, player](const f32& dt) {
 		char collected[64];
-		sprintf_s(collected, 64, "Coins: %llu", total_coins - GetEntitiesOfType<CoinEntity>().size());
+		sprintf_s(collected, 64, "Coins: %d", player->Coins());
 		coins->text = collected;
 	});
 	AddEntityToScene(coins);
@@ -285,7 +315,7 @@ void GameScene::Init() {
 		char timer[64];
 		sprintf_s(timer, 64, "Timer: %0.2f", game_timer);
 		time->text = timer;
-		});
+	});
 	AddEntityToScene(time);
 
 	LevelManager::LoadTutorial(this);
@@ -298,11 +328,21 @@ void GameScene::Update(const f32& dt) {
 	staticEntities = SceneManager::GetInstance()->GetCurrentScene()->GetBaseEntitiesOfType<StaticEntity>();
 	BaseScene::Update(dt);
 	staticEntities.clear();
-	game_timer += dt;
+	if (game_state == GameState::PLAYING)
+		game_timer += dt;
+
+	if (AEInputCheckTriggered(AEVK_J)) {
+		Win();
+	}
 }
 
 void GameScene::PostUpdate(const f32& dt) {
 	BaseScene::PostUpdate(dt);
+
+	if (game_state == GameState::LOST) {
+		End(); // restart level (todo: lose screen)
+		Init();
+	}
 
 	Player* player = GetFirstEntityOfType<Player>();
 	if (player == nullptr || player->health <= 0.f)
@@ -317,18 +357,62 @@ void GameScene::End() {
 void GameScene::Win() {
 	game_state = GameState::WON;
 	LevelManager::SetLevelTime(LevelManager::GetLevel(), game_timer); // set this level time
-	if (!LevelManager::GetUnlockedLvls().count(LevelManager::GetLevel() + 1)) // check if next level is not unlocked
-		LevelManager::UnlockLevel(LevelManager::GetLevel() + 1); // unlock next level
+	LevelManager::UnlockLevel(LevelManager::GetLevel() + 1); // unlock next level
+
 	LevelManager::SavePlayerData(); // save data
+
+	Player* p = GetFirstEntityOfType<Player>();
+	if (!p)
+		return;
+
+	ImageUI* bgd = new ImageUI{ ASSET_HUD_IMAGE, {Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f} };
+	bgd->scale = { Utils::GetWorldWidth() * 0.3f, Utils::GetWorldHeight() * 0.9f };
+	AddEntityToScene(bgd);
+
+	ButtonUI* toptext = new ButtonUI{ { Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.7f } };
+	toptext->scale = { Utils::GetWorldWidth() * 0.21f, Utils::GetWorldHeight() * 0.1f };
+	toptext->text_size = 10.f;
+	toptext->color.a = 0;
+	int score = static_cast<int>((p->Coins() / game_timer) * 100.f);
+	std::ostringstream oss;
+	oss.precision(2);
+	oss << "You beat this level!   \nScore: " << score << "  \nGame Time: " << game_timer << "s   ";
+	toptext->text = oss.str();
+	toptext->SetInteractive(false);
+	AddEntityToScene(toptext);
+
+	ButtonUI* advance = new ButtonUI{{ Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f }};
+	advance->scale = { Utils::GetWorldWidth() * 0.21f, Utils::GetWorldHeight() * 0.1f };
+	advance->text_size = 10.f;
+	advance->image = AssetManager::GetTexture(ASSET_SMALLBUTTON_IMAGE);
+	advance->text = "Next Level  ";
+	advance->AddClickListener([this](BaseUI::MouseButton b) {
+		if (b & BaseUI::MouseButton::LEFT) {
+			LevelManager::SetLevel(LevelManager::GetLevel() + 1);
+			Lose();
+		}
+	});
+	AddEntityToScene(advance);
+
+	ButtonUI* back = new ButtonUI{ { Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.35f } };
+	back->scale = { Utils::GetWorldWidth() * 0.21f, Utils::GetWorldHeight() * 0.1f };
+	back->text_size = 10.f;
+	back->image = AssetManager::GetTexture(ASSET_SMALLBUTTON_IMAGE);
+	back->text = "Back to Menu   ";
+	back->AddClickListener([this](BaseUI::MouseButton b) {
+		if (b & BaseUI::MouseButton::LEFT) {
+			SceneManager::GetInstance()->SetNextScene(Scenes::MAIN_MENU);
+		}
+	});
+	AddEntityToScene(back);
+
+	p->RemoveUpdateListener(this);
 }
 
 void GameScene::Lose() {
 	game_state = GameState::LOST;
-	End(); // restart level (todo: lose screen)
-	Init();
 }
 
-std::vector<BaseEntity*>& GameScene::GetStaticEntities()
-{
+std::vector<BaseEntity*>& GameScene::GetStaticEntities() {
 	return staticEntities;
 }

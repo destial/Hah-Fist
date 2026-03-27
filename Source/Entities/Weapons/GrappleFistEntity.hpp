@@ -18,7 +18,7 @@ protected:
 	GameObjectEntity* grappledObject{ nullptr };
 	AEVec2 snapshottedAttackDirection;
 public:
-	GrappleFistWeapon(AEVec2 pos, GameObjectEntity* player);
+	GrappleFistWeapon(AEVec2 pos);
 	~GrappleFistWeapon();
 
 	void PreUpdate(const f32& dt) override;

@@ -82,6 +82,29 @@ public:
 	* @brief Adds a coin to the player
 	*/
 	void AddCoin();
+
+	/*!
+	* @brief Get the collected coins
+	* @return How many coins have been collected
+	*/
+	int Coins() const;
+
+	/*!
+	* @brief Get the speed of the player
+	* @return The float speed value
+	*/
+	f32 GetSpeed() const;
+
+	/*!
+	* @brief Make the player jump
+	*/
+	void Jump();
+
+	/*!
+	* @brief Make the player move according to direction
+	* @param dir - The direction to move the player
+	*/
+	void Move(AEVec2 const& dir);
 };
 
 #endif

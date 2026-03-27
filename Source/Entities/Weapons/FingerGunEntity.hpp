@@ -7,7 +7,7 @@ class FingerGunWeapon : public Weapon {
 protected:
 
 public:
-	FingerGunWeapon(AEVec2 pos, GameObjectEntity* player);
+	FingerGunWeapon(AEVec2 pos);
 	~FingerGunWeapon();
 
 	void PreUpdate(const f32& dt) override;

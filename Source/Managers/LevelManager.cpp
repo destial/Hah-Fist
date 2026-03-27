@@ -183,6 +183,7 @@ namespace LevelManager {
 	* @param level - The level to unlock
 	*/
 	void UnlockLevel(int level) {
-		unlocked_levels[level] = 0;
+		if (unlocked_levels[level] < 0)
+			unlocked_levels[level] = 0;
 	}
 }

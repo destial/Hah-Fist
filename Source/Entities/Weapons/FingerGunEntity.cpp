@@ -6,7 +6,7 @@
 #include "../Projectiles/ExplosiveProjectile.hpp"
 #include "../../Managers/SceneManager.hpp"
 
-FingerGunWeapon::FingerGunWeapon(AEVec2 pos, GameObjectEntity* player) : Weapon(pos, player)
+FingerGunWeapon::FingerGunWeapon(AEVec2 pos) : Weapon{pos}
 {
 	weaponChannels = false;
 	cd_duration = 0.25f;

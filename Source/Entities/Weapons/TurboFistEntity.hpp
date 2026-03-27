@@ -12,7 +12,7 @@ protected:
 	f32 player_original_mass = 0.0f;
 public:
 
-	TurboFistWeapon(AEVec2 pos, GameObjectEntity* player);
+	TurboFistWeapon(AEVec2 pos, f32 og_mass);
 	~TurboFistWeapon();
 
 	void Update(const f32& dt) override;

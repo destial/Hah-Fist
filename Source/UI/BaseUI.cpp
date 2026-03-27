@@ -106,6 +106,6 @@ void BaseUI::RenderText() {
 			AEVec2 screen = Utils::GameToTextScreen(this->position.x + (this->scale.x * 0.5f), this->position.y, (layer != RenderLayer::UI && layer != RenderLayer::BACKGROUND));
 			AEGfxPrint(font, str, screen.x - ((w / 2.f) / text_size), start_h + screen.y - ((h / 2.f) / text_size * 0.5f), h, t_color[0], t_color[1], t_color[2], t_color[3]);
 		}
-		start_h -= ((h / 2.f) / text_size * 1.3f);
+		start_h -= ((h / 2.f) / text_size * (text_size * 0.2f));
 	}
 }

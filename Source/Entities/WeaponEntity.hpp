@@ -6,7 +6,7 @@
 
 class Weapon : public GameObjectEntity {
 protected:
-	GameObjectEntity* player_entity;
+	GameObjectEntity* player_entity{ nullptr };
 
 	bool weaponChannels{ false };
 	bool channelling{ false };
@@ -17,7 +17,7 @@ protected:
 	float cd_duration{2.0f};
 	float damage{ 25.f };
 public:
-	Weapon(AEVec2 pos = { 0.f, 0.f }, GameObjectEntity* Player = nullptr);
+	Weapon(AEVec2 pos = { 0.f, 0.f });
 	~Weapon();
 	virtual void PreUpdate(const f32& dt);
 	virtual void Update(const f32& dt);
@@ -26,8 +26,6 @@ public:
 	virtual void Attack() = 0;
 
 	virtual void ResetWeapon();
-
-	void SetPlayerEntity(GameObjectEntity* player);
 
 	AEVec2 GetAttackDirection();
 
