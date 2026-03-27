@@ -256,7 +256,6 @@ void StartMenuScene::Init() {
 	BarUI* master_vol = new BarUI({ Utils::GetWorldWidth() - 7.5f, 5.f });
 	master_vol->text = "";
 	master_vol->SetValue(1.f);
-	master_vol->overlay_color = {255, 64, 128, 64};
 	master_vol->scale = { BUTTON_SCALE_X * 0.75f, BUTTON_SCALE_Y * 0.35f };
 	master_vol->text_size = 7.5f;
 	master_vol->text_alignment = BaseUI::TextAlignment::LEFT_CORNER;
@@ -271,6 +270,14 @@ void StartMenuScene::Init() {
 
 		// Transition slider based on toggled level menu status
 		master_vol->position.x = Utils::LerpCircle(Utils::GetWorldWidth() - 7.5f, -7.5f, level_panel);
+
+		// Change slider color based on interaction
+		if (master_vol->IsDragging()) {
+			master_vol->overlay_color = { 255, 64, 128, 64 };
+		}
+		else {
+			master_vol->overlay_color = { 255, 64, 196, 64 };
+		}
 	});
 	scene_entities.push_back(master_vol);
 
@@ -278,7 +285,6 @@ void StartMenuScene::Init() {
 	BarUI* sfx_vol = new BarUI({ Utils::GetWorldWidth() - 7.5f, 3.f });
 	sfx_vol->text = "";
 	sfx_vol->SetValue(1.f);
-	sfx_vol->overlay_color = { 255, 64, 128, 64 };
 	sfx_vol->scale = { BUTTON_SCALE_X * 0.75f, BUTTON_SCALE_Y * 0.35f };
 	sfx_vol->text_size = 7.5f;
 	sfx_vol->text_alignment = BaseUI::TextAlignment::LEFT_CORNER;
@@ -293,6 +299,14 @@ void StartMenuScene::Init() {
 
 		// Transition slider based on toggled level menu status
 		sfx_vol->position.x = Utils::LerpCircle(Utils::GetWorldWidth() - 7.5f, -7.5f, level_panel);
+
+		// Change slider color based on interaction
+		if (sfx_vol->IsDragging()) {
+			sfx_vol->overlay_color = { 255, 64, 128, 64 };
+		}
+		else {
+			sfx_vol->overlay_color = { 255, 64, 196, 64 };
+		}
 	});
 	scene_entities.push_back(sfx_vol);
 

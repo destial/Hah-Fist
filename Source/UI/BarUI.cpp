@@ -11,7 +11,7 @@
 #include "../Utils/AEOverload.hpp"
 #include "../Managers/SceneManager.hpp"
 
-BarUI::BarUI(AEVec2 pos) : BaseUI{ pos }, value{ 0.f }, overlay_transform{ 1.f } {
+BarUI::BarUI(AEVec2 pos) : BaseUI{ pos }, mouse_dragged{ false }, value { 0.f }, overlay_transform{ 1.f } {
 	// Empty ctor body
 }
 
@@ -39,16 +39,26 @@ void BarUI::Update(const f32& dt) {
 		// If mouse was clicked on this UI
 		clicked_this_frame = AEInputCheckTriggered(AEVK_LBUTTON);
 
+		// If mouse started dragging on this UI
+		if (!mouse_dragged) {
+			mouse_dragged = clicked_this_frame;
+		}
+	}
+	else if (mouse_hovered) { // Mouse no longer hovered this frame
+		mouse_hovered = false;
+		clicked_this_frame = false;
+	}
+
+	if (mouse_dragged) {
 		// If mouse was dragged on this UI, update slider
 		if (AEInputCheckCurr(AEVK_LBUTTON)) {
 			AEVec2 local_mouse = mouse_world - (position - (scale * 0.5f));
 			AEVec2Rotate(&local_mouse, &local_mouse, -rotation);
 			value = local_mouse.x / scale.x;
 		}
-	}
-	else if (mouse_hovered) { // Mouse no longer hovered this frame
-		mouse_hovered = false;
-		clicked_this_frame = false;
+		else {
+			mouse_dragged = false;
+		}
 	}
 }
 
@@ -144,4 +154,12 @@ f32 BarUI::GetValue() const {
 */
 void BarUI::SetValue(f32 v) {
 	value = v;
+}
+
+/*!
+* @brief Get the state of dragging of this slider
+* @return The mouse drag state
+*/
+bool BarUI::IsDragging() const {
+	return mouse_dragged;
 }

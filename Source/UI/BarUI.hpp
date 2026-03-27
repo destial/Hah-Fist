@@ -17,6 +17,7 @@
 */
 class BarUI : public BaseUI {
 protected:
+	bool mouse_dragged; // If this slider is being dragged
 	f32 value; // A value between 0-1
 	AEMtx33 overlay_transform; // The actual value overlay transform
 public:
@@ -52,6 +53,12 @@ public:
 	* @param v - A value between 0-1
 	*/
 	virtual void SetValue(f32 v);
+
+	/*!
+	* @brief Get the state of dragging of this slider
+	* @return The mouse drag state
+	*/
+	bool IsDragging() const;
 };
 
 #endif
