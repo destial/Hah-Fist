@@ -43,6 +43,7 @@ std::ostream& operator<<(std::ostream& os, const EnemyEntity::FSM& state)
 ProjectileEntity::ProjectileEntity(AEVec2 pos, f32 speed) : EnemyEntity(pos, { 1.f,0.f }, speed, true)
 {
 	InitializeAnimatedSpriteData(ASSET_PROJECTILE_ENEMY_SPRITE, ASSET_PROJECTILE_ENEMY_SPRITE_ROWS, ASSET_PROJECTILE_ENEMY_SPRITE_COLUMNS, ASSET_PROJECTILE_ENEMY_SPRITE_SCALE);
+	animationFrame = 1.0f / (ASSET_PROJECTILE_ENEMY_SPRITE_COLUMNS * ASSET_PROJECTILE_ENEMY_SPRITE_ROWS - 4.f);
 }
 
 ProjectileEntity::~ProjectileEntity()
@@ -222,7 +223,9 @@ void ProjectileEntity::OnAttack(const f32& dt) {
 	// Exact frame / Sprite where the Projectile Enemy launches projectile Row 4, Col 7
 	if (currentRow == 4 && currentCol == 7) {
 		f32 bulletSpeed = 30.f;
-		MissileProjectile* bullet = new MissileProjectile(this->position, dir, bulletSpeed, damage, this);
+		AEVec2 shootDir = { scale.x, 0.f };
+		AEVec2Normalize(&shootDir, &shootDir);
+		MissileProjectile* bullet = new MissileProjectile(this->position, shootDir, bulletSpeed, damage, this);
 		bullet->scale = { BULLETSCALEX, BULLETSCALEY };
 		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
 	}
