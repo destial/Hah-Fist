@@ -76,7 +76,7 @@ void TurboFistWeapon::Attack() {
 	AEVec2 attack_direction = GetAttackDirection();
 
 	dash_timer = max_dash_time;
-	player_entity->invulnerabilityDuration = max_dash_time;
+	player_entity->invulnerabilityDuration = max_dash_time * 2;
 	player_entity->velocity = attack_direction * 20 * attack_strength;
 	player_entity->pBody->mass = 10.0f * attack_strength;
 	player_entity->frictionMultiplier = 0.25;
