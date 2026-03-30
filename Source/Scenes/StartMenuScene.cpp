@@ -253,15 +253,17 @@ void StartMenuScene::Init() {
 #endif
 
 	// Initalize master volume slider
+	static float master = 1.f;
 	BarUI* master_vol = new BarUI({ Utils::GetWorldWidth() - 7.5f, 5.f });
 	master_vol->text = "";
-	master_vol->SetValue(1.f);
+	master_vol->SetValue(master);
 	master_vol->scale = { BUTTON_SCALE_X * 0.75f, BUTTON_SCALE_Y * 0.35f };
 	master_vol->text_size = 7.5f;
 	master_vol->text_alignment = BaseUI::TextAlignment::LEFT_CORNER;
 	master_vol->AddUpdateListener(this, [master_vol](const f32 &dt) {
 		// Update group volume based on slider value when interacted with
 		AEAudioSetGroupVolume(Game::GetMusicGroup(), AEClamp(master_vol->GetValue(), 0.f, 1.f));
+		master = master_vol->GetValue();
 
 		// Update text on slider
 		char vol[64];
@@ -282,15 +284,17 @@ void StartMenuScene::Init() {
 	scene_entities.push_back(master_vol);
 
 	// Initialize sfx volume slider
+	static float sfx = 1.f;
 	BarUI* sfx_vol = new BarUI({ Utils::GetWorldWidth() - 7.5f, 3.f });
 	sfx_vol->text = "";
-	sfx_vol->SetValue(1.f);
+	sfx_vol->SetValue(sfx);
 	sfx_vol->scale = { BUTTON_SCALE_X * 0.75f, BUTTON_SCALE_Y * 0.35f };
 	sfx_vol->text_size = 7.5f;
 	sfx_vol->text_alignment = BaseUI::TextAlignment::LEFT_CORNER;
 	sfx_vol->AddUpdateListener(this, [sfx_vol](const f32& dt) {
 		// Update group volume based on slider value when interacted with
 		AEAudioSetGroupVolume(Game::GetSfxGroup(), AEClamp(sfx_vol->GetValue(), 0.f, 1.f));
+		sfx = sfx_vol->GetValue();
 
 		// Update text on slider
 		char vol[64];
