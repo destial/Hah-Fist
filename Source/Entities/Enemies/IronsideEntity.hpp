@@ -11,12 +11,12 @@ public:
 		LANE1 = 0, LANE2 = 1, LANE3 = 2, TOTAL
 	};
 protected:
-	INNERFSM innerState;
-	LANE currLane;
-	int nextLanetospawn;
-	LANE lanetogoto;     
-	float dirtogo;
-	float targetY;
+	INNERFSM inner_state;
+	LANE curr_lane;
+	int next_lane_to_spawn;
+	LANE lane_to_go_to;     
+	float dir_to_go;
+	float target_y;
 	
 public:
 	IronsideEntity(AEVec2 pos);

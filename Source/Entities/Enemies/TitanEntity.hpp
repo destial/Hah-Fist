@@ -6,10 +6,10 @@
 class TitanEntity : public BossEntity {
 protected:
 	GameObjectEntity* ground;
-	float shootCooldown{ BOSS1SHOOTCOOLDOWN };
-	float shootTimer;
-	float attackRange,jumpX,jumpY;
-	int baseProjectiles, extraProjectiles;
+	float shoot_cooldown{ BOSS1SHOOTCOOLDOWN };
+	float shoot_timer;
+	float attack_range,jump_x,jump_y;
+	int base_projectiles, extra_projectiles;
 public:
 	
 	TitanEntity(AEVec2 pos);

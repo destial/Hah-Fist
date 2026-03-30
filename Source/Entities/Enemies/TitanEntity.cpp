@@ -8,12 +8,12 @@
 
 TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, BossEntity(pos) {
 	InitializeAnimatedSpriteData(ASSET_TITAN_SPRITE, ASSET_TITAN_SPRITE_ROWS, ASSET_TITAN_SPRITE_COLUMNS, ASSET_TITAN_SPRITE_SCALE);
-	attackRange = BOSS1ATTACKRANGE;
-	shootTimer = 0.f;
-	jumpX = BOSS1JUMPVELX;
-	jumpY = BOSS1JUMPVELY;
-	baseProjectiles = BOSS1BASEPROJECTILES;
-	extraProjectiles = BOSS1EXTRAPROJECTILES;
+	attack_range = BOSS1ATTACKRANGE;
+	shoot_timer = 0.f;
+	jump_x = BOSS1JUMPVELX;
+	jump_y = BOSS1JUMPVELY;
+	base_projectiles = BOSS1BASEPROJECTILES;
+	extra_projectiles = BOSS1EXTRAPROJECTILES;
 	
 }
 
@@ -25,7 +25,7 @@ void TitanEntity::PreUpdate(const f32& dt) {
 }
 
 void TitanEntity::Update(const f32& dt) {
-	shootTimer -= dt;
+	shoot_timer -= dt;
 	BossEntity::Update(dt);
 }
 
@@ -65,7 +65,7 @@ void TitanEntity::OnCollide(GameObjectEntity* go) {
 }
 
 void TitanEntity::OnIdle(const f32& dt) {	
-	if (bossActivated) {
+	if (boss_activated) {
 		SwitchState(FSM::CHASE);
 	}
 }
@@ -84,8 +84,8 @@ void TitanEntity::OnChase(const f32& dt) {
 	float healthRatio = health / max_health;
 	float temp = (1.f - healthRatio) / 0.75f;
 	temp = AEClamp(temp, 0.f, 1.f);
-	velocity.x = dir.x * (jumpX + temp * jumpX);
-	velocity.y = jumpY;
+	velocity.x = dir.x * (jump_x + temp * jump_x);
+	velocity.y = jump_y;
 	
 	SwitchState(FSM::STUN, 3.f);
 
@@ -93,17 +93,17 @@ void TitanEntity::OnChase(const f32& dt) {
 }
 
 void TitanEntity::OnStun(const f32& dt) {
-	if (pBody->is_standing_above && shootTimer < 0.f)
+	if (pBody->is_standing_above && shoot_timer < 0.f)
 	{
 		CameraManager::GetInstance()->Shake(3.f, 5.f);
 		float healthRatio = health / max_health;
 		float temp = (1.f - healthRatio) / 0.75f;
 		temp = AEClamp(temp, 0.f, 1.f);
 
-		int projectiles = baseProjectiles + static_cast<int>(temp * extraProjectiles);
+		int projectiles = base_projectiles + static_cast<int>(temp * extra_projectiles);
 		for (int i = 0; i < projectiles; i++)
 		{
-			AEVec2 Pos{ Utils::RandRange(bossRoomCenter.x-attackRange,bossRoomCenter.x +attackRange), BOSS1ROOMPOSY };
+			AEVec2 Pos{ Utils::RandRange(boss_room_center.x-attack_range,boss_room_center.x +attack_range), BOSS1ROOMPOSY };
 			AEVec2 shootDir{ 0.f, -1.f };
 			AEVec2Normalize(&shootDir, &shootDir);
 			f32 bulletSpeed = Utils::RandRange(BULLETMINSPEED, BULLETMAXSPEED);
@@ -113,7 +113,7 @@ void TitanEntity::OnStun(const f32& dt) {
 			SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(spike);
 		}
 
-		shootTimer = shootCooldown;
+		shoot_timer = shoot_cooldown;
 	}
 
 

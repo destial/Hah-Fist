@@ -10,11 +10,11 @@
 
 PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, BossEntity(pos) {
 	InitializeAnimatedSpriteData(ASSET_PAYLOAD_SPRITE, ASSET_PAYLOAD_SPRITE_ROWS, ASSET_PAYLOAD_SPRITE_COLUMNS, ASSET_PAYLOAD_SPRITE_SCALE);
-	attackRange = BOSS2ATTACKRANGE;
-	landTimer = 0.f;
-	baseProjectiles = BOSS2EXTRAPROJECTILES;
-	extraProjectiles = BOSS2BASEPROJECTILES;
-	innerState = INNERFSM::JUMP;
+	attack_range = BOSS2ATTACKRANGE;
+	land_timer = 0.f;
+	base_projectiles = BOSS2EXTRAPROJECTILES;
+	extra_projectiles = BOSS2BASEPROJECTILES;
+	inner_state = INNERFSM::JUMP;
 	frictionMultiplier = BOSS2FRICTION;
 }
 
@@ -64,7 +64,7 @@ void PayloadEntity::OnCollide(GameObjectEntity* go) {
 }
 
 void PayloadEntity::OnIdle(const f32& dt) {
-	if (bossActivated) {
+	if (boss_activated) {
 		SwitchState(FSM::CHASE);
 	}
 }
@@ -73,21 +73,21 @@ void PayloadEntity::OnPatrol(const f32& dt) {
 }
 
 void PayloadEntity::OnChase(const f32& dt) {
-	switch (innerState) {
+	switch (inner_state) {
 	case INNERFSM::JUMP:
 	{
 		dir.x = (Utils::RandRange(0.f, 1.f) < 0.5f) ? -1.f : 1.f;
 		velocity.x = dir.x * BOSS2JUMPVELX;
 		float t = AEClamp(position.y / BOSS2ROOMMAXHEIGHT, 0.f, 1.f);
 		velocity.y = BOSS2JUMPVELY * (1.f - t * t);
-		innerState = INNERFSM::LAND;
-		landTimer = landCooldown;
+		inner_state = INNERFSM::LAND;
+		land_timer = land_cooldown;
 		break;
 	}
 	case INNERFSM::LAND:
 	{
-		landTimer -= dt;
-		if (landTimer < 0.f)
+		land_timer -= dt;
+		if (land_timer < 0.f)
 		{
 			AEVec2 Pos{ position.x,  position.y - scale.y * 0.7f };
 			AEVec2 platformDir{ 0.f, -1.f };
@@ -95,20 +95,20 @@ void PayloadEntity::OnChase(const f32& dt) {
 			platform->mesh = MeshRenderer::GetCenterRectMesh();
 			platform->scale = { 7.f, 0.5f };
 			SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(platform);
-			innerState = INNERFSM::ATTACK;
+			inner_state = INNERFSM::ATTACK;
 		}
 		break;
 	}
 	case INNERFSM::ATTACK:
 	{
-		int projectiles = baseProjectiles + static_cast<int>(GetLowHealthFactor() * extraProjectiles);
+		int projectiles = base_projectiles + static_cast<int>(GetLowHealthFactor() * extra_projectiles);
 		for (int i = 0; i < projectiles; i++)
 		{
-			AEVec2 Pos{ Utils::RandRange(position.x - attackRange,position.x + attackRange),  position.y };
+			AEVec2 Pos{ Utils::RandRange(position.x - attack_range,position.x + attack_range),  position.y };
 			AEVec2 shootDir{ 0.f, -1.f };
 			ShootProjectile(health / max_health, Pos, shootDir);
 		}
-		innerState = INNERFSM::JUMP;
+		inner_state = INNERFSM::JUMP;
 		float stunTime = 1.f + (1.f * GetLowHealthFactor());
 		SwitchState(FSM::STUN, stunTime);
 		break;

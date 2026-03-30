@@ -10,12 +10,12 @@ public:
 		JUMP,LAND,ATTACK, TOTAL
 	};
 protected:
-	INNERFSM innerState;
+	INNERFSM inner_state;
 	GameObjectEntity* ground;
-	float landCooldown{ BOSS2SHOOTCOOLDOWN };
-	float landTimer;
-	float attackRange, jumpX, jumpY;
-	int baseProjectiles, extraProjectiles;
+	float land_cooldown{ BOSS2SHOOTCOOLDOWN };
+	float land_timer;
+	float attack_range;
+	int base_projectiles, extra_projectiles;
 public:
 	PayloadEntity(AEVec2 pos);
 	~PayloadEntity() override;

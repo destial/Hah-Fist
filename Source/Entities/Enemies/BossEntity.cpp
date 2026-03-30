@@ -8,9 +8,9 @@
 BossEntity::BossEntity(AEVec2 pos) : ground{ nullptr }, EnemyEntity(pos, { 1.f,0.f }, 10.f, true) {
 	health = DEFAULTBOSSMAXHEALTH;
 	max_health = DEFAULTBOSSMAXHEALTH;
-	bossActivated = DEFAULTBOSSACTIVATED;
+	boss_activated = DEFAULTBOSSACTIVATED;
 	damage = DEFAULTBOSSDAMAGE;
-	bossRoomCenter = position;
+	boss_room_center = position;
 }
 
 void BossEntity::PreUpdate(const f32& dt)
@@ -71,17 +71,17 @@ BossEntity::~BossEntity() {
 }
 bool BossEntity::GetBossActivated()
 {
-	return bossActivated;
+	return boss_activated;
 }
 
 void BossEntity::SetBossActivation(bool activated)
 {
-	bossActivated = activated;
+	boss_activated = activated;
 }
 
 AEVec2 BossEntity::GetBossRoomCenter()
 {
-	return bossRoomCenter;
+	return boss_room_center;
 }
 
 void BossEntity::ShootProjectile(float healthRatio, AEVec2 Pos, AEVec2 shootDir)

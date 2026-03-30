@@ -21,7 +21,7 @@
 */
 class CameraManager : public Singleton<CameraManager> {
 private: 
-    float x, y, targetx, targety, smoothspeed, shaketimer, shakeduration, shakestrength;
+    float x, y, target_x, target_y, smooth_speed, shake_timer, shake_duration, shake_strength;
 public:
     /*!
     * @brief Construct a CameraManager object

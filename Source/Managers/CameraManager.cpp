@@ -18,8 +18,8 @@
 *        Initializes camera variables and default state
 */
 CameraManager::CameraManager()
-: x(0.0f), y(0.0f), targetx(0.0f), targety(0.0f),
-  smoothspeed(5.f), shaketimer(0.f), shakeduration(0.f), shakestrength(0.f) {}
+: x(0.0f), y(0.0f), target_x(0.0f), target_y(0.0f),
+  smooth_speed(5.f), shake_timer(0.f), shake_duration(0.f), shake_strength(0.f) {}
 
 /*!
 * @brief Destroy the CameraManager object
@@ -32,12 +32,12 @@ CameraManager::~CameraManager(){}
 */
 void CameraManager::Init()
 {
-    x = targetx = 0.f;
-    y = targety = 0.f;
+    x = target_x = 0.f;
+    y = target_y = 0.f;
 
-    shaketimer = 0.f;
-    shakeduration = 0.f;
-    shakestrength = 0.f;
+    shake_timer = 0.f;
+    shake_duration = 0.f;
+    shake_strength = 0.f;
 }
 
 /*!
@@ -49,8 +49,8 @@ void CameraManager::SetPosition(float newX, float newY)
 {
     x = newX;
     y = newY;
-    targetx = newX;
-    targety = newY;
+    target_x = newX;
+    target_y = newY;
 }
 
 /*!
@@ -62,8 +62,8 @@ void CameraManager::Move(float dx, float dy)
 {
     x += dx;
     y += dy;
-    targetx += dx;
-    targety += dy;
+    target_x += dx;
+    target_y += dy;
 }
 
 /*!
@@ -73,8 +73,8 @@ void CameraManager::Move(float dx, float dy)
 */
 void CameraManager::SetTarget(float tx, float ty)
 {
-    targetx = tx;
-    targety = ty;
+    target_x = tx;
+    target_y = ty;
 }
 
 /*!
@@ -84,9 +84,9 @@ void CameraManager::SetTarget(float tx, float ty)
 */
 void CameraManager::Shake(float duration, float strength)
 {
-    shakeduration = duration;
-    shaketimer = duration;
-    shakestrength = strength;
+    shake_duration = duration;
+    shake_timer = duration;
+    shake_strength = strength;
 }
 
 /*!
@@ -95,17 +95,17 @@ void CameraManager::Shake(float duration, float strength)
 */
 void CameraManager::Update(float dt)
 {
-    x += (targetx - x) * smoothspeed * dt;
-    y += (targety - y) * smoothspeed * dt;
+    x += (target_x - x) * smooth_speed * dt;
+    y += (target_y - y) * smooth_speed * dt;
 
     float finalX = x;
     float finalY = y;
 
-    if (shaketimer > 0.f)
+    if (shake_timer > 0.f)
     {
-        shaketimer -= dt;
-        float progress = shaketimer / shakeduration;
-        float strength = shakestrength * progress;
+        shake_timer -= dt;
+        float progress = shake_timer / shake_duration;
+        float strength = shake_strength * progress;
 
         float offsetX = ((rand() / (float)RAND_MAX) * 2.f - 1.f) * strength;
         float offsetY = ((rand() / (float)RAND_MAX) * 2.f - 1.f) * strength;

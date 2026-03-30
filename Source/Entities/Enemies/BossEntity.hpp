@@ -6,8 +6,8 @@
 class BossEntity : public EnemyEntity {
 protected:
 	GameObjectEntity* ground;
-	bool bossActivated;
-	AEVec2 bossRoomCenter;
+	bool boss_activated;
+	AEVec2 boss_room_center;
 public:
 
 	BossEntity(AEVec2 pos);
