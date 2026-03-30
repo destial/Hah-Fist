@@ -1,3 +1,14 @@
+/*!
+* @file TurboFistEntity.cpp
+* @author Mohammad Hafiz Bin Mohammad Kamarurrashid (mohammadhafiz.b@digipen.edu)
+* @date 24th February 2026
+* @course CSD1451
+* @brief This source file defines the member functions of the 
+* TurboFistWeapon which inherits the weapon class.
+* This weapon channels and releases to launch the player forward, speed of travel
+* determined by the duration of travel.
+*/
+
 #include "TurboFistEntity.hpp"
 #include "../../Utils/AEOverload.hpp"
 #include "../../UI/Debug.hpp"
@@ -84,8 +95,8 @@ void TurboFistWeapon::Attack() {
 	AEAudioPlay(AssetManager::GetAudio(ASSET_TURBOFIST_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
 }
 
-float TurboFistWeapon::GetCurrentAttackStrength() {
-	return 1.f + (2.f * (static_cast<f32>(std::trunc(channel_timer)) / max_channel_time));
+f32 TurboFistWeapon::GetCurrentAttackStrength() {
+	return 1.f + 2.f * (static_cast<f32>(std::trunc(channel_timer * 10.f)) / (max_channel_time * 10.f));
 }
 
 void TurboFistWeapon::ResetWeapon() {

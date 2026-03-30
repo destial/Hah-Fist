@@ -1,3 +1,11 @@
+/*!
+* @file GrappleFistWeapon.hpp
+* @author Mohammad Hafiz Bin Mohammad Kamarurrashid (mohammadhafiz.b@digipen.edu)
+* @date 8th March 2026
+* @course CSD1451
+* @brief This source file declares the GrappleFistWeapon class which inherits from the weapon class.
+* This weapon grapples the player towards structures and pulls entities towards the player.
+*/
 #include "GrappleFistEntity.hpp"
 #include "../Projectiles/BaseProjectile.hpp"
 #include "../../Utils/AEOverload.hpp"

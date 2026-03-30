@@ -52,7 +52,16 @@ void Player::PreUpdate(const f32& dt) {
 void Player::Update(const f32& dt) {
 	GameObjectEntity::Update(dt);
 
-	this->color = Utils::Lerp(Color{ 255, 255, 128, 128 }, Color{ 255, 255, 255, 255 }, timeElapsedSinceLastDamage / PLAYER_CONTROL_LOCK_AFTER_HIT);
+	if ((timeElapsedSinceLastDamage / PLAYER_CONTROL_LOCK_AFTER_HIT) <= 1.0)
+	{
+		this->color = Utils::Lerp(Color{ 255, 255, 128, 128 }, Color{ 255, 255, 255, 255 }, timeElapsedSinceLastDamage / PLAYER_CONTROL_LOCK_AFTER_HIT);
+	}
+	else if (invulnerabilityDuration > 0)
+	{
+		this->color = Utils::Lerp(Color{ 255, 0, 128, 0 }, Color{ 255, 255, 255, 255 }, 20.f * invulnerabilityDuration);
+	}
+	
+	
 
 	////Testing Shooting Function
 	if (AEInputCheckCurr(AEVK_T)) {

@@ -1,3 +1,14 @@
+/*!
+* @file WeaponEntity.cpp
+* @author Mohammad Hafiz Bin Mohammad Kamarurrashid (mohammadhafiz.b@digipen.edu)
+* @author Rance Andres (andresrancerowell.g@digipen.edu)
+* @date 20th January 2026
+* @course CSD1451
+* @brief This source file defines the member functions of the weapon class.
+*		 The weapon class object handles basic functionality and variables required
+*		 by all inherited weapons.
+*/
+
 #include "WeaponEntity.hpp"
 #include "../Utils/AEOverload.hpp"
 #include "../Utils/MeshRenderer.hpp"
@@ -9,6 +20,7 @@
 #include "../Managers/SceneManager.hpp"
 #include "../Entities/PlayerEntity.hpp"
 
+
 Weapon::Weapon(AEVec2 pos) : GameObjectEntity{ pos } {
 	go_type = PhysicsType::TRIGGER;
 	image = nullptr;
@@ -16,6 +28,7 @@ Weapon::Weapon(AEVec2 pos) : GameObjectEntity{ pos } {
 	mesh = MeshRenderer::GetCenterRectMesh();
 	layer = RenderLayer::PLAYER;
 }
+
 
 Weapon::~Weapon() {}
 
