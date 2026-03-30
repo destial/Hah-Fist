@@ -1,3 +1,12 @@
+/*!
+* @file FingerGunEntity.cpp
+* @author Mohammad Hafiz Bin Mohammad Kamarurrashid (mohammadhafiz.b@digipen.edu)
+* @date 20th January 2026
+* @course CSD1451
+* @brief This source file declares the weapon class and the member functions.
+*		 The weapon class object handles basic functionality and variables required
+*		 by all inherited weapons.
+*/
 #include "FingerGunEntity.hpp"
 #include "../../Utils/AEOverload.hpp"
 #include "../../Utils/Constant.hpp"
