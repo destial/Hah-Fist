@@ -10,7 +10,7 @@
 #include "../PlayerEntity.hpp"
 
 IronsideEntity::IronsideEntity(AEVec2 pos) : BossEntity(pos) {
-	InitializeAnimatedSpriteData(ASSET_TROOPER_SPRITE, ASSET_TROOPER_SPRITE_ROWS, ASSET_TROOPER_SPRITE_COLUMNS, ASSET_TROOPER_SPRITE_SCALE);
+	InitializeAnimatedSpriteData(ASSET_IRONSIDE_SPRITE, ASSET_IRONSIDE_SPRITE_ROWS, ASSET_IRONSIDE_SPRITE_COLUMNS, ASSET_IRONSIDE_SPRITE_SCALE);
 	pBody->gravityScale = 0;
 
 	innerState = INNERFSM::MOVE;
