@@ -10,7 +10,6 @@
 
 PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, BossEntity(pos) {
 	InitializeAnimatedSpriteData(ASSET_PAYLOAD_SPRITE, ASSET_PAYLOAD_SPRITE_ROWS, ASSET_PAYLOAD_SPRITE_COLUMNS, ASSET_PAYLOAD_SPRITE_SCALE);
-	// Empty for now
 	attackRange = BOSS2ATTACKRANGE;
 	landTimer = 0.f;
 	baseProjectiles = BOSS2EXTRAPROJECTILES;
@@ -20,7 +19,6 @@ PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, BossEntity(pos) {
 }
 
 PayloadEntity::~PayloadEntity() {
-	// Empty by design
 }
 
 void PayloadEntity::PreUpdate(const f32& dt) {
@@ -66,18 +64,15 @@ void PayloadEntity::OnCollide(GameObjectEntity* go) {
 }
 
 void PayloadEntity::OnIdle(const f32& dt) {
-	// Trooper's idle behaviour
 	if (bossActivated) {
 		SwitchState(FSM::CHASE);
 	}
 }
 
 void PayloadEntity::OnPatrol(const f32& dt) {
-	// Trooper's patrol behaviour
 }
 
 void PayloadEntity::OnChase(const f32& dt) {
-	// Trooper's chase behaviour
 	switch (innerState) {
 	case INNERFSM::JUMP:
 	{
@@ -124,7 +119,6 @@ void PayloadEntity::OnChase(const f32& dt) {
 }
 
 void PayloadEntity::OnStun(const f32& dt) {
-	// Trooper's stun behaviour
 	if (stateTimer < 0.f) {
 		SwitchState(FSM::CHASE);
 	}
@@ -132,7 +126,6 @@ void PayloadEntity::OnStun(const f32& dt) {
 }
 
 void PayloadEntity::OnDead(const f32& dt) {
-	// Trooper's death behaviour
 	if (GameScene* game = dynamic_cast<GameScene*>(SceneManager::GetInstance()->GetCurrentScene()))
 	{
 		game->Win();

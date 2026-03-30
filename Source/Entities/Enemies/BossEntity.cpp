@@ -44,27 +44,22 @@ void BossEntity::OnHit()
 
 void BossEntity::OnIdle(const f32& dt)
 {
-	// Empty for now
 }
 
 void BossEntity::OnPatrol(const f32& dt)
 {
-	//Empty for now
 }
 
 void BossEntity::OnChase(const f32& dt)
 {
-	// Empty for now
 }
 
 void BossEntity::OnAttack(const f32& dt)
 {
-	// Empty for now
 }
 
 void BossEntity::OnStun(const f32& dt)
 {
-	// Empty for now
 }
 
 void BossEntity::OnDead(const f32& dt)
@@ -73,7 +68,6 @@ void BossEntity::OnDead(const f32& dt)
 }
 
 BossEntity::~BossEntity() {
-	// Empty by design
 }
 bool BossEntity::GetBossActivated()
 {

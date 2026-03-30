@@ -12,19 +12,18 @@
 IronsideEntity::IronsideEntity(AEVec2 pos) : BossEntity(pos) {
 	InitializeAnimatedSpriteData(ASSET_IRONSIDE_SPRITE, ASSET_IRONSIDE_SPRITE_ROWS, ASSET_IRONSIDE_SPRITE_COLUMNS, ASSET_IRONSIDE_SPRITE_SCALE);
 	pBody->gravityScale = 0;
-
 	innerState = INNERFSM::MOVE;
 	go_type = PhysicsType::TRIGGER;
-	//Initialising values so no errors
-	currLane = LANE::LANE2;
-	lanetogoto = LANE::LANE1;
-	nextLanetospawn = 1;
-	dirtogo = 1;
-	targetY = 6.0f;
+
+	//Initialising Values (Will be reinitialised during runtime)
+	lanetogoto = GetRandomSpawnLane(currLane);
+	currLane = lanetogoto;
+	nextLanetospawn = currLane;
+	dirtogo = 1.f;
+	targetY = LaneY[lanetogoto];
 }
 
 IronsideEntity::~IronsideEntity() {
-	// Empty by design
 }
 
 void IronsideEntity::PreUpdate(const f32& dt) {
@@ -36,7 +35,8 @@ void IronsideEntity::Update(const f32& dt) {
 }
 
 void IronsideEntity::PostUpdate(const f32& dt) {
-	BossEntity::PostUpdate(dt);
+	//Using its own animation spritesheet not the default
+	GameObjectEntity::PostUpdate(dt);
 }
 
 void IronsideEntity::Render() {
@@ -48,7 +48,6 @@ void IronsideEntity::OnCollide(GameObjectEntity* go) {
 }
 
 void IronsideEntity::OnIdle(const f32& dt) {
-	// Trooper's idle behaviour
 	if (bossActivated) {
 		velocity.x = BOSS3VELX;
 		if (position.x >= bossRoomCenter.x + BOSS3OFFSETX)
@@ -60,11 +59,9 @@ void IronsideEntity::OnIdle(const f32& dt) {
 }
 
 void IronsideEntity::OnPatrol(const f32& dt) {
-	// Trooper's patrol behaviour
 }
 
 void IronsideEntity::OnChase(const f32& dt) {
-	// Trooper's chase behaviour
 	switch (innerState) {
 	case INNERFSM::MOVE:
 	{
@@ -130,10 +127,16 @@ void IronsideEntity::OnChase(const f32& dt) {
 	}
 	case INNERFSM::LASER:
 	{
-		LaserEntity* laser = new LaserEntity(this->position, this, damage);
-		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(laser);
-		innerState = INNERFSM::MOVE;
-		StunTimerBasedOnHealth();
+		currentRow = 1;
+		if (currentCol == ASSET_IRONSIDE_SPRITE_COLUMNS - 1)
+		{
+			LaserEntity* laser = new LaserEntity(this->position, this, damage);
+			SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(laser);
+			innerState = INNERFSM::MOVE;
+			StunTimerBasedOnHealth();
+			currentRow = 0;
+		}
+
 		break;
 	}
 	default:
@@ -142,7 +145,6 @@ void IronsideEntity::OnChase(const f32& dt) {
 }
 
 void IronsideEntity::OnStun(const f32& dt) {
-	// Trooper's stun behaviour
 	
 	if (stateTimer < 0.f) {
 		SwitchState(FSM::CHASE);
@@ -150,7 +152,6 @@ void IronsideEntity::OnStun(const f32& dt) {
 }
 
 void IronsideEntity::OnDead(const f32& dt) {
-	// Trooper's death behaviour
 	if (GameScene* game = dynamic_cast<GameScene*>(SceneManager::GetInstance()->GetCurrentScene()))
 	{
 		game->Win();

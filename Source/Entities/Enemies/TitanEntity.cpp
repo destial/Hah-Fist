@@ -18,7 +18,6 @@ TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, BossEntity(pos) {
 }
 
 TitanEntity::~TitanEntity() {
-	// Empty by design
 }
 
 void TitanEntity::PreUpdate(const f32& dt) {
@@ -65,23 +64,19 @@ void TitanEntity::OnCollide(GameObjectEntity* go) {
 	BossEntity::OnCollide(go);
 }
 
-void TitanEntity::OnIdle(const f32& dt) {
-	// Trooper's idle behaviour
-	
+void TitanEntity::OnIdle(const f32& dt) {	
 	if (bossActivated) {
 		SwitchState(FSM::CHASE);
 	}
 }
 
 void TitanEntity::OnPatrol(const f32& dt) {
-	// Trooper's patrol behaviour
 	if (stateTimer < 0.f) {
 		SwitchState(FSM::CHASE);
 	}
 }
 
 void TitanEntity::OnChase(const f32& dt) {
-	// Trooper's chase behaviour
 	Player* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<Player>();
 	if (!player) return;
 
@@ -98,14 +93,8 @@ void TitanEntity::OnChase(const f32& dt) {
 }
 
 void TitanEntity::OnStun(const f32& dt) {
-	// Trooper's stun behaviour
-	//velocity.x = 0.f;
-	// Spawn falling projectiles periodically
 	if (pBody->is_standing_above && shootTimer < 0.f)
 	{
-		// Example spawn
-		// SpawnProjectile({ player->position.x, ceilingHeight });
-		//AEVec2 Pos{ Utils::RandRange(bossroommin.x,bossroommax.x), 100.f};
 		CameraManager::GetInstance()->Shake(3.f, 5.f);
 		float healthRatio = health / max_health;
 		float temp = (1.f - healthRatio) / 0.75f;
@@ -134,7 +123,6 @@ void TitanEntity::OnStun(const f32& dt) {
 }
 
 void TitanEntity::OnDead(const f32& dt) {
-	// Trooper's death behaviour
 	if (GameScene* game = dynamic_cast<GameScene*>(SceneManager::GetInstance()->GetCurrentScene()))
 	{
 		game->Win();
