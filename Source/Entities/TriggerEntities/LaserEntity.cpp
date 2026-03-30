@@ -6,11 +6,12 @@
 
 LaserEntity::LaserEntity(AEVec2 pos, GameObjectEntity* _owner, f32 _damage) : GameObjectEntity(pos, 1.f, CollisionShape::AABB, PhysicsType::TRIGGER)
 {
-	InitializeAnimatedSpriteData(ASSET_COIN_SPRITE, ASSET_COIN_SPRITE_ROWS, ASSET_COIN_SPRITE_COLUMNS, ASSET_COIN_SPRITE_SCALE);
+	InitializeAnimatedSpriteData(ASSET_LASER_SPRITE, ASSET_LASER_SPRITE_ROWS, ASSET_LASER_SPRITE_COLUMNS, ASSET_LASER_SPRITE_SCALE);
     owner = _owner;
     damage = _damage;
-    scale = { 50.0f,3.0f };
-    position.x -= scale.x * 0.5f;
+    scale = { 6.0f,50.0f };
+    position.x -= scale.y * 0.5f;
+    rotation = -PI/2;
 }
 
 LaserEntity::~LaserEntity()
@@ -22,7 +23,7 @@ void LaserEntity::Update(const f32& dt) {
     GameObjectEntity::Update(dt);
 }
 void LaserEntity::PostUpdate(const f32& dt) {
-    if (currentCol == ASSET_COIN_SPRITE_COLUMNS - 1)
+    if (currentCol == ASSET_LASER_SPRITE_COLUMNS - 1)
     {
         isActive = false;
         SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);

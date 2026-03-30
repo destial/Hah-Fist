@@ -15,7 +15,7 @@ protected:
 	AEVec2 weapon_direction{ 0.f, 0.f };
 	float cd_timer{ 0.0f };
 	float cd_duration{2.0f};
-	float damage{ 25.f };
+	float damage{ 5.f };
 public:
 	Weapon(AEVec2 pos = { 0.f, 0.f });
 	~Weapon();

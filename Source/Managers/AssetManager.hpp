@@ -64,10 +64,23 @@
 #define ASSET_COIN_SPRITE_SCALE 2.f
 #define ASSET_COIN_PICKUP_AUDIO "Assets/Audio/coin_pickup.wav"
 
+#define ASSET_EXPLOSION_SPRITE "Assets/Entities/explosion.png"
+#define ASSET_EXPLOSION_SPRITE_ROWS 1
+#define ASSET_EXPLOSION_SPRITE_COLUMNS 7
+#define ASSET_EXPLOSION_SPRITE_SCALE 2.f
+#define ASSET_EXPLOSION_PICKUP_AUDIO "Assets/Audio/explosion.wav"
+
+#define ASSET_LASER_SPRITE "Assets/Entities/lightning.png"
+#define ASSET_LASER_SPRITE_ROWS 1
+#define ASSET_LASER_SPRITE_COLUMNS 10
+#define ASSET_LASER_SPRITE_SCALE 1.f
+
 #define ASSET_BREAKABLE_CRATE_IMAGE "Assets/Entities/crate.png"
 #define ASSET_BREAKING_FRAME_SPRITE "Assets/Entities/breaking_frames.png"
 
 #define ASSET_PROJECTILE_IMAGE "Assets/Entities/projectile.png"
+#define ASSET_SPIKE_IMAGE "Assets/Entities/spike.png"
+#define ASSET_EXPLOSIVE_PROJECTILE_IMAGE "Assets/Entities/explosive_projectile.png"
 #define ASSET_SPLASHSCREEN_IMAGE "Assets/Icons/splash_screen.png"
 #define ASSET_TURBOFIST_IMAGE "Assets/Entities/fist1.png"
 #define ASSET_GRAPPLEFIST_IMAGE "Assets/Entities/fist2.png"

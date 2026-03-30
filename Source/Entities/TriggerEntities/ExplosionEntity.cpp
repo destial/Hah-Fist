@@ -6,7 +6,7 @@
 
 ExplosionEntity::ExplosionEntity(AEVec2 pos, GameObjectEntity* _owner ,f32 _damage) : GameObjectEntity(pos,  1.f, CollisionShape::AABB, PhysicsType::TRIGGER)
 {
-	InitializeAnimatedSpriteData(ASSET_COIN_SPRITE, ASSET_COIN_SPRITE_ROWS, ASSET_COIN_SPRITE_COLUMNS, ASSET_COIN_SPRITE_SCALE);
+	InitializeAnimatedSpriteData(ASSET_EXPLOSION_SPRITE, ASSET_EXPLOSION_SPRITE_ROWS, ASSET_EXPLOSION_SPRITE_COLUMNS, ASSET_EXPLOSION_SPRITE_SCALE);
     owner = _owner;
     damage = _damage;
     scale = { 3.0f,3.0f };
@@ -22,7 +22,7 @@ void ExplosionEntity::Update(const f32& dt) {
     GameObjectEntity::Update(dt);
 }
 void ExplosionEntity::PostUpdate(const f32& dt) {
-    if (currentCol == ASSET_COIN_SPRITE_COLUMNS - 1)
+    if (currentCol == ASSET_EXPLOSION_SPRITE_COLUMNS - 1)
     {
         isActive = false;
         SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
@@ -46,6 +46,7 @@ void ExplosionEntity::OnCollide(GameObjectEntity* other) {
         {
             other->health -= damage;
             previouslydamaged = other;
+            AEAudioPlay(AssetManager::GetAudio(ASSET_EXPLOSION_PICKUP_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
         }
 
         if (other->entity_type == EntityType::ENEMY)
@@ -56,6 +57,7 @@ void ExplosionEntity::OnCollide(GameObjectEntity* other) {
                 if (e->health < 0) {
                     e->SwitchState(EnemyEntity::FSM::DEAD);
                 }
+
             }
         }
         else if (other->entity_type == EntityType::BREAKABLE_STATIC)

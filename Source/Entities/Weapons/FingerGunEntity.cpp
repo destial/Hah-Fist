@@ -9,7 +9,7 @@
 FingerGunWeapon::FingerGunWeapon(AEVec2 pos) : Weapon{pos}
 {
 	weaponChannels = false;
-	cd_duration = 0.25f;
+	cd_duration = 0.5f;
 	image = AssetManager::GetTexture(ASSET_FINGERGUN_IMAGE);
 }
 FingerGunWeapon::~FingerGunWeapon()

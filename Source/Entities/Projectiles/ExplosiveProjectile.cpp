@@ -10,7 +10,7 @@
 ExplosiveProjectile::ExplosiveProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameObjectEntity* own, bool lerp)
     : BaseProjectile(pos, dir, speed, dmg, own)
 {
-    sprite = AssetManager::GetSpriteSheet(ASSET_PLAYER_SPRITE, 1, 1);
+    sprite = AssetManager::GetSpriteSheet(ASSET_EXPLOSIVE_PROJECTILE_IMAGE, 1, 1);
 }
 
 void ExplosiveProjectile::Update(const f32& dt)
