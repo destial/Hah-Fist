@@ -213,7 +213,7 @@ void GameScene::Init() {
 				AEVec2Normalize(&dir, &dir);
 			}
 
-			if (dir.x && player->pBody->is_standing_above) {
+			if (dir.x /*&& player->pBody->is_standing_above*/) {
 				player->Move(dir);
 			}
 		}
