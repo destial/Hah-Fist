@@ -1,3 +1,13 @@
+/*!
+* @file ExplosiveProjectile.cpp
+* @author Ryan Lau (r.lau@digipen.edu)
+* @date 13 March 2026
+* @course CSD1451
+* @brief Central header defining game-wide constants, macros, and default values.
+*        Includes gameplay settings, bullet properties, enemy defaults, boss
+*        configurations, and lane positions for boss 3. Used throughout the game
+*        for consistent values and tuning.
+*/
 
 #pragma once
 #ifndef __CONSTANT_H
@@ -20,6 +30,8 @@
 #define BULLETMINSPEED 10.f
 #define BULLETMAXSPEED 20.f
 #define BULLETPLAYERSPEED 30.f
+#define BULLETLIFETIME 5.f
+
 
 //Enemy defaults
 #define DEFAULTENEMYMAXHEALTH 50.f
@@ -38,6 +50,7 @@
 #define BOSS1JUMPVELY 50.f
 #define BOSS1ROOMPOSY 25.f
 #define BOSS1SHOOTCOOLDOWN 3.f
+#define BOSS1SPIKELIFETIME 8.f
 
 //Boss 2
 #define BOSS2ATTACKRANGE 10.f

@@ -1,3 +1,13 @@
+/*!
+* @file PayloadEntity.cpp
+* @author Ryan Lau (r.lau@digipen.edu)
+* @date 8 March 2026
+* @course CSD1451
+* @brief Implementation of the PayloadEntity boss class. This class defines
+*        behavior for a boss enemy that uses a multi-phase attack system,
+*        including jumping, platform spawning, and projectile attacks.
+*        The boss scales its attack intensity based on remaining health.
+*/
 #include "PayloadEntity.hpp"
 #include "../../Utils/Utils.hpp"
 #include "../../Managers/AssetManager.hpp"
@@ -7,7 +17,12 @@
 #include "../../Utils/MeshRenderer.hpp"
 #include "../../Managers/SceneManager.hpp"
 #include "../../Scenes/GameScene.hpp"
-
+/*!
+* @brief Constructs the PayloadEntity and initializes its attributes such as
+*        sprite data, attack parameters, and internal state machine
+* @param pos - Initial position of the Payload boss
+* @return None
+*/
 PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, BossEntity(pos) {
 	InitializeAnimatedSpriteData(ASSET_PAYLOAD_SPRITE, ASSET_PAYLOAD_SPRITE_ROWS, ASSET_PAYLOAD_SPRITE_COLUMNS, ASSET_PAYLOAD_SPRITE_SCALE);
 	attack_range = BOSS2ATTACKRANGE;
@@ -17,10 +32,17 @@ PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, BossEntity(pos) {
 	inner_state = INNERFSM::JUMP;
 	frictionMultiplier = BOSS2FRICTION;
 }
-
+/*!
+* @brief Destructor for PayloadEntity
+* @return None
+*/
 PayloadEntity::~PayloadEntity() {
 }
-
+/*!
+* @brief Handles post-update logic such as animation selection and sprite orientation
+* @param dt - Delta time since last frame
+* @return None
+*/
 void PayloadEntity::PostUpdate(const f32& dt) {
 	currentRow = 1;
 	if (fabsf(velocity.x) > 0.1f) {
@@ -46,13 +68,22 @@ void PayloadEntity::PostUpdate(const f32& dt) {
 	}
 	BossEntity::PostUpdate(dt);
 }
-
+/*!
+* @brief Handles idle state behavior and transitions to chase when activated
+* @param dt - Delta time since last frame (unused)
+* @return None
+*/
 void PayloadEntity::OnIdle(const f32&) {
 	if (boss_activated) {
 		SwitchState(FSM::CHASE);
 	}
 }
-
+/*!
+* @brief Handles chase behavior using an internal state machine for jump,
+*        landing, and attack phases
+* @param dt - Delta time since last frame
+* @return None
+*/
 void PayloadEntity::OnChase(const f32& dt) {
 	switch (inner_state) {
 	case INNERFSM::JUMP:
@@ -98,13 +129,20 @@ void PayloadEntity::OnChase(const f32& dt) {
 		break;
 	}
 }
-
+/*!
+* @brief Handles stun state behavior and transitions back to chase when timer expires
+* @param dt - Delta time since last frame (unused)
+* @return None
+*/
 void PayloadEntity::OnStun(const f32&) {
 	if (stateTimer < 0.f) {
 		SwitchState(FSM::CHASE);
 	}
 }
-
+/*!
+* @brief Handles boss death by triggering win condition and removing the entity
+* @return None
+*/
 void PayloadEntity::OnDead() {
 	if (GameScene* game = dynamic_cast<GameScene*>(SceneManager::GetInstance()->GetCurrentScene()))
 	{

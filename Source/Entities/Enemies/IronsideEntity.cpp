@@ -1,3 +1,13 @@
+/*!
+* @file IronsideEntity.cpp
+* @author Ryan Lau (r.lau@digipen.edu)
+* @date 8 March 2026
+* @course CSD1451
+* @brief Implementation of the IronsideEntity boss class. This class defines
+*        behavior for a boss enemy that operates using a lane-based system,
+*        spawning platforms, firing projectiles, and executing laser attacks.
+*        The boss uses an internal state machine and scales behavior based on health.
+*/
 #include "IronsideEntity.hpp"
 #include "../../Utils/Utils.hpp"
 #include "../../Utils/Constant.hpp"
@@ -8,7 +18,12 @@
 #include "../../Managers/SceneManager.hpp"
 #include "../../Scenes/GameScene.hpp"
 #include "../PlayerEntity.hpp"
-
+/*!
+* @brief Constructs the IronsideEntity and initializes its movement,
+*        lane system, and internal state machine
+* @param pos - Initial position of the Ironside boss
+* @return None
+*/
 IronsideEntity::IronsideEntity(AEVec2 pos) : BossEntity(pos) {
 	InitializeAnimatedSpriteData(ASSET_IRONSIDE_SPRITE, ASSET_IRONSIDE_SPRITE_ROWS, ASSET_IRONSIDE_SPRITE_COLUMNS, ASSET_IRONSIDE_SPRITE_SCALE);
 	pBody->gravityScale = 0;
@@ -22,15 +37,26 @@ IronsideEntity::IronsideEntity(AEVec2 pos) : BossEntity(pos) {
 	dir_to_go = 1.f;
 	target_y = LaneY[lane_to_go_to];
 }
-
+/*!
+* @brief Destructor for IronsideEntity
+* @return None
+*/
 IronsideEntity::~IronsideEntity() {
 }
-
+/*!
+* @brief Handles post-update logic using base GameObjectEntity animation handling
+* @param dt - Delta time since last frame
+* @return None
+*/
 void IronsideEntity::PostUpdate(const f32& dt) {
 	//Using its own animation spritesheet not the default
 	GameObjectEntity::PostUpdate(dt);
 }
-
+/*!
+* @brief Handles idle state behavior and transitions to chase when activated
+* @param dt - Delta time since last frame (unused)
+* @return None
+*/
 void IronsideEntity::OnIdle(const f32&) {
 	if (boss_activated) {
 		velocity.x = BOSS3VELX;
@@ -41,10 +67,19 @@ void IronsideEntity::OnIdle(const f32&) {
 		}
 	}
 }
-
+/*!
+* @brief Handles patrol state behavior (currently unused)
+* @param dt - Delta time since last frame (unused)
+* @return None
+*/
 void IronsideEntity::OnPatrol(const f32&) {
 }
-
+/*!
+* @brief Handles chase behavior using an internal FSM for movement, platform spawning,
+*        projectile attacks, and laser execution
+* @param dt - Delta time since last frame (unused)
+* @return None
+*/
 void IronsideEntity::OnChase(const f32&) {
 	switch (inner_state) {
 	case INNERFSM::MOVE:
@@ -127,13 +162,20 @@ void IronsideEntity::OnChase(const f32&) {
 		break;
 	}
 }
-
+/*!
+* @brief Handles stun state behavior and transitions back to chase when timer expires
+* @param dt - Delta time since last frame (unused)
+* @return None
+*/
 void IronsideEntity::OnStun(const f32&) {
 	if (stateTimer < 0.f) {
 		SwitchState(FSM::CHASE);
 	}
 }
-
+/*!
+* @brief Handles boss death by triggering win condition and removing the entity
+* @return None
+*/
 void IronsideEntity::OnDead() {
 	if (GameScene* game = dynamic_cast<GameScene*>(SceneManager::GetInstance()->GetCurrentScene())) {
 		game->Win();
@@ -142,12 +184,20 @@ void IronsideEntity::OnDead() {
 
 }
 
-
+/*!
+* @brief Calculates stun duration based on current health and applies stun state
+* @return None
+*/
 void IronsideEntity::StunTimerBasedOnHealth()
 {
 	float stunTime = 1.f + (1.f - GetLowHealthFactor());
 	SwitchState(FSM::STUN, stunTime);
 }
+/*!
+* @brief Selects a random lane different from the current boss lane
+* @param bossLane - Current lane occupied by the boss
+* @return A randomly selected lane that is not the current lane
+*/
 IronsideEntity::LANE IronsideEntity::GetRandomSpawnLane(IronsideEntity::LANE bossLane)
 {
 	int r = static_cast<int>(Utils::RandRange(0.f, 2.f));

@@ -1,3 +1,12 @@
+/*!
+* @file TitanEntity.cpp
+* @author Ryan Lau (r.lau@digipen.edu)
+* @date 8 March 2026
+* @course CSD1451
+* @brief Implementation of the TitanEntity boss class. This class defines
+*        the behavior of a boss enemy including movement, state transitions,
+*        attack patterns, projectile spawning, and death handling.
+*/
 #include "TitanEntity.hpp"
 #include "../../Utils/Utils.hpp"
 #include "../../Managers/AssetManager.hpp"
@@ -5,7 +14,12 @@
 #include "../../Managers/SceneManager.hpp"
 #include "../../Scenes/GameScene.hpp"
 #include "../PlayerEntity.hpp"
-
+/*!
+* @brief Constructs the TitanEntity and initializes its attributes such as
+*        sprite data, attack parameters, and projectile configuration
+* @param pos - Initial position of the Titan boss
+* @return None
+*/
 TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, BossEntity(pos) {
 	InitializeAnimatedSpriteData(ASSET_TITAN_SPRITE, ASSET_TITAN_SPRITE_ROWS, ASSET_TITAN_SPRITE_COLUMNS, ASSET_TITAN_SPRITE_SCALE);
 	attack_range = BOSS1ATTACKRANGE;
@@ -16,15 +30,26 @@ TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, BossEntity(pos) {
 	extra_projectiles = BOSS1EXTRAPROJECTILES;
 	
 }
-
+/*!
+* @brief Destructor for TitanEntity
+* @return None
+*/
 TitanEntity::~TitanEntity() {
 }
-
+/*!
+* @brief Updates the Titan boss logic including cooldown timers and base behavior
+* @param dt - Delta time since last frame
+* @return None
+*/
 void TitanEntity::Update(const f32& dt) {
 	shoot_timer -= dt;
 	BossEntity::Update(dt);
 }
-
+/*!
+* @brief Handles post-update logic such as animation state selection and sprite flipping
+* @param dt - Delta time since last frame
+* @return None
+*/
 void TitanEntity::PostUpdate(const f32& dt) {
 	currentRow = 1;
 	if (velocity.x != 0) {
@@ -51,19 +76,31 @@ void TitanEntity::PostUpdate(const f32& dt) {
 
 	BossEntity::PostUpdate(dt);
 }
-
+/*!
+* @brief Handles idle state behavior and transitions to chase when activated
+* @param dt - Delta time since last frame (unused)
+* @return None
+*/
 void TitanEntity::OnIdle(const f32&) {	
 	if (boss_activated) {
 		SwitchState(FSM::CHASE);
 	}
 }
-
+/*!
+* @brief Handles patrol state behavior and transitions to chase after timer expires
+* @param dt - Delta time since last frame (unused)
+* @return None
+*/
 void TitanEntity::OnPatrol(const f32&) {
 	if (stateTimer < 0.f) {
 		SwitchState(FSM::CHASE);
 	}
 }
-
+/*!
+* @brief Handles chase behavior by jumping toward the player and transitioning to stun
+* @param dt - Delta time since last frame (unused)
+* @return None
+*/
 void TitanEntity::OnChase(const f32&) {
 	PlayerEntity* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<PlayerEntity>();
 	if (!player) return;
@@ -79,7 +116,11 @@ void TitanEntity::OnChase(const f32&) {
 
 
 }
-
+/*!
+* @brief Handles stun state behavior including spawning projectiles and camera shake
+* @param dt - Delta time since last frame (unused)
+* @return None
+*/
 void TitanEntity::OnStun(const f32&) {
 	if (pBody->is_standing_above && shoot_timer < 0.f) {
 		CameraManager::GetInstance()->Shake(3.f, 5.f);
@@ -107,7 +148,10 @@ void TitanEntity::OnStun(const f32&) {
 		SwitchState(FSM::PATROL, 2.f);
 	}
 }
-
+/*!
+* @brief Handles boss death by triggering win condition and removing the entity
+* @return None
+*/
 void TitanEntity::OnDead() {
 	if (GameScene* game = dynamic_cast<GameScene*>(SceneManager::GetInstance()->GetCurrentScene())) {
 		game->Win();
