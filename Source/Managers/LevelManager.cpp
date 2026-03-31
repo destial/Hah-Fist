@@ -8,6 +8,7 @@
 
 #include "LevelManager.hpp"
 #include "../UI/ImageUI.hpp"
+#include "../Utils/AEOverload.hpp"
 #include <fstream>
 #include <sstream>
 #include <vector>
@@ -19,12 +20,13 @@ namespace Tutorial {
 	* @param text - The text to display
 	* @return The instance of the BaseUI
 	*/
-	static BaseUI* AddTutorialText(GameScene* scene, AEVec2 const& pos, std::string text) {
+	static BaseUI* AddTutorialText(GameScene* scene, std::ostream& os, AEVec2 const& pos, std::string text) {
 		ImageUI* tut = new ImageUI{ ASSET_HUD_IMAGE, pos };
 		tut->layer = BaseEntity::RenderLayer::WORLD;
 		tut->scale = { 15.f, 2.5f };
 		tut->text_size = 8.f;
 		tut->text = text;
+		os << pos << ',' << text << '\n';
 		scene->AddEntityToScene(tut);
 		return tut;
 	}
@@ -34,15 +36,38 @@ namespace Tutorial {
 	* @param level - The level to load
 	* 
 	*/
-	static std::vector<BaseUI*> LoadTutorialTexts(int level) {
-		std::vector<BaseUI*> ui;
+	static std::vector<ImageUI*> LoadTutorialTexts(int level) {
+		std::vector<ImageUI*> ui;
 		std::ostringstream oss;
+	
+		// Open file
 		oss << "Assets/tut_" << level << ".dat";
 		std::ifstream is{ oss.str() };
 		if (is.fail())
 			return ui;
 
+		// Each line is formatted as "{pos.x,pos.y},text to display|2nd line"
+		std::string line;
+		while (std::getline(is, line)) {
+			std::istringstream iss{ line };
+			AEVec2 pos; char c; // ','
+			std::string word;
+			std::string text;
+			iss >> pos >> c;
+			while (iss >> word) {
+				text += word;
+				text += " ";
+			}
 
+			// Instantiate UI element
+			ImageUI* tut = new ImageUI{ ASSET_HUD_IMAGE, pos };
+			tut->layer = BaseEntity::RenderLayer::WORLD;
+			tut->scale = { 15.f, 2.5f };
+			tut->text_size = 8.f;
+			tut->text = text;
+
+			ui.push_back(tut);
+		}
 
 		return ui;
 	}
@@ -118,35 +143,44 @@ namespace LevelManager {
 			return;
 		}
 
-		std::vector<BaseUI*> texts = Tutorial::LoadTutorialTexts(global_level);
-		if (texts.size() != 0) {
-			for (BaseUI* ui : texts) {
+		// Load serialized tutorial texts
+		std::vector<ImageUI*> texts = Tutorial::LoadTutorialTexts(global_level);
+		if (texts.size() != 0) { // File exists, so load that one
+			for (ImageUI* ui : texts) {
 				scene->AddEntityToScene(ui);
 			}
 			return;
 		}
 
-		// Hard coded tutorial text
+		// Load & save hard coded tutorial text
+		std::ostringstream oss;
+		oss << "Assets/tut_" << global_level << ".dat";
+		std::ofstream ofs{ oss.str() };
+		if (ofs.fail()) {
+			return;
+		}
+
 		if (global_level == 0) {
-			Tutorial::AddTutorialText(scene, { -80.f, 16.f }, "Hold left mouse button to charge your fist!\nRelease to use your attack!");
-			Tutorial::AddTutorialText(scene, { -80.f, 13.f }, "This is your turbo fist!");
-			Tutorial::AddTutorialText(scene, { 5.f, 21.f }, "Charge your first to get past!");
-			Tutorial::AddTutorialText(scene, { 47.f, 8.f }, "This is a breakable crate with loot!");
-			Tutorial::AddTutorialText(scene, { 106.f, 20.f }, "Kill the slimes to get more coins!");
-			Tutorial::AddTutorialText(scene, { 160.f, 22.f }, "Next is the boss room!\nKill the boss to advance!");
+			Tutorial::AddTutorialText(scene, ofs, { -80.f, 16.f }, "Hold left mouse button to charge your fist!|Release to use your attack!");
+			Tutorial::AddTutorialText(scene, ofs, { -80.f, 13.f }, "This is your turbo fist!");
+			Tutorial::AddTutorialText(scene, ofs, { 5.f, 21.f }, "Charge your first to get past!");
+			Tutorial::AddTutorialText(scene, ofs, { 47.f, 8.f }, "This is a breakable crate with loot!");
+			Tutorial::AddTutorialText(scene, ofs, { 106.f, 20.f }, "Kill the slimes to get more coins!");
+			Tutorial::AddTutorialText(scene, ofs, { 160.f, 22.f }, "Next is the boss room!|Kill the boss to advance!");
+		}
+		else if (global_level == 1) {
+			Tutorial::AddTutorialText(scene, ofs, { 16.f, 16.f }, "Cycle between '1', '2' to switch your fists!");
+			Tutorial::AddTutorialText(scene, ofs, { 16.f, 13.f }, "The grapple fist pulls enemies to you!|Try combo-ing your grapple and turbo fist!");
+			Tutorial::AddTutorialText(scene, ofs, { 112.f, 10.f }, "Don't fall in the void!");
+			Tutorial::AddTutorialText(scene, ofs, { 194.f, 13.f }, "Spiders spawn babies when killed!");
+		}
+		else if (global_level == 2) {
+			Tutorial::AddTutorialText(scene, ofs, { 8.f, 7.f }, "Hotkey '3' is your finger gun!");
+			Tutorial::AddTutorialText(scene, ofs, { 51.f, 18.f }, "This is an archer! Ranged enemy!");
 		}
 
-		if (global_level == 1) {
-			Tutorial::AddTutorialText(scene, { 16.f, 16.f }, "Cycle between '1', '2' to switch your fists!");
-			Tutorial::AddTutorialText(scene, { 16.f, 13.f }, "The grapple fist pulls enemies to you!\nTry combo-ing your grapple and turbo fist!");
-			Tutorial::AddTutorialText(scene, { 112.f, 10.f }, "Don't fall in the void!")->scale = { 10.f, 1.5f };
-			Tutorial::AddTutorialText(scene, { 194.f, 13.f }, "Spiders spawn babies when killed!");
-		}
-
-		if (global_level == 2) {
-			Tutorial::AddTutorialText(scene, { 8.f, 7.f }, "Hotkey '3' is your finger gun!");
-			Tutorial::AddTutorialText(scene, { 51.f, 18.f }, "This is an archer! Ranged enemy!");
-		}
+		// Save serialized file
+		ofs.close();
 	}
 
 	/*!

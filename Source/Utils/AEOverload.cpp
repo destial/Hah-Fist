@@ -157,7 +157,7 @@ bool operator== (const AEVec2& lhs, const float& scalar) {
 * @return Output formatted as {x,y}
 */
 std::ostream& operator<< (std::ostream& os, const AEVec2& rhs) {
-	os << '{' << rhs.x << ", " << rhs.y << '}';
+	os << '{' << rhs.x << ',' << rhs.y << '}';
 	return os;
 }
 

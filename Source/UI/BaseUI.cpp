@@ -88,11 +88,11 @@ void BaseUI::RenderText() {
 	// Split the lines into its newline (if any)
 	std::vector<std::string> lines;
 	size_t start = 0;
-	size_t nline = text.find('\n');
+	size_t nline = text.find('|');
 	while (nline != text.npos) {
-		lines.push_back(text.substr(start, text.find('\n', start) - start));
+		lines.push_back(text.substr(start, text.find('|', start) - start));
 		start = nline + 1;
-		nline = text.find('\n', start);
+		nline = text.find('|', start);
 	}
 	lines.push_back(text.substr(start));
 
