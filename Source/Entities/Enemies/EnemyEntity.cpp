@@ -3,7 +3,8 @@
 * @author Name (brandonshaohui.koh@digipen.edu)
 * @date 21 January 2026
 * @course CSD1451
-* @brief Declaration/Definition file for abcxyz
+* @brief This source file contains the definitions of class EnemyEntity as well as its member
+*		 functions which is in charge of the behaviours of the Enemy.
 */
 #include "EnemyEntity.hpp"
 #include "../../Utils/MeshRenderer.hpp"
