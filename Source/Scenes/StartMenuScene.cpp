@@ -103,7 +103,7 @@ void StartMenuScene::Init() {
 	});
 
 	// Transition button based on toggled level menu status
-	start->AddUpdateListener(this, [start](const f32& dt){
+	start->AddUpdateListener(this, [start](const f32&){
 		start->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f, level_panel);
 	});
 
@@ -116,7 +116,7 @@ void StartMenuScene::Init() {
 	});
 
 	// Transition button based on toggled level menu status
-	credits->AddUpdateListener(this, [credits](const f32& dt) {
+	credits->AddUpdateListener(this, [credits](const f32&) {
 		credits->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f, level_panel);
 	});
 
@@ -129,7 +129,7 @@ void StartMenuScene::Init() {
 	});
 
 	// Transition button based on toggled level menu status
-	quit->AddUpdateListener(this, [quit](const f32& dt) {
+	quit->AddUpdateListener(this, [quit](const f32&) {
 		quit->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f, level_panel); 
 	});
 
@@ -140,7 +140,7 @@ void StartMenuScene::Init() {
 	title->SetInteractive(false);
 
 	// Transition title based on toggled level menu status
-	title->AddUpdateListener(this, [title](const f32& dt) {
+	title->AddUpdateListener(this, [title](const f32&) {
 		title->position.x = Utils::LerpCircle(Utils::GetWorldWidth() * 0.5f, -Utils::GetWorldWidth() * 0.5f, level_panel);
 	});
 
@@ -154,7 +154,7 @@ void StartMenuScene::Init() {
 	});
 
 	// Transition button based on toggled level menu status
-	back->AddUpdateListener(this, [back](const f32& dt) {
+	back->AddUpdateListener(this, [back](const f32&) {
 		back->position.x = Utils::LerpCircle(Utils::GetWorldWidth() + 2.5f, Utils::GetWorldWidth() + 2.5f - Utils::GetWorldWidth(), level_panel);
 	});
 
@@ -204,7 +204,7 @@ void StartMenuScene::Init() {
 			time->SetInteractive(false); // Not an actual button, just text
 
 			// Transition text based on toggled level menu status
-			time->AddUpdateListener(this, [time, w](const f32& dt) {
+			time->AddUpdateListener(this, [time, w](const f32&) {
 				time->position.x = Utils::LerpCircle(w, w - Utils::GetWorldWidth(), level_panel);
 			});
 
@@ -220,7 +220,7 @@ void StartMenuScene::Init() {
 		}
 
 		// Transition button based on toggled level menu status
-		level_button->AddUpdateListener(this, [level_button, w](const f32& dt) {
+		level_button->AddUpdateListener(this, [level_button, w](const f32&) {
 			level_button->position.x = Utils::LerpCircle(w, w - Utils::GetWorldWidth(), level_panel);
 		});
 
@@ -233,21 +233,27 @@ void StartMenuScene::Init() {
 	unlock_all->scale *= 0.5f;
 	unlock_all->text_size *= 0.5f;
 	unlock_all->AddClickListener([buttons, unlock_all](BaseUI::MouseButton b) {
-		for (ButtonUI* level_button : buttons) { // Change behaviour of level buttons to be interactable
-			int l = level_button->text[0] - '1';
-			LevelManager::SetLevelTime(l, 1);
-			level_button->SetInteractive(true);
-			level_button->AddClickListener([l, level_button](BaseUI::MouseButton b) {
-				if (b & BaseUI::MouseButton::LEFT) { // When clicked, load level and transition into game
-					LevelManager::SetLevel(l);
-					SceneManager::GetInstance()->SetNextScene(Scenes::GAME);
-				}
-			});
-			level_button->color = { 255, 255, 255, 255 };
-		}
+		if (b & BaseUI::MouseButton::LEFT) {
+			for (ButtonUI* level_button : buttons) { // Change behaviour of level buttons to be interactable
+				int l = level_button->text[0] - '1';
+				LevelManager::SetLevelTime(l, 1);
+				level_button->SetInteractive(true);
+				level_button->AddClickListener([l, level_button](BaseUI::MouseButton b) {
+					if (b & BaseUI::MouseButton::LEFT) { // When clicked, load level and transition into game
+						LevelManager::SetLevel(l);
+						SceneManager::GetInstance()->SetNextScene(Scenes::GAME);
+					}
+					});
+				level_button->color = { 255, 255, 255, 255 };
+			}
 
-		// Save player data once forced unlocked
-		LevelManager::SavePlayerData();
+			// Save player data once forced unlocked
+			LevelManager::SavePlayerData();
+		}
+	});
+	unlock_all->AddUpdateListener(this, [unlock_all](const f32&) {
+		// Transition button based on toggled level menu status
+		unlock_all->position.x = Utils::LerpCircle(Utils::GetWorldWidth() + 5.f, 5.f, level_panel);
 	});
 	scene_entities.push_back(unlock_all);
 #endif
@@ -260,7 +266,7 @@ void StartMenuScene::Init() {
 	master_vol->scale = { BUTTON_SCALE_X * 0.75f, BUTTON_SCALE_Y * 0.35f };
 	master_vol->text_size = 7.5f;
 	master_vol->text_alignment = BaseUI::TextAlignment::LEFT_CORNER;
-	master_vol->AddUpdateListener(this, [master_vol](const f32 &dt) {
+	master_vol->AddUpdateListener(this, [master_vol](const f32&) {
 		// Update group volume based on slider value when interacted with
 		AEAudioSetGroupVolume(Game::GetMusicGroup(), AEClamp(master_vol->GetValue(), 0.f, 1.f));
 		master = master_vol->GetValue();
@@ -291,7 +297,7 @@ void StartMenuScene::Init() {
 	sfx_vol->scale = { BUTTON_SCALE_X * 0.75f, BUTTON_SCALE_Y * 0.35f };
 	sfx_vol->text_size = 7.5f;
 	sfx_vol->text_alignment = BaseUI::TextAlignment::LEFT_CORNER;
-	sfx_vol->AddUpdateListener(this, [sfx_vol](const f32& dt) {
+	sfx_vol->AddUpdateListener(this, [sfx_vol](const f32&) {
 		// Update group volume based on slider value when interacted with
 		AEAudioSetGroupVolume(Game::GetSfxGroup(), AEClamp(sfx_vol->GetValue(), 0.f, 1.f));
 		sfx = sfx_vol->GetValue();
@@ -320,6 +326,14 @@ void StartMenuScene::Init() {
 	scene_entities.push_back(back);
 	scene_entities.push_back(credits);
 	scene_entities.push_back(title);
+
+	// Initialize background image
+	ImageUI* bgd = new ImageUI{ ASSET_BACKGROUND_IMAGE, {Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f} };
+	bgd->layer = BaseEntity::RenderLayer::BACKGROUND;
+	bgd->scale = { Utils::GetWorldWidth(), Utils::GetWorldHeight() };
+	bgd->color = {255, 220, 220, 220};
+	AddEntityToScene(bgd);
+
 	Game::SetBackgroundColor({ 1.f, 0.3f, 0.3f, 0.3f });
 
 	// Play looped main menu music

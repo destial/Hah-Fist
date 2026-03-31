@@ -3,6 +3,7 @@
 #define __LASER_ENTITY_H
 #include "../GameObjectEntity.hpp"
 #include "../../Items/SpriteSheet.hpp"
+
 class LaserEntity : public GameObjectEntity {
 protected:
 	GameObjectEntity* owner;
@@ -10,9 +11,9 @@ protected:
 	f32 damage;
 public:
 	LaserEntity(AEVec2 pos, GameObjectEntity* _owner, f32 _damage);
-	~LaserEntity();
-	void Update(const f32& dt);
-	void PostUpdate(const f32& dt);
-	void OnCollide(GameObjectEntity* other);
+	virtual ~LaserEntity();
+	virtual void PostUpdate(const f32& dt);
+	virtual void OnCollide(GameObjectEntity* other);
 };
+
 #endif

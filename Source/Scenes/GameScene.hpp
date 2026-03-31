@@ -13,6 +13,14 @@
 #ifndef __GAMESCENE_H
 #define __GAMESCENE_H
 #include "BaseScene.hpp"
+
+/*!
+* @brief Game state enumerator
+*/
+enum struct GameState : int {
+	INIT, PLAYING = 0, PAUSE, LOST, WON
+};
+
 /*!
 * @brief Game scene class
 * @brief Contains the level data, player, enemies, etc.
@@ -20,9 +28,7 @@
 class GameScene : public BaseScene {
 protected:
 	f32 game_timer;
-	enum struct GameState : int {
-		INIT, PLAYING = 0, LOST, WON
-	} game_state;
+	GameState game_state;
 	static std::vector<BaseEntity*> staticEntities;
 public:
 	GameScene(); // Ctor
@@ -61,6 +67,12 @@ public:
 	* @brief Called when the current level has been lost
 	*/
 	void Lose();
+
+	/*!
+	* @brief Get the current game state
+	* @return The current enumerator of game state actively
+	*/
+	GameState GetGameState() const;
 
 	/*!
 	* @brief Get the vector of all static entities in the scene

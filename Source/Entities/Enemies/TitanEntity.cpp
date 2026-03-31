@@ -20,10 +20,6 @@ TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, BossEntity(pos) {
 TitanEntity::~TitanEntity() {
 }
 
-void TitanEntity::PreUpdate(const f32& dt) {
-	BossEntity::PreUpdate(dt);
-}
-
 void TitanEntity::Update(const f32& dt) {
 	shoot_timer -= dt;
 	BossEntity::Update(dt);
@@ -56,28 +52,20 @@ void TitanEntity::PostUpdate(const f32& dt) {
 	BossEntity::PostUpdate(dt);
 }
 
-void TitanEntity::Render() {
-	BossEntity::Render();
-}
-
-void TitanEntity::OnCollide(GameObjectEntity* go) {
-	BossEntity::OnCollide(go);
-}
-
-void TitanEntity::OnIdle(const f32& dt) {	
+void TitanEntity::OnIdle(const f32&) {	
 	if (boss_activated) {
 		SwitchState(FSM::CHASE);
 	}
 }
 
-void TitanEntity::OnPatrol(const f32& dt) {
+void TitanEntity::OnPatrol(const f32&) {
 	if (stateTimer < 0.f) {
 		SwitchState(FSM::CHASE);
 	}
 }
 
-void TitanEntity::OnChase(const f32& dt) {
-	Player* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<Player>();
+void TitanEntity::OnChase(const f32&) {
+	PlayerEntity* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<PlayerEntity>();
 	if (!player) return;
 
 	dir.x = (player->position.x > position.x) ? 1.f : -1.f;
@@ -92,17 +80,15 @@ void TitanEntity::OnChase(const f32& dt) {
 
 }
 
-void TitanEntity::OnStun(const f32& dt) {
-	if (pBody->is_standing_above && shoot_timer < 0.f)
-	{
+void TitanEntity::OnStun(const f32&) {
+	if (pBody->is_standing_above && shoot_timer < 0.f) {
 		CameraManager::GetInstance()->Shake(3.f, 5.f);
 		float healthRatio = health / max_health;
 		float temp = (1.f - healthRatio) / 0.75f;
 		temp = AEClamp(temp, 0.f, 1.f);
 
 		int projectiles = base_projectiles + static_cast<int>(temp * extra_projectiles);
-		for (int i = 0; i < projectiles; i++)
-		{
+		for (int i = 0; i < projectiles; i++) {
 			AEVec2 Pos{ Utils::RandRange(boss_room_center.x-attack_range,boss_room_center.x +attack_range), BOSS1ROOMPOSY };
 			AEVec2 shootDir{ 0.f, -1.f };
 			AEVec2Normalize(&shootDir, &shootDir);
@@ -122,9 +108,8 @@ void TitanEntity::OnStun(const f32& dt) {
 	}
 }
 
-void TitanEntity::OnDead(const f32& dt) {
-	if (GameScene* game = dynamic_cast<GameScene*>(SceneManager::GetInstance()->GetCurrentScene()))
-	{
+void TitanEntity::OnDead() {
+	if (GameScene* game = dynamic_cast<GameScene*>(SceneManager::GetInstance()->GetCurrentScene())) {
 		game->Win();
 	}
 	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);

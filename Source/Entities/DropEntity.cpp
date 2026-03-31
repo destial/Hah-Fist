@@ -5,26 +5,17 @@ DropEntity::DropEntity(AEVec2 pos, f32 mass, CollisionShape shape) : GameObjectE
 
 DropEntity::~DropEntity() {}
 
-void DropEntity::OnCollide(GameObjectEntity* go)
-{
-	if (go->entity_type == EntityType::PLAYER)
-	{
+void DropEntity::OnCollide(GameObjectEntity* go) {
+	if (go->entity_type == EntityType::PLAYER) {
 		OnPickup(go);
 		SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 	}
 }
 
-void DropEntity::Update(const f32& dt)
-{
-
+void DropEntity::Update(const f32&) {
+	// Empty body
 }
 
-void DropEntity::OnPickup(GameObjectEntity* pickupper)
-{
-
-}
-
-void DropEntity::Render()
-{
-	GameObjectEntity::Render();
+void DropEntity::OnPickup(GameObjectEntity*) {
+	// Empty body
 }

@@ -66,7 +66,7 @@ void EnemyEntity::Update(const f32& dt)
 		}
 		case FSM::DEAD:
 		{
-			OnDead(dt);
+			OnDead();
 			break;
 		}
 		default:
@@ -88,15 +88,6 @@ void EnemyEntity::PostUpdate(const f32& dt)
 	GameObjectEntity::PostUpdate(dt);
 }
 
-void EnemyEntity::Render()
-{
-	GameObjectEntity::Render();
-}
-
-void EnemyEntity::OnCollide(GameObjectEntity* go) {
-	GameObjectEntity::OnCollide(go);
-}
-
 void EnemyEntity::OnHit()
 {
 	timeElapsedSinceLastDamage = 0.0f;
@@ -106,13 +97,12 @@ void EnemyEntity::OnHit()
 	SceneManager::GetInstance()->GetCurrentScene()->GetParticleSystem()->SpawnParticles(ParticleType::SPARKLE, this->position, 3, 1.f, 1.f, 0.5f);
 }
 
-void EnemyEntity::OnIdle(const f32& dt)
+void EnemyEntity::OnIdle(const f32&)
 {
 	// Empty for now
 }
 
-void EnemyEntity::OnPatrol(const f32& dt)
-{
+void EnemyEntity::OnPatrol(const f32&) {
 	// Clamps the acceleration of object
 	if (abs(velocity.x) < speed)
 	{
@@ -125,24 +115,21 @@ void EnemyEntity::OnPatrol(const f32& dt)
 	}
 }
 
-void EnemyEntity::OnChase(const f32& dt)
-{
+void EnemyEntity::OnChase(const f32&) {
 	// Empty for now
 }
 
-void EnemyEntity::OnAttack(const f32& dt)
-{
+void EnemyEntity::OnAttack(const f32&) {
 	// Empty for now
 }
 
-void EnemyEntity::OnStun(const f32& dt)
-{
+void EnemyEntity::OnStun(const f32&) {
 	// Empty for now
 }
 
-void EnemyEntity::OnDead(const f32& dt)
+void EnemyEntity::OnDead()
 {
-	CoinEntity* coin = new CoinEntity(position);
+	CoinEntity* coin = new CoinEntity{ position };
 	SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(coin);
 	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 }

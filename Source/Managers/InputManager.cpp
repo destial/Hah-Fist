@@ -10,13 +10,13 @@
 #include "AEEngine.h"
 #include "AssetManager.hpp"
 
-InputHandler::InputHandler() 
+InputManager::InputManager() 
 : keys_t(0), keys_c(0), keys_r(0), keys_p(0) {
 	// initialize input event pointer
 	this->event = new InputEvent{ keys_t, keys_p, keys_c, keys_r };
 	this->EndFrame();
 }
-InputHandler::~InputHandler() {
+InputManager::~InputManager() {
 	// clear all listeners
 	InputEvent::Listeners.clear();
 
@@ -24,7 +24,7 @@ InputHandler::~InputHandler() {
 	delete event;
 }
 
-void InputHandler::Update(const f32& dt) {
+void InputManager::Update(const f32&) {
 	// clear all currently pressed keys
 	keys_c.clear();
 	for (u8 i = 0; i < 0xFF; ++i) { // loop through every key
@@ -76,14 +76,14 @@ void InputHandler::Update(const f32& dt) {
 	}
 }
 
-void InputHandler::EndFrame() {
+void InputManager::EndFrame() {
 	// clear the key vectors
 	keys_t.clear();
 	keys_p.clear();
 	keys_r.clear();
 }
 
-// Global InputListener, uses the InputHandler instance as the owner
-InputEvent::InputListeners& operator+= (InputEvent::InputListeners& lhs, InputEvent::InputListener rhs) {
-	return InputEvent::Listeners += std::pair<void*, InputEvent::InputListener>{InputHandler::GetInstance(), rhs};
+// Global InputListener, uses the InputManager instance as the owner
+InputEvent::InputListeners& operator+= (InputEvent::InputListeners&, InputEvent::InputListener rhs) {
+	return InputEvent::Listeners += std::pair<void*, InputEvent::InputListener>{InputManager::GetInstance(), rhs};
 }

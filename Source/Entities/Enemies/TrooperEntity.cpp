@@ -15,14 +15,6 @@ TrooperEntity::~TrooperEntity() {
 	// Empty by design
 }
 
-void TrooperEntity::PreUpdate(const f32& dt) {
-	EnemyEntity::PreUpdate(dt);
-}
-
-void TrooperEntity::Update(const f32& dt) {
-	EnemyEntity::Update(dt);
-}
-
 void TrooperEntity::PostUpdate(const f32& dt) {
 	// Animation of Trooper Entity
 	if (velocity.x < 0)
@@ -40,10 +32,6 @@ void TrooperEntity::PostUpdate(const f32& dt) {
 		}
 	}
 	GameObjectEntity::PostUpdate(dt);
-}
-
-void TrooperEntity::Render() {
-	EnemyEntity::Render();
 }
 
 void TrooperEntity::OnCollide(GameObjectEntity* go) {
@@ -66,12 +54,7 @@ void TrooperEntity::OnCollide(GameObjectEntity* go) {
 	}
 }
 
-void TrooperEntity::OnHit()
-{
-	EnemyEntity::OnHit();
-}
-
-void TrooperEntity::OnIdle(const f32& dt) {
+void TrooperEntity::OnIdle(const f32&) {
 	// Trooper's idle behaviour
 	velocity.x = 0.f;
 	if (stateTimer < 0.f) {
@@ -81,19 +64,7 @@ void TrooperEntity::OnIdle(const f32& dt) {
 	}
 }
 
-void TrooperEntity::OnPatrol(const f32& dt) {
-	EnemyEntity::OnPatrol(dt);
-}
-
-void TrooperEntity::OnChase(const f32& dt) {
-	// Trooper's chase behaviour
-}
-
-void TrooperEntity::OnStun(const f32& dt) {
-	// Trooper's stun behaviour
-}
-
-void TrooperEntity::OnDead(const f32& dt) {
+void TrooperEntity::OnDead() {
 	// Trooper's death behaviour
 	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 }

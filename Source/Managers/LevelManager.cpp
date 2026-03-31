@@ -9,7 +9,8 @@
 #include "LevelManager.hpp"
 #include "../UI/ImageUI.hpp"
 #include <fstream>
-#include <cstdio>
+#include <sstream>
+#include <vector>
 
 namespace Tutorial {
 	/*!
@@ -27,11 +28,29 @@ namespace Tutorial {
 		scene->AddEntityToScene(tut);
 		return tut;
 	}
+
+	/*!
+	* @brief Load the tutorial texts from file
+	* @param level - The level to load
+	* 
+	*/
+	static std::vector<BaseUI*> LoadTutorialTexts(int level) {
+		std::vector<BaseUI*> ui;
+		std::ostringstream oss;
+		oss << "Assets/tut_" << level << ".dat";
+		std::ifstream is{ oss.str() };
+		if (is.fail())
+			return ui;
+
+
+
+		return ui;
+	}
 }
 
 namespace LevelManager {
 	static std::map<int, float> unlocked_levels;
-	static int level; // the currently played level
+	static int global_level; // the currently played level
 
 	/*!
 	* @brief Set a level's fastest time
@@ -49,7 +68,7 @@ namespace LevelManager {
 	* @return The current level
 	*/
 	int GetLevel() {
-		return level;
+		return global_level;
 	}
 
 	/*!
@@ -58,7 +77,7 @@ namespace LevelManager {
 	* @param l - The next level
 	*/
 	void SetLevel(int l) {
-		level = l;
+		global_level = l;
 	}
 
 	/*!
@@ -95,12 +114,20 @@ namespace LevelManager {
 	* @param scene - The game scene pointer
 	*/
 	void LoadTutorial(GameScene* scene) {
-		if (level > 2) {
+		if (global_level > 2) {
+			return;
+		}
+
+		std::vector<BaseUI*> texts = Tutorial::LoadTutorialTexts(global_level);
+		if (texts.size() != 0) {
+			for (BaseUI* ui : texts) {
+				scene->AddEntityToScene(ui);
+			}
 			return;
 		}
 
 		// Hard coded tutorial text
-		if (level == 0) {
+		if (global_level == 0) {
 			Tutorial::AddTutorialText(scene, { -80.f, 16.f }, "Hold left mouse button to charge your fist!\nRelease to use your attack!");
 			Tutorial::AddTutorialText(scene, { -80.f, 13.f }, "This is your turbo fist!");
 			Tutorial::AddTutorialText(scene, { 5.f, 21.f }, "Charge your first to get past!");
@@ -109,14 +136,14 @@ namespace LevelManager {
 			Tutorial::AddTutorialText(scene, { 160.f, 22.f }, "Next is the boss room!\nKill the boss to advance!");
 		}
 
-		if (level == 1) {
+		if (global_level == 1) {
 			Tutorial::AddTutorialText(scene, { 16.f, 16.f }, "Cycle between '1', '2' to switch your fists!");
 			Tutorial::AddTutorialText(scene, { 16.f, 13.f }, "The grapple fist pulls enemies to you!\nTry combo-ing your grapple and turbo fist!");
 			Tutorial::AddTutorialText(scene, { 112.f, 10.f }, "Don't fall in the void!")->scale = { 10.f, 1.5f };
 			Tutorial::AddTutorialText(scene, { 194.f, 13.f }, "Spiders spawn babies when killed!");
 		}
 
-		if (level == 2) {
+		if (global_level == 2) {
 			Tutorial::AddTutorialText(scene, { 8.f, 7.f }, "Hotkey '3' is your finger gun!");
 			Tutorial::AddTutorialText(scene, { 51.f, 18.f }, "This is an archer! Ranged enemy!");
 		}

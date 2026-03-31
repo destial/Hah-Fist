@@ -14,7 +14,7 @@
 //For Debug Functions
 #include "../Entities/StaticEntities/BossSpawnTriggerEntity.hpp"
 
-Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
+PlayerEntity::PlayerEntity(AEVec2 pos) : GameObjectEntity(pos) {
 	int columns{ 18 };
 	int rows{ 3 };
 
@@ -36,20 +36,20 @@ Player::Player(AEVec2 pos) : GameObjectEntity(pos) {
 	go_type = PhysicsType::DYNAMIC;
 }
 
-Player::~Player() {
+PlayerEntity::~PlayerEntity() {
 	std::printf("Called Player deconstructor\n");
-	for (Weapon* wp : weapons)
+	for (WeaponEntity* wp : weapons)
 	{
 		SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(wp);
 	}
 }
 
-void Player::PreUpdate(const f32& dt) {
+void PlayerEntity::PreUpdate(const f32& dt) {
 	GameObjectEntity::PreUpdate(dt);
 	color = { 255, 255, 255, 255 };
 }
 
-void Player::Update(const f32& dt) {
+void PlayerEntity::Update(const f32& dt) {
 	GameObjectEntity::Update(dt);
 
 	if ((timeElapsedSinceLastDamage / PLAYER_CONTROL_LOCK_AFTER_HIT) <= 1.0)
@@ -73,7 +73,7 @@ void Player::Update(const f32& dt) {
 	}
 }
 
-void Player::PostUpdate(const f32& dt) {
+void PlayerEntity::PostUpdate(const f32& dt) {
 	GameObjectEntity::PostUpdate(dt);
 	currentRow = 1;
 	if (velocity.x != 0) {
@@ -101,12 +101,12 @@ void Player::PostUpdate(const f32& dt) {
 	}
 }
 
-void Player::Render() {
+void PlayerEntity::Render() {
 	sprite->Render(transform, color, currentRow, currentCol);
 	GameObjectEntity::Render();
 }
 
-void Player::OnCollide(GameObjectEntity* go) {
+void PlayerEntity::OnCollide(GameObjectEntity* go) {
 	//f32 p_health = health;
 	
 	if (go->entity_type == EntityType::ENEMY) {
@@ -126,11 +126,11 @@ void Player::OnCollide(GameObjectEntity* go) {
 	GameObjectEntity::OnCollide(go);
 }
 
-void Player::AddWeapon(Weapon* weapon) {
+void PlayerEntity::AddWeapon(WeaponEntity* weapon) {
 	weapons.push_back(weapon);
 }
 
-void Player::SwitchWeapon(int index) {
+void PlayerEntity::SwitchWeapon(int index) {
 	if (weapons.size() <= index) 
 		return;
 
@@ -142,7 +142,7 @@ void Player::SwitchWeapon(int index) {
 	}
 }
 
-Weapon* Player::CurrentWeapon() const {
+WeaponEntity* PlayerEntity::CurrentWeapon() const {
 	for (int i{ 0 }; i < weapons.size(); ++i) {
 		if (weapons[i]->isActive) {
 			return weapons[i];
@@ -151,23 +151,23 @@ Weapon* Player::CurrentWeapon() const {
 	return nullptr;
 }
 
-void Player::AddCoin() {
+void PlayerEntity::AddCoin() {
 	coinCount++;
 }
 
-int Player::Coins() const {
+int PlayerEntity::Coins() const {
 	return coinCount;
 }
 
-f32 Player::GetSpeed() const {
+f32 PlayerEntity::GetSpeed() const {
 	return speed;
 }
 
-void Player::Jump() {
+void PlayerEntity::Jump() {
 	velocity.y += jumpVelocity;
 }
 
-void Player::Move(AEVec2 const& dir) {
+void PlayerEntity::Move(AEVec2 const& dir) {
 	//f32 spd = velocity.y == 0 ? speed : speed * pBody->air_strength * 0.75f;
 	if (!(dir.x < 0 && velocity.x < 0 || dir.x > 0 && velocity.x > 0)) {
 		velocity.x = 0.f;

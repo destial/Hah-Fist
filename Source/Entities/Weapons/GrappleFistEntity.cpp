@@ -12,18 +12,18 @@
 #include "../../Managers/AssetManager.hpp"
 
 
-GrappleFistWeapon::GrappleFistWeapon(AEVec2 pos) : Weapon{pos} {
+GrappleFistWeapon::GrappleFistWeapon(AEVec2 pos) : WeaponEntity{ pos }, snapshottedAttackDirection{ 0 } {
 	weaponChannels = false;
 	image = AssetManager::GetTexture(ASSET_GRAPPLEFIST_IMAGE);
 	cd_duration = 1.5f;
 	damage = 50.f;
 }
 
-GrappleFistWeapon::~GrappleFistWeapon() {}
+GrappleFistWeapon::~GrappleFistWeapon() {} // Empty dtor
 
 void GrappleFistWeapon::PreUpdate(const f32& dt) {
 	if (grappleState == INACTIVE) {
-		Weapon::PreUpdate(dt);
+		WeaponEntity::PreUpdate(dt);
 	}
 }
 
@@ -31,14 +31,14 @@ void GrappleFistWeapon::Update(const f32& dt) {
 	if (!isActive) {
 		return;
 	}
-	Weapon::Update(dt);
+	WeaponEntity::Update(dt);
 }
 
 void GrappleFistWeapon::PostUpdate(const f32& dt) {
 	if (!isActive) {
 		return;
 	}
-	Weapon::PostUpdate(dt);
+	WeaponEntity::PostUpdate(dt);
 	AEVec2 travel_direction = position - player_entity->position;
 	if (grappleState == SHOOTING) {
 		travelDuration += dt;
@@ -86,10 +86,6 @@ void GrappleFistWeapon::PostUpdate(const f32& dt) {
 	}
 }
 
-void GrappleFistWeapon::Render() {
-	Weapon::Render();
-}
-
 void GrappleFistWeapon::OnCollide(GameObjectEntity* go) {
 	if (go->go_type == PhysicsType::TRIGGER) {
 		return;
@@ -119,7 +115,7 @@ void GrappleFistWeapon::Attack() {
 }
 
 void GrappleFistWeapon::ResetWeapon() {
-	Weapon::ResetWeapon();
+	WeaponEntity::ResetWeapon();
 	grappleState = GRAPPLE_STATE::INACTIVE;
 	travelDuration = 0.0f;
 	grappledObject = nullptr;

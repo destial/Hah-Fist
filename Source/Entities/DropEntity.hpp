@@ -11,7 +11,6 @@ public:
 	~DropEntity();
 
 	void Update(const f32& dt) override;
-	void Render() override;
 
 	void OnCollide(GameObjectEntity* go) override;
 	virtual void OnPickup(GameObjectEntity* pickupper);

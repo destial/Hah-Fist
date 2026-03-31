@@ -41,57 +41,43 @@ void BaseProjectile::PreUpdate(const f32& dt) {
 }
 
 void BaseProjectile::Update(const f32& dt) {
-
-    if (!isActive) {
+    if (!isActive) 
         return;
-    }
+    
     GameObjectEntity::Update(dt);
  
     age += dt;
-    if (age >= lifetime)
-    {
-        
+    if (age >= lifetime){
         OnExpire();
-
     }
-
-}
-void BaseProjectile::PostUpdate(const f32& dt)
-{
-    GameObjectEntity::PostUpdate(dt);
 }
 
-void BaseProjectile::Render()
-{
+void BaseProjectile::Render() {
     sprite->Render(transform, color, currentRow, currentCol);
     GameObjectEntity::Render();
 }
 
-void BaseProjectile::OnCollide(GameObjectEntity* other)
-{
+void BaseProjectile::OnCollide(GameObjectEntity* other) {
     if (!other || other == this || other == owner)
         return;
 
     if (!other->isActive)
         return;
+
     if (other->entity_type == EntityType::NONE)
-    {
         return;
-    }
+
     if (dynamic_cast<ExplosionEntity*>(other))
-    {
         return;
-    }
 
     OnHit(other);
 }
-void BaseProjectile::OnHit(GameObjectEntity* other)
-{
+
+void BaseProjectile::OnHit(GameObjectEntity* other) {
     // Apply direct damage
     other->health -= damage;
     
-    if (other->entity_type == EntityType::ENEMY)
-    {
+    if (other->entity_type == EntityType::ENEMY) {
         EnemyEntity* e = dynamic_cast<EnemyEntity*>(other);
         if (e) {
             e->OnHit();
@@ -100,24 +86,22 @@ void BaseProjectile::OnHit(GameObjectEntity* other)
             }
         }
     }
-    else if (other->entity_type == EntityType::BREAKABLE_STATIC)
-    {
-
+    else if (other->entity_type == EntityType::BREAKABLE_STATIC) {
+        // Empty body
     }
     OnExpire();
 }
-void BaseProjectile::OnExpire()
-{
+
+void BaseProjectile::OnExpire() {
     isActive = false;
     SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 }
 
-bool BaseProjectile::TryChangeOwnership(GameObjectEntity* newOwner)
-{
-    if (this->owner == newOwner)
+bool BaseProjectile::TryChangeOwnership(GameObjectEntity* newOwner) {
+    if (owner == newOwner)
     {
         return false;
     }
-    this->owner = newOwner;
+    owner = newOwner;
     return true;
 }

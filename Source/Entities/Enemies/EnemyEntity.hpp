@@ -20,8 +20,6 @@ public:
 	virtual void PreUpdate(const f32& dt);
 	virtual void Update(const f32& dt);
 	virtual void PostUpdate(const f32& dt);
-	virtual void Render();
-	virtual void OnCollide(GameObjectEntity* go);
 
 	// Virtual methods to Enemy Base class
 	virtual void OnHit();
@@ -30,7 +28,7 @@ public:
 	virtual void OnChase(const f32& dt);
 	virtual void OnAttack(const f32& dt);
 	virtual void OnStun(const f32& dt);
-	virtual void OnDead(const f32& dt);
+	virtual void OnDead();
 
 	// Helper function for switching the state.
 	void SwitchState(FSM newState, f32 timeInNewState = 0.0f);

@@ -7,8 +7,8 @@
 
 namespace DebugUtils {
 	struct DebugRender {
-		AEGfxVertexList* mesh;
-		AEMtx33 transform;
+		AEGfxVertexList* mesh{nullptr};
+		AEMtx33 transform{ 0 };
 
 		Color color;
 	};
@@ -43,7 +43,7 @@ namespace DebugUtils {
 	}
 
 	void RenderText(AEVec2 world_pos, std::string text, Color color, f32 size, bool cam) {
-		int font = AssetManager::GetFontId(ASSET_DEBUG_FONT);
+		u8 font = AssetManager::GetFontId(ASSET_DEBUG_FONT);
 		AEVec2 screen = Utils::GameToTextScreen(world_pos.x, world_pos.y, cam);
 		const char* str = text.c_str();
 		f32 w, h;

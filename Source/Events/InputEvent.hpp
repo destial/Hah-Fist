@@ -17,7 +17,7 @@
 /*!
 * @brief Stores data about what keys are triggered this frame, currently held, released,
 * @brief and the keys on the previous frame. There can only be one instance of this which
-* @brief is found inside InputHandler singleton class.
+* @brief is found inside InputManager singleton class.
 */
 class InputEvent {
 private:

@@ -51,13 +51,7 @@ ProjectileEntity::~ProjectileEntity()
 	// Empty by design
 }
 
-void ProjectileEntity::PreUpdate(const f32& dt)
-{
-	EnemyEntity::PreUpdate(dt);
-}
-
-void ProjectileEntity::Update(const f32& dt)
-{
+void ProjectileEntity::Update(const f32& dt) {
 	EnemyEntity::Update(dt);
 	if (velocity.x < 0) {
 		if (scale.x > 0)
@@ -67,23 +61,13 @@ void ProjectileEntity::Update(const f32& dt)
 		if (scale.x < 0)
 			scale.x *= -1.f;
 	}
-	/*SwitchState(FSM::ATTACK);
-	currentRow = 4;
-	currentCol = 0;*/
 }
 
-void ProjectileEntity::PostUpdate(const f32& dt)
-{
+void ProjectileEntity::PostUpdate(const f32& dt) {
 	GameObjectEntity::PostUpdate(dt);
 }
 
-void ProjectileEntity::Render()
-{
-	EnemyEntity::Render();
-}
-
-void ProjectileEntity::OnCollide(GameObjectEntity* go)
-{
+void ProjectileEntity::OnCollide(GameObjectEntity* go) {
 	EnemyEntity::OnCollide(go);
 	if (go->go_type == PhysicsType::DYNAMIC) {
 		if (EnemyEntity* e = dynamic_cast<EnemyEntity*>(go)) {
@@ -102,12 +86,7 @@ void ProjectileEntity::OnCollide(GameObjectEntity* go)
 	}
 }
 
-void ProjectileEntity::OnHit()
-{
-}
-
-void ProjectileEntity::OnIdle(const f32& dt)
-{
+void ProjectileEntity::OnIdle(const f32& dt) {
 	// ProjectileEntity's idle behaviour
 	velocity.x = 0.f;
 	if (stateTimer < 0.f) {
@@ -136,11 +115,10 @@ void ProjectileEntity::OnIdle(const f32& dt)
 	}
 }
 
-void ProjectileEntity::OnPatrol(const f32& dt)
-{
+void ProjectileEntity::OnPatrol(const f32& dt) {
 	EnemyEntity::OnPatrol(dt);
-	// Checks if Player is within the line of sight, if it is Chase.
-	if (Player* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<Player>()) {
+	// Checks if PlayerEntity is within the line of sight, if it is Chase.
+	if (PlayerEntity* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<PlayerEntity>()) {
 		if (Utils::RayHit({ position.x + std::abs(scale.x) * 0.5f * dir.x,position.y }, { PROJECTILE_ENTITY_LINE_OF_SIGHT * dir.x,0.f }, player)) {
 			SwitchState(FSM::CHASE, 5.f);
 			speed *= 1.1f; // Increases speed by 10%
@@ -160,10 +138,9 @@ void ProjectileEntity::OnPatrol(const f32& dt)
 	}
 }
 
-void ProjectileEntity::OnChase(const f32& dt)
-{
+void ProjectileEntity::OnChase(const f32& dt) {
 	// Checks if there exists a player
-	if (Player* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<Player>()) {
+	if (PlayerEntity* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<PlayerEntity>()) {
 		dir.x = player->position.x - position.x;
 		AEVec2Normalize(&dir, &dir);
 		if (abs(velocity.x) < speed)
@@ -231,12 +208,6 @@ void ProjectileEntity::OnAttack(const f32& dt) {
 	}
 }
 
-void ProjectileEntity::OnStun(const f32& dt)
-{
-	EnemyEntity::OnStun(dt);
-}
-
-void ProjectileEntity::OnDead(const f32& dt)
-{
+void ProjectileEntity::OnDead() {
 	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 }

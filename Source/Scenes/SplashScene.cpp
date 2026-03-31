@@ -1,25 +1,25 @@
 /*!
-* @file SplashScreen.cpp
+* @file SplashScene.cpp
 * @author Rance Andres (andresrancerowell.g@digipen.edu)
 * @date 2 March 2026
 * @course CSD1451
 * @brief Definition file for a splash screen scene
 */
 
-#include "SplashScreen.hpp"
+#include "SplashScene.hpp"
 #include "../UI/ImageUI.hpp"
 #include "../Utils/Utils.hpp"
 #include "../Managers/AssetManager.hpp"
 #include "../Managers/SceneManager.hpp"
 
-SplashScreen::SplashScreen() : BaseScene{} {} // Empty ctor
+SplashScene::SplashScene() : BaseScene{} {} // Empty ctor
 
-SplashScreen::~SplashScreen() {} // Empty dtor
+SplashScene::~SplashScene() {} // Empty dtor
 
 /*!
 * @brief Inherited: Initialize the scene with the splash screen image
 */
-void SplashScreen::Init() {
+void SplashScene::Init() {
 	// Initialize the background splash screen image
 	ImageUI* screen = new ImageUI{ ASSET_SPLASHSCREEN_IMAGE, { Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f } };
 	screen->scale = { Utils::GetWorldWidth(), Utils::GetWorldHeight() };
@@ -35,7 +35,7 @@ void SplashScreen::Init() {
 * @brief Inherited: Update all entities in the scene
 * @param dt - The delta time for this frame
 */
-void SplashScreen::Update(const f32& dt) {
+void SplashScene::Update(const f32& dt) {
 	BaseScene::Update(dt);
 
 	// Fade the background image according to time

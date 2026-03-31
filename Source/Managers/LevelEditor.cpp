@@ -65,7 +65,7 @@ void LevelEditor::SetScene(BaseScene* b_scene) {
 void LevelEditor::SelectEntity(BaseEntity* entity) {
 	if (entity == nullptr) // Non-null
 		return;
-	if (Weapon* w = dynamic_cast<Weapon*>(entity)) // Skip weapon entity
+	if (WeaponEntity* w = dynamic_cast<WeaponEntity*>(entity)) // Skip weapon entity
 		return;
 	std::pair<BaseEntity*, AEVec2> pair = { entity, Utils::GetMouseWorld(true) - entity->position };
 	currentSelections.push_back(pair);
@@ -80,7 +80,7 @@ void LevelEditor::RemoveSelectedEntity() {
 		return; // Removing nothing
 
 	for (std::pair<BaseEntity*, AEVec2> const& pair : currentSelections) {
-		if (Weapon* w = dynamic_cast<Weapon*>(pair.first)) 
+		if (WeaponEntity* w = dynamic_cast<WeaponEntity*>(pair.first)) 
 			continue; // Skip weapon entity
 
 		scene->RemoveEntityFromScene(pair.first);

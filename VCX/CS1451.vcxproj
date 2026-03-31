@@ -60,7 +60,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
@@ -143,7 +143,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClCompile Include="..\Source\Scenes\BaseScene.cpp" />
     <ClCompile Include="..\Source\Scenes\CreditsScene.cpp" />
     <ClCompile Include="..\Source\Scenes\GameScene.cpp" />
-    <ClCompile Include="..\Source\Scenes\SplashScreen.cpp" />
+    <ClCompile Include="..\Source\Scenes\SplashScene.cpp" />
     <ClCompile Include="..\Source\Scenes\StartMenuScene.cpp" />
     <ClCompile Include="..\Source\UI\BarUI.cpp" />
     <ClCompile Include="..\Source\UI\BaseUI.cpp" />
@@ -202,7 +202,7 @@ xcopy "$(SolutionDir)Extern\AlphaEngine\lib\fmod.dll" "$(OutDir)" /s /r /y /q</C
     <ClInclude Include="..\Source\Scenes\BaseScene.hpp" />
     <ClInclude Include="..\Source\Scenes\CreditsScene.hpp" />
     <ClInclude Include="..\Source\Scenes\GameScene.hpp" />
-    <ClInclude Include="..\Source\Scenes\SplashScreen.hpp" />
+    <ClInclude Include="..\Source\Scenes\SplashScene.hpp" />
     <ClInclude Include="..\Source\Scenes\StartMenuScene.hpp" />
     <ClInclude Include="..\Source\UI\BarUI.hpp" />
     <ClInclude Include="..\Source\UI\BaseUI.hpp" />

@@ -37,8 +37,8 @@ namespace Game {
 
 // Program Entrypoint
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
-	_In_opt_ HINSTANCE hPrevInstance,
-	_In_ LPWSTR    lpCmdLine,
+	_In_opt_ HINSTANCE,
+	_In_ LPWSTR,
 	_In_ int       nCmdShow) {
 
 #if _DEBUG
@@ -58,7 +58,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 	// Reset the system modules
 	AESysReset();
-	AEFrameRateControllerInit(-1);
+	AEFrameRateControllerInit(static_cast<u32>(-1));
 
 	// Initialize fonts
 	AEGfxFontSystemStart();
@@ -110,12 +110,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 				dt = min(frame_time, 1 / 60.f);
 				Utils::SetDeltaTime(dt);
 				sceneManager.PreUpdate(dt);
-				InputHandler::GetInstance()->Update(dt);
+				InputManager::GetInstance()->Update(dt);
 				sceneManager.Update(dt);
 				sceneManager.PostUpdate(dt);
 				frame_time -= dt;
 			}
-			InputHandler::GetInstance()->EndFrame();
+			InputManager::GetInstance()->EndFrame();
 
 			// -=-=-=-=-=-=-=- Rendering Logic Start -=-=-=-=-=-=-=-
 
@@ -144,7 +144,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// clean up other resources
 	CameraManager::Free();
 	MeshRenderer::Free();
-	InputHandler::Free();
+	InputManager::Free();
 	AssetManager::Free();
 	AESysExit();
 }

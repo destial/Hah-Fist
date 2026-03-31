@@ -14,7 +14,7 @@
 /*!
 * @brief GrappleFistWeapon class manages custom behaviour.
 */
-class GrappleFistWeapon : public Weapon {
+class GrappleFistWeapon : public WeaponEntity {
 protected:
 	f32 grappleSpeedMult{ 50.0f }; //Multiplier for travel speed of the grapple.
 	enum GRAPPLE_STATE {
@@ -24,7 +24,7 @@ protected:
 		HOOKING_OBJECT_TO_PLAYER,
 		HOOKING_PLAYER_TO_STATIC_OBJECT,
 		HOOKING_PLAYER_TO_DYNAMIC_OBJECT,
-	}grappleState{ INACTIVE }; // Current state of this weapon's grapple.
+	} grappleState{ INACTIVE }; // Current state of this weapon's grapple.
 	f32 travelDuration{ 0.0f }; // How long this weapon has been travelling.
 	GameObjectEntity* grappledObject{ nullptr }; // Pointer to the current grappled object.
 	AEVec2 snapshottedAttackDirection; // The travel direction which is snapshotted when the attack is called.
@@ -39,35 +39,28 @@ public:
 	/*!
 	* @brief Destructor function for a GrappleFistWeapon.
 	*/
-	~GrappleFistWeapon();
+	virtual ~GrappleFistWeapon();
 
 	/*!
 	* @brief PreUpdate override for the GrappleFistWeapon.
 	* Blocks the default behaviour of a weapon if the weapon is currently grappling.
 	* @param const f32& dt - delta time.
 	*/
-	void PreUpdate(const f32& dt) override;
+	virtual void PreUpdate(const f32& dt);
 
 	/*!
 	* @brief Update override for the GrappleFistWeapon.
 	* Blocks the base update if this object is inactive.
 	* @param const f32& dt - delta time.
 	*/
-	void Update(const f32& dt) override;
+	virtual void Update(const f32& dt);
 
 	/*!
 	* @brief PostUpdate override for the GrappleFistWeapon.
 	* Handles the behaviour of the grapple depending on its current state.
 	* @param const f32& dt - delta time.
 	*/
-	void PostUpdate(const f32& dt) override;
-
-	/*!
-	* @brief Render override for the GrappleFistWeapon.
-	* Calls the base Render
-	* @param const f32& dt - delta time.
-	*/
-	void Render() override;
+	virtual void PostUpdate(const f32& dt);
 
 	/*!
 	* @brief OnCollide override for the GrappleFistWeapon.
@@ -75,18 +68,18 @@ public:
 	* this collides with.
 	* @param GameObjectEntity* go - object this collides with.
 	*/
-	void OnCollide(GameObjectEntity* go) override;
+	virtual void OnCollide(GameObjectEntity* go);
 
 	/*!
 	* @brief Attack override for the GrappleFistWeapon.
 	* Configures the state and snapshots the direction of firing.
 	*/
-	void Attack() override;
+	virtual void Attack();
 
 	/*!
 	* @brief ResetWeapon override for the GrappleFistWeapon.
 	* Resets states and variables back to 0
 	*/
-	void ResetWeapon();
+	virtual void ResetWeapon();
 };
 #endif

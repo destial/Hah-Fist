@@ -92,7 +92,7 @@ namespace Serialization {
 					s.type = EntityType::PLATFORM;
 				}
 			}
-			else if (Player* p = dynamic_cast<Player*>(en)) {
+			else if (PlayerEntity* p = dynamic_cast<PlayerEntity*>(en)) {
 				s.type = EntityType::PLAYER;
 			}
 			else if (EnemyEntity* enemy = dynamic_cast<EnemyEntity*>(en)) {
@@ -147,7 +147,7 @@ namespace Serialization {
 				break;
 			}
 			case EntityType::PLAYER: {
-				entity = new Player(AEVec2{ en.x, en.y });
+				entity = new PlayerEntity(AEVec2{ en.x, en.y });
 				break;
 			}
 			case EntityType::TROOPER: {
@@ -226,7 +226,7 @@ namespace Serialization {
 			if (dynamic_cast<BaseUI*>(en))
 				continue;
 
-			if (dynamic_cast<Weapon*>(en))
+			if (dynamic_cast<WeaponEntity*>(en))
 				continue;
 
 			vect.push_back(Serialize(en));

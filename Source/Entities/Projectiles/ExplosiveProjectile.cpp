@@ -6,22 +6,15 @@
 #include "../../Entities/Enemies/EnemyEntity.hpp"
 #include "../../Entities/TriggerEntities/ExplosionEntity.hpp"
 
-
-ExplosiveProjectile::ExplosiveProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameObjectEntity* own, bool lerp)
-    : BaseProjectile(pos, dir, speed, dmg, own)
-{
+ExplosiveProjectile::ExplosiveProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameObjectEntity* own, bool)
+: BaseProjectile{ pos, dir, speed, dmg, own } {
     sprite = AssetManager::GetSpriteSheet(ASSET_EXPLOSIVE_PROJECTILE_IMAGE, 1, 1);
 }
 
-void ExplosiveProjectile::Update(const f32& dt)
-{
-    BaseProjectile::Update(dt);
-}
+ExplosiveProjectile::~ExplosiveProjectile() {} // Empty dtor
 
-void ExplosiveProjectile::OnHit(GameObjectEntity* other)
-{
-    if (other->entity_type == EntityType::ENEMY)
-    {
+void ExplosiveProjectile::OnHit(GameObjectEntity* other) {
+    if (other->entity_type == EntityType::ENEMY) {
         EnemyEntity* e = dynamic_cast<EnemyEntity*>(other);
         if (e) {
             e->OnHit();
@@ -30,18 +23,15 @@ void ExplosiveProjectile::OnHit(GameObjectEntity* other)
             }
         }
     }
-    else if (other->entity_type == EntityType::BREAKABLE_STATIC)
-    {
-
+    else if (other->entity_type == EntityType::BREAKABLE_STATIC) {
+        // Empty body
     }
     OnExpire();
 }
 
-void ExplosiveProjectile::OnExpire()
-{
-    ExplosionEntity* explosion = new ExplosionEntity(this->position ,owner, damage);
+void ExplosiveProjectile::OnExpire() {
+    ExplosionEntity* explosion = new ExplosionEntity{ position ,owner, damage };
     SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(explosion);
     BaseProjectile::OnExpire();
-
 }
 

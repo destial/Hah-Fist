@@ -15,53 +15,28 @@
 #include "../Projectiles/ExplosiveProjectile.hpp"
 #include "../../Managers/SceneManager.hpp"
 
-FingerGunWeapon::FingerGunWeapon(AEVec2 pos) : Weapon{pos}
-{
+FingerGunWeapon::FingerGunWeapon(AEVec2 pos) : WeaponEntity{pos} {
 	weaponChannels = false;
 	cd_duration = 0.5f;
 	image = AssetManager::GetTexture(ASSET_FINGERGUN_IMAGE);
 }
-FingerGunWeapon::~FingerGunWeapon()
-{
 
-}
+FingerGunWeapon::~FingerGunWeapon() {} // Empty dtor
 
-void FingerGunWeapon::PreUpdate(const f32& dt)
-{
-	Weapon::PreUpdate(dt);
-}
-
-void FingerGunWeapon::Update(const f32& dt)
-{
+void FingerGunWeapon::Update(const f32& dt) {
 	if (!isActive)
-	{
 		return;
-	}
 	
-	Weapon::Update(dt);
-	
+	WeaponEntity::Update(dt);
 }
 
-void FingerGunWeapon::OnCollide(GameObjectEntity* go)
-{
-
+void FingerGunWeapon::OnCollide(GameObjectEntity*) {
+	// Empty body
 }
 
-void FingerGunWeapon::Render()
-{
-	Weapon::Render();
-}
-
-
-void FingerGunWeapon::Attack()
-{
+void FingerGunWeapon::Attack() {
 	f32 bulletSpeed = BULLETPLAYERSPEED;
-	ExplosiveProjectile* bullet = new ExplosiveProjectile(this->position, GetAttackDirection(), bulletSpeed, damage, this->player_entity);
+	ExplosiveProjectile* bullet = new ExplosiveProjectile{ position, GetAttackDirection(), bulletSpeed, damage, player_entity };
 	bullet->scale = { 1.f, 0.5f };
 	SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
-}
-
-void FingerGunWeapon::ResetWeapon()
-{
-	Weapon::ResetWeapon();
 }

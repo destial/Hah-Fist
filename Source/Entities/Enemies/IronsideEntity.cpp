@@ -26,28 +26,12 @@ IronsideEntity::IronsideEntity(AEVec2 pos) : BossEntity(pos) {
 IronsideEntity::~IronsideEntity() {
 }
 
-void IronsideEntity::PreUpdate(const f32& dt) {
-	BossEntity::PreUpdate(dt);
-}
-
-void IronsideEntity::Update(const f32& dt) {
-	BossEntity::Update(dt);
-}
-
 void IronsideEntity::PostUpdate(const f32& dt) {
 	//Using its own animation spritesheet not the default
 	GameObjectEntity::PostUpdate(dt);
 }
 
-void IronsideEntity::Render() {
-	BossEntity::Render();
-}
-
-void IronsideEntity::OnCollide(GameObjectEntity* go) {
-	BossEntity::OnCollide(go);
-}
-
-void IronsideEntity::OnIdle(const f32& dt) {
+void IronsideEntity::OnIdle(const f32&) {
 	if (boss_activated) {
 		velocity.x = BOSS3VELX;
 		if (position.x >= boss_room_center.x + BOSS3OFFSETX)
@@ -58,10 +42,10 @@ void IronsideEntity::OnIdle(const f32& dt) {
 	}
 }
 
-void IronsideEntity::OnPatrol(const f32& dt) {
+void IronsideEntity::OnPatrol(const f32&) {
 }
 
-void IronsideEntity::OnChase(const f32& dt) {
+void IronsideEntity::OnChase(const f32&) {
 	switch (inner_state) {
 	case INNERFSM::MOVE:
 	{
@@ -101,7 +85,7 @@ void IronsideEntity::OnChase(const f32& dt) {
 	}
 	case INNERFSM::SHOOTPROJECTILE:
 	{
-		Player* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<Player>();
+		PlayerEntity* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<PlayerEntity>();
 		if (!player) return;
 		AEVec2 Pos{ position.x, LaneY[next_lane_to_spawn] };
 		AEVec2 shootDir{ player->position.x - Pos.x,player->position.y - Pos.y };
@@ -144,16 +128,14 @@ void IronsideEntity::OnChase(const f32& dt) {
 	}
 }
 
-void IronsideEntity::OnStun(const f32& dt) {
-	
+void IronsideEntity::OnStun(const f32&) {
 	if (stateTimer < 0.f) {
 		SwitchState(FSM::CHASE);
 	}
 }
 
-void IronsideEntity::OnDead(const f32& dt) {
-	if (GameScene* game = dynamic_cast<GameScene*>(SceneManager::GetInstance()->GetCurrentScene()))
-	{
+void IronsideEntity::OnDead() {
+	if (GameScene* game = dynamic_cast<GameScene*>(SceneManager::GetInstance()->GetCurrentScene())) {
 		game->Win();
 	}
 	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);

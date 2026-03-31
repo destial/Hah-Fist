@@ -3,14 +3,12 @@
 #define __BREAKABLE_CRATE_ENTITY_H
 #include "BreakableStaticEntity.hpp"
 
-
-class BreakableCrateEntity : public BreakableStaticEntity
-{
+class BreakableCrateEntity : public BreakableStaticEntity {
 public:
 	BreakableCrateEntity(AEVec2 pos);
-	~BreakableCrateEntity();
+	virtual ~BreakableCrateEntity();
 
-	void OnBroken();
+	virtual void OnBroken();
 };
 
 #endif

@@ -66,10 +66,10 @@ static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, std::string str, u8 listener) {
 	b->font = AssetManager::GetFontId(ASSET_DEFAULT_FONT);
 
 	// Always set color multiplier to white when not hovered
-	b->AddPreUpdateListener(b, [b](const f32& dt) {
+	b->AddPreUpdateListener(b, [b](const f32&) {
 		b->color = { 255, 255, 255, 255 };
 	});
-	b->AddUpdateListener(b, [b, listener](const f32& dt) {
+	b->AddUpdateListener(b, [b, listener](const f32&) {
 		if (AEInputCheckCurr(listener)) {
 			b->color = { 255, 128, 128, 128 };
 		}
@@ -81,9 +81,10 @@ static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, std::string str, u8 listener) {
 * @brief Generic function to create a display for real-time interactive hotkeys
 * @param pos - The position on the screen
 * @param str - The character to display
+* @param listener - The input to listen to
 * @return The ButtonUI instance created
 */
-static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, char ch, int listener) {
+static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, char ch, u8 listener) {
 	return CreateHotKeyDisplay(pos, std::string{ ch }, listener);
 }
 
@@ -125,13 +126,13 @@ void GameScene::Init() {
 	std::vector<Serialization::SerializedEntity> ens = Serialization::LoadFromFile(filename.c_str());
 
 	// Unserialize all entity data from level file
-	Player* player = nullptr;
+	PlayerEntity* player = nullptr;
 	if (!ens.empty()) {
 		for (Serialization::SerializedEntity const& sen : ens) {
 			BaseEntity* en = Serialization::Unserialize(sen);
 			if (en) { // If it's a valid entity
 				AddEntityToScene(en);
-				if (Player* p = dynamic_cast<Player*>(en)) {
+				if (PlayerEntity* p = dynamic_cast<PlayerEntity*>(en)) {
 					player = p; // Set the player pointer when loaded (only 1 should exist) 
 				}
 			}
@@ -146,21 +147,21 @@ void GameScene::Init() {
 	}
 
 	if (player == nullptr) {
-		player = new Player({ 1.f, 5.f });
+		player = new PlayerEntity({ 1.f, 5.f });
 		AddEntityToScene(player);
 	}
 
 	// Lock weapons based on level
-	Weapon* w = new TurboFistWeapon(AEVec2{ 0.f, 0.f }, player->pBody->mass);
+	WeaponEntity* w = new TurboFistWeapon(AEVec2{ 0.f, 0.f }, player->pBody->mass);
 	AddEntityToScene(w);
 	player->AddWeapon(w);
 	if (LevelManager::GetLevel() > 0) {
-		Weapon* w2 = new GrappleFistWeapon(AEVec2{ 0.f, 0.f });
+		WeaponEntity* w2 = new GrappleFistWeapon(AEVec2{ 0.f, 0.f });
 		AddEntityToScene(w2);
 		player->AddWeapon(w2);
 	}
 	if (LevelManager::GetLevel() > 1) {
-		Weapon* w3 = new FingerGunWeapon(AEVec2{ 0.f, 0.f });
+		WeaponEntity* w3 = new FingerGunWeapon(AEVec2{ 0.f, 0.f });
 		AddEntityToScene(w3);
 		player->AddWeapon(w3);
 	}
@@ -177,9 +178,9 @@ void GameScene::Init() {
 	AddEntityToScene(power);
 
 	// Listen to current weapon charge to update slider value
-	power->AddUpdateListener(this, [power, player](const f32& dt) {
+	power->AddUpdateListener(this, [power, player](const f32&) {
 		// Update UI based on current weapon position and value
-		Weapon* current = player->CurrentWeapon();
+		WeaponEntity* current = player->CurrentWeapon();
 		if (current == nullptr) 
 			return;
 
@@ -200,7 +201,7 @@ void GameScene::Init() {
 
 	// Initialize player movement interaction
 	// Uses a listener so that when the level is finished, we can remove the player interaction
-	player->AddUpdateListener(this, [player](const f32& dt) {
+	player->AddUpdateListener(this, [player](const f32&) {
 		if (player->timeElapsedSinceLastDamage > PLAYER_CONTROL_LOCK_AFTER_HIT) {
 			AEVec2 dir{};
 			if (AEInputCheckCurr(AEVK_A)) {
@@ -234,9 +235,9 @@ void GameScene::Init() {
 		}
 	});
 
-	// Player listener for camera tracking
+	// PlayerEntity listener for camera tracking
 	// Uses the AssetManager instance as owner as it's perpetual lifetime
-	player->AddUpdateListener(AssetManager::GetInstance(), [this, player](const f32& dt) {
+	player->AddUpdateListener(AssetManager::GetInstance(), [this, player](const f32&) {
 		if (BossEntity * e = dynamic_cast<BossEntity*>(GetFirstEntityOfType<BossEntity>())) {
 			if (e->GetBossActivated()) {
 				camManager->SetTarget(Utils::WorldToScreen(e->GetBossRoomCenter().x, e->GetBossRoomCenter().y).x, 0);
@@ -271,7 +272,7 @@ void GameScene::Init() {
 	player_health->SetInteractive(false);
 
 	// Listen to player health to update slider value
-	player_health->AddUpdateListener(this, [player, player_health](const f32& dt) {
+	player_health->AddUpdateListener(this, [player, player_health](const f32&) {
 		if (player == nullptr) {
 			return;
 		}
@@ -293,8 +294,8 @@ void GameScene::Init() {
 	AddEntityToScene(weaponhud);
 
 	// Listen to current weapon charge to update slider value
-	weaponhud->AddUpdateListener(this, [weaponhud, player](const f32& dt) {
-		Weapon* current = player->CurrentWeapon();
+	weaponhud->AddUpdateListener(this, [weaponhud, player](const f32&) {
+		WeaponEntity* current = player->CurrentWeapon();
 		if (current == nullptr) {
 			weaponhud->text = "";
 			return;
@@ -321,7 +322,7 @@ void GameScene::Init() {
 	coins->scale = {5.f, 2.f};
 
 	// Listen to how many coins were collected to update text display
-	coins->AddUpdateListener(this, [coins, player](const f32& dt) {
+	coins->AddUpdateListener(this, [coins, player](const f32&) {
 		char collected[64];
 		sprintf_s(collected, 64, "Coins: %d", player->Coins());
 		coins->text = collected;
@@ -334,7 +335,7 @@ void GameScene::Init() {
 	time->scale = { 5.f, 2.f };
 
 	// Listen to current game time to update text display
-	time->AddUpdateListener(this, [time, this](const f32& dt) {
+	time->AddUpdateListener(this, [time, this](const f32&) {
 		char timer[64];
 		sprintf_s(timer, 64, "Timer: %0.2f", game_timer);
 		time->text = timer;
@@ -379,7 +380,7 @@ void GameScene::PostUpdate(const f32& dt) {
 	}
 
 	// Lose when player dies
-	Player* player = GetFirstEntityOfType<Player>();
+	PlayerEntity* player = GetFirstEntityOfType<PlayerEntity>();
 	if (player == nullptr || player->health <= 0.f)
 		Lose();
 }
@@ -402,7 +403,7 @@ void GameScene::Win() {
 	LevelManager::SavePlayerData(); // save data
 
 	// If this game scene has a player, show the win screen
-	Player* p = GetFirstEntityOfType<Player>();
+	PlayerEntity* p = GetFirstEntityOfType<PlayerEntity>();
 	if (!p)
 		return;
 
@@ -463,6 +464,10 @@ void GameScene::Win() {
 */
 void GameScene::Lose() {
 	game_state = GameState::LOST;
+}
+
+GameState GameScene::GetGameState() const {
+	return game_state;
 }
 
 /*!

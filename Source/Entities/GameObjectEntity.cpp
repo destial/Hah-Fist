@@ -84,11 +84,11 @@ void GameObjectEntity::Render() {
 	if (DebugUtils::IsRendering()) {
 		auto corners = Utils::GetCorners(this);
 
-		Color color = Utils::OBBPoint(this, Utils::GetMouseWorld(true)) ? Color{255, 255, 0, 0} : Color{255, 0, 255, 0};
-		DebugUtils::RenderLine(corners[0], corners[1], color);
-		DebugUtils::RenderLine(corners[1], corners[2], color);
-		DebugUtils::RenderLine(corners[2], corners[3], color);
-		DebugUtils::RenderLine(corners[3], corners[0], color);
+		Color cr = Utils::OBBPoint(this, Utils::GetMouseWorld(true)) ? Color{255, 255, 0, 0} : Color{255, 0, 255, 0};
+		DebugUtils::RenderLine(corners[0], corners[1], cr);
+		DebugUtils::RenderLine(corners[1], corners[2], cr);
+		DebugUtils::RenderLine(corners[2], corners[3], cr);
+		DebugUtils::RenderLine(corners[3], corners[0], cr);
 
 		char pos[64];
 		sprintf_s(pos, "%d:(%0.2f,%0.2f)", GetId(), this->position.x, this->position.y);
@@ -99,5 +99,6 @@ void GameObjectEntity::Render() {
 	}
 }
 
-void GameObjectEntity::OnCollide(GameObjectEntity* go) {
+void GameObjectEntity::OnCollide(GameObjectEntity*) {
+	// Empty body
 }

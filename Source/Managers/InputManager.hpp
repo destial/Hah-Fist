@@ -17,7 +17,7 @@
 /*!
 * @brief Singleton class that handles input events
 */
-class InputHandler : public Singleton<InputHandler> {
+class InputManager : public Singleton<InputManager> {
 private:
 	std::vector<u8> keys_t; // All keys in this frame that were triggered
 	std::vector<u8> keys_c; // All keys in this frame that are pressed
@@ -25,16 +25,16 @@ private:
 	std::vector<u8> keys_p; // All keys in this frame that were pressed in the previous frame
 	InputEvent* event; // The main event pointer, should not be deleted until the application ends
 public:
-	InputHandler(); // Ctor
-	~InputHandler(); // Dtor
+	InputManager(); // Ctor
+	~InputManager(); // Dtor
 
 	/*!
-	* @brief Update the InputHandler each frame
+	* @brief Update the InputManager each frame
 	*/
 	void Update(const f32& dt);
 
 	/*!
-	* @brief Tell the InputHandler that this frame has ended
+	* @brief Tell the InputManager that this frame has ended
 	*/
 	void EndFrame();
 };

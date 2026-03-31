@@ -14,7 +14,6 @@ public:
 	StaticEntity& operator=(StaticEntity const&) = delete; // Remove copy assignment
 	virtual ~StaticEntity(); // Dtor
 
-	void PreUpdate(const f32& dt) override;
 	void Update(const f32& dt) override;
 	void PostUpdate(const f32& dt) override;
 	void OnCollide(GameObjectEntity* go) override;

@@ -14,9 +14,9 @@
 #include "GameObjectEntity.hpp"
 
 /*!
-* @brief Weapon class manages basic functionality of all weapons.
+* @brief WeaponEntity class manages basic functionality of all weapons.
 */
-class Weapon : public GameObjectEntity {
+class WeaponEntity : public GameObjectEntity {
 protected:
 	GameObjectEntity* player_entity{ nullptr }; // pointer to the player_entity which owns this weapon.
 	bool weaponChannels{ false }; // Does this weapon channel or instant use on click?
@@ -33,12 +33,12 @@ public:
 	* basic information for the weapon.
 	* @param AEVec2 pos - Position to spawn the weapon.
 	*/
-	Weapon(AEVec2 pos = { 0.f, 0.f });
+	WeaponEntity(AEVec2 pos = { 0.f, 0.f });
 
 	/*!
 	* @brief Destructor function for a weapon.
 	*/
-	~Weapon();
+	virtual ~WeaponEntity();
 
 	/*!
 	* @brief PreUpdate override for the weapon.
@@ -55,13 +55,6 @@ public:
 	virtual void Update(const f32& dt);
 
 	/*!
-	* @brief PostUpdate override for the weapon.
-	* Calls the base PostUpdate.
-	* @param const f32& dt - delta time.
-	*/
-	virtual void PostUpdate(const f32& dt);
-
-	/*!
 	* @brief Render override for the weapon.
 	* Conditionally renders if the player entity still exists.
 	* Also defines rendering for debugging.
@@ -73,6 +66,7 @@ public:
 	* to define behaviour when an attack happens.
 	*/
 	virtual void Attack() = 0;
+
 	/*!
 	* @brief Member function to reset data of a weapon.
 	*/
@@ -82,7 +76,7 @@ public:
 	* @brief Helper function to get the current pointed direction from the cursor.
 	* @return AEVec2 vector of the pointed direction.
 	*/
-	AEVec2 GetAttackDirection();
+	AEVec2 GetAttackDirection() const;
 
 	/*!
 	* @brief Helper function to get the current value of the channel timer.

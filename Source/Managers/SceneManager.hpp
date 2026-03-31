@@ -43,13 +43,13 @@ public:
 	~SceneManager(); // Dtor
 
 	/*!
-	* @brief Called before InputHandler->Update()
+	* @brief Called before InputManager->Update()
 	*		 Process anything before the main Update()
 	*/
 	void PreUpdate(const f32& dt);
 
 	/*!
-	* @brief Called after InputHandler->Update()
+	* @brief Called after InputManager->Update()
 	*		 Process input, physics, logic
 	*/
 	void Update(const f32& dt);

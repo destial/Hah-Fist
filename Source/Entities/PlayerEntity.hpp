@@ -18,7 +18,7 @@
 #include "../Entities/WeaponEntity.hpp"
 #include <vector>
 
-class Player : public GameObjectEntity {
+class PlayerEntity : public GameObjectEntity {
 protected:
 	f32 animationTimer, animationFrame; // Sprite animation data
 	int currentRow, currentCol; // Sprite animation data
@@ -26,13 +26,13 @@ protected:
 	f32 jumpHeight;
 	f32 jumpVelocity;
 	f32 speed;
-	std::vector<Weapon*> weapons;
+	std::vector<WeaponEntity*> weapons;
 	int coinCount{ 0 };
 public:
-	Player(AEVec2 pos = { 0.f, 0.f }); // Ctor
-	Player(Player const&) = delete; // Remove copy ctor
-	Player& operator=(Player const&) = delete; // Remove copy assignment
-	virtual ~Player(); // Dtor
+	PlayerEntity(AEVec2 pos = { 0.f, 0.f }); // Ctor
+	PlayerEntity(PlayerEntity const&) = delete; // Remove copy ctor
+	PlayerEntity& operator=(PlayerEntity const&) = delete; // Remove copy assignment
+	virtual ~PlayerEntity(); // Dtor
 
 	/*!
 	* @brief Inherited: Pre-update the entity, before any input has been processed
@@ -64,7 +64,7 @@ public:
 	* @brief Add a weapon to the player
 	* @param weapon - The weapon to add
 	*/
-	void AddWeapon(Weapon* weapon);
+	void AddWeapon(WeaponEntity* weapon);
 
 	/*!
 	* @brief Switch the current weapon of the player
@@ -76,7 +76,7 @@ public:
 	* @brief Get the current weapon of the player
 	* @return The current active weapon
 	*/
-	Weapon* CurrentWeapon() const;
+	WeaponEntity* CurrentWeapon() const;
 
 	/*!
 	* @brief Adds a coin to the player

@@ -12,11 +12,9 @@ protected:
 	SpriteSheet* breaking_sprite; // Sprite animation data
 public:
 	BreakableStaticEntity(AEVec2 pos = { 0.f,0.f }, std::string file_name = "Assets/coin.png", int _columns = 20, int _rows = 1);
-	~BreakableStaticEntity();
+	virtual ~BreakableStaticEntity();
 
-	void Render();
-
-	void Update(const f32& dt);
-	virtual void OnBroken() ;
+	virtual void Render();
+	virtual void Update(const f32& dt);
 };
 #endif

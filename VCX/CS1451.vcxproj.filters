@@ -198,7 +198,7 @@
     <ClCompile Include="..\Source\Managers\CameraManager.cpp">
       <Filter>Source Files\Managers</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\Scenes\SplashScreen.cpp">
+    <ClCompile Include="..\Source\Scenes\SplashScene.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\Scenes\CreditsScene.cpp">
@@ -377,7 +377,7 @@
     <ClInclude Include="..\Source\Utils\Singleton.hpp">
       <Filter>Header Files\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\Scenes\SplashScreen.hpp">
+    <ClInclude Include="..\Source\Scenes\SplashScene.hpp">
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\Scenes\CreditsScene.hpp">

@@ -1,5 +1,5 @@
 /*!
-* @file SplashScreen.hpp
+* @file SplashScene.hpp
 * @author Rance Andres (andresrancerowell.g@digipen.edu)
 * @date 2 March 2026
 * @course CSD1451
@@ -16,14 +16,14 @@
 * @brief Display's the splash screen for 2 seconds
 * @brief then transitions into the main menu
 */
-class SplashScreen : public BaseScene {
+class SplashScene : public BaseScene {
 private:
 	f32 timer{ 0.f };
 public:
-	SplashScreen(); // Ctor
-	SplashScreen(SplashScreen const&) = delete; // Remove copy ctor
-	SplashScreen& operator=(SplashScreen const&) = delete; // Remove copy assignment
-	virtual ~SplashScreen(); // Dtor
+	SplashScene(); // Ctor
+	SplashScene(SplashScene const&) = delete; // Remove copy ctor
+	SplashScene& operator=(SplashScene const&) = delete; // Remove copy assignment
+	virtual ~SplashScene(); // Dtor
 
 	/*!
 	* @brief Inherited: Initialize the scene with the splash screen image

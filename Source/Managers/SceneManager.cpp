@@ -1,6 +1,6 @@
 #include "SceneManager.hpp"
 #include "../Scenes/GameScene.hpp"
-#include "../Scenes/SplashScreen.hpp"
+#include "../Scenes/SplashScene.hpp"
 #include "../Scenes/StartMenuScene.hpp"
 #include "../Scenes/CreditsScene.hpp"
 #include "../UI/Debug.hpp"
@@ -11,7 +11,7 @@ namespace DebugUtils {
 
 SceneManager::SceneManager() : all_scenes{}, next_scene{ Scenes::INIT }, current_scene{ Scenes::INIT }, editor{nullptr} {
 	instance = this;
-	all_scenes[Scenes::SPLASH_SCREEN] = new SplashScreen();
+	all_scenes[Scenes::SPLASH_SCREEN] = new SplashScene();
 	all_scenes[Scenes::MAIN_MENU] = new StartMenuScene();
 	all_scenes[Scenes::GAME] = new GameScene();
 	all_scenes[Scenes::CREDITS] = new CreditsScene();

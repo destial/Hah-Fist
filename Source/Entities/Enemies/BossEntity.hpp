@@ -2,37 +2,30 @@
 #ifndef __BOSSENTITY_H
 #define __BOSSENTITY_H
 #include "EnemyEntity.hpp"
-#include "../../Utils/Constant.hpp"
+
 class BossEntity : public EnemyEntity {
 protected:
 	GameObjectEntity* ground;
 	bool boss_activated;
 	AEVec2 boss_room_center;
 public:
-
 	BossEntity(AEVec2 pos);
 	virtual ~BossEntity();
-	virtual void PreUpdate(const f32& dt);
-	virtual void Update(const f32& dt);
-	virtual void PostUpdate(const f32& dt);
-	virtual void Render() override;
-	virtual void OnCollide(GameObjectEntity* go);
+
 	//Default Boss functions
 	void ShootProjectile(float healthRatio, AEVec2 Pos, AEVec2 shootDir);
 	float GetLowHealthFactor();
-	bool GetBossActivated();
+	bool GetBossActivated() const;
 	void SetBossActivation(bool activated);
-	AEVec2 GetBossRoomCenter();
+	AEVec2 GetBossRoomCenter() const;
 	// Virtual methods to Enemy Base class
-	virtual void OnHit() override;
+
 	virtual void OnIdle(const f32& dt);
 	virtual void OnPatrol(const f32& dt);
-	virtual void OnAttack(const f32& dt);
 	virtual void OnChase(const f32& dt);
+	virtual void OnAttack(const f32& dt);
 	virtual void OnStun(const f32& dt);
-	virtual void OnDead(const f32& dt);
+	virtual void OnDead();
 };
-
-
 
 #endif

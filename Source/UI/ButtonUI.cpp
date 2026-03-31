@@ -127,7 +127,7 @@ void ButtonUI::AddStopHoverListener(std::function<void()> func) {
 * @param mousePos - The mouse position
 * @param button - The button clicked
 */
-void ButtonUI::OnMouseClick(AEVec2 mousePos, MouseButton button) {
+void ButtonUI::OnMouseClick(AEVec2, MouseButton button) {
 	for (auto& func : click_listeners) {
 		func(button);
 	}
@@ -137,7 +137,7 @@ void ButtonUI::OnMouseClick(AEVec2 mousePos, MouseButton button) {
 * @brief Function to call when this button is hovered over
 * @param pos - The mouse position
 */
-void ButtonUI::OnMouseHover(AEVec2 pos) {
+void ButtonUI::OnMouseHover(AEVec2) {
 	for (auto& func : hover_listeners) {
 		func();
 	}

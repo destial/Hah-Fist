@@ -19,9 +19,10 @@
 #include "../Managers/CameraManager.hpp"
 #include "../Managers/SceneManager.hpp"
 #include "../Entities/PlayerEntity.hpp"
+#include "../Scenes/GameScene.hpp"
 
 
-Weapon::Weapon(AEVec2 pos) : GameObjectEntity{ pos } {
+WeaponEntity::WeaponEntity(AEVec2 pos) : GameObjectEntity{ pos } {
 	go_type = PhysicsType::TRIGGER;
 	image = nullptr;
 	scale = { 2.5f, 2.5f };
@@ -29,12 +30,11 @@ Weapon::Weapon(AEVec2 pos) : GameObjectEntity{ pos } {
 	layer = RenderLayer::PLAYER;
 }
 
+WeaponEntity::~WeaponEntity() {} // Empty dtor
 
-Weapon::~Weapon() {}
-
-void Weapon::PreUpdate(const f32& dt) {
+void WeaponEntity::PreUpdate(const f32& dt) {
 	GameObjectEntity::PreUpdate(dt);
-	player_entity = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<Player>();
+	player_entity = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<PlayerEntity>();
 	if (!player_entity) {
 		isActive = false;
 		return;
@@ -43,19 +43,24 @@ void Weapon::PreUpdate(const f32& dt) {
 	AEVec2 attack_direction = GetAttackDirection();
 	AEVec2 right = { 1.f, 0 };
 	rotation = AEVec2AngleCCW(&right, &attack_direction);
-	this->position = player_entity->position + attack_direction * 2.0f;
-	if (this->position.x < player_entity->position.x) {
-		this->scale.y = -2.5f;
+	position = player_entity->position + attack_direction * 2.0f;
+	if (position.x < player_entity->position.x) {
+		scale.y = -2.5f;
 	}
 	else {
-		this->scale.y = 2.5f;
+		scale.y = 2.5f;
 	}
 }
 
-void Weapon::Update(const f32& dt) {
+void WeaponEntity::Update(const f32& dt) {
 	GameObjectEntity::Update(dt);
 	if (!player_entity)
 		return;
+
+	GameScene* scene = dynamic_cast<GameScene*>(SceneManager::GetInstance()->GetCurrentScene());
+	if (scene && scene->GetGameState() != GameState::PLAYING) {
+		return;
+	}
 
 	if (cd_timer > 0.0f) {
 		cd_timer -= dt;
@@ -87,11 +92,7 @@ void Weapon::Update(const f32& dt) {
 	}
 }
 
-void Weapon::PostUpdate(const f32& dt) {
-	GameObjectEntity::PostUpdate(dt);
-}
-
-void Weapon::Render() {
+void WeaponEntity::Render() {
 	if (!player_entity)
 		return;
 
@@ -104,30 +105,30 @@ void Weapon::Render() {
 	DebugUtils::RenderLine(corners[3], corners[0], { 255, 255, 255, 0 });
 }
 
-void Weapon::ResetWeapon() {
+void WeaponEntity::ResetWeapon() {
 	channel_timer = 0.0f;
 	channelling = false;
 	weapon_direction = { 0.f, 0.f };
 }
 
-AEVec2 Weapon::GetAttackDirection() {
+AEVec2 WeaponEntity::GetAttackDirection() const {
 	AEVec2 attack_direction = Utils::GetMouseWorld(true) - player_entity->position;
 	AEVec2Normalize(&attack_direction, &attack_direction);
 	return attack_direction;
 }
 
-f32 Weapon::GetChannelTimer() const {
+f32 WeaponEntity::GetChannelTimer() const {
 	return channel_timer;
 }
 
-f32 Weapon::GetMaxChannelTime() const {
+f32 WeaponEntity::GetMaxChannelTime() const {
 	return max_channel_time;
 }
 
-f32 Weapon::GetCooldownTimer() const {
+f32 WeaponEntity::GetCooldownTimer() const {
 	return cd_timer;
 }
 
-f32 Weapon::GetCooldownDuration() const {
+f32 WeaponEntity::GetCooldownDuration() const {
 	return cd_duration;
 }

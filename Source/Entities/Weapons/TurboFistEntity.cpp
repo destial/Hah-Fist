@@ -17,7 +17,7 @@
 #include "../Projectiles/BaseProjectile.hpp"
 
 
-TurboFistWeapon::TurboFistWeapon(AEVec2 pos, f32 og_mass) : Weapon{ pos } {
+TurboFistWeapon::TurboFistWeapon(AEVec2 pos, f32 og_mass) : WeaponEntity{ pos } {
 	weaponChannels = true;
 	image = AssetManager::GetTexture(ASSET_TURBOFIST_IMAGE);
 	max_channel_time = 1.0f;
@@ -26,13 +26,13 @@ TurboFistWeapon::TurboFistWeapon(AEVec2 pos, f32 og_mass) : Weapon{ pos } {
 	player_original_mass = og_mass;
 }
 
-TurboFistWeapon::~TurboFistWeapon() {}
+TurboFistWeapon::~TurboFistWeapon() {} // Empty dtor
 
 void TurboFistWeapon::Update(const f32& dt) {
-	if (!isActive) {
+	if (!isActive) 
 		return;
-	}
-	Weapon::Update(dt);
+
+	WeaponEntity::Update(dt);
 	
 	if (dash_timer > 0.0f) {
 		dash_timer -= dt;
@@ -44,7 +44,7 @@ void TurboFistWeapon::Update(const f32& dt) {
 }
 
 void TurboFistWeapon::Render() {
-	Weapon::Render();
+	WeaponEntity::Render();
 	if (channelling) {
 		AEVec2 normalizedDirection{ weapon_direction };
 		AEVec2Normalize(&normalizedDirection, &normalizedDirection);
@@ -72,8 +72,7 @@ void TurboFistWeapon::OnCollide(GameObjectEntity* go) {
 			BaseProjectile* e = dynamic_cast<BaseProjectile*>(go);
 			
 			//i think this is correct, not sure
-			if (e->TryChangeOwnership(player_entity))
-			{
+			if (e->TryChangeOwnership(player_entity)) {
 				go->velocity = player_entity->velocity * 1.5f;
 			}
 		}
@@ -95,12 +94,12 @@ void TurboFistWeapon::Attack() {
 	AEAudioPlay(AssetManager::GetAudio(ASSET_TURBOFIST_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
 }
 
-f32 TurboFistWeapon::GetCurrentAttackStrength() {
+f32 TurboFistWeapon::GetCurrentAttackStrength() const {
 	return 1.f + 2.f * (static_cast<f32>(std::trunc(channel_timer * 10.f)) / (max_channel_time * 10.f));
 }
 
 void TurboFistWeapon::ResetWeapon() {
-	Weapon::ResetWeapon();
+	WeaponEntity::ResetWeapon();
 	dash_timer = 0.0f;
 	dashing = false;
 }

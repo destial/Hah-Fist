@@ -15,7 +15,6 @@
 #include "../Entities/WeaponEntity.hpp"
 #include "../UI/BarUI.hpp"
 #include <algorithm>
-#include <cmath>
 #include <iostream>
 
 BaseScene::BaseScene() 
@@ -141,7 +140,7 @@ void BaseScene::AddEntityToScene(BaseEntity* entity) {
 		healthbar->layer = BaseUI::RenderLayer::ENTITY;
 		healthbar->text_size = 7.f;
 		healthbar->SetInteractive(false);
-		healthbar->AddPostUpdateListener(this, [healthbar, enemy](const f32& dt) {
+		healthbar->AddPostUpdateListener(this, [healthbar, enemy](const f32&) {
 			healthbar->SetValue(enemy->health / enemy->max_health);
 			healthbar->position = enemy->position;
 			healthbar->position.y += std::abs(enemy->scale.y) * 0.6f;
@@ -154,7 +153,7 @@ void BaseScene::AddEntityToScene(BaseEntity* entity) {
 }
 
 void BaseScene::RemoveEntityFromScene(BaseEntity* entity) {
-	if (dynamic_cast<Weapon*>(entity)) {
+	if (dynamic_cast<WeaponEntity*>(entity)) {
 		return;
 	}
 	if (SceneManager::GetInstance()->GetEditor()->IsToggled()) {
@@ -200,7 +199,7 @@ void BaseScene::DeleteEntityFromScene(BaseEntity* entity) {
 		}
 	}
 
-	// delete memory
+	// Delete memory
 	if (deleted) {
 		if (BaseEntity* linked = linked_entities[entity]) {
 			linked_entities.erase(entity);

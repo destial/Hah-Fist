@@ -15,7 +15,7 @@
 /*!
 * @brief FingerGunWeapon class manages custom behaviour of the FingerGunWeapon
 */
-class FingerGunWeapon : public Weapon {
+class FingerGunWeapon : public WeaponEntity {
 protected:
 
 public:
@@ -29,45 +29,26 @@ public:
 	/*!
 	* @brief Destructor function for a FingerGunWeapon.
 	*/
-	~FingerGunWeapon();
-
-	/*!
-	* @brief PreUpdate override for the FingerGunWeapon.
-	* Calls the base weapon's PreUpdate
-	* @param const f32& dt - delta time.
-	*/
-	void PreUpdate(const f32& dt) override;
+	virtual ~FingerGunWeapon();
 
 	/*!
 	* @brief Update override for the FingerGunWeapon.
 	* Blocks updates if this is not active.
 	* @param const f32& dt - delta time.
 	*/
-	void Update(const f32& dt) override;
+	virtual void Update(const f32& dt);
 
 	/*!
 	* @brief OnCollide override for the FingerGunWeapon.
 	* Does nothing.
 	*/
-	void OnCollide(GameObjectEntity* go) override;
-
-	/*!
-	* @brief Render override for the FingerGunWeapon.
-	* Calls the base weapon's Render
-	*/
-	void Render() override;
+	virtual void OnCollide(GameObjectEntity* go);
 
 	/*!
 	* @brief Attack override for the FingerGunWeapon.
 	* Spawns a projectile and initializes it using the information
 	* from this class.
 	*/
-	void Attack() override;
-
-	/*!
-	* @brief ResetWeapon override for the FingerGunWeapon.
-	* Calls the base weapon's ResetWeapon
-	*/
-	void ResetWeapon();
+	virtual void Attack();
 };
 #endif

@@ -21,14 +21,6 @@ PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, BossEntity(pos) {
 PayloadEntity::~PayloadEntity() {
 }
 
-void PayloadEntity::PreUpdate(const f32& dt) {
-	BossEntity::PreUpdate(dt);
-}
-
-void PayloadEntity::Update(const f32& dt) {
-	BossEntity::Update(dt);
-}
-
 void PayloadEntity::PostUpdate(const f32& dt) {
 	currentRow = 1;
 	if (fabsf(velocity.x) > 0.1f) {
@@ -55,21 +47,10 @@ void PayloadEntity::PostUpdate(const f32& dt) {
 	BossEntity::PostUpdate(dt);
 }
 
-void PayloadEntity::Render() {
-	BossEntity::Render();
-}
-
-void PayloadEntity::OnCollide(GameObjectEntity* go) {
-	BossEntity::OnCollide(go);
-}
-
-void PayloadEntity::OnIdle(const f32& dt) {
+void PayloadEntity::OnIdle(const f32&) {
 	if (boss_activated) {
 		SwitchState(FSM::CHASE);
 	}
-}
-
-void PayloadEntity::OnPatrol(const f32& dt) {
 }
 
 void PayloadEntity::OnChase(const f32& dt) {
@@ -118,14 +99,13 @@ void PayloadEntity::OnChase(const f32& dt) {
 	}
 }
 
-void PayloadEntity::OnStun(const f32& dt) {
+void PayloadEntity::OnStun(const f32&) {
 	if (stateTimer < 0.f) {
 		SwitchState(FSM::CHASE);
 	}
-
 }
 
-void PayloadEntity::OnDead(const f32& dt) {
+void PayloadEntity::OnDead() {
 	if (GameScene* game = dynamic_cast<GameScene*>(SceneManager::GetInstance()->GetCurrentScene()))
 	{
 		game->Win();
