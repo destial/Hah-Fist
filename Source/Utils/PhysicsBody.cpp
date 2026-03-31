@@ -1,5 +1,19 @@
+/*!
+* @file PhysicsBody.hpp
+* @author Name (brandonshaohui.koh@digipen.edu)
+* @date 19 January 2026
+* @course CSD1451
+* @brief This source file contains the definitions of a PhysicsBody class which is incharge
+*		 of physics of the gameobjects, jumping & gravity.
+*/
 #include "PhysicsBody.hpp"
 #include "AEOverload.hpp"
+/*!
+* @brief Default Constructor which initialises the mass, gravityScale, gravity based on what the user has input
+* @param mass - Mass of the gameobject
+* @param gravityScale - Gravity's scale, higher = more gravity being applied.
+* @param gravity - Gravity's direction
+*/
 PhysicsBody::PhysicsBody(f32 mass, f32 gravityScale, AEVec2 gravity)
 {
 	this->mass = mass;
@@ -10,11 +24,14 @@ PhysicsBody::PhysicsBody(f32 mass, f32 gravityScale, AEVec2 gravity)
 	force = AEVec2{};
 }
 
-PhysicsBody::~PhysicsBody()
-{
-	// Empty
-}
-
+/*!
+* @brief UpdateStates function which updates the states of the gameobject based on its position
+*	     and velocity accordingly.
+* @param velocity - Velocity of the gameobject
+* @param position - Position of the gameobject
+* @param scale - Scale of the gameobject
+* @return void
+*/
 void PhysicsBody::UpdateStates(AEVec2& velocity, AEVec2& position, AEVec2& scale)
 {
 	if (state == STATE::IN_AIR)
@@ -48,6 +65,12 @@ void PhysicsBody::UpdateStates(AEVec2& velocity, AEVec2& position, AEVec2& scale
 	}
 }
 
+/*!
+* @brief ApplyGravity function which applies the gravity to the gameobject.
+* @param velocity - Velocity of the gameobject
+* @param dt - Delta time - Time between every frame
+* @return void
+*/
 void PhysicsBody::ApplyGravity(AEVec2& velocity, const f32& dt)
 {
 	if (state == STATE::IN_AIR)
@@ -57,11 +80,25 @@ void PhysicsBody::ApplyGravity(AEVec2& velocity, const f32& dt)
 }
 
 // Debug tool for checking the player's state
+/*!
+* @brief operator overload of std::ostream operator<<. Outputs the current state of the PhysicsBody to
+*		 the output stream.
+* @param std::ostream& - Reference to the output stream
+* @param const PhysicsBody::STATE& - const reference to the current state of the PhysicsBody
+* @return std::ostream&
+*/
 std::ostream& operator<<(std::ostream& os, const PhysicsBody::STATE& pState) {
 	os << (pState == PhysicsBody::STATE::IN_AIR ? "IN_AIR" : pState == PhysicsBody::STATE::ON_GROUND ? "ON_GROUND" : "FALLING");
 	return os;
 }
 
+/*!
+* @brief operator overload of std::ostream operator<<. Outputs the current vertical state of the PhysicsBody to
+*		 the output stream.
+* @param std::ostream& - Reference to the output stream
+* @param const PhysicsBody::VERTICAL_STATE& - const reference to the current vertical state of the PhysicsBody
+* @return std::ostream&
+*/
 std::ostream& operator<<(std::ostream& os, const PhysicsBody::VERTICAL_STATE& vState) {
 	os << (vState == PhysicsBody::VERTICAL_STATE::VS_FALLING ? "VS_FALLING" : vState == PhysicsBody::VERTICAL_STATE::VS_ON_GROUND ? "ON_GROUND" : "VS_RISING");
 	return os;
