@@ -18,6 +18,7 @@ public:
 	void OnPatrol(const f32& dt) override;
 	void OnChase(const f32& dt) override;
 	void OnAttack(const f32& dt) override;
+	void OnStun(const f32& dt) override;
 	void OnDead() override;
 };
 #endif
