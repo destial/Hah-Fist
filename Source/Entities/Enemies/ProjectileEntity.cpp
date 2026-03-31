@@ -52,6 +52,7 @@ ProjectileEntity::~ProjectileEntity()
 }
 
 void ProjectileEntity::Update(const f32& dt) {
+
 	EnemyEntity::Update(dt);
 	if (velocity.x < 0) {
 		if (scale.x > 0)
@@ -148,7 +149,7 @@ void ProjectileEntity::OnChase(const f32& dt) {
 			velocity.x += dir.x * speed;
 		}
 		if (Utils::RayHit({ position.x + std::abs(scale.x) * 0.5f * dir.x,position.y }, { ATTACK_RANGE * dir.x, 0.f },player)) {
-			SwitchState(FSM::ATTACK, 5.f);
+			SwitchState(FSM::ATTACK, 1.f);
 			currentRow = 4;
 			currentCol = 0;
 		}
@@ -175,9 +176,6 @@ void ProjectileEntity::OnChase(const f32& dt) {
 }
 
 void ProjectileEntity::OnAttack(const f32& dt) {
-	if (stateTimer <= 0.f) {
-		SwitchState(FSM::PATROL);
-	}
 	// Animations
 	if (currentRow > 6) {
 		currentRow = 4;
@@ -205,9 +203,19 @@ void ProjectileEntity::OnAttack(const f32& dt) {
 		MissileProjectile* bullet = new MissileProjectile(this->position, shootDir, bulletSpeed, damage, this);
 		bullet->scale = { BULLETSCALEX, BULLETSCALEY };
 		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
+		currentRow = 0;
+		currentCol = 0;
+		SwitchState(FSM::STUN,5.f);
 	}
 }
 
 void ProjectileEntity::OnDead() {
 	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
+}
+
+void ProjectileEntity::OnStun(const f32& dt){
+	currentCol = 0;
+	if (stateTimer <= 0.f) {
+		SwitchState(FSM::PATROL);
+	}
 }
