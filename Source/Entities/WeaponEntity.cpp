@@ -33,6 +33,9 @@ WeaponEntity::WeaponEntity(AEVec2 pos) : GameObjectEntity{ pos } {
 WeaponEntity::~WeaponEntity() {} // Empty dtor
 
 void WeaponEntity::PreUpdate(const f32& dt) {
+	if (dt == 0)
+		return;
+
 	GameObjectEntity::PreUpdate(dt);
 	player_entity = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<PlayerEntity>();
 	if (!player_entity) {
@@ -53,6 +56,9 @@ void WeaponEntity::PreUpdate(const f32& dt) {
 }
 
 void WeaponEntity::Update(const f32& dt) {
+	if (dt == 0)
+		return;
+
 	GameObjectEntity::Update(dt);
 	if (!player_entity)
 		return;

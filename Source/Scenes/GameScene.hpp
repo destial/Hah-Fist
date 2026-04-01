@@ -42,6 +42,12 @@ public:
 	void Init() override;
 
 	/*!
+	* @brief Inherited: PreUpdate all entities in the scene
+	* @param dt - The delta time for this frame
+	*/
+	void PreUpdate(const f32& dt) override;
+
+	/*!
 	* @brief Inherited: Update all entities in the scene
 	* @param dt - The delta time for this frame
 	*/

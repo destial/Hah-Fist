@@ -21,6 +21,9 @@ BarUI::~BarUI() {} // Empty dtor
 * @brief Inherited: Update the UI after input has been processed
 */
 void BarUI::Update(const f32& dt) {
+	if (!active)
+		return;
+
 	BaseUI::Update(dt);
 	// Only process if interactive
 	if (!interactive)
@@ -66,6 +69,9 @@ void BarUI::Update(const f32& dt) {
 * @brief Inherited: Post-update the UI after everything else has been processed
 */
 void BarUI::PostUpdate(const f32& dt) {
+	if (!active)
+		return;
+
 	BaseUI::PostUpdate(dt);
 
 	// Initialize position & scale of overlay value
@@ -99,6 +105,9 @@ void BarUI::PostUpdate(const f32& dt) {
 * @brief Inherited: Render the UI to the screen
 */
 void BarUI::Render() {
+	if (!active)
+		return;
+
 	// If level editor is toggled, PostUpdate was not called so we force call it here
 	if (SceneManager::GetInstance()->GetEditor()->IsToggled()) {
 		PostUpdate(Utils::GetDeltaTime());

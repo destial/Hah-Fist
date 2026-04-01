@@ -24,6 +24,9 @@ FingerGunWeapon::FingerGunWeapon(AEVec2 pos) : WeaponEntity{pos} {
 FingerGunWeapon::~FingerGunWeapon() {} // Empty dtor
 
 void FingerGunWeapon::Update(const f32& dt) {
+	if (dt == 0)
+		return;
+
 	if (!isActive)
 		return;
 	

@@ -30,6 +30,9 @@ ButtonUI::~ButtonUI() { // Dtor
 * @brief Inherited: Update the UI
 */
 void ButtonUI::Update(const f32& dt) {
+	if (!active)
+		return;
+
 	BaseUI::Update(dt);
 	if (!interactive)
 		return;
@@ -63,6 +66,9 @@ void ButtonUI::Update(const f32& dt) {
 }
 
 void ButtonUI::Render() {
+	if (!active)
+		return;
+
 	// If level editor is toggled, PostUpdate was not called so we force call it here
 	if (SceneManager::GetInstance()->GetEditor()->IsToggled()) {
 		BaseUI::PostUpdate(Utils::GetDeltaTime());

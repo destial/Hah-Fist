@@ -29,6 +29,9 @@ TurboFistWeapon::TurboFistWeapon(AEVec2 pos, f32 og_mass) : WeaponEntity{ pos } 
 TurboFistWeapon::~TurboFistWeapon() {} // Empty dtor
 
 void TurboFistWeapon::Update(const f32& dt) {
+	if (dt == 0)
+		return;
+
 	if (!isActive) 
 		return;
 

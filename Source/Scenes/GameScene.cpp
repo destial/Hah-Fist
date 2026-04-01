@@ -88,16 +88,6 @@ static ButtonUI* CreateHotKeyDisplay(AEVec2 pos, char ch, u8 listener) {
 	return CreateHotKeyDisplay(pos, std::string{ ch }, listener);
 }
 
-/*!
-* @brief Function to listen when escaping from the level
-* @param ev - The input event
-*/
-static void OnGameExit(const InputEvent* ev) {
-	if (ev->IsKeyTriggered(AEVK_ESCAPE)) {
-		SceneManager::GetInstance()->SetNextScene(Scenes::MAIN_MENU);
-	}
-}
-
 GameScene::GameScene() : BaseScene(), game_timer{ 0 }, game_state{ GameState::INIT } {} // Empty ctor body
 
 GameScene::~GameScene() {} // Empty dtor
@@ -110,8 +100,81 @@ void GameScene::Init() {
 	camManager->Init();
 	game_timer = 0.f;
 
-	// Add input listener when ESC to pressed to exit back to main menu
-	InputEvent::Listeners += {this, OnGameExit};
+	std::vector<BaseUI*> pause_menu;
+
+	// Initialize win screen background
+	ImageUI* pause = new ImageUI{ ASSET_HUD_IMAGE, {Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f} };
+	pause->scale = { Utils::GetWorldWidth() * 0.3f, Utils::GetWorldHeight() * 0.8f };
+	AddEntityToScene(pause);
+	pause_menu.push_back(pause);
+
+	// Initialize win screen text
+	ButtonUI* toptext = new ButtonUI{ { Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.7f } };
+	toptext->scale = { Utils::GetWorldWidth() * 0.21f, Utils::GetWorldHeight() * 0.1f };
+	toptext->text_size = 10.f;
+	toptext->color.a = 0;
+	toptext->text = "Game Paused!    ";
+	toptext->SetInteractive(false);
+	AddEntityToScene(toptext);
+	pause_menu.push_back(toptext);
+
+	// Initialize next level button
+	ButtonUI* advance = new ButtonUI{ { Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f } };
+	advance->scale = { Utils::GetWorldWidth() * 0.21f, Utils::GetWorldHeight() * 0.1f };
+	advance->text_size = 10.f;
+	advance->image = AssetManager::GetTexture(ASSET_SMALLBUTTON_IMAGE);
+	advance->text = "Continue    ";
+
+	AddEntityToScene(advance);
+	pause_menu.push_back(advance);
+
+	// Initialize the return to main menu button
+	ButtonUI* back = new ButtonUI{ { Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.35f } };
+	back->scale = { Utils::GetWorldWidth() * 0.21f, Utils::GetWorldHeight() * 0.1f };
+	back->text_size = 10.f;
+	back->image = AssetManager::GetTexture(ASSET_SMALLBUTTON_IMAGE);
+	back->text = "Back to Menu   ";
+	AddEntityToScene(back);
+	pause_menu.push_back(back);
+
+	// Listen to button click to advance to the next level
+	advance->AddClickListener([this, pause_menu](BaseUI::MouseButton b) {
+		if (b & BaseUI::MouseButton::LEFT) {
+			game_state = GameState::PLAYING;
+			for (BaseUI* en : pause_menu) {
+				en->active = false;
+			}
+		}
+	});
+
+	// Listen to button click to go back to main menu scene
+	back->AddClickListener([this](BaseUI::MouseButton b) {
+		if (b & BaseUI::MouseButton::LEFT) {
+			SceneManager::GetInstance()->SetNextScene(Scenes::MAIN_MENU);
+		}
+	});
+
+	for (BaseUI* en : pause_menu) {
+		en->active = false;
+	}
+
+	// Add input listener when ESC to pressed to toggle pause menu
+	InputEvent::Listeners += {this, [pause_menu, this](const InputEvent* ev) {
+		if (ev->IsKeyTriggered(AEVK_ESCAPE)) {
+			if (game_state == GameState::PLAYING) {
+				game_state = GameState::PAUSE;
+				for (BaseUI* en : pause_menu) {
+					en->active = true;
+				}
+			}
+			else if (game_state == GameState::PAUSE) {
+				game_state = GameState::PLAYING;
+				for (BaseUI* en : pause_menu) {
+					en->active = false;
+				}
+			}
+		}
+	}};
 
 	// Initialize background image
 	ImageUI* bgd = new ImageUI{ ASSET_BACKGROUND_IMAGE, {Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f} };
@@ -201,7 +264,9 @@ void GameScene::Init() {
 
 	// Initialize player movement interaction
 	// Uses a listener so that when the level is finished, we can remove the player interaction
-	player->AddUpdateListener(this, [player](const f32&) {
+	player->AddUpdateListener(this, [player](const f32& dt) {
+		if (dt == 0)
+			return;
 		if (player->timeElapsedSinceLastDamage > PLAYER_CONTROL_LOCK_AFTER_HIT) {
 			AEVec2 dir{};
 			if (AEInputCheckCurr(AEVK_A)) {
@@ -293,6 +358,9 @@ void GameScene::Init() {
 	weaponhud->layer = BaseUI::RenderLayer::UI;
 	AddEntityToScene(weaponhud);
 
+	BaseEntity* en = weaponhud;
+	en->Update(2.f);
+
 	// Listen to current weapon charge to update slider value
 	weaponhud->AddUpdateListener(this, [weaponhud, player](const f32&) {
 		WeaponEntity* current = player->CurrentWeapon();
@@ -351,13 +419,21 @@ void GameScene::Init() {
 }
 
 /*!
+* @brief Inherited: PreUpdate all entities in the scene
+* @param dt - The delta time for this frame
+*/
+void GameScene::PreUpdate(const f32& dt) {
+	BaseScene::PreUpdate(game_state != GameState::PLAYING ? 0.f : dt); // Base update all entities
+}
+
+/*!
 * @brief Inherited: Update all entities in the scene
 * @param dt - The delta time for this frame
 */
 void GameScene::Update(const f32& dt) {
 	// Update current static entities
 	staticEntities = SceneManager::GetInstance()->GetCurrentScene()->GetBaseEntitiesOfType<StaticEntity>();
-	BaseScene::Update(dt); // Base update all entities
+	BaseScene::Update(game_state != GameState::PLAYING ? 0.f : dt); // Base update all entities
 	staticEntities.clear();
 
 	// Update game time if not lost or won
@@ -370,7 +446,7 @@ void GameScene::Update(const f32& dt) {
 * @param dt - The delta time for this frame
 */
 void GameScene::PostUpdate(const f32& dt) {
-	BaseScene::PostUpdate(dt); // Base post update all entities
+	BaseScene::PostUpdate(game_state != GameState::PLAYING ? 0.f : dt); // Base post update all entities
 
 	// Previous game state was lost, we reset the level
 	if (game_state == GameState::LOST) {
@@ -419,7 +495,7 @@ void GameScene::Win() {
 	toptext->color.a = 0;
 	int score = static_cast<int>((p->Coins() / game_timer) * 100.f);
 	std::ostringstream oss;
-	oss << "You beat this level!     \nScore: " << score << "     ";
+	oss << "You beat this level!     |Score: " << score << "     ";
 	toptext->text = oss.str();
 	toptext->SetInteractive(false);
 	AddEntityToScene(toptext);
@@ -466,6 +542,10 @@ void GameScene::Lose() {
 	game_state = GameState::LOST;
 }
 
+/*!
+* @brief Get the current game state
+* @return The current enumerator of game state actively
+*/
 GameState GameScene::GetGameState() const {
 	return game_state;
 }

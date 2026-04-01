@@ -22,12 +22,18 @@ GrappleFistWeapon::GrappleFistWeapon(AEVec2 pos) : WeaponEntity{ pos }, snapshot
 GrappleFistWeapon::~GrappleFistWeapon() {} // Empty dtor
 
 void GrappleFistWeapon::PreUpdate(const f32& dt) {
+	if (dt == 0)
+		return;
+
 	if (grappleState == INACTIVE) {
 		WeaponEntity::PreUpdate(dt);
 	}
 }
 
 void GrappleFistWeapon::Update(const f32& dt) {
+	if (dt == 0)
+		return;
+
 	if (!isActive) {
 		return;
 	}
@@ -35,6 +41,9 @@ void GrappleFistWeapon::Update(const f32& dt) {
 }
 
 void GrappleFistWeapon::PostUpdate(const f32& dt) {
+	if (dt == 0)
+		return;
+
 	if (!isActive) {
 		return;
 	}
