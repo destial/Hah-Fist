@@ -73,7 +73,7 @@
 #define ASSET_EXPLOSION_SPRITE_ROWS 1
 #define ASSET_EXPLOSION_SPRITE_COLUMNS 7
 #define ASSET_EXPLOSION_SPRITE_SCALE 2.f
-#define ASSET_EXPLOSION_PICKUP_AUDIO "Assets/Audio/explosion.wav"
+#define ASSET_EXPLOSION_AUDIO "Assets/Audio/explosion.wav"
 
 #define ASSET_LASER_SPRITE "Assets/Entities/lightning.png"
 #define ASSET_LASER_SPRITE_ROWS 1

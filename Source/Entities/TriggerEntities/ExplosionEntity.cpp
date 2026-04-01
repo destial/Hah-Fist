@@ -57,13 +57,9 @@ void ExplosionEntity::OnCollide(GameObjectEntity* other) {
     if (other->entity_type == EntityType::NONE)
         return;
 
-    if (currentCol == 0) {
-        if (previouslydamaged != other) {
-            other->health -= damage;
-            previouslydamaged = other;
-            AEAudioPlay(AssetManager::GetAudio(ASSET_EXPLOSION_PICKUP_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
-        }
 
+    if (animationTimer == 0.f && currentCol == 1) {
+        other->health -= damage;
         if (other->entity_type == EntityType::ENEMY) {
             EnemyEntity* e = dynamic_cast<EnemyEntity*>(other);
             if (e) {
@@ -72,9 +68,13 @@ void ExplosionEntity::OnCollide(GameObjectEntity* other) {
                     e->SwitchState(EnemyEntity::FSM::DEAD);
                 }
             }
-        }
-        else if (other->entity_type == EntityType::BREAKABLE_STATIC) {
-            // Empty body
+            AEAudioPlay(AssetManager::GetAudio(ASSET_EXPLOSION_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
         }
     }
+
+
+    if (other->entity_type == EntityType::BREAKABLE_STATIC) {
+        // Empty body
+    }
+    
 }
