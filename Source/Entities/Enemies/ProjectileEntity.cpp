@@ -43,7 +43,7 @@ std::ostream& operator<<(std::ostream& os, const EnemyEntity::FSM& state)
 ProjectileEntity::ProjectileEntity(AEVec2 pos, f32 speed) : EnemyEntity(pos, { 1.f,0.f }, speed, true)
 {
 	InitializeAnimatedSpriteData(ASSET_PROJECTILE_ENEMY_SPRITE, ASSET_PROJECTILE_ENEMY_SPRITE_ROWS, ASSET_PROJECTILE_ENEMY_SPRITE_COLUMNS, ASSET_PROJECTILE_ENEMY_SPRITE_SCALE);
-	animationFrame = 1.0f / (ASSET_PROJECTILE_ENEMY_SPRITE_COLUMNS * ASSET_PROJECTILE_ENEMY_SPRITE_ROWS - 4.f);
+	animationFrame = 2.0f / (ASSET_PROJECTILE_ENEMY_SPRITE_COLUMNS * ASSET_PROJECTILE_ENEMY_SPRITE_ROWS - 4.f);
 }
 
 ProjectileEntity::~ProjectileEntity()
@@ -214,7 +214,7 @@ void ProjectileEntity::OnDead() {
 }
 
 void ProjectileEntity::OnStun(const f32& dt){
-	currentCol = 0;
+	//currentCol = 0;
 	if (stateTimer <= 0.f) {
 		SwitchState(FSM::PATROL);
 	}
