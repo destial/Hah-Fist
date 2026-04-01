@@ -205,7 +205,7 @@ void ProjectileEntity::OnAttack(const f32& dt) {
 		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
 		currentRow = 0;
 		currentCol = 0;
-		SwitchState(FSM::STUN,5.f);
+		SwitchState(FSM::STUN,1.f);
 	}
 }
 

@@ -126,6 +126,7 @@ void IronsideEntity::OnChase(const f32&) {
 		AEVec2 shootDir{ player->position.x - Pos.x,player->position.y - Pos.y };
 		ShootProjectile(health / max_health, Pos, shootDir);
 		Pos = AEVec2{ position.x, LaneY[3 - next_lane_to_spawn - curr_lane] };
+		shootDir = AEVec2{ player->position.x - Pos.x,player->position.y - Pos.y };
 		ShootProjectile(health / max_health, Pos, shootDir);
 
 		inner_state = INNERFSM::SPAWNPLATFORM2;
