@@ -47,6 +47,17 @@ public:
 	Color overlay_color; // The interactive color
 	Color overlay_text_color; // The interactive text color
 	Image* overlay_texture; // The interactive texture
+	bool active; // The activity state
+
+	/*!
+	* @brief Pre-update the UI before input
+	*/
+	virtual void PreUpdate(const f32& dt);
+
+	/*!
+	* @brief Update the UI after everything else has been processed
+	*/
+	virtual void Update(const f32& dt);
 
 	/*!
 	* @brief Post-update the UI after everything else has been processed

@@ -25,13 +25,12 @@ CameraManager::CameraManager()
 * @brief Destroy the CameraManager object
 *        Cleans up any resources used by the camera manager
 */
-CameraManager::~CameraManager(){}
+CameraManager::~CameraManager() {} // Empty dtor
 
 /*!
 * @brief Initialize the camera manager and its default values
 */
-void CameraManager::Init()
-{
+void CameraManager::Init() {
     x = target_x = 0.f;
     y = target_y = 0.f;
 
@@ -45,8 +44,7 @@ void CameraManager::Init()
 * @param newX - New X position of the camera
 * @param newY - New Y position of the camera
 */
-void CameraManager::SetPosition(float newX, float newY)
-{
+void CameraManager::SetPosition(float newX, float newY) {
     x = newX;
     y = newY;
     target_x = newX;
@@ -58,8 +56,7 @@ void CameraManager::SetPosition(float newX, float newY)
 * @param dx - Offset in the X direction
 * @param dy - Offset in the Y direction
 */
-void CameraManager::Move(float dx, float dy)
-{
+void CameraManager::Move(float dx, float dy) {
     x += dx;
     y += dy;
     target_x += dx;
@@ -71,8 +68,7 @@ void CameraManager::Move(float dx, float dy)
 * @param tx - Target X position
 * @param ty - Target Y position
 */
-void CameraManager::SetTarget(float tx, float ty)
-{
+void CameraManager::SetTarget(float tx, float ty) {
     target_x = tx;
     target_y = ty;
 }
@@ -82,8 +78,7 @@ void CameraManager::SetTarget(float tx, float ty)
 * @param duration - Duration of the shake effect in seconds
 * @param strength - Intensity of the shake
 */
-void CameraManager::Shake(float duration, float strength)
-{
+void CameraManager::Shake(float duration, float strength) {
     shake_duration = duration;
     shake_timer = duration;
     shake_strength = strength;
@@ -93,16 +88,19 @@ void CameraManager::Shake(float duration, float strength)
 * @brief Update the camera position and apply effects each frame
 * @param dt - Delta time between frames
 */
-void CameraManager::Update(float dt)
-{
+void CameraManager::Update(float dt) {
+    if (dt == 0)
+        return;
+
+    // Target smooth transition to target position
     x += (target_x - x) * smooth_speed * dt;
     y += (target_y - y) * smooth_speed * dt;
 
     float finalX = x;
     float finalY = y;
 
-    if (shake_timer > 0.f)
-    {
+    // Shake the camera randomly
+    if (shake_timer > 0.f) {
         shake_timer -= dt;
         float progress = shake_timer / shake_duration;
         float strength = shake_strength * progress;
@@ -114,6 +112,7 @@ void CameraManager::Update(float dt)
         finalY += offsetY;
     }
 
+    // Update camera x position scaled by screen resolution
     auto screenRes = Utils::GetScreenResolution(); 
     finalX -= screenRes.first / 2.f;
     //finalY -= screenRes.second / 2.f;

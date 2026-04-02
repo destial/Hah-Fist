@@ -25,7 +25,9 @@
 * @return None
 */
 IronsideEntity::IronsideEntity(AEVec2 pos) : BossEntity(pos) {
+	//Initialising Sprite Data and Boss Variables
 	InitializeAnimatedSpriteData(ASSET_IRONSIDE_SPRITE, ASSET_IRONSIDE_SPRITE_ROWS, ASSET_IRONSIDE_SPRITE_COLUMNS, ASSET_IRONSIDE_SPRITE_SCALE);
+	//For gravityScale it should be set to 0 since i do not want it to follow the normal gravity that entities have
 	pBody->gravityScale = 0;
 	inner_state = INNERFSM::MOVE;
 	go_type = PhysicsType::TRIGGER;
@@ -42,6 +44,7 @@ IronsideEntity::IronsideEntity(AEVec2 pos) : BossEntity(pos) {
 * @return None
 */
 IronsideEntity::~IronsideEntity() {
+	// Empty body
 }
 /*!
 * @brief Handles post-update logic using base GameObjectEntity animation handling
@@ -58,6 +61,7 @@ void IronsideEntity::PostUpdate(const f32& dt) {
 * @return None
 */
 void IronsideEntity::OnIdle(const f32&) {
+	//Activate the Boss Fight
 	if (boss_activated) {
 		velocity.x = BOSS3VELX;
 		if (position.x >= boss_room_center.x + BOSS3OFFSETX)
@@ -73,6 +77,7 @@ void IronsideEntity::OnIdle(const f32&) {
 * @return None
 */
 void IronsideEntity::OnPatrol(const f32&) {
+	// Empty body
 }
 /*!
 * @brief Handles chase behavior using an internal FSM for movement, platform spawning,
@@ -126,6 +131,7 @@ void IronsideEntity::OnChase(const f32&) {
 		AEVec2 shootDir{ player->position.x - Pos.x,player->position.y - Pos.y };
 		ShootProjectile(health / max_health, Pos, shootDir);
 		Pos = AEVec2{ position.x, LaneY[3 - next_lane_to_spawn - curr_lane] };
+		shootDir = AEVec2{ player->position.x - Pos.x,player->position.y - Pos.y };
 		ShootProjectile(health / max_health, Pos, shootDir);
 
 		inner_state = INNERFSM::SPAWNPLATFORM2;

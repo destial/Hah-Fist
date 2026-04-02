@@ -21,20 +21,16 @@
 * @return None
 */
 TitanEntity::TitanEntity(AEVec2 pos) : ground{nullptr}, BossEntity(pos) {
+	//Initialising Sprite Data and Boss Variables
 	InitializeAnimatedSpriteData(ASSET_TITAN_SPRITE, ASSET_TITAN_SPRITE_ROWS, ASSET_TITAN_SPRITE_COLUMNS, ASSET_TITAN_SPRITE_SCALE);
-	attack_range = BOSS1ATTACKRANGE;
 	shoot_timer = 0.f;
-	jump_x = BOSS1JUMPVELX;
-	jump_y = BOSS1JUMPVELY;
-	base_projectiles = BOSS1BASEPROJECTILES;
-	extra_projectiles = BOSS1EXTRAPROJECTILES;
-	
 }
 /*!
 * @brief Destructor for TitanEntity
 * @return None
 */
 TitanEntity::~TitanEntity() {
+	// Empty body
 }
 /*!
 * @brief Updates the Titan boss logic including cooldown timers and base behavior
@@ -42,6 +38,7 @@ TitanEntity::~TitanEntity() {
 * @return None
 */
 void TitanEntity::Update(const f32& dt) {
+	//Update Shootimer based on dt
 	shoot_timer -= dt;
 	BossEntity::Update(dt);
 }
@@ -51,6 +48,7 @@ void TitanEntity::Update(const f32& dt) {
 * @return None
 */
 void TitanEntity::PostUpdate(const f32& dt) {
+	//Changes animation of spritesheet if the boss is jumping and flips the sprite when it is looking left or right
 	currentRow = 1;
 	if (velocity.x != 0) {
 		currentRow = 0;
@@ -73,7 +71,6 @@ void TitanEntity::PostUpdate(const f32& dt) {
 	{
 		currentRow = 2;
 	}
-
 	BossEntity::PostUpdate(dt);
 }
 /*!
@@ -82,6 +79,7 @@ void TitanEntity::PostUpdate(const f32& dt) {
 * @return None
 */
 void TitanEntity::OnIdle(const f32&) {	
+	//Activate the Boss Fight
 	if (boss_activated) {
 		SwitchState(FSM::CHASE);
 	}
@@ -102,15 +100,14 @@ void TitanEntity::OnPatrol(const f32&) {
 * @return None
 */
 void TitanEntity::OnChase(const f32&) {
+	//Checks for the player
 	PlayerEntity* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<PlayerEntity>();
 	if (!player) return;
-
+	//If able to find the player then try to jump towards their position
 	dir.x = (player->position.x > position.x) ? 1.f : -1.f;
-	float healthRatio = health / max_health;
-	float temp = (1.f - healthRatio) / 0.75f;
-	temp = AEClamp(temp, 0.f, 1.f);
-	velocity.x = dir.x * (jump_x + temp * jump_x);
-	velocity.y = jump_y;
+	//Boss jumps further based on how low he is up to twice as far
+	velocity.x = dir.x * (BOSS1JUMPVELX + GetLowHealthFactor() * BOSS1JUMPVELX);
+	velocity.y = BOSS1JUMPVELY;
 	
 	SwitchState(FSM::STUN, 3.f);
 
@@ -122,28 +119,32 @@ void TitanEntity::OnChase(const f32&) {
 * @return None
 */
 void TitanEntity::OnStun(const f32&) {
+	//Check if the boss is on the ground
 	if (pBody->is_standing_above && shoot_timer < 0.f) {
+		//Screenshake to give the player feedback the boss has landed and will start attacking the player with the spike projectiles
 		CameraManager::GetInstance()->Shake(3.f, 5.f);
-		float healthRatio = health / max_health;
-		float temp = (1.f - healthRatio) / 0.75f;
-		temp = AEClamp(temp, 0.f, 1.f);
-
-		int projectiles = base_projectiles + static_cast<int>(temp * extra_projectiles);
+		//Add projectiles based on the health of the boss
+		int projectiles = BOSS1BASEPROJECTILES + static_cast<int>(GetLowHealthFactor() * BOSS1EXTRAPROJECTILES);
 		for (int i = 0; i < projectiles; i++) {
-			AEVec2 Pos{ Utils::RandRange(boss_room_center.x-attack_range,boss_room_center.x +attack_range), BOSS1ROOMPOSY };
+			//Spawn the spike projectiles based on the boss room Attackrange being the half size of the room so it spawns 
+			//spikes from the ceiling of the bossroom
+			AEVec2 Pos{ Utils::RandRange(boss_room_center.x - BOSS1ATTACKRANGE,boss_room_center.x + BOSS1ATTACKRANGE), BOSS1ROOMPOSY };
+			//Shoots downwards from the ceiling
 			AEVec2 shootDir{ 0.f, -1.f };
+			//Normalizing shoot direction
 			AEVec2Normalize(&shootDir, &shootDir);
+			//Random Projectile Speed
 			f32 bulletSpeed = Utils::RandRange(BULLETMINSPEED, BULLETMAXSPEED);
-
+			//Normal Spike Spawn Code
 			SpikeProjectile* spike = new SpikeProjectile(Pos, shootDir, bulletSpeed, this->damage, this);
 			spike->scale = { BULLETSCALEX ,BULLETSCALEY };
 			SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(spike);
 		}
-
+		//Reset Shoot_timer so boss does not constantly shoot
 		shoot_timer = shoot_cooldown;
 	}
 
-
+	//Reset back to patrol state
 	if (stateTimer < 0.f) {
 		SwitchState(FSM::PATROL, 2.f);
 	}
@@ -153,8 +154,10 @@ void TitanEntity::OnStun(const f32&) {
 * @return None
 */
 void TitanEntity::OnDead() {
+	//Set winscreen to popup
 	if (GameScene* game = dynamic_cast<GameScene*>(SceneManager::GetInstance()->GetCurrentScene())) {
 		game->Win();
 	}
+	//Delete entity from the scene
 	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 }

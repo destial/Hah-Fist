@@ -23,8 +23,6 @@ protected:
 	GameObjectEntity* ground;
 	float shoot_cooldown{ BOSS1SHOOTCOOLDOWN };
 	float shoot_timer;
-	float attack_range,jump_x,jump_y;
-	int base_projectiles, extra_projectiles;
 public:
 	/*!
 	* @brief Constructs the TitanEntity and initializes its attributes such as

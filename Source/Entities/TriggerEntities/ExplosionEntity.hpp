@@ -20,7 +20,6 @@
 class ExplosionEntity : public GameObjectEntity {
 protected:
 	GameObjectEntity* owner;
-	GameObjectEntity* previouslydamaged{nullptr};
 	f32 damage;
 public:
 	/*!

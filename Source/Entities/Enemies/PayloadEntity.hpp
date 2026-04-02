@@ -29,8 +29,6 @@ protected:
 	GameObjectEntity* ground;
 	float land_cooldown{ BOSS2SHOOTCOOLDOWN };
 	float land_timer;
-	float attack_range;
-	int base_projectiles, extra_projectiles;
 public:
 	/*!
 	* @brief Constructs the PayloadEntity and initializes its attributes such as

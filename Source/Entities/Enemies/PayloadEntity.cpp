@@ -24,11 +24,9 @@
 * @return None
 */
 PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, BossEntity(pos) {
+	//Initialising Sprite Data and Boss Variables
 	InitializeAnimatedSpriteData(ASSET_PAYLOAD_SPRITE, ASSET_PAYLOAD_SPRITE_ROWS, ASSET_PAYLOAD_SPRITE_COLUMNS, ASSET_PAYLOAD_SPRITE_SCALE);
-	attack_range = BOSS2ATTACKRANGE;
 	land_timer = 0.f;
-	base_projectiles = BOSS2EXTRAPROJECTILES;
-	extra_projectiles = BOSS2BASEPROJECTILES;
 	inner_state = INNERFSM::JUMP;
 	frictionMultiplier = BOSS2FRICTION;
 }
@@ -37,6 +35,7 @@ PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, BossEntity(pos) {
 * @return None
 */
 PayloadEntity::~PayloadEntity() {
+	// Empty body
 }
 /*!
 * @brief Handles post-update logic such as animation selection and sprite orientation
@@ -44,6 +43,7 @@ PayloadEntity::~PayloadEntity() {
 * @return None
 */
 void PayloadEntity::PostUpdate(const f32& dt) {
+	//Changes animation of spritesheet
 	currentRow = 1;
 	if (fabsf(velocity.x) > 0.1f) {
 		currentRow = 0;
@@ -74,6 +74,7 @@ void PayloadEntity::PostUpdate(const f32& dt) {
 * @return None
 */
 void PayloadEntity::OnIdle(const f32&) {
+	//Activate the Boss Fight
 	if (boss_activated) {
 		SwitchState(FSM::CHASE);
 	}
@@ -85,11 +86,15 @@ void PayloadEntity::OnIdle(const f32&) {
 * @return None
 */
 void PayloadEntity::OnChase(const f32& dt) {
+	//Used an INNERFSM to help with more varied options for the boss
 	switch (inner_state) {
 	case INNERFSM::JUMP:
 	{
+		//Randomly Chooses a direction to jump towards
 		dir.x = (Utils::RandRange(0.f, 1.f) < 0.5f) ? -1.f : 1.f;
 		velocity.x = dir.x * BOSS2JUMPVELX;
+		//The boss will jump higher when he near the ground and will jump lower when he is higher to the room
+		//This is to make the boss fight feel like he is generally above you without him jumping out of the screen
 		float t = AEClamp(position.y / BOSS2ROOMMAXHEIGHT, 0.f, 1.f);
 		velocity.y = BOSS2JUMPVELY * (1.f - t * t);
 		inner_state = INNERFSM::LAND;
@@ -98,12 +103,16 @@ void PayloadEntity::OnChase(const f32& dt) {
 	}
 	case INNERFSM::LAND:
 	{
+		//Use a timer to spawn a platform below the boss after he jumps
 		land_timer -= dt;
 		if (land_timer < 0.f)
 		{
+			//Spawns the platform below the boss for him to land on
 			AEVec2 Pos{ position.x,  position.y - scale.y * 0.7f };
+			//Direction that the platform will move in which is downwards
 			AEVec2 platformDir{ 0.f, -1.f };
-			MovingPlatformEntity* platform = new MovingPlatformEntity(Pos, platformDir, false , 0.2f , 5.0f);
+			//Standard Platform Spawning
+			MovingPlatformEntity* platform = new MovingPlatformEntity(Pos, platformDir, false , 0.2f , 10.0f);
 			platform->mesh = MeshRenderer::GetCenterRectMesh();
 			platform->scale = { 7.f, 0.5f };
 			SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(platform);
@@ -113,15 +122,19 @@ void PayloadEntity::OnChase(const f32& dt) {
 	}
 	case INNERFSM::ATTACK:
 	{
-		int projectiles = base_projectiles + static_cast<int>(GetLowHealthFactor() * extra_projectiles);
+		//Add projectiles based on the health of the boss
+		int projectiles = BOSS2BASEPROJECTILES + static_cast<int>(GetLowHealthFactor() * BOSS2EXTRAPROJECTILES);
 		for (int i = 0; i < projectiles; i++)
 		{
-			AEVec2 Pos{ Utils::RandRange(position.x - attack_range,position.x + attack_range),  position.y };
+			//Spawn the projectiles based on the attack range of the boss
+			AEVec2 Pos{ Utils::RandRange(position.x - BOSS2ATTACKRANGE,position.x + BOSS2ATTACKRANGE),  position.y };
+			//Shoots downwards from the boss
 			AEVec2 shootDir{ 0.f, -1.f };
 			ShootProjectile(health / max_health, Pos, shootDir);
 		}
 		inner_state = INNERFSM::JUMP;
-		float stunTime = 1.f + (1.f * GetLowHealthFactor());
+		//Boss is stunned less as he gets lower health
+		float stunTime = 2.f - (1.f * GetLowHealthFactor());
 		SwitchState(FSM::STUN, stunTime);
 		break;
 	}

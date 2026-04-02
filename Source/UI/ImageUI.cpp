@@ -24,6 +24,9 @@ ImageUI::~ImageUI() {} // Empty dtor
 * @param dt - The delta time
 */
 void ImageUI::Update(const f32& dt) {
+	if (!active)
+		return;
+
 	BaseUI::Update(dt);
 	if (!sprite) 
 		return;
@@ -44,6 +47,9 @@ void ImageUI::Update(const f32& dt) {
 * @brief Render the image to the screen
 */
 void ImageUI::Render() {
+	if (!active)
+		return;
+
 	// Prioritize sprite rendering
 	if (sprite) {
 		sprite->Render(transform, color, currentRow, currentCol);

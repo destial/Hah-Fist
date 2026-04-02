@@ -25,7 +25,8 @@ BaseUI::BaseUI(AEVec2 pos) : BaseEntity{ pos },
 	text_color{255, 0, 0, 0},
 	overlay_text_color{255, 0, 0, 0},
 	overlay_texture{ nullptr },
-	overlay_color{ 255, 128, 128, 128 }
+	overlay_color{ 255, 128, 128, 128 },
+	active{ true }
 { // Ctor
 	layer = RenderLayer::UI;
 	mesh = MeshRenderer::GetCenterRectMesh();
@@ -35,9 +36,32 @@ BaseUI::BaseUI(AEVec2 pos) : BaseEntity{ pos },
 BaseUI::~BaseUI() {} // Empty dtor
 
 /*!
+* @brief Pre-update the UI before input
+*/
+void BaseUI::PreUpdate(const f32& dt) {
+	if (!active)
+		return;
+
+	BaseEntity::PreUpdate(dt);
+}
+
+/*!
+* @brief Update the UI after everything else has been processed
+*/
+void BaseUI::Update(const f32& dt) {
+	if (!active)
+		return;
+
+	BaseEntity::Update(dt);
+}
+
+/*!
 * @brief Post-update the UI after everything else has been processed
 */
 void BaseUI::PostUpdate(const f32& dt) {
+	if (!active)
+		return;
+
 	BaseEntity::PostUpdate(dt);
 
 	// On screen, so negate camera position
@@ -56,6 +80,9 @@ void BaseUI::PostUpdate(const f32& dt) {
 * @brief Render the UI to the screen
 */
 void BaseUI::Render() {
+	if (!active) 
+		return;
+
 	// If level editor is toggled, PostUpdate was not called so we force call it here
 	if (SceneManager::GetInstance()->GetEditor()->IsToggled()) {
 		BaseUI::PostUpdate(Utils::GetDeltaTime());
@@ -85,6 +112,9 @@ void BaseUI::Render() {
 * @brief Render the UI text to the screen
 */
 void BaseUI::RenderText() {
+	if (!active)
+		return;
+
 	// Split the lines into its newline (if any)
 	std::vector<std::string> lines;
 	size_t start = 0;
