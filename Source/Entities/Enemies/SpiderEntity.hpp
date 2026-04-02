@@ -1,6 +1,6 @@
 /*!
 * @file SpiderEntity.hpp
-* @author Name (brandonshaohui.koh@digipen.edu)
+* @author Brandon Koh Shao Hui (brandonshaohui.koh@digipen.edu)
 * @date 8 March 2026
 * @course CSD1451
 * @brief This source file contains the declaration of class SpiderEntity as well as its member functions

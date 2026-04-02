@@ -1,6 +1,6 @@
 /*!
 * @file EnemyEntity.hpp
-* @author Name (brandonshaohui.koh@digipen.edu)
+* @author Brandon Koh Shao Hui (brandonshaohui.koh@digipen.edu)
 * @date 21 January 2026
 * @course CSD1451
 * @brief This source file contains the declaration of class EnemyEntity as well as its member

@@ -1,3 +1,11 @@
+/*!
+* @file ProjectileEntity.hpp
+* @author Brandon Koh Shao Hui (brandonshaohui.koh@digipen.edu)
+* @date 14 March 2026
+* @course CSD1451
+* @brief This source file contains the declaration for class ProjectileEntity as well as its member functions
+*		 which contains the behaviour of ProjectileEntity which is the archer in the game.
+*/
 #include "ProjectileEntity.hpp"
 #include "../PlayerEntity.hpp"
 #include "../StaticEntity.hpp"
@@ -12,6 +20,12 @@
 #define PROJECTILE_ENTITY_LINE_OF_SIGHT 5.f
 #define ATTACK_RANGE 2.0f
 
+/*!
+* @brief Operator overload <<.
+* @param os - Reference to the output stream
+* @param state - FSM
+* @return abcxyz
+*/
 std::ostream& operator<<(std::ostream& os, const EnemyEntity::FSM& state)
 {
 	switch (state) {
@@ -39,18 +53,29 @@ std::ostream& operator<<(std::ostream& os, const EnemyEntity::FSM& state)
 	return os << "UNKNOWN";
 }
 
-
+/*!
+* @brief Constructor of ProjectileEntity which initialises its data members position & speed
+* @param pos - Position of the ProjectileEntity
+* @param speed - Speed of the ProjectileEntity
+*/
 ProjectileEntity::ProjectileEntity(AEVec2 pos, f32 speed) : EnemyEntity(pos, { 1.f,0.f }, speed, true)
 {
 	InitializeAnimatedSpriteData(ASSET_PROJECTILE_ENEMY_SPRITE, ASSET_PROJECTILE_ENEMY_SPRITE_ROWS, ASSET_PROJECTILE_ENEMY_SPRITE_COLUMNS, ASSET_PROJECTILE_ENEMY_SPRITE_SCALE);
 	animationFrame = 1.0f / (ASSET_PROJECTILE_ENEMY_SPRITE_COLUMNS * ASSET_PROJECTILE_ENEMY_SPRITE_ROWS - 4.f);
 }
 
+/*!
+* @brief Destructor of the ProjectileEntity
+*/
 ProjectileEntity::~ProjectileEntity()
 {
 	// Empty by design
 }
 
+/*!
+* @brief Update
+* @param dt - Time between frame
+*/
 void ProjectileEntity::Update(const f32& dt) {
 
 	EnemyEntity::Update(dt);
@@ -64,10 +89,18 @@ void ProjectileEntity::Update(const f32& dt) {
 	}
 }
 
+/*!
+* @brief PostUpdate
+* @param dt - Time between frame
+*/
 void ProjectileEntity::PostUpdate(const f32& dt) {
 	GameObjectEntity::PostUpdate(dt);
 }
 
+/*!
+* @brief OnCollide function which contains the collision response of the ProjectileEntity
+* @param go - GameObjectEntity it is colliding
+*/
 void ProjectileEntity::OnCollide(GameObjectEntity* go) {
 	EnemyEntity::OnCollide(go);
 	if (go->go_type == PhysicsType::DYNAMIC) {
@@ -87,6 +120,10 @@ void ProjectileEntity::OnCollide(GameObjectEntity* go) {
 	}
 }
 
+/*!
+* @brief OnIdle contains the idle behaviour of the ProjectileEntity
+* @param dt - Time between each frame
+*/
 void ProjectileEntity::OnIdle(const f32& dt) {
 	// ProjectileEntity's idle behaviour
 	velocity.x = 0.f;
@@ -116,6 +153,10 @@ void ProjectileEntity::OnIdle(const f32& dt) {
 	}
 }
 
+/*!
+* @brief OnPatrol contains the patrol behaviour of the ProjectileEntity
+* @param dt - Time between frame
+*/
 void ProjectileEntity::OnPatrol(const f32& dt) {
 	EnemyEntity::OnPatrol(dt);
 	// Checks if PlayerEntity is within the line of sight, if it is Chase.
@@ -139,6 +180,10 @@ void ProjectileEntity::OnPatrol(const f32& dt) {
 	}
 }
 
+/*!
+* @brief OnChase contains the chase behaviour of the ProjectileEntity
+* @param dt - Time between each frame
+*/
 void ProjectileEntity::OnChase(const f32& dt) {
 	// Checks if there exists a player
 	if (PlayerEntity* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<PlayerEntity>()) {
@@ -175,6 +220,10 @@ void ProjectileEntity::OnChase(const f32& dt) {
 	}
 }
 
+/*!
+* @brief OnAttack contains the attack behaviour of the ProjectileEntity
+* @param dt - Time between each frame
+*/
 void ProjectileEntity::OnAttack(const f32& dt) {
 	// Animations
 	if (currentRow > 6) {
@@ -209,13 +258,21 @@ void ProjectileEntity::OnAttack(const f32& dt) {
 	}
 }
 
-void ProjectileEntity::OnDead() {
-	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
-}
-
+/*!
+* @brief OnStun contains the stun behaviour of the ProjectileEntity
+* @param dt - Time between each frame
+*/
 void ProjectileEntity::OnStun(const f32& dt){
 	currentCol = 0;
 	if (stateTimer <= 0.f) {
 		SwitchState(FSM::PATROL);
 	}
+}
+
+/*!
+* @brief OnDead contains the dead behaviour of the ProjectileEntity
+* @param dt - Time between each frame
+*/
+void ProjectileEntity::OnDead() {
+	SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 }
