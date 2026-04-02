@@ -3,7 +3,7 @@
 * @author Brandon Koh Shao Hui (brandonshaohui.koh@digipen.edu)
 * @date 14 March 2026
 * @course CSD1451
-* @brief This source file contains the declaration for class ProjectileEntity as well as its member functions
+* @brief This source file contains the definition for class ProjectileEntity as well as its member functions
 *		 which contains the behaviour of ProjectileEntity which is the archer in the game.
 */
 #include "ProjectileEntity.hpp"
@@ -21,10 +21,10 @@
 #define ATTACK_RANGE 2.0f
 
 /*!
-* @brief Operator overload <<.
+* @brief Operator overload <<. Prints to the output stream the state of the ProjectileEnemy's FSM
 * @param os - Reference to the output stream
 * @param state - FSM
-* @return abcxyz
+* @return reference to the output stream
 */
 std::ostream& operator<<(std::ostream& os, const EnemyEntity::FSM& state)
 {
@@ -73,7 +73,7 @@ ProjectileEntity::~ProjectileEntity()
 }
 
 /*!
-* @brief Update
+* @brief Updates which way the sprites faces and its fsm behaviour
 * @param dt - Time between frame
 */
 void ProjectileEntity::Update(const f32& dt) {

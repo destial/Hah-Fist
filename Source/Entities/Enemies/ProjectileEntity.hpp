@@ -31,7 +31,7 @@ public:
 	~ProjectileEntity() override;
 
 	/*!
-	* @brief Update
+	* @brief Updates which way the sprites faces and its fsm behaviour
 	* @param dt - Time between frame
 	*/
 	void Update(const f32& dt) override;
