@@ -1,3 +1,12 @@
+/*!
+* @file GameObjectEntity.hpp
+* @author Brandon Koh (brandonshaohui.koh@digipen.edu)
+* @author Mohammad Hafiz (mohammadhafiz.b@digipen.edu)
+* @author Rance Andres (andresrancerowell.g@digipen.edu)
+* @date 19 January 2026
+* @course CSD1451
+* @brief Declaration file for a gameobject entity that can collide
+*/
 #include "GameObjectEntity.hpp"
 #include "StaticEntity.hpp"
 #include "../Utils/AEOverload.hpp"
@@ -18,7 +27,9 @@ GameObjectEntity::GameObjectEntity(AEVec2 pos, f32 mass, CollisionShape shape, P
 GameObjectEntity::~GameObjectEntity() {
 	delete pBody;
 }
-
+/*!
+* @brief Inherited: Pre-update the entity, before any input has been processed
+*/
 void GameObjectEntity::PreUpdate(const f32& dt) {
 	if (!isActive)
 		return;
@@ -27,7 +38,9 @@ void GameObjectEntity::PreUpdate(const f32& dt) {
 	this->prev_position = this->position;
 	//this->velocity = { 0.f, velocity.y };
 }
-
+/*!
+* @brief Inherited: Update the entity after input has been processed
+*/
 void GameObjectEntity::Update(const f32& dt) {
 	if (!isActive)
 		return;
@@ -44,7 +57,9 @@ void GameObjectEntity::Update(const f32& dt) {
 		/*pBody->air_strength = AEClamp(pBody->air_strength - 2 * dt, 0.0, 1.0);*/
 	}
 }
-
+/*!
+* @brief Inherited: Post-update the entity after everything else has been processed
+*/
 void GameObjectEntity::PostUpdate(const f32& dt)  {
 	if (!isActive)
 		return;
@@ -75,7 +90,9 @@ void GameObjectEntity::PostUpdate(const f32& dt)  {
 	}
 	BaseEntity::PostUpdate(dt);
 }
-
+/*!
+* @brief Inherited: Render the entity to the screen
+*/
 void GameObjectEntity::Render() {
 	if (!isActive)
 		return;
@@ -98,7 +115,10 @@ void GameObjectEntity::Render() {
 		DebugUtils::RenderText(AEVec2{this->position.x, this->position.y - 0.5f}, typ, true);
 	}
 }
-
+/*!
+* @brief Called when this entity collides with another GameObject entity
+* @param go - The collided GameObject entity
+*/
 void GameObjectEntity::OnCollide(GameObjectEntity*) {
 	// Empty body
 }

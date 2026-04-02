@@ -77,7 +77,9 @@ ProjectileEntity::~ProjectileEntity()
 * @param dt - Time between frame
 */
 void ProjectileEntity::Update(const f32& dt) {
-
+	// Debug line for Raycast //Utils::RayHit({ position.x + std::abs(scale.x) * 0.5f * dir.x,position.y }, { ATTACK_RANGE * dir.x, 0.f },player)
+	DebugUtils::RenderLine({ position.x + std::abs(scale.x) * 0.5f * dir.x, position.y }, { position.x + std::abs(scale.x) * 0.5f * dir.x + ATTACK_RANGE * dir.x, position.y });
+	// TO SHOW RAYCAST
 	EnemyEntity::Update(dt);
 	if (velocity.x < 0) {
 		if (scale.x > 0)
