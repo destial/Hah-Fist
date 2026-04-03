@@ -23,7 +23,7 @@ protected:
 	FSM state;
 	AEVec2 dir;
 	f32 speed;
-	f32 stateTimer;
+	f32 state_timer;
 public:
 	/*!
 	* @brief Constructor of the EnemyEntity class which initialises the position, direction, speed.

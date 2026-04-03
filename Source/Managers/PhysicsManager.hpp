@@ -8,11 +8,11 @@
 
 class PhysicsManager {
 private:
-	Physics::AABB worldBounds;
-	size_t maxEntriesPerNode{ 1 };
+	Physics::AABB world_bounds;
+	size_t max_entries_per_node{ 1 };
 	QuadTree::Tree* qtGameObjects{ nullptr };
 public:
-	PhysicsManager(Physics::AABB _worldBounds = { AEVec2{-500.0f, -500.0f}, AEVec2{500.0f, 500.0f} }, size_t _maxEntriesPerNode = 1);
+	PhysicsManager(Physics::AABB _world_bounds = { AEVec2{-500.0f, -500.0f}, AEVec2{500.0f, 500.0f} }, size_t _max_entries_per_node = 1);
 	~PhysicsManager();
 	std::vector<GameObjectEntity*> gameObjects;
 	void Init();

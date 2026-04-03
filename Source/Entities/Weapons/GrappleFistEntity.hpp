@@ -16,7 +16,7 @@
 */
 class GrappleFistWeapon : public WeaponEntity {
 protected:
-	f32 grappleSpeedMult{ 50.0f }; //Multiplier for travel speed of the grapple.
+	f32 grapple_speed_mult{ 50.0f }; //Multiplier for travel speed of the grapple.
 	enum GRAPPLE_STATE {
 		INACTIVE,
 		SHOOTING,
@@ -24,10 +24,10 @@ protected:
 		HOOKING_OBJECT_TO_PLAYER,
 		HOOKING_PLAYER_TO_STATIC_OBJECT,
 		HOOKING_PLAYER_TO_DYNAMIC_OBJECT,
-	} grappleState{ INACTIVE }; // Current state of this weapon's grapple.
-	f32 travelDuration{ 0.0f }; // How long this weapon has been travelling.
-	GameObjectEntity* grappledObject{ nullptr }; // Pointer to the current grappled object.
-	AEVec2 snapshottedAttackDirection; // The travel direction which is snapshotted when the attack is called.
+	} grapple_state{ INACTIVE }; // Current state of this weapon's grapple.
+	f32 travel_duration{ 0.0f }; // How long this weapon has been travelling.
+	GameObjectEntity* grappled_object{ nullptr }; // Pointer to the current grappled object.
+	AEVec2 snapshotted_attack_direction; // The travel direction which is snapshotted when the attack is called.
 public:
 	/*!
 	* @brief Constructor function for a GrappleFistWeapon. Initializes the sprite and configuration for a

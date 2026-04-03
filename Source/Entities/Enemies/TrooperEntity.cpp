@@ -81,7 +81,7 @@ void TrooperEntity::OnCollide(GameObjectEntity* go) {
 void TrooperEntity::OnIdle(const f32&) {
 	// Trooper's idle behaviour
 	velocity.x = 0.f;
-	if (stateTimer < 0.f) {
+	if (state_timer < 0.f) {
 		FlipDir(); // Flip the direction it is travelling.
 		SwitchState(FSM::PATROL);
 		return;

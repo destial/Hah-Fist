@@ -15,12 +15,12 @@
 #include <cmath>
 
 GameObjectEntity::GameObjectEntity()
-: BaseEntity{ { 0.f } }, health{ 1.f }, max_health{ 1.f }, damage { 1.f }, isActive{ true },
+: BaseEntity{ { 0.f } }, health{ 1.f }, max_health{ 1.f }, damage { 1.f }, is_active{ true },
   shape{ CollisionShape::AABB }, go_type{ PhysicsType::DYNAMIC }, 
   prev_position{ 0.f }, pBody{ new PhysicsBody{0.f} } {}
 
 GameObjectEntity::GameObjectEntity(AEVec2 pos, f32 mass, CollisionShape shape, PhysicsType go_type)
-: BaseEntity{ pos }, health{ 1.f }, max_health{ 1.f }, damage{ 1.f }, isActive{ true },
+: BaseEntity{ pos }, health{ 1.f }, max_health{ 1.f }, damage{ 1.f }, is_active{ true },
   shape{ shape } , go_type{ go_type },
 	prev_position{ 0.f }, pBody{ new PhysicsBody{mass} } {}
 
@@ -31,7 +31,7 @@ GameObjectEntity::~GameObjectEntity() {
 * @brief Inherited: Pre-update the entity, before any input has been processed
 */
 void GameObjectEntity::PreUpdate(const f32& dt) {
-	if (!isActive)
+	if (!is_active)
 		return;
 
 	BaseEntity::PreUpdate(dt);
@@ -42,7 +42,7 @@ void GameObjectEntity::PreUpdate(const f32& dt) {
 * @brief Inherited: Update the entity after input has been processed
 */
 void GameObjectEntity::Update(const f32& dt) {
-	if (!isActive)
+	if (!is_active)
 		return;
 
 	BaseEntity::Update(dt);
@@ -61,7 +61,7 @@ void GameObjectEntity::Update(const f32& dt) {
 * @brief Inherited: Post-update the entity after everything else has been processed
 */
 void GameObjectEntity::PostUpdate(const f32& dt)  {
-	if (!isActive)
+	if (!is_active)
 		return;
 
 	this->position += this->velocity * dt;
@@ -94,7 +94,7 @@ void GameObjectEntity::PostUpdate(const f32& dt)  {
 * @brief Inherited: Render the entity to the screen
 */
 void GameObjectEntity::Render() {
-	if (!isActive)
+	if (!is_active)
 		return;
 	
 	BaseEntity::Render();

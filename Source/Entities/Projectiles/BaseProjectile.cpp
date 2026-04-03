@@ -34,15 +34,15 @@ BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameO
     mesh = nullptr;
 
     //Might want to use when doing projectiles with animations
-    animationTimer = 0.f;
-    animationFrame = 1.f / (1.f * 1.f);
-    currentRow = currentCol = 0;
+    animation_timer = 0.f;
+    animation_frame = 1.f / (1.f * 1.f);
+    current_row = current_col = 0;
 
     scale = { 2.f * (static_cast<f32>(sprite->image->width) / sprite->image->height), 2.f };
     layer = RenderLayer::ENTITY;
-    pBody->gravityScale = 0.f;
+    pBody->gravity_scale = 0.f;
     this->frictionMultiplier = 0.f;
-    isActive = true;
+    is_active = true;
     velocity.x = dir.x * speed;
     velocity.y = dir.y * speed;
     health = 1;
@@ -68,7 +68,7 @@ void BaseProjectile::PreUpdate(const f32& dt) {
 * @return None
 */
 void BaseProjectile::Update(const f32& dt) {
-    if (!isActive) 
+    if (!is_active) 
         return;
     
     GameObjectEntity::Update(dt);
@@ -83,7 +83,7 @@ void BaseProjectile::Update(const f32& dt) {
 * @return None
 */
 void BaseProjectile::Render() {
-    sprite->Render(transform, color, currentRow, currentCol);
+    sprite->Render(transform, color, current_row, current_col);
     GameObjectEntity::Render();
 }
 /*!
@@ -95,7 +95,7 @@ void BaseProjectile::OnCollide(GameObjectEntity* other) {
     if (!other || other == this || other == owner)
         return;
 
-    if (!other->isActive)
+    if (!other->is_active)
         return;
 
     if (other->entity_type == EntityType::NONE)
@@ -141,7 +141,7 @@ void BaseProjectile::OnHit(GameObjectEntity* other) {
 * @return None
 */
 void BaseProjectile::OnExpire() {
-    isActive = false;
+    is_active = false;
     SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 }
 

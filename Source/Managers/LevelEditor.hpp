@@ -45,7 +45,7 @@ class LevelEditor {
 private:
 	bool toggled; // Toggle flag
 	BaseScene* scene; // The current editing scene
-	std::vector<std::pair<BaseEntity*, AEVec2>> currentSelections; // The current entity selected
+	std::vector<std::pair<BaseEntity*, AEVec2>> current_selections; // The current entity selected
 public:
 	LevelEditor(BaseScene* scene); // Ctor
 	LevelEditor(LevelEditor const&) = delete; // Remove copy ctor

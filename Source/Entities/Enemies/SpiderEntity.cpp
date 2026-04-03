@@ -33,15 +33,15 @@ SpiderEntity::~SpiderEntity() {} // Empty dtor
 */
 void SpiderEntity::PostUpdate(const f32& dt) {
 	// Animation
-	currentRow = 0;
+	current_row = 0;
 	if (velocity.x > 0) {
-		currentRow = 2;
+		current_row = 2;
 	}
 	if (velocity.x < 0) {
-		currentRow = 1;
+		current_row = 1;
 	}/*
 	if (death) {
-		currentRow = 3
+		current_row = 3
 	}*/
 	GameObjectEntity::PostUpdate(dt);
 }
@@ -85,7 +85,7 @@ void SpiderEntity::OnIdle(const f32&) {
 	// Spider's idle behaviour
 	velocity.x = 0.f;
 
-	if (stateTimer < 0.f) {
+	if (state_timer < 0.f) {
 		dir.x *= -1.f; // Flip the direction it is travelling.
 		SwitchState(FSM::PATROL);
 		return;

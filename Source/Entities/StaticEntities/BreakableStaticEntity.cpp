@@ -8,9 +8,9 @@ BreakableStaticEntity::BreakableStaticEntity(AEVec2 pos, std::string file_name, 
 
 	sprite = AssetManager::GetSpriteSheet(file_name, rows, columns);
 	mesh = nullptr;
-	animationTimer = 0.f;
-	animationFrame = 1.f / static_cast<f32>(columns * rows);
-	currentRow = currentCol = 0;
+	animation_timer = 0.f;
+	animation_frame = 1.f / static_cast<f32>(columns * rows);
+	current_row = current_col = 0;
 	scale = { 5.f * ((static_cast<f32>(sprite->image->width) / static_cast<f32>(columns)) / (sprite->image->height / static_cast<f32>(rows))) , 5.f };
 }
 
@@ -18,22 +18,22 @@ BreakableStaticEntity::~BreakableStaticEntity() {} // Empty dtor
 
 void BreakableStaticEntity::Update(const f32& dt) {
 	StaticEntity::Update(dt);
-	if (health <= 0.f && isActive) {
+	if (health <= 0.f && is_active) {
 		// OnBroken();
 		SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
 		return;
 	}
 
-	if ((animationTimer += dt) > animationFrame) {
-		animationTimer = 0.f;
-		if (++currentCol >= columns) {
-			currentCol = 0;
+	if ((animation_timer += dt) > animation_frame) {
+		animation_timer = 0.f;
+		if (++current_col >= columns) {
+			current_col = 0;
 		}
 	}
 }
 
 void BreakableStaticEntity::Render() {
-	sprite->Render(transform, color, currentRow, currentCol);
+	sprite->Render(transform, color, current_row, current_col);
 	breaking_sprite->Render(transform, color, 0, 4 - static_cast<int>(4.0f * (health / max_health)));
 	StaticEntity::Render();
 }

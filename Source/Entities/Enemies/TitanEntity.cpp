@@ -49,9 +49,9 @@ void TitanEntity::Update(const f32& dt) {
 */
 void TitanEntity::PostUpdate(const f32& dt) {
 	//Changes animation of spritesheet if the boss is jumping and flips the sprite when it is looking left or right
-	currentRow = 1;
+	current_row = 1;
 	if (velocity.x != 0) {
-		currentRow = 0;
+		current_row = 0;
 		if (velocity.x < 0)
 		{
 			if (this->scale.x > 0)
@@ -69,7 +69,7 @@ void TitanEntity::PostUpdate(const f32& dt) {
 	}
 	if (velocity.y != 0.f)
 	{
-		currentRow = 2;
+		current_row = 2;
 	}
 	BossEntity::PostUpdate(dt);
 }
@@ -90,7 +90,7 @@ void TitanEntity::OnIdle(const f32&) {
 * @return None
 */
 void TitanEntity::OnPatrol(const f32&) {
-	if (stateTimer < 0.f) {
+	if (state_timer < 0.f) {
 		SwitchState(FSM::CHASE);
 	}
 }
@@ -145,7 +145,7 @@ void TitanEntity::OnStun(const f32&) {
 	}
 
 	//Reset back to patrol state
-	if (stateTimer < 0.f) {
+	if (state_timer < 0.f) {
 		SwitchState(FSM::PATROL, 2.f);
 	}
 }

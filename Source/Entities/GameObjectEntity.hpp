@@ -24,7 +24,7 @@ public:
 	AEVec2 prev_position; // The position at the previous frame
 	AEVec2 prev_dynamic_position{0.f, 0.f}; // The position at the previous frame
 	f32 frictionMultiplier{ 1.0f }; // The friction multiplier against the ground
-	bool isActive; // Active update status of this object
+	bool is_active; // Active update status of this object
 	f32 health; // Current health
 	f32 max_health; // Maximum health
 	f32 damage; // Damage output

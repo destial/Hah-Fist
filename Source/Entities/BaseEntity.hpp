@@ -46,8 +46,8 @@ protected:
 	std::map<void*, std::vector<std::function<void(const f32&)>>> postupdate_listeners;
 
 	// Sprite animation data
-	f32 animationTimer{ 0.f }, animationFrame{ 0.f };
-	int currentRow{ 0 }, currentCol{ 0 }, maxRows{ 1 }, maxColumns{ 1 };
+	f32 animation_timer{ 0.f }, animation_frame{ 0.f };
+	int current_row{ 0 }, current_col{ 0 }, maxRows{ 1 }, maxColumns{ 1 };
 	SpriteSheet* sprite{ nullptr };
 public:
 	virtual ~BaseEntity(); // Dtor

@@ -27,8 +27,8 @@
 IronsideEntity::IronsideEntity(AEVec2 pos) : BossEntity(pos) {
 	//Initialising Sprite Data and Boss Variables
 	InitializeAnimatedSpriteData(ASSET_IRONSIDE_SPRITE, ASSET_IRONSIDE_SPRITE_ROWS, ASSET_IRONSIDE_SPRITE_COLUMNS, ASSET_IRONSIDE_SPRITE_SCALE);
-	//For gravityScale it should be set to 0 since i do not want it to follow the normal gravity that entities have
-	pBody->gravityScale = 0;
+	//For gravity_scale it should be set to 0 since i do not want it to follow the normal gravity that entities have
+	pBody->gravity_scale = 0;
 	inner_state = INNERFSM::MOVE;
 	go_type = PhysicsType::TRIGGER;
 
@@ -152,14 +152,14 @@ void IronsideEntity::OnChase(const f32&) {
 	}
 	case INNERFSM::LASER:
 	{
-		currentRow = 1;
-		if (currentCol == ASSET_IRONSIDE_SPRITE_COLUMNS - 1)
+		current_row = 1;
+		if (current_col == ASSET_IRONSIDE_SPRITE_COLUMNS - 1)
 		{
 			LaserEntity* laser = new LaserEntity(this->position, this, damage);
 			SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(laser);
 			inner_state = INNERFSM::MOVE;
 			StunTimerBasedOnHealth();
-			currentRow = 0;
+			current_row = 0;
 		}
 
 		break;
@@ -174,7 +174,7 @@ void IronsideEntity::OnChase(const f32&) {
 * @return None
 */
 void IronsideEntity::OnStun(const f32&) {
-	if (stateTimer < 0.f) {
+	if (state_timer < 0.f) {
 		SwitchState(FSM::CHASE);
 	}
 }

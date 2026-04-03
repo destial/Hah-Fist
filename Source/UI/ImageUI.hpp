@@ -20,8 +20,8 @@ class ImageUI : public BaseUI {
 protected:
 	SpriteSheet* sprite; // Sprite animation data
 public:
-	f32 animationTimer, animationFrame; // Sprite animation data
-	int currentRow, currentCol; // Sprite animation data
+	f32 animation_timer, animation_frame; // Sprite animation data
+	int current_row, current_col; // Sprite animation data
 
 	ImageUI(const char* file_name, AEVec2 pos = { 0.f, 0.f }, int rows = 0, int cols = 0); // Ctor
 	ImageUI(ImageUI const&) = delete; // Remove copy ctor

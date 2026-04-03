@@ -12,8 +12,8 @@
 #include "../../Managers/AssetManager.hpp"
 
 
-GrappleFistWeapon::GrappleFistWeapon(AEVec2 pos) : WeaponEntity{ pos }, snapshottedAttackDirection{ 0 } {
-	weaponChannels = false;
+GrappleFistWeapon::GrappleFistWeapon(AEVec2 pos) : WeaponEntity{ pos }, snapshotted_attack_direction{ 0 } {
+	weapon_channels = false;
 	image = AssetManager::GetTexture(ASSET_GRAPPLEFIST_IMAGE);
 	cd_duration = 1.5f;
 	damage = 50.f;
@@ -25,7 +25,7 @@ void GrappleFistWeapon::PreUpdate(const f32& dt) {
 	if (dt == 0)
 		return;
 
-	if (grappleState == INACTIVE) {
+	if (grapple_state == INACTIVE) {
 		WeaponEntity::PreUpdate(dt);
 	}
 }
@@ -34,7 +34,7 @@ void GrappleFistWeapon::Update(const f32& dt) {
 	if (dt == 0)
 		return;
 
-	if (!isActive) {
+	if (!is_active) {
 		return;
 	}
 	WeaponEntity::Update(dt);
@@ -44,52 +44,52 @@ void GrappleFistWeapon::PostUpdate(const f32& dt) {
 	if (dt == 0)
 		return;
 
-	if (!isActive) {
+	if (!is_active) {
 		return;
 	}
 	WeaponEntity::PostUpdate(dt);
 	AEVec2 travel_direction = position - player_entity->position;
-	if (grappleState == SHOOTING) {
-		travelDuration += dt;
-		position += snapshottedAttackDirection * dt * grappleSpeedMult;
-		if (travelDuration >= 1.0f || AEVec2Length(&travel_direction) >= 20.0f) {
-			travelDuration = 0.0f;
-			grappleState = RETURNING;
+	if (grapple_state == SHOOTING) {
+		travel_duration += dt;
+		position += snapshotted_attack_direction * dt * grapple_speed_mult;
+		if (travel_duration >= 1.0f || AEVec2Length(&travel_direction) >= 20.0f) {
+			travel_duration = 0.0f;
+			grapple_state = RETURNING;
 		}
 		return;
 	}
-	else if (grappleState == RETURNING) {
+	else if (grapple_state == RETURNING) {
 		if (AEVec2Length(&travel_direction) <= 5.0f) {
-			grappleState = INACTIVE;
+			grapple_state = INACTIVE;
 		}
 		AEVec2Normalize(&travel_direction, &travel_direction);
-		position -= travel_direction * dt * grappleSpeedMult;
+		position -= travel_direction * dt * grapple_speed_mult;
 		return;
 	}
-	else if (grappledObject == nullptr || !grappledObject->isActive) {
-		grappledObject = nullptr;
-		grappleState = INACTIVE;
+	else if (grappled_object == nullptr || !grappled_object->is_active) {
+		grappled_object = nullptr;
+		grapple_state = INACTIVE;
 	}
-	else if (grappledObject != nullptr) {
-		if (grappleState == HOOKING_OBJECT_TO_PLAYER || grappleState == HOOKING_PLAYER_TO_STATIC_OBJECT) {
+	else if (grappled_object != nullptr) {
+		if (grapple_state == HOOKING_OBJECT_TO_PLAYER || grapple_state == HOOKING_PLAYER_TO_STATIC_OBJECT) {
 			if (AEVec2Length(&travel_direction) <= 5.0f) {
-				grappledObject = nullptr;
-				grappleState = INACTIVE;
+				grappled_object = nullptr;
+				grapple_state = INACTIVE;
 				return;
 			}
 			AEVec2Normalize(&travel_direction, &travel_direction);
-			if (grappleState == HOOKING_OBJECT_TO_PLAYER) {
-				position -= travel_direction * dt * grappleSpeedMult;
-				grappledObject->position = position;
-				grappledObject->health -= damage * dt;
+			if (grapple_state == HOOKING_OBJECT_TO_PLAYER) {
+				position -= travel_direction * dt * grapple_speed_mult;
+				grappled_object->position = position;
+				grappled_object->health -= damage * dt;
 			}
-			else if (grappleState == HOOKING_PLAYER_TO_STATIC_OBJECT) {
-				player_entity->velocity = travel_direction * grappleSpeedMult;
+			else if (grapple_state == HOOKING_PLAYER_TO_STATIC_OBJECT) {
+				player_entity->velocity = travel_direction * grapple_speed_mult;
 			}
 		}
-		else if (grappleState == HOOKING_PLAYER_TO_DYNAMIC_OBJECT) {
-			player_entity->velocity = grappledObject->velocity;
-			position = grappledObject->position;
+		else if (grapple_state == HOOKING_PLAYER_TO_DYNAMIC_OBJECT) {
+			player_entity->velocity = grappled_object->velocity;
+			position = grappled_object->position;
 		}
 		return;
 	}
@@ -102,31 +102,31 @@ void GrappleFistWeapon::OnCollide(GameObjectEntity* go) {
 	if (go == player_entity) {
 		return;
 	}
-	if (grappleState == SHOOTING || grappleState == RETURNING) {
-		grappledObject = go;
+	if (grapple_state == SHOOTING || grapple_state == RETURNING) {
+		grappled_object = go;
 		if (go->go_type == PhysicsType::DYNAMIC) {
 			if (go->entity_type == EntityType::PROJECTILE) {
-				grappleState = HOOKING_PLAYER_TO_DYNAMIC_OBJECT;
+				grapple_state = HOOKING_PLAYER_TO_DYNAMIC_OBJECT;
 			}
 			else if (go->entity_type == EntityType::ENEMY) {
-				grappleState = HOOKING_OBJECT_TO_PLAYER;
+				grapple_state = HOOKING_OBJECT_TO_PLAYER;
 			}
 		}
 		else {
-			grappleState = HOOKING_PLAYER_TO_STATIC_OBJECT;
+			grapple_state = HOOKING_PLAYER_TO_STATIC_OBJECT;
 		}
 	}
 }
 
 void GrappleFistWeapon::Attack() {
-	grappleState = SHOOTING;
-	snapshottedAttackDirection = GetAttackDirection();
+	grapple_state = SHOOTING;
+	snapshotted_attack_direction = GetAttackDirection();
 }
 
 void GrappleFistWeapon::ResetWeapon() {
 	WeaponEntity::ResetWeapon();
-	grappleState = GRAPPLE_STATE::INACTIVE;
-	travelDuration = 0.0f;
-	grappledObject = nullptr;
-	snapshottedAttackDirection = { 0.0f, 0.0f };
+	grapple_state = GRAPPLE_STATE::INACTIVE;
+	travel_duration = 0.0f;
+	grappled_object = nullptr;
+	snapshotted_attack_direction = { 0.0f, 0.0f };
 }

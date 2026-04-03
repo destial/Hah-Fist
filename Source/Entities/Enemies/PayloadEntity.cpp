@@ -44,9 +44,9 @@ PayloadEntity::~PayloadEntity() {
 */
 void PayloadEntity::PostUpdate(const f32& dt) {
 	//Changes animation of spritesheet
-	currentRow = 1;
+	current_row = 1;
 	if (fabsf(velocity.x) > 0.1f) {
-		currentRow = 0;
+		current_row = 0;
 		if (velocity.x < 0)
 		{
 			if (this->scale.x > 0)
@@ -63,7 +63,7 @@ void PayloadEntity::PostUpdate(const f32& dt) {
 		}
 		if (AEVec2Length(&velocity) > 50.0f)
 		{
-			currentRow = 2;
+			current_row = 2;
 		}
 	}
 	BossEntity::PostUpdate(dt);
@@ -148,7 +148,7 @@ void PayloadEntity::OnChase(const f32& dt) {
 * @return None
 */
 void PayloadEntity::OnStun(const f32&) {
-	if (stateTimer < 0.f) {
+	if (state_timer < 0.f) {
 		SwitchState(FSM::CHASE);
 	}
 }

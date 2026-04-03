@@ -39,7 +39,7 @@ void WeaponEntity::PreUpdate(const f32& dt) {
 	GameObjectEntity::PreUpdate(dt);
 	player_entity = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<PlayerEntity>();
 	if (!player_entity) {
-		isActive = false;
+		is_active = false;
 		return;
 	}
 
@@ -76,7 +76,7 @@ void WeaponEntity::Update(const f32& dt) {
 			return;
 
 		if (AEInputCheckTriggered(AEVK_LBUTTON)) {
-			if (!weaponChannels) {
+			if (!weapon_channels) {
 				Attack();
 				cd_timer = cd_duration;
 			}

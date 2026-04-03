@@ -80,10 +80,10 @@ void BaseEntity::PostUpdate(const f32& dt) {
 
 	// Generic Animation Functionality across all entities
 	if (maxColumns > 1) {
-		if ((animationTimer += dt) > animationFrame) {
-			animationTimer = 0.f;
-			if (++currentCol >= maxColumns) {
-				currentCol = 0;
+		if ((animation_timer += dt) > animation_frame) {
+			animation_timer = 0.f;
+			if (++current_col >= maxColumns) {
+				current_col = 0;
 			}
 		}
 	}
@@ -100,7 +100,7 @@ void BaseEntity::Render() {
 	transform = Utils::GetTransformMatrix(position, scale, rotation);
 
 	if (sprite != nullptr) { // Render the sprite if it exists
-		sprite->Render(transform, color, currentRow, currentCol);
+		sprite->Render(transform, color, current_row, current_col);
 	}
 
 	if (!mesh)
@@ -212,8 +212,8 @@ void BaseEntity::InitializeAnimatedSpriteData(std::string filepath, int rows, in
 	maxRows = rows;
 	maxColumns = columns;
 	InitializeSpriteData(filepath, _scale);
-	animationTimer = 0.f;
-	animationFrame = 1.f / static_cast<f32>(maxColumns * maxRows);
+	animation_timer = 0.f;
+	animation_frame = 1.f / static_cast<f32>(maxColumns * maxRows);
 }
 
 /*!
@@ -224,6 +224,6 @@ void BaseEntity::InitializeAnimatedSpriteData(std::string filepath, int rows, in
 void BaseEntity::InitializeSpriteData(std::string filepath, f32 _scale) {
 	sprite = AssetManager::GetSpriteSheet(filepath, maxRows, maxColumns);
 	mesh = nullptr;
-	currentRow = currentCol = 0;
+	current_row = current_col = 0;
 	scale = { _scale * ((static_cast<f32>(sprite->image->width) / static_cast<f32>(maxColumns)) / (sprite->image->height / static_cast<f32>(maxRows))) , _scale };
 }

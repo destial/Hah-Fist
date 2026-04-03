@@ -9,15 +9,15 @@
 #include "PhysicsBody.hpp"
 #include "AEOverload.hpp"
 /*!
-* @brief Default Constructor which initialises the mass, gravityScale, gravity based on what the user has input
+* @brief Default Constructor which initialises the mass, gravity_scale, gravity based on what the user has input
 * @param mass - Mass of the gameobject
-* @param gravityScale - Gravity's scale, higher = more gravity being applied.
+* @param gravity_scale - Gravity's scale, higher = more gravity being applied.
 * @param gravity - Gravity's direction
 */
-PhysicsBody::PhysicsBody(f32 mass, f32 gravityScale, AEVec2 gravity)
+PhysicsBody::PhysicsBody(f32 mass, f32 gravity_scale, AEVec2 gravity)
 {
 	this->mass = mass;
-	this->gravityScale = gravityScale;
+	this->gravity_scale = gravity_scale;
 	this->gravity = gravity;
 	state = STATE::IN_AIR;
 	vertical_state = VERTICAL_STATE::VS_FALLING;
@@ -75,7 +75,7 @@ void PhysicsBody::ApplyGravity(AEVec2& velocity, const f32& dt)
 {
 	if (state == STATE::IN_AIR)
 	{
-		velocity += gravity * gravityScale * dt;// *dt;
+		velocity += gravity * gravity_scale * dt;// *dt;
 	}
 }
 

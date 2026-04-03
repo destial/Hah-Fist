@@ -20,12 +20,12 @@ PlayerEntity::PlayerEntity(AEVec2 pos) : GameObjectEntity(pos) {
 
 	sprite = AssetManager::GetSpriteSheet(ASSET_PLAYER_SPRITE, rows, columns);
 	mesh = nullptr;
-	animationTimer = 0.f;
-	animationFrame = 1.f / static_cast<f32>(columns * rows);
-	currentRow = currentCol = 0;
+	animation_timer = 0.f;
+	animation_frame = 1.f / static_cast<f32>(columns * rows);
+	current_row = current_col = 0;
 	scale = { 5.f * ((static_cast<f32>(sprite->image->width) / static_cast<f32>(columns)) / (sprite->image->height / static_cast<f32>(rows))) , 5.f };
-	jumpHeight = 8.5f;
-	jumpVelocity = std::sqrtf(jumpHeight * 2.f * std::abs(pBody->gravity.y));
+	jump_height = 8.5f;
+	jump_velocity = std::sqrtf(jump_height * 2.f * std::abs(pBody->gravity.y));
 	speed = 10.f;
 	health = 100.f;
 	max_health = 100.f;
@@ -75,9 +75,9 @@ void PlayerEntity::Update(const f32& dt) {
 
 void PlayerEntity::PostUpdate(const f32& dt) {
 	GameObjectEntity::PostUpdate(dt);
-	currentRow = 1;
+	current_row = 1;
 	if (velocity.x != 0) {
-		currentRow = 0;
+		current_row = 0;
 		if (velocity.x < 0) {
 			if (this->scale.x > 0) {
 				this->scale.x *= -1;
@@ -89,20 +89,20 @@ void PlayerEntity::PostUpdate(const f32& dt) {
 			}
 		}
 		if (AEVec2Length(&velocity) > 50.0f) {
-			currentRow = 2;
+			current_row = 2;
 		}
 	}
 	
-	if ((animationTimer += dt) > animationFrame) {
-		animationTimer = 0.f;
-		if (++currentCol >= 32) {
-			currentCol = 0;
+	if ((animation_timer += dt) > animation_frame) {
+		animation_timer = 0.f;
+		if (++current_col >= 32) {
+			current_col = 0;
 		}
 	}
 }
 
 void PlayerEntity::Render() {
-	sprite->Render(transform, color, currentRow, currentCol);
+	sprite->Render(transform, color, current_row, current_col);
 	GameObjectEntity::Render();
 }
 
@@ -138,13 +138,13 @@ void PlayerEntity::SwitchWeapon(int index) {
 		if (i != index) {
 			weapons[i]->ResetWeapon();
 		}
-		weapons[i]->isActive = i == index;
+		weapons[i]->is_active = i == index;
 	}
 }
 
 WeaponEntity* PlayerEntity::CurrentWeapon() const {
 	for (int i{ 0 }; i < weapons.size(); ++i) {
-		if (weapons[i]->isActive) {
+		if (weapons[i]->is_active) {
 			return weapons[i];
 		}
 	}
@@ -152,11 +152,11 @@ WeaponEntity* PlayerEntity::CurrentWeapon() const {
 }
 
 void PlayerEntity::AddCoin() {
-	coinCount++;
+	coin_count++;
 }
 
 int PlayerEntity::Coins() const {
-	return coinCount;
+	return coin_count;
 }
 
 f32 PlayerEntity::GetSpeed() const {
@@ -164,7 +164,7 @@ f32 PlayerEntity::GetSpeed() const {
 }
 
 void PlayerEntity::Jump() {
-	velocity.y += jumpVelocity;
+	velocity.y += jump_velocity;
 }
 
 void PlayerEntity::Move(AEVec2 const& dir) {

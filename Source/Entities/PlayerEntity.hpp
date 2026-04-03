@@ -20,14 +20,14 @@
 
 class PlayerEntity : public GameObjectEntity {
 protected:
-	f32 animationTimer, animationFrame; // Sprite animation data
-	int currentRow, currentCol; // Sprite animation data
+	f32 animation_timer, animation_frame; // Sprite animation data
+	int current_row, current_col; // Sprite animation data
 	SpriteSheet* sprite; // Sprite animation data
-	f32 jumpHeight;
-	f32 jumpVelocity;
+	f32 jump_height;
+	f32 jump_velocity;
 	f32 speed;
 	std::vector<WeaponEntity*> weapons;
-	int coinCount{ 0 };
+	int coin_count{ 0 };
 public:
 	PlayerEntity(AEVec2 pos = { 0.f, 0.f }); // Ctor
 	PlayerEntity(PlayerEntity const&) = delete; // Remove copy ctor

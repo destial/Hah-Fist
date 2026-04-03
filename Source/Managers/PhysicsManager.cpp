@@ -3,8 +3,8 @@
 #include "../Utils/AEOverload.hpp"
 #include "../Entities/StaticEntity.hpp"
 
-PhysicsManager::PhysicsManager(Physics::AABB _worldBounds, size_t _maxEntriesPerNode)
-	: worldBounds(_worldBounds), maxEntriesPerNode(_maxEntriesPerNode), gameObjects(0)
+PhysicsManager::PhysicsManager(Physics::AABB _world_bounds, size_t _max_entries_per_node)
+	: world_bounds(_world_bounds), max_entries_per_node(_max_entries_per_node), gameObjects(0)
 {
 
 }
@@ -24,7 +24,7 @@ void PhysicsManager::PreUpdate(const f32&)
 	{
 		delete qtGameObjects;
 	}
-	qtGameObjects = new QuadTree::Tree(worldBounds, gameObjects, maxEntriesPerNode);*/
+	qtGameObjects = new QuadTree::Tree(world_bounds, gameObjects, max_entries_per_node);*/
 }
 
 void PhysicsManager::PostUpdate(const f32& dt)
@@ -41,7 +41,7 @@ void PhysicsManager::PostUpdate(const f32& dt)
 	// Collision: DYNAMIC vs TRIGGER
 	for (GameObjectEntity* trigger : gameObjects) {
 		//If trigger inactive, continue
-		if (!trigger->isActive) { continue; }
+		if (!trigger->is_active) { continue; }
 
 		//If GameObject is not a trigger, continue
 		if (trigger->go_type != GameObjectEntity::PhysicsType::TRIGGER) { continue; }
@@ -75,7 +75,7 @@ void PhysicsManager::PostUpdate(const f32& dt)
 	// Collision: DYNAMIC vs MOVING_STATIC
 	for (GameObjectEntity* _static : gameObjects) {
 		//If trigger inactive, continue
-		if (!_static->isActive) { continue; }
+		if (!_static->is_active) { continue; }
 
 		//If GameObject is not a trigger, continue
 		if (_static->go_type != GameObjectEntity::PhysicsType::MOVING_STATIC) { continue; }
@@ -109,7 +109,7 @@ void PhysicsManager::PostUpdate(const f32& dt)
 	// Collision: DYNAMIC vs STATIC
 	for (GameObjectEntity* _static : gameObjects) {
 		//If trigger inactive, continue
-		if (!_static->isActive) { continue; }
+		if (!_static->is_active) { continue; }
 
 		//If GameObject is not a trigger, continue
 		if (_static->go_type != GameObjectEntity::PhysicsType::STATIC) { continue; }
@@ -144,7 +144,7 @@ void PhysicsManager::PostUpdate(const f32& dt)
 	for (GameObjectEntity* dynamic1 : gameObjects) {
 		ignoredObjects.push_back(dynamic1);
 		//If trigger inactive, continue
-		if (!dynamic1->isActive) { continue; }
+		if (!dynamic1->is_active) { continue; }
 
 		//If GameObject is not a trigger, continue
 		if (dynamic1->go_type != GameObjectEntity::PhysicsType::DYNAMIC) { continue; }

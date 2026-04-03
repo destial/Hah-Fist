@@ -19,7 +19,7 @@
 class WeaponEntity : public GameObjectEntity {
 protected:
 	GameObjectEntity* player_entity{ nullptr }; // pointer to the player_entity which owns this weapon.
-	bool weaponChannels{ false }; // Does this weapon channel or instant use on click?
+	bool weapon_channels{ false }; // Does this weapon channel or instant use on click?
 	bool channelling{ false }; // Is this weapon currently channelling?
 	f32 max_channel_time{ 2.0f }; //Maximum duration required to channel this weapon for full effect.
 	f32 channel_timer{ 0.0f }; //Current elapsed time of channelling.

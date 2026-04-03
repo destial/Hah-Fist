@@ -36,8 +36,8 @@ ExplosionEntity::~ExplosionEntity() {} // Empty dtor
 * @return None
 */
 void ExplosionEntity::PostUpdate(const f32& dt) {
-    if (currentCol == ASSET_EXPLOSION_SPRITE_COLUMNS - 1) {
-        isActive = false;
+    if (current_col == ASSET_EXPLOSION_SPRITE_COLUMNS - 1) {
+        is_active = false;
         SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
     }
     GameObjectEntity::PostUpdate(dt);
@@ -51,14 +51,14 @@ void ExplosionEntity::OnCollide(GameObjectEntity* other) {
     if (!other || other == this || other == owner)
         return;
 
-    if (!other->isActive)
+    if (!other->is_active)
         return;
 
     if (other->entity_type == EntityType::NONE)
         return;
 
 
-    if (animationTimer == 0.f && currentCol == 1) {
+    if (animation_timer == 0.f && current_col == 1) {
         other->health -= damage;
         if (other->entity_type == EntityType::ENEMY) {
             EnemyEntity* e = dynamic_cast<EnemyEntity*>(other);

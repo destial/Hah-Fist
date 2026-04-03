@@ -23,7 +23,7 @@
 * @param inherited - Status of EnemyEntity's inheritance
 */
 EnemyEntity::EnemyEntity(AEVec2 pos, AEVec2 dir, f32 speed, bool inherited) 
-: GameObjectEntity{ pos }, state{ FSM::IDLE }, dir{ dir }, speed{ speed }, stateTimer{ 1.f }
+: GameObjectEntity{ pos }, state{ FSM::IDLE }, dir{ dir }, speed{ speed }, state_timer{ 1.f }
 {
 	//Behaviour that would be called again by the inherited class, to prevent the extra load, this only runs in the base class
 	if (!inherited)
@@ -58,7 +58,7 @@ void EnemyEntity::Update(const f32& dt)
 	if (health <= 0.f && state != FSM::DEAD) {
 		SwitchState(FSM::DEAD, 3.f);
 	}
-	stateTimer -= dt;
+	state_timer -= dt;
 	switch (state) {
 		case FSM::IDLE: 
 		{
@@ -103,12 +103,12 @@ void EnemyEntity::Update(const f32& dt)
 */
 void EnemyEntity::PostUpdate(const f32& dt)
 {
-	currentRow = 0;
+	current_row = 0;
 	if (velocity.x > 0) {
-		currentRow = 1;
+		current_row = 1;
 	}
 	if (velocity.x < 0) {
-		currentRow = 2;
+		current_row = 2;
 	}
 	GameObjectEntity::PostUpdate(dt);
 }
@@ -186,7 +186,7 @@ void EnemyEntity::OnDead()
 void EnemyEntity::SwitchState(FSM newState, f32 timeInNewState)
 {
 	state = newState;
-	stateTimer = timeInNewState;
+	state_timer = timeInNewState;
 }
 
 /*!

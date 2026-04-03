@@ -11,7 +11,7 @@
 
 ImageUI::ImageUI(const char* file_name, AEVec2 pos, int r, int c)
 : BaseUI{ pos },
-  animationFrame{0}, animationTimer{0}, currentCol{0}, currentRow{0},
+  animation_frame{0}, animation_timer{0}, current_col{0}, current_row{0},
   sprite{ r == 0 ? nullptr : AssetManager::GetSpriteSheet(file_name, r, c) } {
 	text = "";
 	image = r == 0 ? AssetManager::GetTexture(file_name) : nullptr;
@@ -32,12 +32,12 @@ void ImageUI::Update(const f32& dt) {
 		return;
 
 	// Update sprite animation
-	if ((animationTimer += dt) > (animationFrame / (sprite->Columns() * sprite->Rows()))) {
-		animationTimer = 0.f;
-		if (++currentCol > sprite->Columns()) {
-			currentCol = 0;
-			if (++currentRow > sprite->Rows()) {
-				currentRow = 0;
+	if ((animation_timer += dt) > (animation_frame / (sprite->Columns() * sprite->Rows()))) {
+		animation_timer = 0.f;
+		if (++current_col > sprite->Columns()) {
+			current_col = 0;
+			if (++current_row > sprite->Rows()) {
+				current_row = 0;
 			}
 		}
 	}
@@ -52,7 +52,7 @@ void ImageUI::Render() {
 
 	// Prioritize sprite rendering
 	if (sprite) {
-		sprite->Render(transform, color, currentRow, currentCol);
+		sprite->Render(transform, color, current_row, current_col);
 	}
 
 	if (image && image->data) {
@@ -66,7 +66,7 @@ void ImageUI::Render() {
 * @return The sprite duration (in seconds)
 */
 f32 ImageUI::GetSpriteDuration() const {
-	return animationFrame;
+	return animation_frame;
 }
 
 /*!
@@ -74,5 +74,5 @@ f32 ImageUI::GetSpriteDuration() const {
 * @param dur - The sprite duration (in seconds)
 */
 void ImageUI::SetSpriteDuration(f32 dur) {
-	animationFrame = dur;
+	animation_frame = dur;
 }

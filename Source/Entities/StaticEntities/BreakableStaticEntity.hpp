@@ -6,8 +6,8 @@
 
 class BreakableStaticEntity : public StaticEntity {
 protected:
-	f32 animationTimer, animationFrame; // Sprite animation data
-	int currentRow, currentCol, columns, rows; // Sprite animation data
+	f32 animation_timer, animation_frame; // Sprite animation data
+	int current_row, current_col, columns, rows; // Sprite animation data
 	SpriteSheet* sprite; // Sprite animation data
 	SpriteSheet* breaking_sprite; // Sprite animation data
 public:

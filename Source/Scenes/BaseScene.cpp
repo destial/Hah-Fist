@@ -166,7 +166,7 @@ void BaseScene::RemoveEntityFromScene(BaseEntity* entity) {
 		// In the case we remove while inside the update loop
 		awaiting_deletion.push_back(entity);
 		if (GameObjectEntity* go = dynamic_cast<GameObjectEntity*>(entity)) {
-			go->isActive = false;
+			go->is_active = false;
 		}
 
 		// Special cases with entities linked to other entities (e.g. health bar UI entity)

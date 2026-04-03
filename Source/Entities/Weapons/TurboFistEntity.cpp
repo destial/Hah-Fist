@@ -18,7 +18,7 @@
 
 
 TurboFistWeapon::TurboFistWeapon(AEVec2 pos, f32 og_mass) : WeaponEntity{ pos } {
-	weaponChannels = true;
+	weapon_channels = true;
 	image = AssetManager::GetTexture(ASSET_TURBOFIST_IMAGE);
 	max_channel_time = 1.0f;
 	cd_duration = 0.5f;
@@ -32,7 +32,7 @@ void TurboFistWeapon::Update(const f32& dt) {
 	if (dt == 0)
 		return;
 
-	if (!isActive) 
+	if (!is_active) 
 		return;
 
 	WeaponEntity::Update(dt);

@@ -6,9 +6,9 @@
 
 MovingPlatformEntity::MovingPlatformEntity(AEVec2 pos, AEVec2 travelDir, bool loopMovement, f32 speed, f32 life) 
 : StaticEntity{ STATIC_TYPE::TYPE_PLATFORM, pos, 1.0f, CollisionShape::AABB, PhysicsType::MOVING_STATIC },
-  travelDirection{ travelDir },loopingMovement{ loopMovement }, travelSpeed{ speed }, lifetime{ life } {
-	AEVec2 length = startPoint - endPoint;
-	normalDistance = AEVec2Length(&length);
+  travel_direction{ travelDir },looping_movement{ loopMovement }, travel_speed{ speed }, lifetime{ life } {
+	AEVec2 length = start_point - end_point;
+	normal_distance = AEVec2Length(&length);
 	mesh = MeshRenderer::GetCenterRectMesh();
 	layer = BaseEntity::RenderLayer::WORLD;
 	SetStartPoint(pos);
@@ -24,26 +24,26 @@ void MovingPlatformEntity::Update(const f32& dt) {
 		}
 	}
 	prev_position = position;
-	if (normalDirection) {
-		position += (endPoint - startPoint) * travelSpeed * dt;
-		AEVec2 length = position - startPoint;
-		if (!loopingMovement) { return; }
-		if (normalDistance < AEVec2Length(&length)) {
-			normalDirection = !normalDirection;
+	if (normal_direction) {
+		position += (end_point - start_point) * travel_speed * dt;
+		AEVec2 length = position - start_point;
+		if (!looping_movement) { return; }
+		if (normal_distance < AEVec2Length(&length)) {
+			normal_direction = !normal_direction;
 		}
 	}
 	else {
-		position -= (endPoint - startPoint) * travelSpeed * dt;
-		AEVec2 length = position - startPoint;
-		if (normalDistance < AEVec2Length(&length)) {
-			normalDirection = !normalDirection;
+		position -= (end_point - start_point) * travel_speed * dt;
+		AEVec2 length = position - start_point;
+		if (normal_distance < AEVec2Length(&length)) {
+			normal_direction = !normal_direction;
 		}
 	}
 }
 
 void MovingPlatformEntity::Render() {
 	StaticEntity::Render();
-	DebugUtils::RenderLine(startPoint, endPoint, { 64, 255, 255, 255 });
+	DebugUtils::RenderLine(start_point, end_point, { 64, 255, 255, 255 });
 }
 
 void MovingPlatformEntity::OnCollide(GameObjectEntity* go){
@@ -54,6 +54,6 @@ void MovingPlatformEntity::OnCollide(GameObjectEntity* go){
 }
 
 void MovingPlatformEntity::SetStartPoint(AEVec2 start) {
-	startPoint = start;
-	endPoint = start + travelDirection * 10.f;
+	start_point = start;
+	end_point = start + travel_direction * 10.f;
 }

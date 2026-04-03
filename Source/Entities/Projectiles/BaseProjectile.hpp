@@ -24,8 +24,8 @@ protected:
     f32 age{ 0.f };
     AEVec2 direction;
     f32 speed;
-    f32 animationTimer, animationFrame;
-    int currentRow, currentCol;
+    f32 animation_timer, animation_frame;
+    int current_row, current_col;
     SpriteSheet* sprite;
     GameObjectEntity* owner;
 public:

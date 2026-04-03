@@ -16,7 +16,7 @@
 #include "../../Managers/SceneManager.hpp"
 
 FingerGunWeapon::FingerGunWeapon(AEVec2 pos) : WeaponEntity{pos} {
-	weaponChannels = false;
+	weapon_channels = false;
 	cd_duration = 0.5f;
 	image = AssetManager::GetTexture(ASSET_FINGERGUN_IMAGE);
 }
@@ -27,7 +27,7 @@ void FingerGunWeapon::Update(const f32& dt) {
 	if (dt == 0)
 		return;
 
-	if (!isActive)
+	if (!is_active)
 		return;
 	
 	WeaponEntity::Update(dt);

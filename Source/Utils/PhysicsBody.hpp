@@ -31,17 +31,17 @@ public:
 	AEVec2 gravity;
 	AEVec2 force;
 	f32 mass;
-	f32 gravityScale;
+	f32 gravity_scale;
 	f32 air_strength{ 0.0f };
 
 	bool is_standing_above = false;
 	/*!
-	* @brief Default Constructor which initialises the mass, gravityScale, gravity based on what the user has input
+	* @brief Default Constructor which initialises the mass, gravity_scale, gravity based on what the user has input
 	* @param mass - Mass of the gameobject
-	* @param gravityScale - Gravity's scale, higher = more gravity being applied.
+	* @param gravity_scale - Gravity's scale, higher = more gravity being applied.
 	* @param gravity - Gravity's direction
 	*/
-	PhysicsBody(f32 mass = 1.f, f32 gravityScale = 1.f, AEVec2 gravity = AEVec2{0.0f, -98.f});
+	PhysicsBody(f32 mass = 1.f, f32 gravity_scale = 1.f, AEVec2 gravity = AEVec2{0.0f, -98.f});
 
 	/*!
 	* @brief Destructor of the PhysicsBody class which uses the synthesised destructor compiler gives.

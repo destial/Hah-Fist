@@ -39,8 +39,8 @@ LaserEntity::~LaserEntity() {} // Empty dtor
 * @return None
 */
 void LaserEntity::PostUpdate(const f32& dt) {
-    if (currentCol == ASSET_LASER_SPRITE_COLUMNS - 1) {
-        isActive = false;
+    if (current_col == ASSET_LASER_SPRITE_COLUMNS - 1) {
+        is_active = false;
         SceneManager::GetInstance()->GetCurrentScene()->RemoveEntityFromScene(this);
     }
     GameObjectEntity::PostUpdate(dt);
@@ -54,13 +54,13 @@ void LaserEntity::OnCollide(GameObjectEntity* other) {
     if (!other || other == this || other == owner)
         return;
 
-    if (!other->isActive)
+    if (!other->is_active)
         return;
 
     if (other->entity_type == EntityType::NONE)
         return;
     
-    if (currentCol == 0) {
+    if (current_col == 0) {
         if (previouslydamaged != other) {
             other->health -= damage;
             previouslydamaged = other;

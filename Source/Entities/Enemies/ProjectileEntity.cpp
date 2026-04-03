@@ -61,7 +61,7 @@ std::ostream& operator<<(std::ostream& os, const EnemyEntity::FSM& state)
 ProjectileEntity::ProjectileEntity(AEVec2 pos, f32 speed) : EnemyEntity(pos, { 1.f,0.f }, speed, true)
 {
 	InitializeAnimatedSpriteData(ASSET_PROJECTILE_ENEMY_SPRITE, ASSET_PROJECTILE_ENEMY_SPRITE_ROWS, ASSET_PROJECTILE_ENEMY_SPRITE_COLUMNS, ASSET_PROJECTILE_ENEMY_SPRITE_SCALE);
-	animationFrame = 2.0f / (ASSET_PROJECTILE_ENEMY_SPRITE_COLUMNS * ASSET_PROJECTILE_ENEMY_SPRITE_ROWS - 4.f);
+	animation_frame = 2.0f / (ASSET_PROJECTILE_ENEMY_SPRITE_COLUMNS * ASSET_PROJECTILE_ENEMY_SPRITE_ROWS - 4.f);
 }
 
 /*!
@@ -129,27 +129,27 @@ void ProjectileEntity::OnCollide(GameObjectEntity* go) {
 void ProjectileEntity::OnIdle(const f32& dt) {
 	// ProjectileEntity's idle behaviour
 	velocity.x = 0.f;
-	if (stateTimer < 0.f) {
+	if (state_timer < 0.f) {
 		FlipDir(); // Flip the direction it is travelling.
-		currentRow = 1;
-		currentCol = 2;
+		current_row = 1;
+		current_col = 2;
 		SwitchState(FSM::PATROL);
 		return;
 	}
-	if (currentRow > 1)
-		currentRow = 0;
-	if ((animationTimer += dt) > animationFrame) {
-		animationTimer = 0.f;
-		if (currentRow == 0) {
-			if (++currentCol >= 7) {
-				currentCol = 0;
-				++currentRow;
+	if (current_row > 1)
+		current_row = 0;
+	if ((animation_timer += dt) > animation_frame) {
+		animation_timer = 0.f;
+		if (current_row == 0) {
+			if (++current_col >= 7) {
+				current_col = 0;
+				++current_row;
 			}
 		}
-		else if (currentRow == 1) {
-			if (++currentCol >= 1) {
-				currentCol = 0;
-				++currentRow;
+		else if (current_row == 1) {
+			if (++current_col >= 1) {
+				current_col = 0;
+				++current_row;
 			}
 		}
 	}
@@ -169,15 +169,15 @@ void ProjectileEntity::OnPatrol(const f32& dt) {
 			return;
 		}
 	}
-	if (currentRow > 3) {
-		currentRow = 1;
-		currentCol = 2;
+	if (current_row > 3) {
+		current_row = 1;
+		current_col = 2;
 	}
-	if ((animationTimer += dt) > animationFrame) {
-		animationTimer = 0.f;
-		if (++currentCol >= 7) {
-			currentCol = 0;
-			++currentRow;
+	if ((animation_timer += dt) > animation_frame) {
+		animation_timer = 0.f;
+		if (++current_col >= 7) {
+			current_col = 0;
+			++current_row;
 		}
 	}
 }
@@ -197,23 +197,23 @@ void ProjectileEntity::OnChase(const f32& dt) {
 		}
 		if (Utils::RayHit({ position.x + std::abs(scale.x) * 0.5f * dir.x,position.y }, { ATTACK_RANGE * dir.x, 0.f },player)) {
 			SwitchState(FSM::ATTACK, 1.f);
-			currentRow = 4;
-			currentCol = 0;
+			current_row = 4;
+			current_col = 0;
 		}
-		if (stateTimer <= 0) {
+		if (state_timer <= 0) {
 			dir.x = 1.f;
 			speed = INITIAL_SPEED;
 			SwitchState(FSM::IDLE);
 		}
-		if (currentRow > 3) {
-			currentRow = 1;
-			currentCol = 2;
+		if (current_row > 3) {
+			current_row = 1;
+			current_col = 2;
 		}
-		if ((animationTimer += dt) > animationFrame) {
-			animationTimer = 0.f;
-			if (++currentCol >= 7) {
-				currentCol = 0;
-				++currentRow;
+		if ((animation_timer += dt) > animation_frame) {
+			animation_timer = 0.f;
+			if (++current_col >= 7) {
+				current_col = 0;
+				++current_row;
 			}
 		}
 	}
@@ -228,34 +228,34 @@ void ProjectileEntity::OnChase(const f32& dt) {
 */
 void ProjectileEntity::OnAttack(const f32& dt) {
 	// Animations
-	if (currentRow > 6) {
-		currentRow = 4;
-		currentCol = 0;
+	if (current_row > 6) {
+		current_row = 4;
+		current_col = 0;
 	}
-	if ((animationTimer += dt) > animationFrame) {
-		animationTimer = 0.f;
-		if (currentRow != 6) {
-			if (++currentCol >= 8) {
-				currentCol = 0;
-				++currentRow;
+	if ((animation_timer += dt) > animation_frame) {
+		animation_timer = 0.f;
+		if (current_row != 6) {
+			if (++current_col >= 8) {
+				current_col = 0;
+				++current_row;
 			}
 		}
 		else {
-			if (++currentCol >= 6) {
-				++currentRow;
+			if (++current_col >= 6) {
+				++current_row;
 			}
 		}
 	}
 	// Exact frame / Sprite where the Projectile Enemy launches projectile Row 4, Col 7
-	if (currentRow == 4 && currentCol == 7) {
+	if (current_row == 4 && current_col == 7) {
 		f32 bulletSpeed = 30.f;
 		AEVec2 shootDir = { scale.x, 0.f };
 		AEVec2Normalize(&shootDir, &shootDir);
 		MissileProjectile* bullet = new MissileProjectile(this->position, shootDir, bulletSpeed, damage, this);
 		bullet->scale = { BULLETSCALEX, BULLETSCALEY };
 		SceneManager::GetInstance()->GetCurrentScene()->AddEntityToScene(bullet);
-		currentRow = 0;
-		currentCol = 0;
+		current_row = 0;
+		current_col = 0;
 		SwitchState(FSM::STUN,1.f);
 	}
 }
@@ -265,9 +265,9 @@ void ProjectileEntity::OnAttack(const f32& dt) {
 * @param dt - Time between each frame
 */
 void ProjectileEntity::OnStun(const f32& dt){
-	//currentCol = 0;
-	if (stateTimer <= 0.f) {
-		SwitchState(FSM::PATROL);
+	//current_col = 0;
+	if (state_timer <= 0.f) {
+		SwitchState(FSM::PATROL,dt);
 	}
 }
 
