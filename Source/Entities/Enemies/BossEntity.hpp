@@ -27,7 +27,14 @@ protected:
 	bool boss_activated;
 	AEVec2 boss_room_center;
 public:
+	/*!
+	* @brief Constructs a BossEntity with an initial position
+	* @param pos - The starting position of the boss
+	*/
 	BossEntity(AEVec2 pos);
+	/*!
+	* @brief Virtual destructor for BossEntity to allow proper cleanup of derived classes
+	*/
 	virtual ~BossEntity();
 
 	//Default Boss functions
