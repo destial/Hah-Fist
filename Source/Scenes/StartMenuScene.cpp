@@ -259,48 +259,46 @@ void StartMenuScene::Init() {
 #endif
 
 	// Initalize master volume slider
-	static float master = 1.f;
-	BarUI* master_vol = new BarUI({ Utils::GetWorldWidth() - 7.5f, 5.f });
-	master_vol->text = "";
-	master_vol->SetValue(master);
-	master_vol->scale = { BUTTON_SCALE_X * 0.75f, BUTTON_SCALE_Y * 0.35f };
-	master_vol->text_size = 7.5f;
-	master_vol->text_alignment = BaseUI::TextAlignment::LEFT_CORNER;
-	master_vol->AddUpdateListener(this, [master_vol](const f32&) {
+	BarUI* music_vol = new BarUI({ Utils::GetWorldWidth() - 7.5f, 5.f });
+	music_vol->text = "";
+	music_vol->SetValue(Game::MusicVol());
+	music_vol->scale = { BUTTON_SCALE_X * 0.75f, BUTTON_SCALE_Y * 0.35f };
+	music_vol->text_size = 7.5f;
+	music_vol->text_alignment = BaseUI::TextAlignment::LEFT_CORNER;
+	music_vol->AddUpdateListener(this, [music_vol](const f32&) {
 		// Update group volume based on slider value when interacted with
-		AEAudioSetGroupVolume(Game::GetMusicGroup(), AEClamp(master_vol->GetValue(), 0.f, 1.f));
-		master = master_vol->GetValue();
+		AEAudioSetGroupVolume(Game::GetMusicGroup(), AEClamp(music_vol->GetValue(), 0.f, 1.f));
+		Game::MusicVol() = music_vol->GetValue();
 
 		// Update text on slider
 		char vol[64];
-		sprintf_s(vol, 64, "Master Volume: %0.2f", master_vol->GetValue() * 100.f);
-		master_vol->text = vol;
+		sprintf_s(vol, 64, "Master Volume: %0.2f", music_vol->GetValue() * 100.f);
+		music_vol->text = vol;
 
 		// Transition slider based on toggled level menu status
-		master_vol->position.x = Utils::LerpCircle(Utils::GetWorldWidth() - 7.5f, -7.5f, level_panel);
+		music_vol->position.x = Utils::LerpCircle(Utils::GetWorldWidth() - 7.5f, -7.5f, level_panel);
 
 		// Change slider color based on interaction
-		if (master_vol->IsDragging()) {
-			master_vol->overlay_color = { 255, 64, 128, 64 };
+		if (music_vol->IsDragging()) {
+			music_vol->overlay_color = { 255, 64, 128, 64 };
 		}
 		else {
-			master_vol->overlay_color = { 255, 64, 196, 64 };
+			music_vol->overlay_color = { 255, 64, 196, 64 };
 		}
 	});
-	scene_entities.push_back(master_vol);
+	scene_entities.push_back(music_vol);
 
 	// Initialize sfx volume slider
-	static float sfx = 1.f;
 	BarUI* sfx_vol = new BarUI({ Utils::GetWorldWidth() - 7.5f, 3.f });
 	sfx_vol->text = "";
-	sfx_vol->SetValue(sfx);
+	sfx_vol->SetValue(Game::SfxVol());
 	sfx_vol->scale = { BUTTON_SCALE_X * 0.75f, BUTTON_SCALE_Y * 0.35f };
 	sfx_vol->text_size = 7.5f;
 	sfx_vol->text_alignment = BaseUI::TextAlignment::LEFT_CORNER;
 	sfx_vol->AddUpdateListener(this, [sfx_vol](const f32&) {
 		// Update group volume based on slider value when interacted with
 		AEAudioSetGroupVolume(Game::GetSfxGroup(), AEClamp(sfx_vol->GetValue(), 0.f, 1.f));
-		sfx = sfx_vol->GetValue();
+		Game::SfxVol() = sfx_vol->GetValue();
 
 		// Update text on slider
 		char vol[64];

@@ -1,3 +1,11 @@
+/*!
+* @file main.cpp
+* @author Rance Andres (andresrancerowell.g@digipen.edu)
+* @date 9 January 2026
+* @course CSD1451
+* @brief Main source file to start the application
+*/
+
 #include <crtdbg.h> // To check for memory leaks
 #include <vector>
 #include "AEEngine.h"
@@ -14,24 +22,35 @@
 #include "UI/Debug.hpp"
 
 namespace Game {
-	bool bGameRunning;
-	Color bgdColor;
-	AEAudioGroup music;
-	AEAudioGroup sfx;
+	bool game_running; // Game running state
+	Color bgd_color; // Background color
+	AEAudioGroup music_grp; // AEAudio music group
+	AEAudioGroup sfx_grp; // AEAudio sound effects group
+	float music_vol; // Music volume
+	float sfx_vol; // Sound effects volume
+
 	void SetGameRunning(bool b) {
-		bGameRunning = b;
+		game_running = b;
 	}
 
 	void SetBackgroundColor(Color c) {
-		bgdColor = c;
+		bgd_color = c;
 	}
 
 	AEAudioGroup const& GetMusicGroup() {
-		return music;
+		return music_grp;
+	}
+
+	float& MusicVol() {
+		return music_vol;
 	}
 
 	AEAudioGroup const& GetSfxGroup() {
-		return sfx;
+		return sfx_grp;
+	}
+
+	float& SfxVol() {
+		return sfx_vol;
 	}
 }
 
@@ -63,28 +82,36 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// Initialize fonts
 	AEGfxFontSystemStart();
 
+	// Initialize game settings
+	Game::game_running = true;
 	DebugUtils::ToggleRender(false);
 
-	Game::bGameRunning = true;
-	Game::bgdColor = { 1.f, 0.3f, 0.3f, 0.3f };
+	// Initialize background color
+	Game::bgd_color = true;
+	Game::bgd_color = { 1.f, 0.3f, 0.3f, 0.3f };
 
-	Game::music = AEAudioCreateGroup();
-	while (!AEAudioIsValidGroup(Game::music)) {
-		AEAudioUnloadAudioGroup(Game::music);
-		Game::music = AEAudioCreateGroup();
+	// Create & initialize audio groups & volume for music & sfx
+	Game::music_grp = AEAudioCreateGroup();
+	while (!AEAudioIsValidGroup(Game::music_grp)) {
+		AEAudioUnloadAudioGroup(Game::music_grp);
+		Game::music_grp = AEAudioCreateGroup();
 	}
-	Game::sfx = AEAudioCreateGroup();
-	while (!AEAudioIsValidGroup(Game::sfx)) {
-		AEAudioUnloadAudioGroup(Game::sfx);
-		Game::sfx = AEAudioCreateGroup();
+	Game::music_vol = 1.f;
+
+	Game::sfx_grp = AEAudioCreateGroup();
+	while (!AEAudioIsValidGroup(Game::sfx_grp)) {
+		AEAudioUnloadAudioGroup(Game::sfx_grp);
+		Game::sfx_grp = AEAudioCreateGroup();
 	}
+	Game::sfx_vol = 1.f;
+
 	{
 		SceneManager sceneManager;
-		// dont need to call delete after, already handled in ~scene manager destructor
+		// Don't need to call delete after, already handled in ~scene manager destructor
 		sceneManager.SetNextScene(Scenes::SPLASH_SCREEN);
 
 		// Game Loop
-		while (Game::bGameRunning) {
+		while (Game::game_running) {
 			// Informing the system about the loop's start
 			AESysFrameStart();
 			AEFrameRateControllerStart();
@@ -105,7 +132,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
 			// -=-=-=-=-=-=-=- Update Logic Start -=-=-=-=-=-=-=-
 			float dt;
-			// run timestep for every lost frame if < 60fps
+			// Run timestep for every lost frame if < 60fps
 			while (frame_time > 0.f) {
 				dt = min(frame_time, 1 / 60.f);
 				Utils::SetDeltaTime(dt);
@@ -120,28 +147,27 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			// -=-=-=-=-=-=-=- Rendering Logic Start -=-=-=-=-=-=-=-
 
 			// Set background color
-			AEGfxSetBackgroundColor(Game::bgdColor.r / 255.f, Game::bgdColor.g / 255.f, Game::bgdColor.b / 255.f);
+			AEGfxSetBackgroundColor(Game::bgd_color.r / 255.f, Game::bgd_color.g / 255.f, Game::bgd_color.b / 255.f);
 			sceneManager.Render();
 
 			// Informing the system about the loop's end
 			AEFrameRateControllerEnd();
 			AESysFrameEnd();
 
-			// Basic way to trigger exiting the application
-			// when the window is closed
+			// Exit application if window is forced closed
 			if (0 == AESysDoesWindowExist())
-				Game::bGameRunning = false;
+				Game::bgd_color = false;
 		}
 
-		// clean up the current scene's resources
+		// Clean up the current scene's resources
 		sceneManager.GetCurrentScene()->End();
 	}
 
-	// unload audio groups
-	AEAudioUnloadAudioGroup(Game::music);
-	AEAudioUnloadAudioGroup(Game::sfx);
+	// Unload audio groups
+	AEAudioUnloadAudioGroup(Game::music_grp);
+	AEAudioUnloadAudioGroup(Game::sfx_grp);
 
-	// clean up other resources
+	// Clean up other resources
 	CameraManager::Free();
 	MeshRenderer::Free();
 	InputManager::Free();

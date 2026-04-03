@@ -89,10 +89,22 @@ namespace Game {
 	AEAudioGroup const& GetMusicGroup();
 
 	/*!
+	* @brief Get the volume for the music audio group
+	* @return The music volume between 0 - 1.f
+	*/
+	float& MusicVol();
+
+	/*!
 	* @brief Get the audio group for the sound effects
 	* @return The effects audio group
 	*/
 	AEAudioGroup const& GetSfxGroup();
+
+	/*!
+	* @brief Get the volume for the sfx audio group
+	* @return The sfx volume between 0 - 1.f
+	*/
+	float& SfxVol();
 }
 
 namespace Utils {
