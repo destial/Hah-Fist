@@ -44,6 +44,8 @@
 #include <string>
 
 constexpr int SIZE_TO_RESERVE{ 50 }; // Reserves this amt of space for vector arr
+constexpr float VOL_SCALE_X = 12.5f; // Volume slider scale
+constexpr float VOL_SCALE_Y = 4.f; // Volume slider scale
 
 std::vector<BaseEntity*> GameScene::staticEntities;
 
@@ -104,7 +106,7 @@ void GameScene::Init() {
 
 	// Initialize win screen background
 	ImageUI* pause = new ImageUI{ ASSET_HUD_IMAGE, {Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f} };
-	pause->scale = { Utils::GetWorldWidth() * 0.3f, Utils::GetWorldHeight() * 0.8f };
+	pause->scale = { Utils::GetWorldWidth() * 0.3f, Utils::GetWorldHeight() * 0.82f };
 	AddEntityToScene(pause);
 	pause_menu.push_back(pause);
 
@@ -119,7 +121,7 @@ void GameScene::Init() {
 	pause_menu.push_back(toptext);
 
 	// Initialize next level button
-	ButtonUI* advance = new ButtonUI{ { Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.5f } };
+	ButtonUI* advance = new ButtonUI{ { Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.6f } };
 	advance->scale = { Utils::GetWorldWidth() * 0.21f, Utils::GetWorldHeight() * 0.1f };
 	advance->text_size = 10.f;
 	advance->image = AssetManager::GetTexture(ASSET_SMALLBUTTON_IMAGE);
@@ -129,7 +131,7 @@ void GameScene::Init() {
 	pause_menu.push_back(advance);
 
 	// Initialize the return to main menu button
-	ButtonUI* back = new ButtonUI{ { Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.35f } };
+	ButtonUI* back = new ButtonUI{ { Utils::GetWorldWidth() * 0.5f, Utils::GetWorldHeight() * 0.4f } };
 	back->scale = { Utils::GetWorldWidth() * 0.21f, Utils::GetWorldHeight() * 0.1f };
 	back->text_size = 10.f;
 	back->image = AssetManager::GetTexture(ASSET_SMALLBUTTON_IMAGE);
@@ -153,6 +155,62 @@ void GameScene::Init() {
 			SceneManager::GetInstance()->SetNextScene(Scenes::MAIN_MENU);
 		}
 	});
+
+	// Initalize master volume slider
+	BarUI* music_vol = new BarUI({ Utils::GetWorldWidth() * 0.5f, 6.f });
+	music_vol->text = "";
+	music_vol->SetValue(Game::MusicVol());
+	music_vol->scale = { VOL_SCALE_X * 0.75f, VOL_SCALE_Y * 0.35f };
+	music_vol->text_size = 7.5f;
+	music_vol->text_alignment = BaseUI::TextAlignment::LEFT_CORNER;
+	music_vol->AddUpdateListener(this, [music_vol](const f32&) {
+		// Update group volume based on slider value when interacted with
+		AEAudioSetGroupVolume(Game::GetMusicGroup(), AEClamp(music_vol->GetValue(), 0.f, 1.f));
+		Game::MusicVol() = music_vol->GetValue();
+
+		// Update text on slider
+		char vol[64];
+		sprintf_s(vol, 64, "Master Volume: %0.2f", music_vol->GetValue() * 100.f);
+		music_vol->text = vol;
+
+		// Change slider color based on interaction
+		if (music_vol->IsDragging()) {
+			music_vol->overlay_color = { 255, 64, 128, 64 };
+		}
+		else {
+			music_vol->overlay_color = { 255, 64, 196, 64 };
+		}
+	});
+	pause_menu.push_back(music_vol);
+	AddEntityToScene(music_vol);
+
+	// Initialize sfx volume slider
+	BarUI* sfx_vol = new BarUI({ Utils::GetWorldWidth() * 0.5f, 4.f });
+	sfx_vol->text = "";
+	sfx_vol->SetValue(Game::SfxVol());
+	sfx_vol->scale = { VOL_SCALE_X * 0.75f, VOL_SCALE_Y * 0.35f };
+	sfx_vol->text_size = 7.5f;
+	sfx_vol->text_alignment = BaseUI::TextAlignment::LEFT_CORNER;
+	sfx_vol->AddUpdateListener(this, [sfx_vol](const f32&) {
+		// Update group volume based on slider value when interacted with
+		AEAudioSetGroupVolume(Game::GetSfxGroup(), AEClamp(sfx_vol->GetValue(), 0.f, 1.f));
+		Game::SfxVol() = sfx_vol->GetValue();
+
+		// Update text on slider
+		char vol[64];
+		sprintf_s(vol, 64, "SFX Volume: %0.2f", sfx_vol->GetValue() * 100.f);
+		sfx_vol->text = vol;
+
+		// Change slider color based on interaction
+		if (sfx_vol->IsDragging()) {
+			sfx_vol->overlay_color = { 255, 64, 128, 64 };
+		}
+		else {
+			sfx_vol->overlay_color = { 255, 64, 196, 64 };
+		}
+	});
+	pause_menu.push_back(sfx_vol);
+	AddEntityToScene(sfx_vol);
 
 	for (BaseUI* en : pause_menu) {
 		en->active = false;
