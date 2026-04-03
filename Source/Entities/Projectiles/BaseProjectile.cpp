@@ -33,7 +33,7 @@ BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameO
     sprite = AssetManager::GetSpriteSheet(ASSET_PROJECTILE_IMAGE, 1, 1); // single-frame bullet
     mesh = nullptr;
 
-    //Might want to use when doing projectiles with animations
+    //Projectiles with animations
     animation_timer = 0.f;
     animation_frame = 1.f / (1.f * 1.f);
     current_row = current_col = 0;
