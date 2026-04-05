@@ -139,17 +139,6 @@ void GameScene::Init() {
 	AddEntityToScene(back);
 	pause_menu.push_back(back);
 
-	// Listen to button click to advance to the next level
-	advance->AddClickListener([this, pause_menu](BaseUI::MouseButton b) {
-		if (b & BaseUI::MouseButton::LEFT) {
-			game_state = GameState::PLAYING;
-			for (BaseUI* en : pause_menu) {
-				en->active = false;
-			}
-			AEAudioResumeGroup(Game::GetMusicGroup());
-		}
-	});
-
 	// Listen to button click to go back to main menu scene
 	back->AddClickListener([this](BaseUI::MouseButton b) {
 		if (b & BaseUI::MouseButton::LEFT) {
@@ -212,6 +201,17 @@ void GameScene::Init() {
 	});
 	pause_menu.push_back(sfx_vol);
 	AddEntityToScene(sfx_vol);
+
+	// Listen to button click to advance to the next level
+	advance->AddClickListener([this, pause_menu](BaseUI::MouseButton b) {
+		if (b & BaseUI::MouseButton::LEFT) {
+			game_state = GameState::PLAYING;
+			for (BaseUI* en : pause_menu) {
+				en->active = false;
+			}
+			AEAudioResumeGroup(Game::GetMusicGroup());
+		}
+	});
 
 	for (BaseUI* en : pause_menu) {
 		en->active = false;
