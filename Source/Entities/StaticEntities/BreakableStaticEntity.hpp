@@ -1,3 +1,11 @@
+/*!
+* @file BreakableStaticEntity.hpp
+* @author Mohammad Hafiz (mohammadhafiz.b@digipen.edu)
+* @date 12th March 2026
+* @course CSD1451
+* @brief This source file declares the BreakableStaticEntity class and its member functions, which are
+* Destructable objects in the game.
+*/
 #pragma once
 #ifndef __BREAKABLE_STATIC_ENTITY_H
 #define __BREAKABLE_STATIC_ENTITY_H

@@ -1,3 +1,11 @@
+/*!
+* @file MovingPlatformEntity.hpp
+* @author Mohammad Hafiz (mohammadhafiz.b@digipen.edu)
+* @date 15th March 2026
+* @course CSD1451
+* @brief This source file declares the MovingPlatformEntity class and its member functions, which are
+* Moving Platforms in game.
+*/
 #ifndef __MOVINGPLATFORMENTITY_HPP
 #define __MOVINGPLATFORMENTITY_HPP
 #include "../StaticEntity.hpp"

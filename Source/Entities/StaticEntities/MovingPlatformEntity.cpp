@@ -1,3 +1,11 @@
+/*!
+* @file MovingPlatformEntity.cpp
+* @author Mohammad Hafiz (mohammadhafiz.b@digipen.edu)
+* @date 15th March 2026
+* @course CSD1451
+* @brief This source file declares the MovingPlatformEntity class' member functions, which are
+* Moving Platforms in game.
+*/
 #include "MovingPlatformEntity.hpp"
 #include "../../Utils/AEOverload.hpp"
 #include "../../Utils/MeshRenderer.hpp"

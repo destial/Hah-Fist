@@ -1,14 +1,31 @@
+/*!
+* @file PhysicsManager.cpp
+* @author Mohammad Hafiz Bin Mohammad Kamarurrashid (mohammadhafiz.b@digipen.edu)
+* @date 22nd February 2026
+* @course CSD1451
+* @brief This source file defines the member functions of the PhysicsManager class, which
+* handles physics for all objects within the gameplay loop.
+*/
 #include "PhysicsManager.hpp"
 #include "../UI/Debug.hpp"
 #include "../Utils/AEOverload.hpp"
 #include "../Entities/StaticEntity.hpp"
 
+/*!
+* @brief Constructor function for a PhysicsManager. Initializes the basic data for the PhysicsManager to operate
+* such as the world size, maximum entries per node for the QuadTree, and the zeroed vector of gameobjects.
+* @param Physics::AABB _world_bounds - Max size of the world.
+* @param size_t _max_entries_per_node - Max objects within each node of the QuadTree.
+*/
 PhysicsManager::PhysicsManager(Physics::AABB _world_bounds, size_t _max_entries_per_node)
 	: world_bounds(_world_bounds), max_entries_per_node(_max_entries_per_node), game_objects(0)
 {
 
 }
 
+/*!
+* @brief Destructor function for a PhysicsManager.
+*/
 PhysicsManager::~PhysicsManager()
 {
 	game_objects.clear();
@@ -18,15 +35,11 @@ PhysicsManager::~PhysicsManager()
 	}
 }
 
-void PhysicsManager::PreUpdate(const f32&)
-{
-	/*if (qt_game_objects != nullptr)
-	{
-		delete qt_game_objects;
-	}
-	qt_game_objects = new QuadTree::Tree(world_bounds, game_objects, max_entries_per_node);*/
-}
-
+/*!
+* @brief PostUpdate for a PhysicsManager.
+* Manages the collision detections and responses of all GameObjectEntities
+* @param const f32& dt - delta time
+*/
 void PhysicsManager::PostUpdate(const f32& dt)
 {
 	//Reset collision state to false;
@@ -196,12 +209,19 @@ void PhysicsManager::PostUpdate(const f32& dt)
 	}
 }
 
+/*!
+* @brief Render function for a PhysicsManager.
+* Renders debugging information for the PhysicsManager
+*/
 void PhysicsManager::Render()
 {
 	if (qt_game_objects)
 		qt_game_objects->RenderDebug();
 }
 
+/*!
+* @brief Clears the runtime information from a PhysicsManager
+*/
 void PhysicsManager::Clear() {
 	game_objects.clear();
 	if (qt_game_objects != nullptr)
@@ -211,11 +231,20 @@ void PhysicsManager::Clear() {
 	qt_game_objects = nullptr;
 }
 
+/*!
+* @brief Clears the runtime information from a PhysicsManager
+* @param GameObjectEntity* gameObject - Adds a GameObject to be handled by this PhysicsManager
+*/
 void PhysicsManager::PushGameObject(GameObjectEntity* gameObject)
 {
 	game_objects.push_back(gameObject);
 }
 
+/*!
+* @brief Handles the collision response between static and dynamic objects
+* @param GameObjectEntity* _static - static object in the collision
+* @param GameObjectEntity* _dynamic - dynamic object in the collision
+*/
 void PhysicsManager::HandleStaticDynamicCollisionResponse(GameObjectEntity* _static, GameObjectEntity* _dynamic)
 {
 	StaticEntity* se = dynamic_cast<StaticEntity*>(_static);
@@ -264,6 +293,11 @@ void PhysicsManager::HandleStaticDynamicCollisionResponse(GameObjectEntity* _sta
 	}
 }
 
+/*!
+* @brief Handles the collision response between dynamic objects
+* @param GameObjectEntity* first - first dynamic object in the collision
+* @param GameObjectEntity* second - second dynamic object in the collision
+*/
 void PhysicsManager::HandleDynamicDynamicCollisionResponse(GameObjectEntity* first, GameObjectEntity* second)
 {
 	if (first->prev_position.y - first->GetHalfSize().y >= second->prev_position.y + second->GetHalfSize().y)
@@ -327,6 +361,12 @@ void PhysicsManager::HandleDynamicDynamicCollisionResponse(GameObjectEntity* fir
 	}
 }
 
+/*!
+* @brief Gets a list of collision targets.
+* @param GameObjectEntity* first - dynamic object to poll with other objects
+* @param std::vector<GameObjectEntity*> ignored - objects to ignore
+* @param GameObjectEntity::PhysicsType type_filter - filter for the types of objects
+*/
 std::vector<GameObjectEntity*> PhysicsManager::GetPotentialCollisionTargets(GameObjectEntity* first, std::vector<GameObjectEntity*> ignored, GameObjectEntity::PhysicsType type_filter) const {
 	std::vector<GameObjectEntity*> potential;
 

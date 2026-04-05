@@ -1,3 +1,11 @@
+/*!
+* @file MissileProjectile.hpp
+* @author Mohammad Hafiz (mohammadhafiz.b@digipen.edu)
+* @date 12th March 2026
+* @course CSD1451
+* @brief This source file declares the MissileProjectile class and its member functions, which are
+* Destructable objects in the game.
+*/
 #pragma once
 #ifndef __MISSILEPROJECTILE_HPP
 #define __MISSILEPROJECTILE_HPP

@@ -1,3 +1,11 @@
+/*!
+* @file BossSpawnTriggerEntity.cpp
+* @author Mohammad Hafiz (mohammadhafiz.b@digipen.edu)
+* @date 12th March 2026
+* @course CSD1451
+* @brief This source file defines the BossSpawnTriggerEntity class' member functions, which are
+* Destructable objects in the game that drop coins.
+*/
 #include "BossSpawnTriggerEntity.hpp"
 #include "../../Utils/AEOverload.hpp"
 #include "../../Utils/MeshRenderer.hpp"

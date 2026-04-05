@@ -1,3 +1,14 @@
+/*!
+* @file PlayerEntity.cpp
+* @author Rance Andres (andresrancerowell.g@digipen.edu)
+* @author Brandon Koh (brandonshaohui.koh@digipen.edu)
+* @author Mohammad Hafiz (mohammadhafiz.b@digipen.edu)
+* @author Ryan Lau (r.lau@digipen.edu)
+* @date 12th January 2026
+* @course CSD1451
+* @brief This source file declares the PhysicsManager class and its member functions, which
+* handles physics for all objects within the gameplay loop.
+*/
 #include "PlayerEntity.hpp"
 #include "../Utils/MeshRenderer.hpp"
 #include "../Events/InputEvent.hpp"
@@ -13,7 +24,11 @@
 
 //For Debug Functions
 #include "../Entities/StaticEntities/BossSpawnTriggerEntity.hpp"
-
+/*!
+* @brief Constructor function for a PlayerEntity. Initializes the basic data for the PlayerEntity to operate
+* such as the world size, maximum entries per node for the QuadTree, and the zeroed vector of gameobjects.
+* @param AEVec2 pos - position to spawn the entity.
+*/
 PlayerEntity::PlayerEntity(AEVec2 pos) : GameObjectEntity(pos) {
 	int columns{ 18 };
 	int rows{ 3 };
@@ -36,6 +51,10 @@ PlayerEntity::PlayerEntity(AEVec2 pos) : GameObjectEntity(pos) {
 	go_type = PhysicsType::DYNAMIC;
 }
 
+/*!
+* @brief Destructor function for a PlayerEntity.
+* Removes its weapons from the game scene.
+*/
 PlayerEntity::~PlayerEntity() {
 	std::printf("Called Player deconstructor\n");
 	for (WeaponEntity* wp : weapons)
@@ -44,11 +63,21 @@ PlayerEntity::~PlayerEntity() {
 	}
 }
 
+/*!
+* @brief PreUpdate for a PlayerEntity.
+* Resets color to white
+* @param const f32& dt - delta time
+*/
 void PlayerEntity::PreUpdate(const f32& dt) {
 	GameObjectEntity::PreUpdate(dt);
 	color = { 255, 255, 255, 255 };
 }
 
+/*!
+* @brief Update for a PlayerEntity.
+* Resets lerps tint color based on damage and invulnerability
+* @param const f32& dt - delta time
+*/
 void PlayerEntity::Update(const f32& dt) {
 	GameObjectEntity::Update(dt);
 
@@ -73,6 +102,11 @@ void PlayerEntity::Update(const f32& dt) {
 	}
 }
 
+/*!
+* @brief PostUpdate for a PlayerEntity.
+* Handles animations
+* @param const f32& dt - delta time
+*/
 void PlayerEntity::PostUpdate(const f32& dt) {
 	GameObjectEntity::PostUpdate(dt);
 	current_row = 1;
@@ -101,11 +135,20 @@ void PlayerEntity::PostUpdate(const f32& dt) {
 	}
 }
 
+/*!
+* @brief Render for a PlayerEntity.
+* Renders the player
+*/
 void PlayerEntity::Render() {
 	sprite->Render(transform, color, current_row, current_col);
 	GameObjectEntity::Render();
 }
 
+/*!
+* @brief OnCollide override for the player, resolves damage, pushback and 
+* invulnerability.
+* @param GameObjectEntity* go - Object it is colliding with.
+*/
 void PlayerEntity::OnCollide(GameObjectEntity* go) {
 	//f32 p_health = health;
 	
@@ -126,10 +169,18 @@ void PlayerEntity::OnCollide(GameObjectEntity* go) {
 	GameObjectEntity::OnCollide(go);
 }
 
+/*!
+* @brief Adds a given weapon to the player.
+* @param WeaponEntity* weapon - weapon to add.
+*/
 void PlayerEntity::AddWeapon(WeaponEntity* weapon) {
 	weapons.push_back(weapon);
 }
 
+/*!
+* @brief Switches the active weapon.
+* @param int index - index of the weapon.
+*/
 void PlayerEntity::SwitchWeapon(int index) {
 	if (weapons.size() <= index) 
 		return;
@@ -142,6 +193,9 @@ void PlayerEntity::SwitchWeapon(int index) {
 	}
 }
 
+/*!
+* @brief Gets the active weapon.
+*/
 WeaponEntity* PlayerEntity::CurrentWeapon() const {
 	for (int i{ 0 }; i < weapons.size(); ++i) {
 		if (weapons[i]->is_active) {
@@ -151,10 +205,17 @@ WeaponEntity* PlayerEntity::CurrentWeapon() const {
 	return nullptr;
 }
 
+/*!
+* @brief Adds a coin to the player.
+*/
 void PlayerEntity::AddCoin() {
 	coin_count++;
 }
 
+/*!
+* @brief Gets the amount of coins the player has.
+
+*/
 int PlayerEntity::Coins() const {
 	return coin_count;
 }

@@ -1,3 +1,11 @@
+/*!
+* @file DropEntity.cpp
+* @author Mohammad Hafiz (mohammadhafiz.b@digipen.edu)
+* @date 12th March 2026
+* @course CSD1451
+* @brief This source file defines the DropEntity class' member functions, which
+* are pickups for the player.
+*/
 #include "DropEntity.hpp"
 #include "../Managers/SceneManager.hpp"
 

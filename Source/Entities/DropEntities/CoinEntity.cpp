@@ -1,3 +1,11 @@
+/*!
+* @file CoinEntity.cpp
+* @author Mohammad Hafiz (mohammadhafiz.b@digipen.edu)
+* @date 12th March 2026
+* @course CSD1451
+* @brief This source file defines the CoinEntity class' member functions, which are
+* collectible objects.
+*/
 #include "CoinEntity.hpp"
 #include "../../Managers/AssetManager.hpp"
 #include "../../Managers/SceneManager.hpp"

@@ -46,9 +46,6 @@ void BaseScene::PreUpdate(const f32& dt) {
 	for (int i = 0; i < scene_entities.size(); ++i) {
 		scene_entities[i]->PreUpdate(dt);
 	}
-	if (physicsManager != nullptr) {
-		physicsManager->PreUpdate(dt);
-	}
 }
 
 void BaseScene::Update(const f32& dt) {
