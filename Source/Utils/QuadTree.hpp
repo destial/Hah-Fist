@@ -45,7 +45,7 @@ namespace QuadTree
 	public:
 		Node* head;
 
-		Tree(Physics::AABB bounds, std::vector<GameObjectEntity*> gameObjects, size_t max_entries = 4);
+		Tree(Physics::AABB bounds, std::vector<GameObjectEntity*> game_objects, size_t max_entries = 4);
 		~Tree();
 
 		void RenderDebug();

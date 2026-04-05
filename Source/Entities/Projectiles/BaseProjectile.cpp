@@ -41,7 +41,7 @@ BaseProjectile::BaseProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameO
     scale = { 2.f * (static_cast<f32>(sprite->image->width) / sprite->image->height), 2.f };
     layer = RenderLayer::ENTITY;
     pBody->gravity_scale = 0.f;
-    this->frictionMultiplier = 0.f;
+    this->friction_multiplier = 0.f;
     is_active = true;
     velocity.x = dir.x * speed;
     velocity.y = dir.y * speed;

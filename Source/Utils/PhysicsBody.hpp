@@ -4,7 +4,7 @@
 * @date 19 January 2026
 * @course CSD1451
 * @brief This source file contains the declaration of a PhysicsBody class which is incharge
-*		 of physics of the gameobjects, jumping & gravity.
+*		 of physics of the game_objects, jumping & gravity.
 */
 #pragma once
 #ifndef __PHYSICSBODY_H

@@ -61,9 +61,9 @@ void LaserEntity::OnCollide(GameObjectEntity* other) {
         return;
     
     if (current_col == 0) {
-        if (previouslydamaged != other) {
+        if (previously_damaged != other) {
             other->health -= damage;
-            previouslydamaged = other;
+            previously_damaged = other;
         }
 
         if (other->entity_type == EntityType::ENEMY) {

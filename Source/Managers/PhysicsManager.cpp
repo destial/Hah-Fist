@@ -4,33 +4,33 @@
 #include "../Entities/StaticEntity.hpp"
 
 PhysicsManager::PhysicsManager(Physics::AABB _world_bounds, size_t _max_entries_per_node)
-	: world_bounds(_world_bounds), max_entries_per_node(_max_entries_per_node), gameObjects(0)
+	: world_bounds(_world_bounds), max_entries_per_node(_max_entries_per_node), game_objects(0)
 {
 
 }
 
 PhysicsManager::~PhysicsManager()
 {
-	gameObjects.clear();
-	if (qtGameObjects != nullptr)
+	game_objects.clear();
+	if (qt_game_objects != nullptr)
 	{
-		delete qtGameObjects;
+		delete qt_game_objects;
 	}
 }
 
 void PhysicsManager::PreUpdate(const f32&)
 {
-	/*if (qtGameObjects != nullptr)
+	/*if (qt_game_objects != nullptr)
 	{
-		delete qtGameObjects;
+		delete qt_game_objects;
 	}
-	qtGameObjects = new QuadTree::Tree(world_bounds, gameObjects, max_entries_per_node);*/
+	qt_game_objects = new QuadTree::Tree(world_bounds, game_objects, max_entries_per_node);*/
 }
 
 void PhysicsManager::PostUpdate(const f32& dt)
 {
 	//Reset collision state to false;
-	for (auto& go : gameObjects) 
+	for (auto& go : game_objects) 
 	{ 
 		go->pBody->is_standing_above = false; 
 		go->prev_dynamic_position = AEVec2{ 0.f, 0.f };
@@ -39,7 +39,7 @@ void PhysicsManager::PostUpdate(const f32& dt)
 	std::vector<GameObjectEntity*> ignoredObjects{};
 
 	// Collision: DYNAMIC vs TRIGGER
-	for (GameObjectEntity* trigger : gameObjects) {
+	for (GameObjectEntity* trigger : game_objects) {
 		//If trigger inactive, continue
 		if (!trigger->is_active) { continue; }
 
@@ -48,7 +48,7 @@ void PhysicsManager::PostUpdate(const f32& dt)
 		
 		ignoredObjects.push_back(trigger);
 
-		//for (GameObjectEntity* trigger2 : qtGameObjects->head->GetPotentialCollisionTargets(trigger, ignoredObjects, GameObjectEntity::PhysicsType::TRIGGER)) {
+		//for (GameObjectEntity* trigger2 : qt_game_objects->head->GetPotentialCollisionTargets(trigger, ignoredObjects, GameObjectEntity::PhysicsType::TRIGGER)) {
 		for (GameObjectEntity* trigger2 : GetPotentialCollisionTargets(trigger, ignoredObjects, GameObjectEntity::PhysicsType::TRIGGER)) {
 			if (Utils::OBB(trigger, trigger2)) {
 				trigger->OnCollide(trigger2);
@@ -56,14 +56,14 @@ void PhysicsManager::PostUpdate(const f32& dt)
 			}
 		}
 
-		//for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(trigger, GameObjectEntity::PhysicsType::DYNAMIC)) {	
+		//for (GameObjectEntity* dynamic : qt_game_objects->head->GetPotentialCollisionTargets(trigger, GameObjectEntity::PhysicsType::DYNAMIC)) {	
 		for (GameObjectEntity* dynamic : GetPotentialCollisionTargets(trigger, {}, GameObjectEntity::PhysicsType::DYNAMIC)) {
 			if (Utils::OBB(trigger, dynamic)) {
 				trigger->OnCollide(dynamic);
 			}
 		}
 
-		//for (GameObjectEntity* _static : qtGameObjects->head->GetPotentialCollisionTargets(trigger, GameObjectEntity::PhysicsType::STATIC)) {
+		//for (GameObjectEntity* _static : qt_game_objects->head->GetPotentialCollisionTargets(trigger, GameObjectEntity::PhysicsType::STATIC)) {
 		for (GameObjectEntity* _static : GetPotentialCollisionTargets(trigger, {}, GameObjectEntity::PhysicsType::STATIC)) {
 			if (Utils::OBB(trigger, _static)) {
 				trigger->OnCollide(_static);
@@ -73,14 +73,14 @@ void PhysicsManager::PostUpdate(const f32& dt)
 
 	
 	// Collision: DYNAMIC vs MOVING_STATIC
-	for (GameObjectEntity* _static : gameObjects) {
+	for (GameObjectEntity* _static : game_objects) {
 		//If trigger inactive, continue
 		if (!_static->is_active) { continue; }
 
 		//If GameObject is not a trigger, continue
 		if (_static->go_type != GameObjectEntity::PhysicsType::MOVING_STATIC) { continue; }
 
-		//for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(_static, GameObjectEntity::PhysicsType::DYNAMIC)) {
+		//for (GameObjectEntity* dynamic : qt_game_objects->head->GetPotentialCollisionTargets(_static, GameObjectEntity::PhysicsType::DYNAMIC)) {
 		for (GameObjectEntity* dynamic : GetPotentialCollisionTargets(_static, {}, GameObjectEntity::PhysicsType::DYNAMIC)) {
 			bool has_collision{ false };
 			if (!Utils::OBB(_static, dynamic))
@@ -107,14 +107,14 @@ void PhysicsManager::PostUpdate(const f32& dt)
 	}
 
 	// Collision: DYNAMIC vs STATIC
-	for (GameObjectEntity* _static : gameObjects) {
+	for (GameObjectEntity* _static : game_objects) {
 		//If trigger inactive, continue
 		if (!_static->is_active) { continue; }
 
 		//If GameObject is not a trigger, continue
 		if (_static->go_type != GameObjectEntity::PhysicsType::STATIC) { continue; }
 
-		//for (GameObjectEntity* dynamic : qtGameObjects->head->GetPotentialCollisionTargets(_static, GameObjectEntity::PhysicsType::DYNAMIC)) {
+		//for (GameObjectEntity* dynamic : qt_game_objects->head->GetPotentialCollisionTargets(_static, GameObjectEntity::PhysicsType::DYNAMIC)) {
 		for (GameObjectEntity* dynamic : GetPotentialCollisionTargets(_static, {}, GameObjectEntity::PhysicsType::DYNAMIC)) {
 			bool has_collision{ false };
 			if (!Utils::OBB(_static, dynamic))
@@ -141,7 +141,7 @@ void PhysicsManager::PostUpdate(const f32& dt)
 
 	// Collision: DYNAMIC vs DYNAMIC
 	ignoredObjects.clear();
-	for (GameObjectEntity* dynamic1 : gameObjects) {
+	for (GameObjectEntity* dynamic1 : game_objects) {
 		ignoredObjects.push_back(dynamic1);
 		//If trigger inactive, continue
 		if (!dynamic1->is_active) { continue; }
@@ -149,11 +149,11 @@ void PhysicsManager::PostUpdate(const f32& dt)
 		//If GameObject is not a trigger, continue
 		if (dynamic1->go_type != GameObjectEntity::PhysicsType::DYNAMIC) { continue; }
 
-		if (dynamic1->invulnerabilityDuration > 0.f) { continue; }
+		if (dynamic1->invulnerability_duration > 0.f) { continue; }
 
-		//for (GameObjectEntity* dynamic2 : qtGameObjects->head->GetPotentialCollisionTargets(dynamic1, ignoredObjects, GameObjectEntity::PhysicsType::DYNAMIC)) {
+		//for (GameObjectEntity* dynamic2 : qt_game_objects->head->GetPotentialCollisionTargets(dynamic1, ignoredObjects, GameObjectEntity::PhysicsType::DYNAMIC)) {
 		for (GameObjectEntity* dynamic2 : GetPotentialCollisionTargets(dynamic1, ignoredObjects, GameObjectEntity::PhysicsType::DYNAMIC)) {
-			if (dynamic2->invulnerabilityDuration > 0.f) { continue; }
+			if (dynamic2->invulnerability_duration > 0.f) { continue; }
 			if (dynamic1->entity_type == GameObjectEntity::EntityType::ENEMY && dynamic2->entity_type == GameObjectEntity::EntityType::ENEMY) { continue; }
 			bool has_collision{ false };
 			if (!Utils::OBB(dynamic1, dynamic2)) {
@@ -198,22 +198,22 @@ void PhysicsManager::PostUpdate(const f32& dt)
 
 void PhysicsManager::Render()
 {
-	if (qtGameObjects)
-		qtGameObjects->RenderDebug();
+	if (qt_game_objects)
+		qt_game_objects->RenderDebug();
 }
 
 void PhysicsManager::Clear() {
-	gameObjects.clear();
-	if (qtGameObjects != nullptr)
+	game_objects.clear();
+	if (qt_game_objects != nullptr)
 	{
-		delete qtGameObjects;
+		delete qt_game_objects;
 	}
-	qtGameObjects = nullptr;
+	qt_game_objects = nullptr;
 }
 
 void PhysicsManager::PushGameObject(GameObjectEntity* gameObject)
 {
-	gameObjects.push_back(gameObject);
+	game_objects.push_back(gameObject);
 }
 
 void PhysicsManager::HandleStaticDynamicCollisionResponse(GameObjectEntity* _static, GameObjectEntity* _dynamic)
@@ -327,10 +327,10 @@ void PhysicsManager::HandleDynamicDynamicCollisionResponse(GameObjectEntity* fir
 	}
 }
 
-std::vector<GameObjectEntity*> PhysicsManager::GetPotentialCollisionTargets(GameObjectEntity* first, std::vector<GameObjectEntity*> ignored, GameObjectEntity::PhysicsType typefilter) const {
+std::vector<GameObjectEntity*> PhysicsManager::GetPotentialCollisionTargets(GameObjectEntity* first, std::vector<GameObjectEntity*> ignored, GameObjectEntity::PhysicsType type_filter) const {
 	std::vector<GameObjectEntity*> potential;
 
-	for (GameObjectEntity* en : gameObjects) {
+	for (GameObjectEntity* en : game_objects) {
 		bool ignore = false;
 		for (GameObjectEntity* ig : ignored) {
 			if (en == ig) {
@@ -342,7 +342,7 @@ std::vector<GameObjectEntity*> PhysicsManager::GetPotentialCollisionTargets(Game
 			continue;
 		}
 		if (Utils::CircleCircleCollision(first, en)) {
-			if (en->go_type == typefilter || typefilter == GameObjectEntity::PhysicsType::TOTAL) {
+			if (en->go_type == type_filter || type_filter == GameObjectEntity::PhysicsType::TOTAL) {
 				potential.push_back(en);
 			}
 		}

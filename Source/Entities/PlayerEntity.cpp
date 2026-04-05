@@ -29,7 +29,7 @@ PlayerEntity::PlayerEntity(AEVec2 pos) : GameObjectEntity(pos) {
 	speed = 10.f;
 	health = 100.f;
 	max_health = 100.f;
-	timeElapsedSinceLastDamage = PLAYER_CONTROL_LOCK_AFTER_HIT;
+	time_elapsed_since_last_damage = PLAYER_CONTROL_LOCK_AFTER_HIT;
 
 	entity_type = EntityType::PLAYER;
 	layer = RenderLayer::PLAYER;
@@ -52,13 +52,13 @@ void PlayerEntity::PreUpdate(const f32& dt) {
 void PlayerEntity::Update(const f32& dt) {
 	GameObjectEntity::Update(dt);
 
-	if ((timeElapsedSinceLastDamage / PLAYER_CONTROL_LOCK_AFTER_HIT) <= 1.0)
+	if ((time_elapsed_since_last_damage / PLAYER_CONTROL_LOCK_AFTER_HIT) <= 1.0)
 	{
-		this->color = Utils::Lerp(Color{ 255, 255, 128, 128 }, Color{ 255, 255, 255, 255 }, timeElapsedSinceLastDamage / PLAYER_CONTROL_LOCK_AFTER_HIT);
+		this->color = Utils::Lerp(Color{ 255, 255, 128, 128 }, Color{ 255, 255, 255, 255 }, time_elapsed_since_last_damage / PLAYER_CONTROL_LOCK_AFTER_HIT);
 	}
-	else if (invulnerabilityDuration > 0)
+	else if (invulnerability_duration > 0)
 	{
-		this->color = Utils::Lerp(Color{ 255, 0, 128, 0 }, Color{ 255, 255, 255, 255 }, 20.f * invulnerabilityDuration);
+		this->color = Utils::Lerp(Color{ 255, 0, 128, 0 }, Color{ 255, 255, 255, 255 }, 20.f * invulnerability_duration);
 	}
 	
 	
@@ -110,9 +110,9 @@ void PlayerEntity::OnCollide(GameObjectEntity* go) {
 	//f32 p_health = health;
 	
 	if (go->entity_type == EntityType::ENEMY) {
-		if (invulnerabilityDuration > 0) { return; }
-		timeElapsedSinceLastDamage = 0.0f;
-		invulnerabilityDuration = 0.75f;
+		if (invulnerability_duration > 0) { return; }
+		time_elapsed_since_last_damage = 0.0f;
+		invulnerability_duration = 0.75f;
 		AEVec2 push_velocity = position - go->position;
 		AEVec2Normalize(&push_velocity, &push_velocity);
 		velocity.x += push_velocity.x * 25.f;

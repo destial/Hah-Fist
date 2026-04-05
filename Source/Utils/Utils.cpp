@@ -21,7 +21,7 @@
 struct OBBStruct {
 	AEVec2 center; // center of OBB
 	AEVec2 axes[2]; // Local X and Y unit vectors (normalized)
-	f32 halfWidths[2]; // Half-extents along the axes
+	f32 half_widths[2]; // Half-extents along the axes
 };
 
 Color::Color(int a, int r, int g, int b) 
@@ -101,7 +101,7 @@ namespace Utils {
 	static f32 world_width = 48.f;
 	static f32 world_height = 27.f;
 
-	static f32 deltaTime;
+	static f32 delta_time;
 
 	unsigned int screen_width = 1600;
 	unsigned int screen_height = 900;
@@ -276,16 +276,16 @@ namespace Utils {
 	/*!
 	* @brief Get the current game delta time
 	*/
-	const f32 GetDeltaTime(void) {
-		return deltaTime;
+	const f32 Getdelta_time(void) {
+		return delta_time;
 	}
 
 	/*!
 	* @brief Set the current game delta time
 	* @param dt - The delta time
 	*/
-	void SetDeltaTime(f32 dt) {
-		deltaTime = dt;
+	void Setdelta_time(f32 dt) {
+		delta_time = dt;
 	}
 
 	/*!

@@ -3,7 +3,7 @@
 
 MissileProjectile::MissileProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameObjectEntity* own)
 : BaseProjectile{ pos, dir, speed, dmg, own } {
-    frictionMultiplier = 5.f;
+    friction_multiplier = 5.f;
     lifetime = 3.0f;
 }
 

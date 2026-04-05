@@ -72,7 +72,7 @@ void WeaponEntity::Update(const f32& dt) {
 		cd_timer -= dt;
 	}
 	else {
-		if (player_entity->timeElapsedSinceLastDamage < PLAYER_CONTROL_LOCK_AFTER_HIT)
+		if (player_entity->time_elapsed_since_last_damage < PLAYER_CONTROL_LOCK_AFTER_HIT)
 			return;
 
 		if (AEInputCheckTriggered(AEVK_LBUTTON)) {

@@ -79,10 +79,10 @@ void BaseEntity::PostUpdate(const f32& dt) {
 	}
 
 	// Generic Animation Functionality across all entities
-	if (maxColumns > 1) {
+	if (max_columns > 1) {
 		if ((animation_timer += dt) > animation_frame) {
 			animation_timer = 0.f;
-			if (++current_col >= maxColumns) {
+			if (++current_col >= max_columns) {
 				current_col = 0;
 			}
 		}
@@ -209,11 +209,11 @@ bool BaseEntity::RemovePostUpdateListener(void* owner) {
 * @param columns - number of columns in the spritesheet (Columns are the number of frames).
 */
 void BaseEntity::InitializeAnimatedSpriteData(std::string filepath, int rows, int columns, f32 _scale) {
-	maxRows = rows;
-	maxColumns = columns;
+	max_rows = rows;
+	max_columns = columns;
 	InitializeSpriteData(filepath, _scale);
 	animation_timer = 0.f;
-	animation_frame = 1.f / static_cast<f32>(maxColumns * maxRows);
+	animation_frame = 1.f / static_cast<f32>(max_columns * max_rows);
 }
 
 /*!
@@ -222,8 +222,8 @@ void BaseEntity::InitializeAnimatedSpriteData(std::string filepath, int rows, in
 * @param filepath - Filepath to the sprite, be sure to use AssetManager macros for this.
 */
 void BaseEntity::InitializeSpriteData(std::string filepath, f32 _scale) {
-	sprite = AssetManager::GetSpriteSheet(filepath, maxRows, maxColumns);
+	sprite = AssetManager::GetSpriteSheet(filepath, max_rows, max_columns);
 	mesh = nullptr;
 	current_row = current_col = 0;
-	scale = { _scale * ((static_cast<f32>(sprite->image->width) / static_cast<f32>(maxColumns)) / (sprite->image->height / static_cast<f32>(maxRows))) , _scale };
+	scale = { _scale * ((static_cast<f32>(sprite->image->width) / static_cast<f32>(max_columns)) / (sprite->image->height / static_cast<f32>(max_rows))) , _scale };
 }

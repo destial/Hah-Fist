@@ -28,7 +28,7 @@ PayloadEntity::PayloadEntity(AEVec2 pos) : ground{nullptr}, BossEntity(pos) {
 	InitializeAnimatedSpriteData(ASSET_PAYLOAD_SPRITE, ASSET_PAYLOAD_SPRITE_ROWS, ASSET_PAYLOAD_SPRITE_COLUMNS, ASSET_PAYLOAD_SPRITE_SCALE);
 	land_timer = 0.f;
 	inner_state = INNERFSM::JUMP;
-	frictionMultiplier = BOSS2FRICTION;
+	friction_multiplier = BOSS2FRICTION;
 }
 /*!
 * @brief Destructor for PayloadEntity

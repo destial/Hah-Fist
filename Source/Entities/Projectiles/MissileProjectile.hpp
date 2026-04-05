@@ -5,7 +5,7 @@
 
 class MissileProjectile : public BaseProjectile {
 private:
-	f32 slowStartTime{ 1.0f };
+	f32 slow_start_time{ 1.0f };
 
 public:
 	MissileProjectile(AEVec2 pos, AEVec2 dir, f32 speed, f32 dmg, GameObjectEntity* own);

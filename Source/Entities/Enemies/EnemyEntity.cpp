@@ -94,7 +94,7 @@ void EnemyEntity::Update(const f32& dt)
 			break;
 	}
 
-	this->color = Utils::Lerp(Color{ 255, 255, 128, 128 }, Color{ 255, 255, 255, 255 }, timeElapsedSinceLastDamage / PLAYER_CONTROL_LOCK_AFTER_HIT);
+	this->color = Utils::Lerp(Color{ 255, 255, 128, 128 }, Color{ 255, 255, 255, 255 }, time_elapsed_since_last_damage / PLAYER_CONTROL_LOCK_AFTER_HIT);
 }
 
 /*!
@@ -118,8 +118,8 @@ void EnemyEntity::PostUpdate(const f32& dt)
 */
 void EnemyEntity::OnHit()
 {
-	timeElapsedSinceLastDamage = 0.0f;
-	//invulnerabilityDuration = 0.75f;
+	time_elapsed_since_last_damage = 0.0f;
+	//invulnerability_duration = 0.75f;
 	AEAudioPlay(AssetManager::GetAudio(ASSET_ENEMYHURT_AUDIO), Game::GetSfxGroup(), 1.f, 1.f, 0);
 
 	SceneManager::GetInstance()->GetCurrentScene()->GetParticleSystem()->SpawnParticles(ParticleType::SPARKLE, this->position, 3, 1.f, 1.f, 0.5f);

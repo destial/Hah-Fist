@@ -110,7 +110,7 @@ void BarUI::Render() {
 
 	// If level editor is toggled, PostUpdate was not called so we force call it here
 	if (SceneManager::GetInstance()->GetEditor()->IsToggled()) {
-		PostUpdate(Utils::GetDeltaTime());
+		PostUpdate(Utils::Getdelta_time());
 	}
 
 	// Render background image/mesh

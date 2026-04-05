@@ -160,9 +160,9 @@ namespace QuadTree {
 		return GetPotentialCollisionTargets(gameObject, {}, type_filter);
 	}
 
-	Tree::Tree(Physics::AABB bounds, std::vector<GameObjectEntity*> gameObjects, size_t max_entries) {
+	Tree::Tree(Physics::AABB bounds, std::vector<GameObjectEntity*> game_objects, size_t max_entries) {
 		head = new Node{ bounds, max_entries };
-		for (GameObjectEntity* goEntry : gameObjects) {
+		for (GameObjectEntity* goEntry : game_objects) {
 			QuadTreeEntry* entry = new QuadTreeEntry(goEntry);
 			head->Insert(entry);
 		}

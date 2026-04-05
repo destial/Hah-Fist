@@ -47,7 +47,7 @@ protected:
 
 	// Sprite animation data
 	f32 animation_timer{ 0.f }, animation_frame{ 0.f };
-	int current_row{ 0 }, current_col{ 0 }, maxRows{ 1 }, maxColumns{ 1 };
+	int current_row{ 0 }, current_col{ 0 }, max_rows{ 1 }, max_columns{ 1 };
 	SpriteSheet* sprite{ nullptr };
 public:
 	virtual ~BaseEntity(); // Dtor

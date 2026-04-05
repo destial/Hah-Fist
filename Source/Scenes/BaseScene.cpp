@@ -191,9 +191,9 @@ void BaseScene::DeleteEntityFromScene(BaseEntity* entity) {
 	// Remove from physics manager
 	GameObjectEntity* go;
 	if (deleted && physicsManager && (go = dynamic_cast<GameObjectEntity*>(entity))) {
-		for (std::vector<GameObjectEntity*>::iterator it = physicsManager->gameObjects.begin(); it != physicsManager->gameObjects.end(); it++) {
+		for (std::vector<GameObjectEntity*>::iterator it = physicsManager->game_objects.begin(); it != physicsManager->game_objects.end(); it++) {
 			if (*it == go) {
-				physicsManager->gameObjects.erase(it);
+				physicsManager->game_objects.erase(it);
 				break;
 			}
 		}

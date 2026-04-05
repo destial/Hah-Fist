@@ -90,10 +90,10 @@ void SceneManager::Render() {
 
 	if (DebugUtils::IsRendering()) {
 		static float fps_counter = 0.f;
-		static float cfps = 1.f / Utils::GetDeltaTime();
+		static float cfps = 1.f / Utils::Getdelta_time();
 		static float saved = 0.f;
-		if ((fps_counter += Utils::GetDeltaTime()) > 0.1f) {
-			cfps = 1.f / Utils::GetDeltaTime();
+		if ((fps_counter += Utils::Getdelta_time()) > 0.1f) {
+			cfps = 1.f / Utils::Getdelta_time();
 			fps_counter = 0.f;
 		}
 		char fps[50];

@@ -47,8 +47,8 @@ void GameObjectEntity::Update(const f32& dt) {
 
 	BaseEntity::Update(dt);
 
-	invulnerabilityDuration -= dt;
-	timeElapsedSinceLastDamage += dt;
+	invulnerability_duration -= dt;
+	time_elapsed_since_last_damage += dt;
 
 	if (go_type == PhysicsType::DYNAMIC) {
 		pBody->UpdateStates(this->velocity, this->position, this->scale);
@@ -74,15 +74,15 @@ void GameObjectEntity::PostUpdate(const f32& dt)  {
 	if (pBody->is_standing_above) {
 		if (velocity.x > 0)
 		{
-			velocity.x = AEClamp(velocity.x - velocity.x * (frictionMultiplier * 20.0f) * dt, 0, velocity.x);
+			velocity.x = AEClamp(velocity.x - velocity.x * (friction_multiplier * 20.0f) * dt, 0, velocity.x);
 
 		}
 		else if (velocity.x < 0)
 		{
-			velocity.x = AEClamp(velocity.x - velocity.x * (frictionMultiplier * 20.0f) * dt, velocity.x, 0);
+			velocity.x = AEClamp(velocity.x - velocity.x * (friction_multiplier * 20.0f) * dt, velocity.x, 0);
 
 		}
-		//velocity.x -= velocity.x * (frictionMultiplier * 20.0f) * dt; // later change 5.0 to friction perhaps
+		//velocity.x -= velocity.x * (friction_multiplier * 20.0f) * dt; // later change 5.0 to friction perhaps
 		
 		if (std::abs(velocity.x) < 0.3) {
 			velocity.x = 0.0;

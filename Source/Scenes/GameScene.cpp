@@ -325,7 +325,7 @@ void GameScene::Init() {
 	player->AddUpdateListener(this, [player](const f32& dt) {
 		if (dt == 0)
 			return;
-		if (player->timeElapsedSinceLastDamage > PLAYER_CONTROL_LOCK_AFTER_HIT) {
+		if (player->time_elapsed_since_last_damage > PLAYER_CONTROL_LOCK_AFTER_HIT) {
 			AEVec2 dir{};
 			if (AEInputCheckCurr(AEVK_A)) {
 				dir += { -1.f, 0.f };

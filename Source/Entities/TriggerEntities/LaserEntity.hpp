@@ -20,7 +20,7 @@
 class LaserEntity : public GameObjectEntity {
 protected:
 	GameObjectEntity* owner;
-	GameObjectEntity* previouslydamaged{ nullptr };
+	GameObjectEntity* previously_damaged{ nullptr };
 	f32 damage;
 public:
 	/*!
