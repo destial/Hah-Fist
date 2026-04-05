@@ -71,7 +71,9 @@
 #define BOSS3PLATFORMLIFETIME 5.f
 #define BOSS3PLATFORMSCALEX 7.f
 #define BOSS3PLATFORMSCALEY 0.5f
-
-constexpr float LaneY[] = { 6.f, 14.f, 22.f };
+#define BOSS3LANE1 6.f
+#define BOSS3LANE2 14.f
+#define BOSS3LANE3 22.f
+#define BOSS3TOTALLANES 3
 
 #endif

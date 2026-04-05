@@ -33,6 +33,7 @@ protected:
 	LANE lane_to_go_to;     
 	float dir_to_go;
 	float target_y;
+	float lane_y[BOSS3TOTALLANES]{BOSS3LANE1, BOSS3LANE2, BOSS3LANE3};
 	
 public:
 	/*!

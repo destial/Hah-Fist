@@ -37,7 +37,8 @@ IronsideEntity::IronsideEntity(AEVec2 pos) : BossEntity(pos) {
 	curr_lane = lane_to_go_to;
 	next_lane_to_spawn = curr_lane;
 	dir_to_go = 1.f;
-	target_y = LaneY[lane_to_go_to];
+	target_y = lane_y[lane_to_go_to];
+
 }
 /*!
 * @brief Destructor for IronsideEntity
@@ -90,7 +91,7 @@ void IronsideEntity::OnChase(const f32&) {
 	case INNERFSM::MOVE:
 	{
 		lane_to_go_to = GetRandomSpawnLane(curr_lane);
-		target_y = LaneY[lane_to_go_to];
+		target_y = lane_y[lane_to_go_to];
 		float diff = target_y - position.y;
 		dir_to_go = (diff > 0.f) ? 1.f : -1.f;
 		velocity.y = (GetLowHealthFactor()* BOSS3VELY + BOSS3VELY) * dir_to_go;
@@ -113,7 +114,7 @@ void IronsideEntity::OnChase(const f32&) {
 	{
 		LANE lanetospawn = GetRandomSpawnLane(curr_lane);
 		next_lane_to_spawn = 3 - lanetospawn - curr_lane;
-		AEVec2 Pos{ position.x, LaneY[lanetospawn] };
+		AEVec2 Pos{ position.x, lane_y[lanetospawn] };
 		AEVec2 platformDir{ -1.f, 0.f };
 		MovingPlatformEntity* platform = new MovingPlatformEntity(Pos, platformDir, false, BOSS3PLATFORMSPEED, BOSS3PLATFORMLIFETIME);
 		platform->mesh = MeshRenderer::GetCenterRectMesh();
@@ -127,10 +128,10 @@ void IronsideEntity::OnChase(const f32&) {
 	{
 		PlayerEntity* player = SceneManager::GetInstance()->GetCurrentScene()->GetFirstEntityOfType<PlayerEntity>();
 		if (!player) return;
-		AEVec2 Pos{ position.x, LaneY[next_lane_to_spawn] };
+		AEVec2 Pos{ position.x, lane_y[next_lane_to_spawn] };
 		AEVec2 shootDir{ player->position.x - Pos.x,player->position.y - Pos.y };
 		ShootProjectile(health / max_health, Pos, shootDir);
-		Pos = AEVec2{ position.x, LaneY[3 - next_lane_to_spawn - curr_lane] };
+		Pos = AEVec2{ position.x, lane_y[BOSS3TOTALLANES - next_lane_to_spawn - curr_lane] };
 		shootDir = AEVec2{ player->position.x - Pos.x,player->position.y - Pos.y };
 		ShootProjectile(health / max_health, Pos, shootDir);
 
@@ -140,7 +141,7 @@ void IronsideEntity::OnChase(const f32&) {
 	}
 	case INNERFSM::SPAWNPLATFORM2:
 	{
-		AEVec2 Pos{ position.x, LaneY[next_lane_to_spawn] };
+		AEVec2 Pos{ position.x, lane_y[next_lane_to_spawn] };
 		AEVec2 platformDir{ -1.f, 0.f };
 		MovingPlatformEntity* platform = new MovingPlatformEntity(Pos, platformDir, false, BOSS3PLATFORMSPEED, BOSS3PLATFORMLIFETIME);
 		platform->mesh = MeshRenderer::GetCenterRectMesh();
