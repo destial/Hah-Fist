@@ -1,3 +1,11 @@
+/*!
+* @file SerializationManager.cpp
+* @author Rance Andres (andresrancerowell.g@digipen.edu)
+* @date 23 February 2026
+* @course CSD1451
+* @brief Definition file for to save a level to serialized text file
+*/
+
 #include <fstream>
 #include <iostream>
 #include "SerializationManager.hpp"
@@ -40,18 +48,18 @@ namespace Serialization {
 		rhs >> x >> c >> y >> c >> scale_x >> c >> scale_y
 			>> c >> rotation >> c >> health >> c >> damage >> c
 			>> mass >> c >> type >> c;
-		if (c == '|') {
+		if (c == '|') { // Legacy level file 1.0
 			max_health = health;
 			return rhs;
 		}
 		
 		rhs >> max_health >> c;
-		if (c == '|') {
+		if (c == '|') { // Legacy level file 1.1
 			return rhs;
 		}
 
 		rhs >> go_type >> c;
-		if (c == '|') {
+		if (c == '|') { // Legacy level file 1.2
 			return rhs;
 		}
 
@@ -59,6 +67,11 @@ namespace Serialization {
 		return rhs;
 	}
 
+	/*!
+	* @brief Convert an entity to a serialized entity
+	* @param p - The Base Entity
+	* @return The serialized entity
+	*/
 	SerializedEntity Serialize(BaseEntity* en) {
 		SerializedEntity s{};
 		s.x = en->position.x;
@@ -125,6 +138,11 @@ namespace Serialization {
 		return s;
 	}
 
+	/*!
+	* @brief Convert a serialized entity to a scene entity
+	* @param en - The serialized entity
+	* @return The scene entity
+	*/
 	BaseEntity* Unserialize(SerializedEntity const& en) {
 		BaseEntity* entity = nullptr;
 		switch (en.type) {
@@ -207,6 +225,11 @@ namespace Serialization {
 		return entity;
 	}
 
+	/*!
+	* @brief Write the converted serialized entities to level file
+	* @param file_name - The file name to write to
+	* @param entities - The vector of serialized entities
+	*/
 	void WriteToFile(const char* filename, std::vector<SerializedEntity> const& entities) {
 		std::ofstream out{ filename };
 		for (SerializedEntity const& en : entities) {
@@ -216,6 +239,11 @@ namespace Serialization {
 		out.close();
 	}
 
+	/*!
+	* @brief Serialize a given vector of scene entities into serialized entities
+	* @param scene_entities - The vector of loaded scene entities
+	* @return A vector of serialized entities
+	*/
 	std::vector<SerializedEntity> SerializeAll(std::vector<BaseEntity*> const& scene_entities) {
 		std::vector<SerializedEntity> vect;
 		for (BaseEntity* en : scene_entities) {
@@ -223,10 +251,10 @@ namespace Serialization {
 				en->layer == BaseEntity::RenderLayer::WORLD_UI)
 				continue;
 
-			if (dynamic_cast<BaseUI*>(en))
+			if (dynamic_cast<BaseUI*>(en)) // Skip UI serialization
 				continue;
 
-			if (dynamic_cast<WeaponEntity*>(en))
+			if (dynamic_cast<WeaponEntity*>(en)) // Skip weapon serialization
 				continue;
 
 			vect.push_back(Serialize(en));
@@ -234,6 +262,11 @@ namespace Serialization {
 		return vect;
 	}
 
+	/*!
+	* @brief Load a level file into serialized entities
+	* @param filename - The file to load from
+	* @return A vector of serialized entities
+	*/
 	std::vector<SerializedEntity> LoadFromFile(const char* filename) {
 		std::vector<SerializedEntity> vect;
 		std::ifstream in{ filename };
