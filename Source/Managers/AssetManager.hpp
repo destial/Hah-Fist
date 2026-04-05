@@ -97,7 +97,8 @@
 #define ASSET_DEFAULT_FONT "Assets/Fonts/Jersey25-Regular.ttf"
 #define ASSET_DEBUG_FONT "Assets/Fonts/buggy-font.ttf"
 
-#define ASSET_MAINMENUBGM_AUDIO "Assets/Audio/bgm.mp3"
+#define ASSET_MAINMENUBGM_AUDIO "Assets/Audio/mmm.wav"
+#define ASSET_GAMEBGM_AUDIO "Assets/Audio/bgm.mp3"
 #define ASSET_TURBOFIST_AUDIO "Assets/Audio/turbofist.ogg"
 #define ASSET_ENEMYHURT_AUDIO "Assets/Audio/enemy_hurt.mp3"
 #define ASSET_SPIDERHURT_AUDIO "Assets/Audio/spider_hurt.ogg"

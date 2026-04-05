@@ -135,7 +135,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 			// Run timestep for every lost frame if < 60fps
 			while (frame_time > 0.f) {
 				dt = min(frame_time, 1 / 60.f);
-				Utils::Setdelta_time(dt);
+				Utils::SetDeltaTime(dt);
 				sceneManager.PreUpdate(dt);
 				InputManager::GetInstance()->Update(dt);
 				sceneManager.Update(dt);

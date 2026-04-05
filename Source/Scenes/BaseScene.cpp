@@ -113,7 +113,8 @@ void BaseScene::End() {
 	if (physicsManager) {
 		physicsManager->Clear();
 	}
-	std::cout << "Scene ended\n";
+	AEAudioResumeGroup(Game::GetMusicGroup());
+	AEAudioResumeGroup(Game::GetSfxGroup());
 }
 
 void BaseScene::AddEntityToScene(BaseEntity* entity) {

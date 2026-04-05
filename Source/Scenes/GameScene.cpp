@@ -146,6 +146,7 @@ void GameScene::Init() {
 			for (BaseUI* en : pause_menu) {
 				en->active = false;
 			}
+			AEAudioResumeGroup(Game::GetMusicGroup());
 		}
 	});
 
@@ -224,12 +225,14 @@ void GameScene::Init() {
 				for (BaseUI* en : pause_menu) {
 					en->active = true;
 				}
+				AEAudioPauseGroup(Game::GetMusicGroup());
 			}
 			else if (game_state == GameState::PAUSE) {
 				game_state = GameState::PLAYING;
 				for (BaseUI* en : pause_menu) {
 					en->active = false;
 				}
+				AEAudioResumeGroup(Game::GetMusicGroup());
 			}
 		}
 	}};
@@ -474,6 +477,10 @@ void GameScene::Init() {
 	// Everything has finished initializing, we can start
 	Game::SetBackgroundColor({ 1.f, 0.3f, 0.3f, 0.3f });
 	game_state = GameState::PLAYING;
+
+	// Play looped game music
+	AEAudio audio = AssetManager::GetAudio(ASSET_GAMEBGM_AUDIO);
+	AEAudioPlay(audio, Game::GetMusicGroup(), 1.f, 1.f, -1);
 }
 
 /*!
@@ -598,6 +605,7 @@ void GameScene::Win() {
 */
 void GameScene::Lose() {
 	game_state = GameState::LOST;
+	AEAudioStopGroup(Game::GetMusicGroup());
 }
 
 /*!

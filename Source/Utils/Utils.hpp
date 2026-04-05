@@ -185,13 +185,13 @@ namespace Utils {
 	/*!
 	* @brief Get the current game delta time
 	*/
-	const f32 Getdelta_time(void);
+	const f32 GetDeltaTime(void);
 
 	/*!
 	* @brief Set the current game delta time
 	* @param dt - The delta time
 	*/
-	void Setdelta_time(f32 dt);
+	void SetDeltaTime(f32 dt);
 
 	/*!
 	* @brief Get the screen resolution

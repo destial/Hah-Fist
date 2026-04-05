@@ -85,7 +85,7 @@ void BaseUI::Render() {
 
 	// If level editor is toggled, PostUpdate was not called so we force call it here
 	if (SceneManager::GetInstance()->GetEditor()->IsToggled()) {
-		BaseUI::PostUpdate(Utils::Getdelta_time());
+		BaseUI::PostUpdate(Utils::GetDeltaTime());
 	}
 
 	// Render image/mesh
